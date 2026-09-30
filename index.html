@@ -13,7 +13,11 @@
   --rule:#cbc7bd;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--paper);color:var(--ink)}
+html,body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+}
 body{
   font-family:"Iowan Old Style",Baskerville,"Times New Roman",serif;
   font-size:15px;
@@ -23,35 +27,58 @@ body{
 a{color:inherit;text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
 main{
-  width:min(780px,calc(100% - 40px));
+  height:100svh;
+  min-height:640px;
+  width:min(1220px,calc(100% - 48px));
   margin:0 auto;
-  padding:28px 0 46px;
+  padding:24px 0 20px;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:24px;
+  overflow:hidden;
 }
 header{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
   gap:24px;
-  margin-bottom:15vh;
 }
 h1{font:inherit;font-weight:400;margin:0}
 nav{display:flex;gap:18px}
-.work{display:flex;flex-direction:column;gap:16vh}
-figure{margin:0}
-figure img{
+.work{
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:22px;
+  align-items:center;
+}
+figure{
+  margin:0;
+  min-width:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:8px;
+  height:100%;
+}
+.frame{
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.frame img{
   display:block;
-  width:100%;
+  max-width:100%;
+  max-height:58vh;
+  width:auto;
   height:auto;
 }
-figure.small{width:78%;margin:0 auto}
 figcaption{
-  margin-top:8px;
   color:var(--quiet);
   font-size:13px;
 }
 footer{
-  margin-top:16vh;
-  padding-top:10px;
+  padding-top:9px;
   border-top:1px solid var(--rule);
   display:flex;
   justify-content:space-between;
@@ -59,13 +86,29 @@ footer{
   color:var(--quiet);
   font-size:13px;
 }
-@media(max-width:560px){
-  main{width:calc(100% - 28px);padding-top:18px}
-  header{margin-bottom:11vh}
-  nav{gap:14px}
-  .work{gap:12vh}
-  figure.small{width:100%}
-  footer{margin-top:12vh}
+@media(max-width:760px){
+  main{
+    height:auto;
+    min-height:100svh;
+    width:calc(100% - 28px);
+    padding-top:18px;
+    display:block;
+    overflow:visible;
+  }
+  header{margin-bottom:10vh}
+  .work{
+    display:flex;
+    flex-direction:column;
+    gap:12vh;
+  }
+  figure{height:auto}
+  .frame{display:block}
+  .frame img{
+    width:100%;
+    height:auto;
+    max-height:none;
+  }
+  footer{margin-top:12vh;padding-bottom:18px}
 }
 </style>
 </head>
@@ -81,17 +124,23 @@ footer{
 
 <section class="work" aria-label="Work">
 <figure>
+<div class="frame">
 <img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper">
+</div>
 <figcaption>Kashus Culpepper / Single artwork</figcaption>
 </figure>
 
-<figure class="small">
+<figure>
+<div class="frame">
 <img src="/assets/scout.webp" alt="Illustrated work for Scout Motors">
+</div>
 <figcaption>Scout Motors / Illustration</figcaption>
 </figure>
 
 <figure>
+<div class="frame">
 <img src="/assets/cowboyer.webp" alt="The Cowboyer cover studies">
+</div>
 <figcaption>The Cowboyer / Cover studies</figcaption>
 </figure>
 </section>
