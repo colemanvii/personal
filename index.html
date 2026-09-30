@@ -16,10 +16,9 @@ header{display:flex;justify-content:space-between;gap:24px;margin-bottom:18vh}
 h1{font:inherit;margin:0}
 nav{display:flex;gap:18px}
 .work{min-height:48vh}
-.work-label{margin:0 0 32px;color:#77736b}
-.note{max-width:360px;margin:0;color:#77736b}
+.work-label{margin:0;color:#77736b;font-size:13px}
 footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:14vh}
-@media(max-width:560px){main{width:calc(100% - 28px);padding-top:18px}header{margin-bottom:14vh}}
+@media(max-width:560px){main{width:calc(100% - 28px);padding-top:18px}header{margin-bottom:14vh}nav{gap:14px}}
 </style>
 </head>
 <body>
@@ -27,6 +26,7 @@ footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid 
 <header>
 <h1>Cole Calfee</h1>
 <nav>
+<a href="#" aria-label="Prints">Prints</a>
 <a href="mailto:hello@colecalfee.com">Contact</a>
 <a href="https://instagram.com/colecalfee" target="_blank" rel="noopener">Instagram</a>
 </nav>
@@ -34,7 +34,6 @@ footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid 
 
 <section class="work" aria-labelledby="work-title">
 <p class="work-label" id="work-title">Selected work</p>
-<p class="note">Past work, honestly presented. Painting, drawing, design, photography, and other things made along the way.</p>
 </section>
 
 <footer>
