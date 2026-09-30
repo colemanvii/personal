@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cole Calfee</title>
-<meta name="description" content="Cole Calfee — selected work.">
+<meta name="description" content="Cole Calfee — selected work in art, design, film, and brand.">
 <style>
 *{box-sizing:border-box}
 html{background:#f5f3ed;color:#171715}
@@ -16,9 +16,19 @@ header{display:flex;justify-content:space-between;gap:24px;margin-bottom:18vh}
 h1{font:inherit;margin:0}
 nav{display:flex;gap:18px}
 .work{min-height:48vh}
-.work-label{margin:0;color:#77736b;font-size:13px}
+.work-label{margin:0 0 22px;color:#77736b;font-size:13px}
+.project{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;padding:10px 0;border-top:1px solid #d8d4ca}
+.project:last-child{border-bottom:1px solid #d8d4ca}
+.project-name,.project-type{margin:0;font:inherit}
+.project-type{color:#77736b;text-align:right}
 footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:14vh}
-@media(max-width:560px){main{width:calc(100% - 28px);padding-top:18px}header{margin-bottom:14vh}nav{gap:14px}}
+@media(max-width:560px){
+  main{width:calc(100% - 28px);padding-top:18px}
+  header{margin-bottom:14vh}
+  nav{gap:14px}
+  .project{grid-template-columns:1fr;gap:2px}
+  .project-type{text-align:left;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -34,6 +44,31 @@ footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid 
 
 <section class="work" aria-labelledby="work-title">
 <p class="work-label" id="work-title">Selected work</p>
+
+<div class="project">
+<p class="project-name">Kashus Culpepper</p>
+<p class="project-type">Art direction, design, film</p>
+</div>
+
+<div class="project">
+<p class="project-name">Augusta National Golf Club</p>
+<p class="project-type">Stationery</p>
+</div>
+
+<div class="project">
+<p class="project-name">Freeman Construction</p>
+<p class="project-type">Brand, web, photography</p>
+</div>
+
+<div class="project">
+<p class="project-name">Ronnie Hodges Performance Horses</p>
+<p class="project-type">Film</p>
+</div>
+
+<div class="project">
+<p class="project-name">Paintings &amp; Drawings</p>
+<p class="project-type">Personal work</p>
+</div>
 </section>
 
 <footer>
