@@ -17,15 +17,24 @@ h1{font:inherit;margin:0}
 nav{display:flex;gap:18px}
 .work{display:flex;flex-direction:column}
 figure{margin:0 0 18vh}
-figure img{display:block;width:100%;height:auto}
+figure img{display:block;max-width:100%;height:auto}
+figure.large img{width:100%}
 figure.medium{width:82%;margin-left:auto;margin-right:auto}
+figure.narrow{width:66%}
+figure.right{margin-left:auto}
 figcaption{margin-top:9px;color:#77736b;font-size:13px}
-footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:2vh;color:#77736b;font-size:13px}
+.index{margin-top:4vh;padding-top:12px;border-top:1px solid #cbc7bd}
+.index-title{margin:0 0 14px;color:#77736b;font-size:13px}
+.index-row{display:flex;justify-content:space-between;gap:24px;padding:3px 0}
+.index-row span:last-child{color:#77736b;text-align:right}
+footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:14vh;color:#77736b;font-size:13px}
 @media(max-width:560px){
   main{width:calc(100% - 28px);padding-top:18px}
   header{margin-bottom:12vh}
   nav{gap:14px}
-  figure,figure.medium{width:100%;margin-bottom:14vh}
+  figure,figure.medium,figure.narrow{width:100%;margin-bottom:14vh}
+  .index-row{display:block;padding:4px 0}
+  .index-row span:last-child{display:block;text-align:left;font-size:13px}
 }
 </style>
 </head>
@@ -38,19 +47,32 @@ footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid 
 <a href="https://instagram.com/colecalfee" target="_blank" rel="noopener">Instagram</a>
 </nav>
 </header>
-
-<section class="work">
-<figure class="medium">
-<img src="/assets/scout.webp" alt="Illustrated print work for Scout Motors">
-<figcaption>Scout Motors / 2024 / Illustration and design</figcaption>
+<section class="work" aria-label="Work">
+<figure class="narrow">
+<img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper">
+<figcaption>Kashus Culpepper / Single artwork</figcaption>
 </figure>
-
-<figure>
+<figure class="medium right">
+<img src="/assets/scout.webp" alt="Illustrated work for Scout Motors">
+<figcaption>Scout Motors / Illustration and design</figcaption>
+</figure>
+<figure class="narrow right">
+<img src="/assets/kashus-character.webp" alt="Character illustration for Kashus Culpepper">
+<figcaption>Kashus Culpepper / Character illustration</figcaption>
+</figure>
+<figure class="large">
 <img src="/assets/cowboyer.webp" alt="Four fictional magazine covers titled The Cowboyer">
-<figcaption>The Cowboyer / 2024 / Cover studies</figcaption>
+<figcaption>The Cowboyer / Cover studies</figcaption>
 </figure>
 </section>
-
+<section class="index" aria-label="Index">
+<p class="index-title">Index</p>
+<div class="index-row"><span>Kashus Culpepper</span><span>Artwork, illustration, art direction</span></div>
+<div class="index-row"><span>Scout Motors</span><span>Illustration, poster design</span></div>
+<div class="index-row"><span>Joseph Martin</span><span>Illustration, poster design</span></div>
+<div class="index-row"><span>Hotel Perle / Bygone Hotel</span><span>Illustration</span></div>
+<div class="index-row"><span>The Cowboyer</span><span>Editorial illustration</span></div>
+</section>
 <footer>
 <a href="mailto:hello@colecalfee.com">hello@colecalfee.com</a>
 <span>© 2026</span>
