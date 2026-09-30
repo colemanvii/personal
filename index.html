@@ -4,30 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cole Calfee</title>
-<meta name="description" content="Cole Calfee — selected work in art, design, film, and brand.">
+<meta name="description" content="Cole Calfee — work.">
 <style>
 *{box-sizing:border-box}
 html{background:#f5f3ed;color:#171715}
 body{margin:0;font-family:"Iowan Old Style",Baskerville,"Times New Roman",serif;font-size:15px;line-height:1.35}
 a{color:inherit;text-decoration:none}
 a:hover{text-decoration:underline}
-main{width:min(760px,calc(100% - 40px));margin:auto;padding:28px 0 56px}
-header{display:flex;justify-content:space-between;gap:24px;margin-bottom:18vh}
+main{width:min(860px,calc(100% - 40px));margin:auto;padding:28px 0 56px}
+header{display:flex;justify-content:space-between;gap:24px;margin-bottom:15vh}
 h1{font:inherit;margin:0}
 nav{display:flex;gap:18px}
-.work{min-height:48vh}
-.work-label{margin:0 0 22px;color:#77736b;font-size:13px}
-.project{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;padding:10px 0;border-top:1px solid #d8d4ca}
-.project:last-child{border-bottom:1px solid #d8d4ca}
-.project-name,.project-type{margin:0;font:inherit}
-.project-type{color:#77736b;text-align:right}
-footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:14vh}
+.work{display:flex;flex-direction:column}
+figure{margin:0 0 18vh}
+figure img{display:block;width:100%;height:auto}
+figure.medium{width:82%;margin-left:auto;margin-right:auto}
+figcaption{margin-top:9px;color:#77736b;font-size:13px}
+footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid #cbc7bd;padding-top:10px;margin-top:2vh;color:#77736b;font-size:13px}
 @media(max-width:560px){
   main{width:calc(100% - 28px);padding-top:18px}
-  header{margin-bottom:14vh}
+  header{margin-bottom:12vh}
   nav{gap:14px}
-  .project{grid-template-columns:1fr;gap:2px}
-  .project-type{text-align:left;font-size:13px}
+  figure,figure.medium{width:100%;margin-bottom:14vh}
 }
 </style>
 </head>
@@ -36,43 +34,25 @@ footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid 
 <header>
 <h1>Cole Calfee</h1>
 <nav>
-<a href="#" aria-label="Prints">Prints</a>
 <a href="mailto:hello@colecalfee.com">Contact</a>
 <a href="https://instagram.com/colecalfee" target="_blank" rel="noopener">Instagram</a>
 </nav>
 </header>
 
-<section class="work" aria-labelledby="work-title">
-<p class="work-label" id="work-title">Selected work</p>
+<section class="work">
+<figure class="medium">
+<img src="/assets/scout.webp" alt="Illustrated print work for Scout Motors">
+<figcaption>Scout Motors / 2024 / Illustration and design</figcaption>
+</figure>
 
-<div class="project">
-<p class="project-name">Kashus Culpepper</p>
-<p class="project-type">Art direction, design, film</p>
-</div>
-
-<div class="project">
-<p class="project-name">Augusta National Golf Club</p>
-<p class="project-type">Stationery</p>
-</div>
-
-<div class="project">
-<p class="project-name">Freeman Construction</p>
-<p class="project-type">Brand, web, photography</p>
-</div>
-
-<div class="project">
-<p class="project-name">Ronnie Hodges Performance Horses</p>
-<p class="project-type">Film</p>
-</div>
-
-<div class="project">
-<p class="project-name">Paintings &amp; Drawings</p>
-<p class="project-type">Personal work</p>
-</div>
+<figure>
+<img src="/assets/cowboyer.webp" alt="Four fictional magazine covers titled The Cowboyer">
+<figcaption>The Cowboyer / 2024 / Cover studies</figcaption>
+</figure>
 </section>
 
 <footer>
-<span>Cole Calfee</span>
+<a href="mailto:hello@colecalfee.com">hello@colecalfee.com</a>
 <span>© 2026</span>
 </footer>
 </main>
