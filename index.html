@@ -13,95 +13,134 @@
   --rule:#cbc7bd;
 }
 *{box-sizing:border-box}
-html{background:var(--paper);color:var(--ink)}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
 body{
-  margin:0;
   font-family:"Iowan Old Style",Baskerville,"Times New Roman",serif;
   font-size:15px;
-  line-height:1.35;
+  line-height:1.3;
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
-main{width:min(1080px,calc(100% - 56px));margin:auto;padding:26px 0 52px}
+.page{
+  height:100svh;
+  min-height:680px;
+  width:min(1180px,calc(100% - 48px));
+  margin:auto;
+  padding:24px 0 20px;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:22px;
+}
 header{
   display:grid;
   grid-template-columns:1fr auto;
   align-items:start;
-  gap:32px;
-  margin-bottom:17vh;
 }
-h1{font:inherit;margin:0;font-weight:400}
-nav{display:flex;gap:20px}
-.intro{
+h1{font:inherit;font-weight:400;margin:0}
+nav{display:flex;gap:18px}
+.stage{
+  min-height:0;
   display:grid;
-  grid-template-columns:150px minmax(0,560px);
-  gap:40px;
-  margin-bottom:19vh;
+  grid-template-columns:210px 1fr;
+  gap:34px;
+  align-items:stretch;
 }
-.intro-label{margin:0;color:var(--quiet);font-size:13px}
-.intro-copy{margin:0;max-width:470px;font-size:16px}
-.work{display:flex;flex-direction:column;gap:20vh}
-.plate{
+.side{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:2px 0 1px;
+}
+.statement{margin:0;max-width:165px}
+.statement span{display:block;color:var(--quiet);font-size:13px;margin-bottom:7px}
+.note{margin:0;color:var(--quiet);font-size:13px;max-width:150px}
+.gallery{
+  min-width:0;
+  min-height:0;
   display:grid;
-  grid-template-columns:150px minmax(0,1fr);
-  gap:40px;
+  grid-template-columns:1.05fr .95fr;
+  grid-template-rows:1fr 1fr;
+  gap:14px;
+}
+figure{
+  min-width:0;
+  min-height:0;
   margin:0;
-  align-items:start;
+  display:grid;
+  grid-template-rows:1fr auto;
+  gap:6px;
 }
-.meta{
+.image{
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.image img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+}
+figure:nth-child(1){grid-row:1 / span 2}
+figure:nth-child(1) .image{justify-content:flex-start}
+figure:nth-child(2) .image,
+figure:nth-child(3) .image{justify-content:flex-end}
+figcaption{
   color:var(--quiet);
-  font-size:13px;
-  padding-top:1px;
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
 }
-.meta p{margin:0}
-.meta p+p{margin-top:2px}
-.image-wrap{width:100%}
-.image-wrap img{display:block;width:100%;height:auto}
-.plate.narrow .image-wrap{width:64%}
-.plate.narrow.right .image-wrap{margin-left:auto}
-.plate.medium .image-wrap{width:82%}
-.plate.medium.right .image-wrap{margin-left:auto}
-.plate.full .image-wrap{width:100%}
+figcaption span:last-child{text-align:right}
 footer{
   display:grid;
-  grid-template-columns:150px 1fr auto;
-  gap:40px;
+  grid-template-columns:210px 1fr auto;
+  gap:34px;
+  padding-top:9px;
   border-top:1px solid var(--rule);
-  padding-top:10px;
-  margin-top:20vh;
   color:var(--quiet);
-  font-size:13px;
+  font-size:12px;
 }
-@media(max-width:720px){
-  main{width:calc(100% - 28px);padding-top:18px}
+@media(max-width:760px){
+  .page{
+    height:auto;
+    min-height:100svh;
+    width:calc(100% - 28px);
+    padding-top:18px;
+    display:block;
+  }
   header{margin-bottom:12vh}
-  nav{gap:14px}
-  .intro{
-    grid-template-columns:1fr;
-    gap:10px;
-    margin-bottom:13vh;
+  .stage{display:block}
+  .side{margin-bottom:10vh}
+  .statement{max-width:230px}
+  .note{display:none}
+  .gallery{
+    display:flex;
+    flex-direction:column;
+    gap:12vh;
   }
-  .work{gap:14vh}
-  .plate{
-    grid-template-columns:1fr;
-    gap:10px;
-  }
-  .meta{order:2}
-  .image-wrap{order:1}
-  .plate.narrow .image-wrap,
-  .plate.medium .image-wrap{width:100%;margin:0}
+  figure:nth-child(1){order:0}
+  figure .image{display:block}
+  .image img{width:100%;height:auto;max-height:none}
+  figcaption{margin-top:7px}
   footer{
-    grid-template-columns:1fr auto;
-    gap:8px 20px;
     margin-top:14vh;
+    grid-template-columns:1fr auto;
+    gap:14px;
+    padding-bottom:20px;
   }
   footer .place{display:none}
 }
 </style>
 </head>
 <body>
-<main>
+<main class="page">
 <header>
 <h1>Cole Calfee</h1>
 <nav>
@@ -110,53 +149,28 @@ footer{
 </nav>
 </header>
 
-<section class="intro" aria-label="Introduction">
-<p class="intro-label">Practice</p>
-<p class="intro-copy">Photography, design, and artwork.</p>
+<section class="stage">
+<aside class="side">
+<p class="statement"><span>Practice</span>Photography, design, and artwork.</p>
+<p class="note">Selected work, ongoing.</p>
+</aside>
+
+<section class="gallery" aria-label="Selected work">
+<figure>
+<div class="image"><img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper"></div>
+<figcaption><span>Kashus Culpepper</span><span>Single artwork</span></figcaption>
+</figure>
+
+<figure>
+<div class="image"><img src="/assets/scout.webp" alt="Illustrated work for Scout Motors"></div>
+<figcaption><span>Scout Motors</span><span>Illustration</span></figcaption>
+</figure>
+
+<figure>
+<div class="image"><img src="/assets/cowboyer.webp" alt="The Cowboyer cover studies"></div>
+<figcaption><span>The Cowboyer</span><span>Cover studies</span></figcaption>
+</figure>
 </section>
-
-<section class="work" aria-label="Work">
-
-<figure class="plate narrow">
-<figcaption class="meta">
-<p>Kashus Culpepper</p>
-<p>Single artwork</p>
-</figcaption>
-<div class="image-wrap">
-<img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper">
-</div>
-</figure>
-
-<figure class="plate medium right">
-<figcaption class="meta">
-<p>Scout Motors</p>
-<p>Illustration and design</p>
-</figcaption>
-<div class="image-wrap">
-<img src="/assets/scout.webp" alt="Illustrated work for Scout Motors">
-</div>
-</figure>
-
-<figure class="plate narrow right">
-<figcaption class="meta">
-<p>Kashus Culpepper</p>
-<p>Character illustration</p>
-</figcaption>
-<div class="image-wrap">
-<img src="/assets/kashus-character.webp" alt="Character illustration for Kashus Culpepper">
-</div>
-</figure>
-
-<figure class="plate full">
-<figcaption class="meta">
-<p>The Cowboyer</p>
-<p>Cover studies</p>
-</figcaption>
-<div class="image-wrap">
-<img src="/assets/cowboyer.webp" alt="Four fictional magazine covers titled The Cowboyer">
-</div>
-</figure>
-
 </section>
 
 <footer>
