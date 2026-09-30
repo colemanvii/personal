@@ -17,130 +17,60 @@ html,body{margin:0;background:var(--paper);color:var(--ink)}
 body{
   font-family:"Iowan Old Style",Baskerville,"Times New Roman",serif;
   font-size:15px;
-  line-height:1.3;
+  line-height:1.35;
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
-.page{
-  height:100svh;
-  min-height:680px;
-  width:min(1180px,calc(100% - 48px));
-  margin:auto;
-  padding:24px 0 20px;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  gap:22px;
+main{
+  width:min(780px,calc(100% - 40px));
+  margin:0 auto;
+  padding:28px 0 46px;
 }
 header{
-  display:grid;
-  grid-template-columns:1fr auto;
-  align-items:start;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  margin-bottom:15vh;
 }
 h1{font:inherit;font-weight:400;margin:0}
 nav{display:flex;gap:18px}
-.stage{
-  min-height:0;
-  display:grid;
-  grid-template-columns:210px 1fr;
-  gap:34px;
-  align-items:stretch;
-}
-.side{
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:2px 0 1px;
-}
-.statement{margin:0;max-width:165px}
-.statement span{display:block;color:var(--quiet);font-size:13px;margin-bottom:7px}
-.note{margin:0;color:var(--quiet);font-size:13px;max-width:150px}
-.gallery{
-  min-width:0;
-  min-height:0;
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  grid-template-rows:1fr 1fr;
-  gap:14px;
-}
-figure{
-  min-width:0;
-  min-height:0;
-  margin:0;
-  display:grid;
-  grid-template-rows:1fr auto;
-  gap:6px;
-}
-.image{
-  min-height:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-.image img{
+.work{display:flex;flex-direction:column;gap:16vh}
+figure{margin:0}
+figure img{
   display:block;
-  max-width:100%;
-  max-height:100%;
-  width:auto;
+  width:100%;
   height:auto;
-  object-fit:contain;
 }
-figure:nth-child(1){grid-row:1 / span 2}
-figure:nth-child(1) .image{justify-content:flex-start}
-figure:nth-child(2) .image,
-figure:nth-child(3) .image{justify-content:flex-end}
+figure.small{width:78%;margin:0 auto}
 figcaption{
+  margin-top:8px;
   color:var(--quiet);
-  font-size:12px;
+  font-size:13px;
+}
+footer{
+  margin-top:16vh;
+  padding-top:10px;
+  border-top:1px solid var(--rule);
   display:flex;
   justify-content:space-between;
-  gap:12px;
-}
-figcaption span:last-child{text-align:right}
-footer{
-  display:grid;
-  grid-template-columns:210px 1fr auto;
-  gap:34px;
-  padding-top:9px;
-  border-top:1px solid var(--rule);
+  gap:24px;
   color:var(--quiet);
-  font-size:12px;
+  font-size:13px;
 }
-@media(max-width:760px){
-  .page{
-    height:auto;
-    min-height:100svh;
-    width:calc(100% - 28px);
-    padding-top:18px;
-    display:block;
-  }
-  header{margin-bottom:12vh}
-  .stage{display:block}
-  .side{margin-bottom:10vh}
-  .statement{max-width:230px}
-  .note{display:none}
-  .gallery{
-    display:flex;
-    flex-direction:column;
-    gap:12vh;
-  }
-  figure:nth-child(1){order:0}
-  figure .image{display:block}
-  .image img{width:100%;height:auto;max-height:none}
-  figcaption{margin-top:7px}
-  footer{
-    margin-top:14vh;
-    grid-template-columns:1fr auto;
-    gap:14px;
-    padding-bottom:20px;
-  }
-  footer .place{display:none}
+@media(max-width:560px){
+  main{width:calc(100% - 28px);padding-top:18px}
+  header{margin-bottom:11vh}
+  nav{gap:14px}
+  .work{gap:12vh}
+  figure.small{width:100%}
+  footer{margin-top:12vh}
 }
 </style>
 </head>
 <body>
-<main class="page">
+<main>
 <header>
 <h1>Cole Calfee</h1>
 <nav>
@@ -149,32 +79,24 @@ footer{
 </nav>
 </header>
 
-<section class="stage">
-<aside class="side">
-<p class="statement"><span>Practice</span>Photography, design, and artwork.</p>
-<p class="note">Selected work, ongoing.</p>
-</aside>
-
-<section class="gallery" aria-label="Selected work">
+<section class="work" aria-label="Work">
 <figure>
-<div class="image"><img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper"></div>
-<figcaption><span>Kashus Culpepper</span><span>Single artwork</span></figcaption>
+<img src="/assets/kashus-after.webp" alt="Single artwork for Kashus Culpepper">
+<figcaption>Kashus Culpepper / Single artwork</figcaption>
+</figure>
+
+<figure class="small">
+<img src="/assets/scout.webp" alt="Illustrated work for Scout Motors">
+<figcaption>Scout Motors / Illustration</figcaption>
 </figure>
 
 <figure>
-<div class="image"><img src="/assets/scout.webp" alt="Illustrated work for Scout Motors"></div>
-<figcaption><span>Scout Motors</span><span>Illustration</span></figcaption>
+<img src="/assets/cowboyer.webp" alt="The Cowboyer cover studies">
+<figcaption>The Cowboyer / Cover studies</figcaption>
 </figure>
-
-<figure>
-<div class="image"><img src="/assets/cowboyer.webp" alt="The Cowboyer cover studies"></div>
-<figcaption><span>The Cowboyer</span><span>Cover studies</span></figcaption>
-</figure>
-</section>
 </section>
 
 <footer>
-<span class="place">Nashville, Tennessee</span>
 <a href="mailto:hello@colecalfee.com">hello@colecalfee.com</a>
 <span>© 2026</span>
 </footer>
