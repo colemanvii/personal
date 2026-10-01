@@ -90,3 +90,27 @@ button{font:inherit;color:inherit}
   .info-grid{grid-template-columns:1fr;gap:48px}
   .info-small{grid-template-columns:1fr}
 }
+.category-links{
+  margin-top:62px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--rule);
+}
+.category-links a{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:15px 0 13px;
+  border-bottom:1px solid var(--rule);
+  font-family:var(--mono);
+  font-size:10px;
+  line-height:1.45;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+.category-links a+a{padding-left:18px}
+.category-links a:hover{color:var(--accent)}
+@media(max-width:850px){
+  .category-links{grid-template-columns:1fr}
+  .category-links a+a{padding-left:0}
+}
