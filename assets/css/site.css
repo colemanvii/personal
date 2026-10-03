@@ -5,17 +5,17 @@
   --rule:#c9c5bb;
   --accent:#8f251e;
   --serif:"Iowan Old Style",Baskerville,Georgia,serif;
-  --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --mono:Monaco,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box}
 html{background:var(--paper);color:var(--ink)}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:none;text-rendering:geometricPrecision}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--ink);color:var(--paper)}
 .skip{position:absolute;left:-9999px;top:8px}
 .skip:focus{left:8px;z-index:99;background:var(--paper);border:1px solid var(--ink);padding:8px 10px}
-a:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
+a:focus-visible{outline:1px dotted var(--ink);outline-offset:4px}
 .shell{width:min(1440px,calc(100% - 56px));margin:0 auto;min-height:100svh;display:flex;flex-direction:column}
 .site-head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;padding:22px 0 16px;border-bottom:1px solid var(--rule)}
 .brand{font-size:15px;line-height:1}
@@ -55,21 +55,56 @@ a:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
 .footer{border-top:1px solid var(--rule);padding:14px 0 22px;color:var(--muted);display:flex;justify-content:space-between;gap:20px}
 .back{display:inline-block;margin-top:38px;font-family:var(--mono);font-size:11px;letter-spacing:.045em;text-transform:uppercase;border-bottom:1px solid var(--rule)}
 
-/* Home: a door, not a portfolio spread */
-body.landing{min-height:100svh;overflow:hidden}
-.landing-frame{min-height:100svh;padding:18px;display:grid;place-items:center;position:relative}
-.landing-frame::before{content:"";position:fixed;inset:18px;border:1px solid var(--rule);pointer-events:none}
-.landing-card{width:min(360px,calc(100vw - 72px))}
-.landing-mark{text-align:center;margin-bottom:54px}
-.landing-name{font-family:var(--mono);font-size:12px;line-height:1.1;letter-spacing:.14em;color:var(--accent)}
-.landing-sub{margin-top:6px;font-family:var(--mono);font-size:9px;line-height:1.2;letter-spacing:.12em;color:var(--muted)}
-.landing-copy{width:260px;margin:0 auto 28px;font-family:var(--mono);font-size:11px;line-height:1.45;letter-spacing:.01em}
-.landing-nav{width:260px;margin:0 auto;border-top:1px solid var(--rule)}
-.landing-nav a{display:flex;justify-content:space-between;gap:20px;padding:10px 0 9px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11px;line-height:1.2;letter-spacing:.06em;text-transform:uppercase}
-.landing-nav a span:last-child{color:var(--muted)}
-.landing-nav a:hover{color:var(--accent)}
-.landing-foot{width:260px;margin:23px auto 0;display:flex;flex-wrap:wrap;gap:7px 16px;font-family:var(--mono);font-size:9px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.landing-foot a:hover{color:var(--ink)}
+/* COLE CALFEE — 1994 */
+body.landing{
+  width:100%;
+  min-height:100svh;
+  overflow:hidden;
+  background:#b9b9b4;
+  color:#111;
+  font-family:var(--mono);
+}
+.landing-frame{
+  width:100%;
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+}
+.seven{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:0;
+  max-width:100%;
+  font-size:11px;
+  line-height:1;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  white-space:normal;
+  text-align:center;
+}
+.seven > *{
+  display:inline-block;
+}
+.seven > * + *::before{
+  content:" / ";
+  white-space:pre;
+  color:#111;
+}
+.seven .name{
+  font-weight:700;
+}
+.seven a{
+  text-decoration:none;
+}
+.seven a:hover,
+.seven a:focus-visible{
+  background:#111;
+  color:#b9b9b4;
+  outline:none;
+}
 
 @media(max-width:850px){
   .shell{width:calc(100% - 28px)}
@@ -85,6 +120,12 @@ body.landing{min-height:100svh;overflow:hidden}
   .index-row .type,.index-row .year{display:none}
   .info-grid{grid-template-columns:1fr;gap:48px}
   .info-small{grid-template-columns:1fr}
-  .landing-frame{padding:12px}
-  .landing-frame::before{inset:12px}
+}
+@media(max-width:560px){
+  .landing-frame{padding:28px 22px}
+  .seven{
+    width:min(260px,100%);
+    font-size:11px;
+    line-height:2.15;
+  }
 }
