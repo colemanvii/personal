@@ -140,3 +140,6 @@ html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background
 .paper-control button{appearance:none;border:0;padding:6px 0;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .paper-control button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:4px}
 .paper-control button:focus-visible{outline:1px dotted currentColor;outline-offset:4px}
+
+.landing-paper{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));margin:0;font-size:10px;color:inherit}
+.landing-paper button{min-height:32px;padding:8px 4px}
