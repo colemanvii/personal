@@ -1,24 +1,68 @@
 document.documentElement.classList.add('js');
 (function(){
   var key='cole-paper-tone';
+  var tones=['tan','brown','white','gray','purple','sienna','umber'];
+  var labels={
+    tan:'Tan',
+    brown:'Warm brown',
+    white:'White',
+    gray:'Soft grey',
+    purple:'Purple',
+    sienna:'Burnt sienna',
+    umber:'Burnt umber'
+  };
+
+  function shuffledThree(){
+    var pool=tones.slice();
+    for(var i=pool.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;
+    }
+    return pool.slice(0,3);
+  }
+
+  function render(options){
+    var holder=document.querySelector('.landing-paper');
+    if(!holder) return;
+    holder.innerHTML='';
+    options.forEach(function(tone){
+      var button=document.createElement('button');
+      button.type='button';
+      button.dataset.paperTone=tone;
+      button.setAttribute('aria-label',labels[tone]);
+      button.setAttribute('aria-pressed','false');
+      holder.appendChild(button);
+    });
+  }
+
   function apply(tone){
     document.documentElement.dataset.tone=tone;
     document.querySelectorAll('[data-paper-tone]').forEach(function(button){
       button.setAttribute('aria-pressed',String(button.dataset.paperTone===tone));
     });
   }
-  var tone='gray';
-  try { var saved=localStorage.getItem(key); if(['tan','brown','white','gray','purple','sienna','umber'].includes(saved)) tone=saved; } catch(e){}
-  apply(tone);
+
   function bind(){
+    var options=shuffledThree();
+    render(options);
+
+    var tone=options[0];
+    try{
+      var saved=localStorage.getItem(key);
+      if(saved && options.includes(saved)) tone=saved;
+    }catch(e){}
+
     apply(tone);
+
     document.querySelectorAll('[data-paper-tone]').forEach(function(button){
       button.addEventListener('click',function(){
-        tone=button.dataset.paperTone;apply(tone);
+        tone=button.dataset.paperTone;
+        apply(tone);
         try{localStorage.setItem(key,tone);}catch(e){}
       });
     });
   }
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind);
   else bind();
 })();
