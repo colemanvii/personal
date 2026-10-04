@@ -129,3 +129,14 @@ body.landing{
     line-height:2.15;
   }
 }
+
+/* Visitor paper tones */
+html[data-tone="chalk"]{--paper:#f2f1eb;--ink:#242420;--muted:#68665e;--rule:#cfcdc3}
+html[data-tone="oat"]{--paper:#d8cfbc;--ink:#292720;--muted:#625d50;--rule:#b7ae9b}
+html[data-tone] body.landing{background:var(--paper);color:var(--ink)}
+.seven > * + *::before{color:inherit}
+html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background:var(--ink);color:var(--paper)}
+.paper-control{margin-top:32px;font:11px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.045em}
+.paper-control button{appearance:none;border:0;padding:6px 0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.paper-control button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:4px}
+.paper-control button:focus-visible{outline:1px dotted currentColor;outline-offset:4px}
