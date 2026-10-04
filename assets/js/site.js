@@ -17,13 +17,16 @@ document.documentElement.classList.add('js');
     'acid-yellow':'Acid yellow'
   };
 
-  function shuffledThree(){
-    var pool=tones.slice();
+  var softTones=['tan','white','gray'];
+
+  function pickOptions(){
+    var start=softTones[Math.floor(Math.random()*softTones.length)];
+    var pool=tones.filter(function(t){ return t!==start; });
     for(var i=pool.length-1;i>0;i--){
       var j=Math.floor(Math.random()*(i+1));
       var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;
     }
-    return pool.slice(0,3);
+    return { start:start, options:[start].concat(pool.slice(0,2)) };
   }
 
   function render(options){
@@ -48,15 +51,11 @@ document.documentElement.classList.add('js');
   }
 
   function bind(){
-    var options=shuffledThree();
+    var draw=pickOptions();
+    var options=draw.options;
     render(options);
 
-    var tone=options[0];
-    try{
-      var saved=localStorage.getItem(key);
-      if(saved && options.includes(saved)) tone=saved;
-    }catch(e){}
-
+    var tone=draw.start;
     apply(tone);
 
     document.querySelectorAll('[data-paper-tone]').forEach(function(button){
