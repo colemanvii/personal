@@ -132,13 +132,18 @@ body.landing{
 }
 
 /* Visitor paper tones */
-html[data-tone="chalk"]{--paper:#f2f1eb;--ink:#242420;--muted:#68665e;--rule:#cfcdc3}
-html[data-tone="oat"]{--paper:#d8cfbc;--ink:#292720;--muted:#625d50;--rule:#b7ae9b}
+html[data-tone="tan"]{--paper:#d7c4a4;--ink:#3a2b21;--muted:#6d5848;--rule:#b49c7d;--accent:#7f2f25}
+html[data-tone="brown"]{--paper:#725847;--ink:#f3eadf;--muted:#d2c1b0;--rule:#967765;--accent:#f0c6a8}
+html[data-tone="white"]{--paper:#f7f7f3;--ink:#171715;--muted:#6e6e67;--rule:#d7d7d0;--accent:#8f251e}
+html[data-tone="gray"]{--paper:#b9b9b4;--ink:#11110f;--muted:#595a55;--rule:#9e9f99;--accent:#8f251e}
+html[data-tone="purple"]{--paper:#75687f;--ink:#f2ede8;--muted:#d4cbd7;--rule:#988ca0;--accent:#f0c4a0}
+html[data-tone="sienna"]{--paper:#a65336;--ink:#f7efe7;--muted:#e0c6b8;--rule:#c07a5f;--accent:#f2cfb7}
+html[data-tone="umber"]{--paper:#68493a;--ink:#f4ede7;--muted:#d7c6ba;--rule:#8b6a59;--accent:#efc6a9}
 html[data-tone] body.landing{background:var(--paper);color:var(--ink)}
 .seven > * + *::before{color:inherit}
 html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background:var(--ink);color:var(--paper)}
 .paper-control{margin-top:32px;font:11px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.045em}
-.paper-control button{appearance:none;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' viewBox='0 0 29 29'%3E%3Cpath d='M14.5 1v27M1 14.5h27' stroke='%23171715' stroke-width='1.2'/%3E%3Ccircle cx='14.5' cy='14.5' r='2.2' fill='%238f251e'/%3E%3C/svg%3E") 14 14, crosshair;border:0;padding:6px 0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.paper-control button{appearance:none;cursor:inherit;border:0;padding:6px 0;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .paper-control button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:4px}
 .paper-control button:focus-visible{outline:1px dotted currentColor;outline-offset:4px}
 
@@ -149,9 +154,13 @@ html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background
 .landing-paper{left:50%;right:auto;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
 .landing-paper button{position:relative;width:14px;height:14px;min-height:0;padding:0;border:1px solid rgba(32,33,30,.4);text-decoration:none}
 .landing-paper button::before{content:"";position:absolute;inset:-8px}
+.landing-paper button[data-paper-tone="tan"]{background:#d7c4a4}
+.landing-paper button[data-paper-tone="brown"]{background:#725847}
+.landing-paper button[data-paper-tone="white"]{background:#f7f7f3}
 .landing-paper button[data-paper-tone="gray"]{background:#b9b9b4}
-.landing-paper button[data-paper-tone="chalk"]{background:#f2f1eb}
-.landing-paper button[data-paper-tone="oat"]{background:#d8cfbc}
+.landing-paper button[data-paper-tone="purple"]{background:#75687f}
+.landing-paper button[data-paper-tone="sienna"]{background:#a65336}
+.landing-paper button[data-paper-tone="umber"]{background:#68493a}
 .landing-paper button[aria-pressed="true"]{outline:1px solid currentColor;outline-offset:3px}
 
 /* Understated, slightly raised swatches */
