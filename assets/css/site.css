@@ -152,3 +152,9 @@ html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background
 .landing-paper button[data-paper-tone="chalk"]{background:#f2f1eb}
 .landing-paper button[data-paper-tone="oat"]{background:#d8cfbc}
 .landing-paper button[aria-pressed="true"]{outline:1px solid currentColor;outline-offset:3px}
+
+/* Understated, slightly raised swatches */
+.landing-paper{bottom:max(48px,env(safe-area-inset-bottom));gap:8px}
+.landing-paper button{width:12px;height:12px;border:1px solid rgba(32,33,30,.25);outline:none}
+.landing-paper button[aria-pressed="true"]{outline:none}
+.landing-paper button:focus-visible{outline:1px dotted currentColor;outline-offset:3px}
