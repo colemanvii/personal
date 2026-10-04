@@ -1,7 +1,7 @@
 document.documentElement.classList.add('js');
 (function(){
   var key='cole-paper-tone';
-  var tones=['tan','brown','white','gray','purple','sienna','umber'];
+  var tones=['tan','brown','white','gray','purple','sienna','umber','mustard','marigold','pulp-orange','peach','acid-yellow'];
   var labels={
     tan:'Tan',
     brown:'Warm brown',
@@ -9,7 +9,12 @@ document.documentElement.classList.add('js');
     gray:'Soft grey',
     purple:'Purple',
     sienna:'Burnt sienna',
-    umber:'Burnt umber'
+    umber:'Burnt umber',
+    mustard:'Mustard',
+    marigold:'Marigold',
+    'pulp-orange':'Pulp orange',
+    peach:'Peach',
+    'acid-yellow':'Acid yellow'
   };
 
   function shuffledThree(){
