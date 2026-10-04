@@ -143,3 +143,12 @@ html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background
 
 .landing-paper{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));margin:0;font-size:10px;color:inherit}
 .landing-paper button{min-height:32px;padding:8px 4px}
+
+/* Quiet paper swatches */
+.landing-paper{left:50%;right:auto;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+.landing-paper button{position:relative;width:14px;height:14px;min-height:0;padding:0;border:1px solid rgba(32,33,30,.4);text-decoration:none}
+.landing-paper button::before{content:"";position:absolute;inset:-8px}
+.landing-paper button[data-paper-tone="gray"]{background:#b9b9b4}
+.landing-paper button[data-paper-tone="chalk"]{background:#f2f1eb}
+.landing-paper button[data-paper-tone="oat"]{background:#d8cfbc}
+.landing-paper button[aria-pressed="true"]{outline:1px solid currentColor;outline-offset:3px}
