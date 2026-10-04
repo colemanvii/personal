@@ -2,14 +2,13 @@ document.documentElement.classList.add('js');
 (function(){
   var key='cole-paper-tone';
   function apply(tone){
-    if(tone==='chalk'||tone==='oat') document.documentElement.dataset.tone=tone;
-    else document.documentElement.removeAttribute('data-tone');
+    document.documentElement.dataset.tone=tone;
     document.querySelectorAll('[data-paper-tone]').forEach(function(button){
       button.setAttribute('aria-pressed',String(button.dataset.paperTone===tone));
     });
   }
   var tone='gray';
-  try { var saved=localStorage.getItem(key); if(['gray','chalk','oat'].includes(saved)) tone=saved; } catch(e){}
+  try { var saved=localStorage.getItem(key); if(['tan','brown','white','gray','purple','sienna','umber'].includes(saved)) tone=saved; } catch(e){}
   apply(tone);
   function bind(){
     apply(tone);
