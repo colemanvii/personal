@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shop — Cole Calfee</title>
+<meta name="description" content="Prints and available work by Cole Calfee.">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="shop.css">
+<script src="../assets/js/site.js"></script>
+<script src="shop.js" defer></script>
+</head>
+<body class="shop-page">
+<header class="shop-head">
+  <nav class="seven" aria-label="Primary">
+    <a class="name" href="../">COLE CALFEE</a>
+    <a href="../photos/">PHOTOS</a>
+    <a href="../index/">WORK INDEX</a>
+    <a href="../shop/" aria-current="page">SHOP</a>
+    <a href="../info/">INFO</a>
+  </nav>
+</header>
+
+<main class="shop-grid" aria-label="Shop">
+  <button class="product" type="button" data-product="another-scout">
+    <span class="product-image"><img src="../assets/scout.webp" alt="Another Scout print"></span>
+    <span class="product-meta">
+      <span>ANOTHER SCOUT — SAMPLE</span>
+      <span>18 × 24 PRINT / $65</span>
+    </span>
+  </button>
+</main>
+
+<div class="paper-control landing-paper" role="group" aria-label="Paper tone"></div>
+
+<dialog class="product-dialog" aria-label="Product detail">
+  <button type="button" class="product-close">CLOSE</button>
+  <div class="product-detail">
+    <div class="product-detail-image">
+      <img src="../assets/scout.webp" alt="Another Scout print">
+    </div>
+    <div class="product-detail-copy">
+      <p>ANOTHER SCOUT — SAMPLE</p>
+      <p>$65</p>
+      <label for="format">SIZE / FORMAT</label>
+      <select id="format">
+        <option>18 × 24 PRINT</option>
+      </select>
+      <button class="buy" type="button" disabled>BUY</button>
+      <p class="product-note">SAMPLE PRODUCT — CHECKOUT NOT CONNECTED</p>
+    </div>
+  </div>
+</dialog>
+</body>
+</html>
