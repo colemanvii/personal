@@ -1,6 +1,7 @@
 document.documentElement.classList.add('js');
 (function(){
-  var key='cole-paper-tone';
+  var toneKey='cole-paper-tone';
+  var optionsKey='cole-paper-options';
   var tones=['tan','brown','white','gray','purple','sienna','umber','mustard','marigold','pulp-orange','peach','acid-yellow'];
   var labels={
     tan:'Tan',
@@ -29,6 +30,23 @@ document.documentElement.classList.add('js');
     return { start:start, options:[start].concat(pool.slice(0,2)) };
   }
 
+  function getVisitState(){
+    try{
+      var storedTone=sessionStorage.getItem(toneKey);
+      var storedOptions=JSON.parse(sessionStorage.getItem(optionsKey) || 'null');
+      if(storedTone && Array.isArray(storedOptions) && storedOptions.length===3){
+        return { tone:storedTone, options:storedOptions };
+      }
+    }catch(e){}
+
+    var draw=pickOptions();
+    try{
+      sessionStorage.setItem(toneKey,draw.start);
+      sessionStorage.setItem(optionsKey,JSON.stringify(draw.options));
+    }catch(e){}
+    return { tone:draw.start, options:draw.options };
+  }
+
   function render(options){
     var holder=document.querySelector('.landing-paper');
     if(!holder) return;
@@ -51,18 +69,17 @@ document.documentElement.classList.add('js');
   }
 
   function bind(){
-    var draw=pickOptions();
-    var options=draw.options;
-    render(options);
+    var state=getVisitState();
+    var tone=state.tone;
 
-    var tone=draw.start;
+    render(state.options);
     apply(tone);
 
     document.querySelectorAll('[data-paper-tone]').forEach(function(button){
       button.addEventListener('click',function(){
         tone=button.dataset.paperTone;
         apply(tone);
-        try{localStorage.setItem(key,tone);}catch(e){}
+        try{sessionStorage.setItem(toneKey,tone);}catch(e){}
       });
     });
   }
