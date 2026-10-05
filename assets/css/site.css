@@ -179,3 +179,11 @@ html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{background
 .landing-paper button[aria-pressed="true"]{outline:none}
 .landing-paper button:focus-visible{outline:1px dotted currentColor;outline-offset:3px}
 
+/* Internal pages use the homepage's restrained system typography. */
+body:not(.landing){font-family:var(--mono);font-size:13px;line-height:1.5}
+body:not(.landing) .brand{font-family:var(--mono);font-size:13px;line-height:1.4;letter-spacing:.02em;text-transform:uppercase}
+body:not(.landing) .section-title{font-family:var(--mono);font-size:13px;line-height:1.4;letter-spacing:.02em;font-weight:400;text-transform:uppercase}
+body:not(.landing) .section-title em{font-style:normal}
+body:not(.landing) .section-note,
+body:not(.landing) .info-copy,
+body:not(.landing) .info-small{font-family:var(--mono);font-size:13px;line-height:1.5;letter-spacing:normal}
