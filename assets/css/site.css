@@ -189,20 +189,17 @@ body:not(.landing) .info-copy,
 body:not(.landing) .info-small{font-family:var(--mono);font-size:13px;line-height:1.5;letter-spacing:normal}
 
 
-/* Single live contact signal */
-.seven .contact-link{
+
+
+/* Contact page: keep the nav quiet; let the actual email be the only live signal. */
+.info-links a.email-live{
   color:var(--accent);
   animation:contactPulse 1.8s ease-in-out infinite;
-}
-.seven .contact-link:hover,
-.seven .contact-link:focus-visible{
-  background:var(--accent);
-  color:var(--paper);
 }
 @keyframes contactPulse{
   0%,100%{opacity:1}
   50%{opacity:.38}
 }
 @media (prefers-reduced-motion:reduce){
-  .seven .contact-link{animation:none}
+  .info-links a.email-live{animation:none}
 }
