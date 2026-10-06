@@ -52,3 +52,30 @@
   .design-pair-first,.design-pair-second{width:100%;margin:0}
   .design-closing{margin-top:24px}
 }
+
+/* Project metadata occupies the existing space above each first work. */
+.design-project{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:inherit;
+  min-width:0;
+}
+.design-project-meta{
+  position:absolute;
+  top:-44px;
+  left:0;
+  color:var(--muted);
+  font:10px/1.4 var(--mono);
+  letter-spacing:.045em;
+}
+.design-project-meta h2{margin:0;font:inherit;color:var(--ink)}
+.design-project--02 .design-project-meta{top:calc(clamp(24px,4vw,64px) - 44px)}
+.design-project--03 .design-project-meta{left:12%}
+@media(max-width:700px){
+  .design-sequence{gap:136px}
+  .design-project{gap:88px}
+  .design-project--01 .design-project-meta{top:-32px}
+  .design-project--02 .design-project-meta{top:-20px}
+  .design-project--03 .design-project-meta{left:0}
+}
