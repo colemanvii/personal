@@ -224,3 +224,16 @@ body:not(.landing) .section-title,
   .seven{font-size:11px}
   .seven > * + *::before{margin:0 6px}
 }
+
+
+/* Exact Freeman entrance nav metrics (desktop + mobile). */
+body.landing{font-family:Monaco,"Courier New",monospace}
+.seven{align-items:baseline;justify-content:center;font-family:inherit;font-size:14px;line-height:1;letter-spacing:-.025em}
+.seven > * + *::before{margin:0 13px;opacity:1}
+@media(max-width:720px){
+  .seven{font-size:12px;line-height:1;row-gap:10px}
+}
+@media(max-width:390px){
+  .seven{font-size:12px}
+  .seven > * + *::before{margin:0 8px}
+}
