@@ -187,3 +187,40 @@ body:not(.landing) .section-title em{font-style:normal}
 body:not(.landing) .section-note,
 body:not(.landing) .info-copy,
 body:not(.landing) .info-small{font-family:var(--mono);font-size:13px;line-height:1.5;letter-spacing:normal}
+
+
+/* 2026-10 — shared proportions with the Freeman editorial system.
+   A related visual language, not a duplicate identity. */
+:root{--site-gutter:30px;--site-type:14px}
+body{-webkit-font-smoothing:antialiased}
+.shell{width:calc(100% - 2 * var(--site-gutter));max-width:1600px}
+.site-head{padding:24px 0 18px;align-items:baseline}
+body:not(.landing) .brand,
+body:not(.landing) .section-title,
+.nav{font-size:var(--site-type);line-height:1.45;letter-spacing:-.025em}
+.nav{gap:18px}
+.section{padding:88px 0 110px}
+.section-head{margin-bottom:52px}
+.archive-list{margin-top:8px}
+.index-row{padding:16px 0 14px}
+.footer{padding:18px 0 24px}
+/* The entry is a quiet instrument: one fixed center, no decorative chrome. */
+.landing-frame{min-height:100dvh;padding:30px}
+.seven{font-size:14px;line-height:1;letter-spacing:-.025em;white-space:nowrap;flex-wrap:nowrap}
+.seven > * + *::before{content:"/";display:inline-block;white-space:normal;margin:0 13px;font-weight:400;opacity:.65}
+.seven .name{font-weight:700}
+.landing-paper{bottom:max(48px,env(safe-area-inset-bottom))}
+@media(max-width:850px){
+  :root{--site-gutter:18px}
+  .site-head{padding-top:20px}
+  .section{padding:60px 0 80px}
+}
+@media(max-width:720px){
+  .landing-frame{padding:24px 18px}
+  .seven{width:calc(100vw - 36px);max-width:100%;font-size:12px;line-height:1.8;flex-wrap:wrap;white-space:normal;row-gap:4px}
+  .seven > * + *::before{margin:0 8px}
+}
+@media(max-width:390px){
+  .seven{font-size:11px}
+  .seven > * + *::before{margin:0 6px}
+}
