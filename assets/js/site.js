@@ -18,23 +18,17 @@ document.documentElement.classList.add('js');
     'acid-yellow':'Acid yellow'
   };
 
-  var softTones=['tan','white','gray'];
+  var softTones=['white','tan','brown'];
 
   function pickOptions(){
-    var start=softTones[Math.floor(Math.random()*softTones.length)];
-    var pool=tones.filter(function(t){ return t!==start; });
-    for(var i=pool.length-1;i>0;i--){
-      var j=Math.floor(Math.random()*(i+1));
-      var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;
-    }
-    return { start:start, options:[start].concat(pool.slice(0,2)) };
+    return { start:'white', options:['white','tan','brown'] };
   }
 
   function getVisitState(){
     try{
       var storedTone=sessionStorage.getItem(toneKey);
       var storedOptions=JSON.parse(sessionStorage.getItem(optionsKey) || 'null');
-      if(storedTone && Array.isArray(storedOptions) && storedOptions.length===3){
+      if(storedTone && ['white','tan','brown'].includes(storedTone) && Array.isArray(storedOptions) && storedOptions.join(',')==='white,tan,brown'){
         return { tone:storedTone, options:storedOptions };
       }
     }catch(e){}
