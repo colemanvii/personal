@@ -79,14 +79,14 @@
 <main class="section">
   <div class="section-head">
     <h1 class="section-title">WORK INDEX</h1>
-    <p class="index-count">013 entries</p>
+    <p class="index-count">012 entries</p>
   </div>
   <div class="index-layout"><table class="index-table" aria-label="Selected work">
     <colgroup><col><col><col><col></colgroup>
     <thead><tr><th scope="col">No.</th><th scope="col">Project / Client</th><th scope="col">Role / Work</th><th scope="col">Year</th></tr></thead>
     <tbody>
       <tr><td>001</td><td>Freeman General Contracting</td><td>Creative Director</td><td>2026—</td></tr>
-      <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" aria-controls="kashus-releases"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2026</td></tr>
+      <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2026</td></tr>
 
       <tr><td>003</td><td><a href="../projects/scout-motors/">Scout Motors</a></td><td>Illustration</td><td>2026</td></tr>
       <tr><td>004</td><td><a href="../projects/the-cowboyer/">The Cowboyer</a></td><td>Cover studies</td><td>2026</td></tr>
@@ -95,16 +95,15 @@
       <tr><td>007</td><td>The Last Movie Star — Burt Reynolds</td><td>Production Intern</td><td>2016</td></tr>
       <tr><td>008</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗</a></td><td>Apprentice</td><td>2025</td></tr>
       <tr><td>009</td><td>ERNEST</td><td>Client</td><td>—</td></tr>
-      <tr><td>010</td><td>Corey Kent</td><td>Client</td><td>—</td></tr>
+      <tr><td>010</td><td><button class="expand-button" type="button" data-client="corey" aria-expanded="false" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Corey Kent</button></td><td>Artwork / 1 release</td><td>—</td></tr>
       <tr><td>011</td><td><a href="https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz" target="_blank" rel="noopener noreferrer" aria-label="Listen to Tree Birds by Dylan Gossett on Spotify">Dylan Gossett — Tree Birds ↗</a></td><td>Music artwork</td><td>2024</td></tr>
       <tr><td>012</td><td><a href="https://open.spotify.com/track/1HIGTfMjZeqweuDuAmpCRk" target="_blank" rel="noopener noreferrer">Abbie Callahan — Linger ↗</a></td><td>Music</td><td>—</td></tr>
-      <tr><td>013</td><td><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">Corey Kent — Poster Child EP ↗</a></td><td>Music</td><td>—</td></tr>
     </tbody>
   </table>
-  <aside class="work-panel" id="kashus-releases" aria-label="Kashus Culpepper releases">
-    <p class="panel-id">002 / SELECTED WORK</p>
+  <aside class="work-panel" id="selected-work-panel" aria-label="Selected client releases">
+    <p class="panel-id">SELECTED WORK</p>
     <p class="panel-placeholder">Select a client to see the work.</p>
-    <div class="panel-content" hidden>
+    <div class="panel-content" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <ul class="release-list">
         <li><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗</a><span class="release-label">SPOTIFY</span></li>
@@ -116,29 +115,51 @@
         <li><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗</a><span class="release-label">SPOTIFY</span></li>
       </ul>
     </div>
+    <div class="panel-content" data-panel="corey" hidden>
+      <div class="panel-top"><h2 class="panel-title">Corey Kent</h2><button class="panel-close" type="button" aria-label="Close Corey Kent releases">CLOSE ×</button></div>
+      <ul class="release-list">
+        <li><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">Poster Child EP ↗</a><span class="release-label">SPOTIFY</span></li>
+      </ul>
+    </div>
   </aside></div>
   <a class="back" href="../">← Home</a>
 </main>
 <footer class="footer"><span>© 2026 Cole Calfee</span><a href="mailto:hello@colecalfee.com">Contact</a></footer>
 </div><script src="../assets/js/site.js"></script><script>
 (function(){
-  const button=document.querySelector('.expand-button');
-  const panel=document.getElementById('kashus-releases');
-  const content=panel&&panel.querySelector('.panel-content');
-  const placeholder=panel&&panel.querySelector('.panel-placeholder');
-  const close=panel&&panel.querySelector('.panel-close');
-  if(!button||!panel||!content||!placeholder||!close)return;
-  function setOpen(open){
-    button.setAttribute('aria-expanded',String(open));
-    button.querySelector('.indicator').textContent=open?'−':'+';
-    panel.classList.toggle('is-open',open);
-    content.hidden=!open;
-    placeholder.hidden=open;
-    if(open && matchMedia('(max-width:850px)').matches) close.focus();
-    if(!open) button.focus();
+  const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
+  const panel=document.getElementById('selected-work-panel');
+  if(!panel||!buttons.length)return;
+  const contents=Array.from(panel.querySelectorAll('.panel-content[data-panel]'));
+  const placeholder=panel.querySelector('.panel-placeholder');
+  let active=null;
+  function show(client){
+    active=client;
+    buttons.forEach(button=>{
+      const selected=button.dataset.client===client;
+      button.setAttribute('aria-expanded',String(selected));
+      button.querySelector('.indicator').textContent=selected?'−':'+';
+    });
+    contents.forEach(content=>{content.hidden=content.dataset.panel!==client;});
+    placeholder.hidden=!!client;
+    panel.classList.toggle('is-open',!!client);
+    if(client && matchMedia('(max-width:850px)').matches){
+      const close=panel.querySelector('.panel-content:not([hidden]) .panel-close');
+      if(close)close.focus();
+    }
   }
-  button.addEventListener('click',()=>setOpen(button.getAttribute('aria-expanded')!=='true'));
-  close.addEventListener('click',()=>setOpen(false));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')setOpen(false)});
+  buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
+  panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
+    const prior=active;show(null);
+    const origin=buttons.find(item=>item.dataset.client===prior);
+    if(origin)origin.focus();
+  }));
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&active){
+      const prior=active;show(null);
+      const origin=buttons.find(item=>item.dataset.client===prior);
+      if(origin)origin.focus();
+    }
+  });
 })();
 </script></body></html>
