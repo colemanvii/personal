@@ -30,6 +30,12 @@ body.landing .landing-ident{left:16px;bottom:16px;font-size:7px}
 body.landing .landing-paper{bottom:12px}
 }
 
+/* Keep the target cursor over every color swatch and its hit area. */
+body.landing .landing-paper,
+body.landing .landing-paper button,
+body.landing .landing-paper button:hover,
+body.landing .landing-paper button:focus-visible{cursor:crosshair!important}
+
 /* Freeman landing screenshot parity: visual system, not the copy. */
 body.landing{background:var(--paper);color:var(--ink)}
 body.landing .seven{font-size:16px;gap:13px;font-weight:400;letter-spacing:-.025em}
