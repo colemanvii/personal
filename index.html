@@ -42,11 +42,11 @@ html[data-tone] body.landing .seven a:focus-visible{
   outline:none;
 }
 
-/* Keep the target cursor over every color swatch and its hit area. */
-body.landing .landing-paper,
+/* Preserve the site's custom target cursor across the color-switcher hit area. */
+body.landing .landing-paper{cursor:inherit!important}
 body.landing .landing-paper button,
 body.landing .landing-paper button:hover,
-body.landing .landing-paper button:focus-visible{cursor:crosshair!important}
+body.landing .landing-paper button:focus-visible{cursor:inherit!important}
 
 /* Freeman landing screenshot parity: visual system, not the copy. */
 body.landing{background:var(--paper);color:var(--ink)}
