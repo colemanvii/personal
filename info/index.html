@@ -6,79 +6,53 @@
 <script>try{const t=localStorage.getItem('cole-paper-tone-v2');if(['field-notes','violet-hour','red-earth'].includes(t))document.documentElement.dataset.tone=t;}catch(e){}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
-/* A quiet writing surface, distinct from the surrounding paper tone. */
-.contact-card{margin:13px 0 14px;padding:17px 18px 14px;background:#faf9f6;border:1px solid #e2ded9;max-width:390px}
-.contact-card{color:#332d38;--muted:#777078;--rule:#d5d0d1;--accent:#874b71;--ink:#332d38}
-.contact-card label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px}
-.contact-card input,.contact-card textarea{appearance:none;-webkit-appearance:none;caret-color:var(--accent);display:block;width:100%;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);font:12px/1.5 var(--mono);padding:7px 0 9px;outline:none;resize:none;min-width:0}
-.contact-card input:focus,.contact-card textarea:focus{border-bottom-color:var(--accent)}
-.contact-card input::placeholder,.contact-card textarea::placeholder{color:var(--muted);opacity:.7}
-.contact-card .contact-field{margin-bottom:14px}
-.contact-card .contact-submit{display:flex;align-items:center;justify-content:space-between;gap:14px}
-.contact-card button{padding:7px 0;border:0;border-bottom:1px solid var(--ink);background:transparent;font:11px/1.4 var(--mono);color:var(--ink);cursor:pointer;text-transform:uppercase}
-.contact-card button:hover,.contact-card button:focus-visible{color:var(--accent);border-color:var(--accent)}
-.contact-card .contact-note{font-size:10px;line-height:1.35;color:var(--muted)}
-/* Fixed viewport page: header, content and footer stay on one screen. */
+/* Single-screen contact: one writing surface, no extra fields. */
 html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll-behavior:none}
 .about-page .shell{height:100dvh;min-height:0;overflow:hidden}
-.about-page .site-head{flex-shrink:0}
-.about-page .section{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(12px,3vh,32px) 0}
-.about-page .section>.eyebrow{margin:0 0 6px}
-.about-page .info-grid{align-items:start;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(22px,4vw,64px)}
-.about-page .info-small{grid-template-columns:minmax(0,1.2fr) minmax(110px,.7fr);gap:clamp(12px,2vw,32px)}
-.about-page .info-copy{max-width:680px}
-.about-page .info-copy p+p{margin-top:13px}
-.about-page .back{margin-top:20px;align-self:flex-start}
-.about-page .footer{flex-shrink:0}
-.contact-card{max-width:390px;margin:9px 0 10px;padding:12px 14px 11px}
-.contact-card .contact-field{margin-bottom:8px}
-.contact-card label{margin-bottom:2px}
-.contact-card input,.contact-card textarea{padding:4px 0 6px}
-.contact-card textarea{height:60px}
-.contact-card .contact-submit{margin-top:5px}
-.about-page .info-links a{padding:5px 0}
+.about-page .site-head,.about-page .footer{flex-shrink:0}
+.about-page .section{flex:1;min-height:0;display:flex;justify-content:center;flex-direction:column;padding:clamp(12px,3vh,34px) 0}
+.about-page .info-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,7vw,110px);align-items:start}
+.about-page .info-copy{max-width:740px}
+.about-page .info-copy p+p{margin-top:15px}
+.about-page .contact-links{margin-top:34px;display:flex;gap:26px;font:11px/1.4 var(--mono);text-transform:uppercase}
+.about-page .contact-links a{border-bottom:1px solid var(--rule);padding-bottom:5px}
+.about-page .contact-links a:hover{color:var(--accent)}
+.about-page .contact-heading{margin:0 0 15px;font:11px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+.about-page .contact-card{margin:0;max-width:100%}
+.about-page .contact-card textarea{appearance:none;-webkit-appearance:none;display:block;width:100%;height:clamp(185px,32vh,290px);padding:20px 19px;resize:none;border-radius:0;border:1px solid #e0dcd6;background:#faf9f6;color:#332d38;caret-color:#874b71;font:13px/1.5 var(--mono);outline:none}
+.about-page .contact-card textarea::placeholder{color:#89828a;opacity:1}
+.about-page .contact-card textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.about-page .contact-submit{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:18px}
+.about-page .contact-submit button{border:0;border-bottom:1px solid var(--ink);padding:0 0 5px;background:none;color:var(--ink);font:11px/1.4 var(--mono);cursor:pointer}
+.about-page .contact-submit button:hover{color:var(--accent);border-color:var(--accent)}
+.about-page .contact-note{margin:0;color:var(--muted);font:9px/1.5 var(--mono);text-transform:uppercase}
 @media(max-width:850px){
 .about-page .site-head{grid-template-columns:1fr auto}
-.about-page .info-grid{grid-template-columns:1fr;gap:clamp(12px,2vh,20px)}
-.about-page .info-small{grid-template-columns:minmax(0,1fr) minmax(100px,.42fr);gap:18px}
+.about-page .info-grid{grid-template-columns:1fr;gap:clamp(18px,4vh,36px)}
 .about-page .section{padding:12px 0}
-.about-page .back{margin-top:12px}
-.contact-card{max-width:100%}
+.about-page .contact-links{margin-top:16px}
+.about-page .contact-card textarea{height:clamp(135px,24vh,220px)}
 }
 @media(max-width:520px){
 .about-page .site-head{padding:11px 0 10px}
 .about-page .brand small{margin-top:1px}
-.about-page .nav{gap:12px}
-.about-page .section{justify-content:center;padding:6px 0}
-.about-page .info-grid{gap:12px}
-.about-page .info-small{grid-template-columns:minmax(0,1fr) minmax(82px,.36fr);gap:12px}
-.about-page .info-copy,.about-page .info-small{font-size:11px;line-height:1.35}
-.about-page .info-copy p+p{margin-top:8px}
-.contact-card{padding:8px 10px;margin:6px 0}
-.contact-card label{font-size:9px}
-.contact-card input,.contact-card textarea{font-size:11px}
-.contact-card textarea{height:48px}
-.contact-card .contact-field{margin-bottom:6px}
-.contact-card .contact-note{font-size:9px}
-.contact-card button{font-size:10px}
-.about-page .info-links a{font-size:10px;padding:4px 0}
-.about-page .back{margin-top:10px}
+.about-page .section{padding:8px 0}
+.about-page .info-grid{gap:18px}
+.about-page .info-copy{font-size:12px;line-height:1.4}
+.about-page .info-copy p+p{margin-top:9px}
+.about-page .contact-heading{margin-bottom:8px}
+.about-page .contact-card textarea{height:clamp(125px,23vh,180px);padding:13px;font-size:12px}
+.about-page .contact-submit{margin-top:10px;gap:7px}
+.about-page .contact-links{margin-top:12px}
 .about-page .footer{padding:9px 0;font-size:10px}
 }
 @media(max-height:650px){
-.about-page .section{padding:4px 0}
-.about-page .info-grid{gap:8px}
-.about-page .info-copy p+p{margin-top:5px}
-.about-page .back{margin-top:7px}
-.contact-card{padding:7px 10px;margin:5px 0}
-.contact-card .contact-field{margin-bottom:4px}
-.contact-card textarea{height:36px}
-.contact-card .contact-submit{margin-top:2px}
-.about-page .info-links a{padding:2px 0}
+.about-page .info-grid{gap:10px}
+.about-page .contact-card textarea{height:clamp(100px,19vh,150px)}
+.about-page .contact-links{margin-top:9px}
+.about-page .contact-submit{margin-top:8px;gap:5px}
 .about-page .footer{padding:6px 0}
 }
-
-/* Only while a mobile form control is focused may the document move to keep typing visible. */
 @media(max-width:850px){
 html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact-card :focus){height:auto;overflow-y:auto;overscroll-behavior:auto}
 .about-page:has(.contact-card :focus) .shell{height:auto;min-height:100dvh;overflow:visible}
@@ -93,33 +67,28 @@ html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact
 </nav>
 </header>
 <main class="section">
-  <div class="eyebrow">Cole Calfee / Georgia &amp; Tennessee</div>
   <div class="info-grid">
     <div class="info-copy">
+      <div class="eyebrow">Cole Calfee / Georgia &amp; Tennessee</div>
       <p>I make photographs, paintings, drawings, identities, album artwork, and other things.</p>
       <p class="meta">Available for selected projects, commissions, and collaborations.</p>
+      <nav class="contact-links" aria-label="Contact links">
+        <a href="mailto:hello@colecalfee.com">EMAIL ↗</a>
+        <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
+      </nav>
     </div>
-    <div class="info-small">
-      <div>
-        <div class="eyebrow">Contact</div>
-        <form class="contact-card" id="contact-form">
-          <div class="contact-field"><label for="contact-name">Your name</label><input id="contact-name" name="name" type="text" autocomplete="name" placeholder="Name" required maxlength="120"></div>
-          <div class="contact-field"><label for="contact-email">Your email</label><input id="contact-email" name="email" type="email" autocomplete="email" placeholder="Email address" required maxlength="200"></div>
-          <div class="contact-field"><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="3" placeholder="Write me a note…" required maxlength="3000"></textarea></div>
-          <div class="contact-submit"><button type="submit">COMPOSE EMAIL ↗</button><span class="contact-note">Opens your mail app</span></div>
-        </form>
-        <div class="info-links">
-          <a href="mailto:hello@colecalfee.com">Email ↗</a>
-          <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+    <div>
+      <h2 class="contact-heading">WRITE A MESSAGE</h2>
+      <form class="contact-card" id="contact-form">
+        <label class="skip" for="contact-message">Your message</label>
+        <textarea id="contact-message" name="message" placeholder="Write me a note." required maxlength="3000"></textarea>
+        <div class="contact-submit">
+          <button type="submit">OPEN EMAIL ↗</button>
+          <p class="contact-note">Opens your email application. Nothing is sent from this website.</p>
         </div>
-      </div>
-      <div>
-        <div class="eyebrow">Shop</div>
-        <p><a href="../shop/">Prints and available work.</a></p>
-      </div>
+      </form>
     </div>
   </div>
-  <a class="back" href="../">← Home</a>
 </main>
 <footer class="footer"><span>© 2026 Cole Calfee</span><span>Georgia / Tennessee</span></footer>
 </div><script src="../assets/js/site.js"></script>
@@ -130,13 +99,9 @@ html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact
   form.addEventListener('submit',function(event){
     event.preventDefault();
     if(!form.reportValidity())return;
-    const name=form.elements.name.value.trim();
-    const email=form.elements.email.value.trim();
     const message=form.elements.message.value.trim();
-    if(!name||!email||!message)return;
-    const subject='Portfolio inquiry from '+name;
-    const body=message+'\n\nFrom: '+name+'\nReply to: '+email;
-    window.location.href='mailto:hello@colecalfee.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    if(!message)return;
+    window.location.href='mailto:hello@colecalfee.com?subject='+encodeURIComponent('Portfolio inquiry')+'&body='+encodeURIComponent(message);
   });
 })();
 </script></body></html>
