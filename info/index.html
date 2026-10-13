@@ -6,128 +6,27 @@
 <script>try{const t=localStorage.getItem('cole-paper-tone-v2');if(['field-notes','violet-hour','red-earth'].includes(t))document.documentElement.dataset.tone=t;}catch(e){}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
-/* Single-screen contact: one writing surface, no extra fields. */
 html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll-behavior:none}
 .about-page .shell{height:100dvh;min-height:0;overflow:hidden}
 .about-page .site-head,.about-page .footer{flex-shrink:0}
-.about-page .section{flex:1;min-height:0;display:flex;justify-content:center;flex-direction:column;padding:clamp(12px,3vh,34px) 0}
-.about-page .info-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.93fr);gap:clamp(48px,5vw,84px);align-items:center;max-width:1300px;width:100%;margin:0 auto}
-.about-page .info-copy{max-width:610px}
-.about-page .info-copy p+p{margin-top:15px}
-.about-page .contact-links{margin-top:34px;display:flex;gap:26px;font:11px/1.4 var(--mono);text-transform:uppercase}
-.about-page .contact-links a{border-bottom:1px solid var(--rule);padding-bottom:5px}
-.about-page .contact-links a:hover{color:var(--accent)}
-.about-page .contact-heading{margin:0 0 15px;font:11px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
-.about-page .contact-card{margin:0;max-width:100%}
-.about-page .contact-email{appearance:none;-webkit-appearance:none;display:block;width:100%;height:40px;margin:0 0 10px;padding:9px 12px;border:1px solid #e0dcd6;border-radius:0;background:#faf9f6;color:#332d38;font:12px/1.5 var(--mono);outline:none}
-.about-page .contact-email::placeholder{color:#89828a;opacity:1}
-.about-page .contact-email:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.about-page .contact-card textarea{appearance:none;-webkit-appearance:none;display:block;width:100%;height:clamp(175px,27vh,245px);padding:20px 19px;resize:none;border-radius:0;border:1px solid #e0dcd6;background:#faf9f6;color:#332d38;caret-color:#874b71;font:13px/1.5 var(--mono);outline:none}
-.about-page .contact-card textarea::placeholder{color:#89828a;opacity:1}
-.about-page .contact-card textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.about-page .contact-submit{display:flex;flex-direction:column;align-items:flex-start;gap:9px;margin-top:15px}
-.about-page .contact-submit button{border:0;border-bottom:1px solid var(--ink);padding:0 0 5px;background:none;color:var(--ink);font:11px/1.4 var(--mono);cursor:pointer}
-.about-page .contact-submit button:hover{color:var(--accent);border-color:var(--accent)}
-.about-page .contact-note{margin:0;color:var(--muted);font:9px/1.5 var(--mono);text-transform:uppercase}
-@media(max-width:850px){
-.about-page .site-head{grid-template-columns:1fr auto}
-.about-page .info-grid{grid-template-columns:1fr;gap:clamp(18px,4vh,36px);max-width:620px;align-items:start}
-.about-page .section{padding:12px 0}
-.about-page .contact-links{margin-top:16px}
-.about-page .contact-card textarea{height:clamp(135px,24vh,220px)}
+.about-page .section{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px 0}
+.about-page .about-content{width:min(100%,760px);margin:0 auto}
+.about-page .about-name{margin:0 0 25px;font:400 clamp(27px,3vw,42px)/1.12 var(--mono);letter-spacing:-.055em;color:var(--ink)}
+.about-page .about-description{margin:0;max-width:47ch;font:400 clamp(14px,1.45vw,18px)/1.55 var(--mono);letter-spacing:-.025em;color:var(--ink)}
+.about-page .about-location{margin:24px 0 0;font:400 clamp(12px,1.1vw,15px)/1.5 var(--mono);color:var(--muted)}
+.about-page .contact-links{margin-top:36px;display:flex;gap:28px;font:11px/1.4 var(--mono);text-transform:uppercase}
+.about-page .contact-links a{text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:5px}
+.about-page .contact-links a:hover,.about-page .contact-links a:focus-visible{color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px var(--accent);color:var(--paper);border-color:transparent}
+@media(max-width:700px){
+ .about-page .site-head{grid-template-columns:1fr auto}
+ .about-page .section{padding:28px 0}
+ .about-page .about-content{max-width:420px}
+ .about-page .about-name{font-size:30px;margin-bottom:23px}
+ .about-page .about-description{font-size:15px;line-height:1.55}
+ .about-page .about-location{font-size:12px;margin-top:20px}
+ .about-page .contact-links{margin-top:30px;gap:25px}
 }
-@media(max-width:520px){
-.about-page .site-head{padding:11px 0 10px}
-.about-page .brand small{margin-top:1px}
-.about-page .section{padding:8px 0}
-.about-page .info-grid{gap:18px}
-.about-page .info-copy{font-size:12px;line-height:1.4}
-.about-page .info-copy p+p{margin-top:9px}
-.about-page .contact-heading{margin-bottom:8px}
-.about-page .contact-card textarea{height:clamp(125px,23vh,180px);padding:13px;font-size:12px}
-.about-page .contact-submit{margin-top:10px;gap:7px}
-.about-page .contact-links{margin-top:12px}
-.about-page .footer{padding:9px 0;font-size:10px}
-}
-@media(max-height:650px){
-.about-page .info-grid{gap:10px}
-.about-page .contact-card textarea{height:clamp(100px,19vh,150px)}
-.about-page .contact-links{margin-top:9px}
-.about-page .contact-submit{margin-top:8px;gap:5px}
-.about-page .footer{padding:6px 0}
-}
-@media(max-width:850px){
-html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact-card :focus){height:auto;overflow-y:auto;overscroll-behavior:auto}
-.about-page:has(.contact-card :focus) .shell{height:auto;min-height:100dvh;overflow:visible}
-}
-
-/* ABOUT: personal introduction, not a portfolio inventory.
-   Preserve the existing single-screen shell and terminal typography. */
-.about-page .info-grid{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:clamp(36px,5vw,94px)}
-.about-page .info-copy{max-width:660px}
-.about-page .info-copy .eyebrow{margin-bottom:16px}
-.about-page .info-copy .about-intro{font:400 clamp(19px,2.15vw,30px)/1.28 var(--mono);letter-spacing:-.055em;color:var(--ink)}
-.about-page .info-copy .about-story{max-width:52ch;margin-top:22px;font:400 clamp(13px,1.05vw,15px)/1.55 var(--mono);letter-spacing:-.018em;color:var(--muted)}
-.about-page .contact-links{margin-top:30px}
-.about-page .contact-heading{margin-bottom:11px}
-.about-page .contact-card textarea{height:clamp(132px,19vh,188px);padding:15px 16px}
-.about-page .contact-email{height:38px}
-.about-page .contact-submit{margin-top:12px}
-@media(max-width:850px){
- .about-page .info-grid{grid-template-columns:1fr;gap:clamp(18px,3vh,32px);max-width:720px}
- .about-page .info-copy .eyebrow{margin-bottom:10px}
- .about-page .info-copy .about-intro{font-size:clamp(17px,2.45vw,24px);line-height:1.3}
- .about-page .info-copy .about-story{margin-top:12px;font-size:13px;line-height:1.45}
- .about-page .contact-links{margin-top:16px}
- .about-page .contact-card textarea{height:clamp(100px,16vh,155px)}
-}
-@media(max-width:520px){
- .about-page .info-grid{gap:14px}
- .about-page .info-copy .about-intro{font-size:17px}
- .about-page .info-copy .about-story{font-size:12px;line-height:1.4}
- .about-page .contact-card textarea{height:clamp(90px,14vh,130px);padding:12px}
- .about-page .contact-email{height:35px;padding:8px 11px}
- .about-page .contact-heading{margin-bottom:7px}
-}
-@media(max-height:650px){
- .about-page .info-copy .about-intro{font-size:17px}
- .about-page .info-copy .about-story{margin-top:9px}
- .about-page .contact-card textarea{height:90px}
- .about-page .contact-links{margin-top:12px}
-}
-
-/* A quieter About: single compact composition, restrained message instrument. */
-.about-page .info-grid{grid-template-columns:1fr;gap:clamp(24px,4vh,44px);max-width:800px;align-items:start}
-.about-page .info-copy{max-width:800px}
-.about-page .info-copy .about-intro{max-width:35ch;font-size:clamp(19px,2.4vw,29px);line-height:1.3}
-.about-page .info-copy .about-story{max-width:60ch;margin-top:17px;font-size:clamp(12px,1.15vw,14px);line-height:1.5}
-.about-page .contact-links{margin-top:22px}
-.about-page .contact-card{max-width:800px}
-.about-page .contact-card textarea{height:clamp(100px,14vh,130px);padding:13px 15px}
-.about-page .contact-email{height:40px;margin-bottom:8px}
-.about-page .contact-submit{margin-top:11px}
-@media(max-width:850px){
- .about-page .info-grid{max-width:740px;gap:clamp(20px,3vh,30px)}
- .about-page .info-copy .about-intro{font-size:clamp(18px,3.2vw,26px)}
- .about-page .info-copy .about-story{margin-top:12px;font-size:13px}
- .about-page .contact-card textarea{height:clamp(98px,13vh,125px)}
-}
-@media(max-width:520px){
- .about-page .info-grid{gap:18px}
- .about-page .info-copy .about-intro{font-size:18px}
- .about-page .info-copy .about-story{font-size:12px}
- .about-page .contact-links{margin-top:14px}
- .about-page .contact-card textarea{height:100px}
- .about-page .contact-email{height:38px}
-}
-@media(max-height:700px){
- .about-page .section{padding:8px 0}
- .about-page .info-grid{gap:16px}
- .about-page .info-copy .about-intro{font-size:19px}
- .about-page .info-copy .about-story{margin-top:9px}
- .about-page .contact-links{margin-top:12px}
- .about-page .contact-card textarea{height:88px}
-}
+@media(max-width:380px){.about-page .about-name{font-size:27px}.about-page .about-description{font-size:14px}}
 </style>
 </head><body class="about-page"><div class="shell">
 <header class="site-head">
@@ -138,63 +37,15 @@ html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact
 </nav>
 </header>
 <main class="section">
-  <div class="info-grid">
-    <div class="info-copy">
-      <p class="about-intro">I make things for a living. Some for myself, some with other people.</p>
-      <p class="about-story">I’ve worked with musicians, painters, cowboys, and builders.</p>
-      <nav class="contact-links" aria-label="Contact links">
-        <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
-        <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
-      </nav>
-    </div>
-    <div>
-      <form class="contact-card" id="contact-form" action="/api/contact" method="post">
-        <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <label class="skip" for="contact-email">Your email address</label>
-        <input class="contact-email" id="contact-email" type="email" name="email" autocomplete="email" placeholder="Your email address" required maxlength="254">
-        <label class="skip" for="contact-message">Your message</label>
-        <textarea id="contact-message" name="message" placeholder="What’s on your mind?" required maxlength="3000"></textarea>
-        <div class="contact-submit">
-          <button type="submit">SEND MESSAGE ↗</button>
-          <p class="contact-note" id="contact-status" role="status" aria-live="polite"></p>
-        </div>
-      </form>
-    </div>
+  <div class="about-content">
+    <h1 class="about-name">Cole Calfee</h1>
+    <p class="about-description">Independent creative work across art, music, photography, and design.</p>
+    <p class="about-location">Nashville, Tennessee / North Georgia</p>
+    <nav class="contact-links" aria-label="Contact links">
+      <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
+      <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
+    </nav>
   </div>
 </main>
 <footer class="footer"><span>© 2026 Cole Calfee</span></footer>
-</div><script src="../assets/js/site.js"></script>
-<script>
-(function(){
-  const form=document.getElementById('contact-form');
-  if(!form)return;
-  const button=form.querySelector('button[type="submit"]');
-  const status=document.getElementById('contact-status');
-  form.addEventListener('submit',async function(event){
-    event.preventDefault();
-    if(!form.reportValidity())return;
-    const message=form.elements.message.value.trim();
-    if(message.length<3){status.textContent='Please write a little more.';return;}
-    button.disabled=true;
-    button.textContent='SENDING…';
-    status.textContent='Sending your note…';
-    try{
-      const response=await fetch('/api/contact',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:message,email:form.elements.email.value.trim(),website:form.elements.website.value})
-      });
-      if(!response.ok)throw new Error('Send failed');
-      form.elements.message.value='';
-      form.elements.email.value='';
-      status.textContent='MESSAGE SENT. THANK YOU.';
-      button.textContent='SEND ANOTHER ↗';
-    }catch(error){
-      status.textContent='Could not send. Try again, or use the email link.';
-      button.textContent='TRY AGAIN ↗';
-    }finally{
-      button.disabled=false;
-    }
-  });
-})();
-</script></body></html>
+</div><script src="../assets/js/site.js"></script></body></html>
