@@ -70,8 +70,8 @@ html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact
   <div class="info-grid">
     <div class="info-copy">
       <div class="eyebrow">Cole Calfee / Georgia &amp; Tennessee</div>
-      <p>I make photographs, paintings, drawings, identities, album artwork, and other things.</p>
-      <p class="meta">Available for selected projects, commissions, and collaborations.</p>
+      <p>I make things for a living. Some for myself, some with other people.</p>
+      <p class="meta">Always interested in what comes next.</p>
       <nav class="contact-links" aria-label="Contact links">
         <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
         <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
@@ -82,10 +82,10 @@ html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact
       <form class="contact-card" id="contact-form" action="/api/contact" method="post">
         <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <label class="skip" for="contact-message">Your message</label>
-        <textarea id="contact-message" name="message" placeholder="Tell me what you’re making. Or what you wish existed." required maxlength="3000"></textarea>
+        <textarea id="contact-message" name="message" placeholder="What’s on your mind?" required maxlength="3000"></textarea>
         <div class="contact-submit">
           <button type="submit">SEND MESSAGE ↗</button>
-          <p class="contact-note" id="contact-status" role="status" aria-live="polite">Delivered to Cole’s inbox.</p>
+          <p class="contact-note" id="contact-status" role="status" aria-live="polite"></p>
         </div>
       </form>
     </div>
