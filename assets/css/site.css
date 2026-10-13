@@ -272,3 +272,25 @@ body:not(.landing) .index-row{font-size:13px;letter-spacing:-.015em}
  .entry-left{left:18px}.entry-right{right:18px}
  .landing-paper{bottom:62px}
 }
+
+/* Cole Calfee / independent color identity — 2026-10-13.
+   Three complementary print palettes, intentionally distinct from Freeman. */
+:root,html[data-tone="field-notes"]{
+  --paper:#e9d5af;--ink:#452d56;--muted:#69516b;--rule:#b8a18b;--accent:#a43f33;
+}
+html[data-tone="violet-hour"]{
+  --paper:#c8b8dd;--ink:#412a4c;--muted:#664c71;--rule:#a18eae;--accent:#804b37;
+}
+html[data-tone="red-earth"]{
+  --paper:#a94735;--ink:#f8e7c1;--muted:#f0d0af;--rule:#ce8670;--accent:#ffe29d;
+}
+body.landing{background:var(--paper);color:var(--ink)}
+.seven .name{color:var(--accent)}
+.seven > * + *::before{color:var(--muted)}
+.entry-corner{color:var(--muted)}
+.landing-paper button[data-paper-tone="field-notes"]{background:#e9d5af}
+.landing-paper button[data-paper-tone="violet-hour"]{background:#c8b8dd}
+.landing-paper button[data-paper-tone="red-earth"]{background:#a94735}
+.landing-paper button{border-color:var(--muted)}
+.landing-paper button[aria-pressed="true"]{outline:1px solid var(--ink);outline-offset:3px}
+html[data-tone] .seven a:hover,html[data-tone] .seven a:focus-visible{color:var(--accent);background:transparent}
