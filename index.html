@@ -33,15 +33,15 @@ body.landing .landing-paper{bottom:12px}
 /* Freeman landing screenshot parity: visual system, not the copy. */
 body.landing{background:var(--paper);color:var(--ink)}
 body.landing .seven{font-size:16px;gap:13px;font-weight:400;letter-spacing:-.025em}
-body.landing .seven .name{font-weight:400;color:#f04b25}
+body.landing .seven .name{font-weight:400;color:var(--accent)}
 body.landing .seven a:last-child{color:var(--ink)}
-body.landing .seven .slash{color:#999994}
-body.landing .seven a:hover,body.landing .seven a:focus-visible{color:#f04b25}
+body.landing .seven .slash{color:var(--muted)}
+body.landing .seven a:hover,body.landing .seven a:focus-visible{color:var(--accent)}
 body.landing .landing-ident{font-size:10px;line-height:1.4;left:28px;bottom:27px;letter-spacing:.025em}
 body.landing .landing-paper{bottom:21px;gap:0}
 body.landing .landing-paper button{width:28px;height:32px;min-height:32px;padding:0;outline:0!important}
-body.landing .landing-paper button::after{width:18px;height:18px;left:5px;top:7px;border:1px solid #b9b9b6}
-body.landing .landing-paper button[aria-pressed="true"]::after{outline:0;border:1px solid #a3a3a0}
+body.landing .landing-paper button::after{width:18px;height:18px;left:5px;top:7px;border:1px solid var(--muted)}
+body.landing .landing-paper button[aria-pressed="true"]::after{outline:0;border:1px solid var(--ink)}
 body.landing .landing-paper button:focus-visible::after{outline:1px solid var(--ink);outline-offset:2px}
 @media(max-width:720px){
 body.landing .seven{font-size:12px;gap:10px;row-gap:10px}
