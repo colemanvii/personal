@@ -37,6 +37,12 @@ module.exports = async function handler(req, res) {
   // Honeypot; accept silently but don't send.
   if (body.website) return res.status(200).json({ ok: true });
 
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  // Limit reply addresses to a single syntactically valid mailbox.
+  if (email.length > 254 || !/^[^\s@<>;,]+@[^\s@<>;,]+\.[^\s@<>;,]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   if (message.length < 3 || message.length > 3000) {
     return res.status(400).json({ error: 'Please write a message between 3 and 3000 characters.' });
@@ -52,8 +58,9 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         from: 'Cole Calfee Website <contact@colecalfee.com>',
         to: ['colecalfee@gmail.com'],
+        reply_to: email,
         subject: 'New note from colecalfee.com',
-        text: message
+        text: 'Reply to: ' + email + '\n\n' + message
       }),
       signal: AbortSignal.timeout(10000)
     });
