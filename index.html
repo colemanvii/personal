@@ -30,6 +30,18 @@ body.landing .landing-ident{left:16px;bottom:16px;font-size:7px}
 body.landing .landing-paper{bottom:12px}
 }
 
+/* Freeman-style full-word highlight, using Cole's selected palette. */
+html body.landing .seven a:hover,
+html body.landing .seven a:focus-visible,
+html[data-tone] body.landing .seven a:hover,
+html[data-tone] body.landing .seven a:focus-visible{
+  color:var(--paper)!important;
+  background:var(--accent)!important;
+  box-shadow:0 0 0 3px var(--accent);
+  text-decoration:none!important;
+  outline:none;
+}
+
 /* Keep the target cursor over every color swatch and its hit area. */
 body.landing .landing-paper,
 body.landing .landing-paper button,
