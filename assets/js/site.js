@@ -13,8 +13,8 @@ document.documentElement.classList.add('js');
 
   function getVisitState(){
     try{
-      var storedTone=sessionStorage.getItem(toneKey);
-      var storedOptions=JSON.parse(sessionStorage.getItem(optionsKey) || 'null');
+      var storedTone=localStorage.getItem(toneKey);
+      var storedOptions=JSON.parse(localStorage.getItem(optionsKey) || 'null');
       if(storedTone && tones.includes(storedTone) && Array.isArray(storedOptions) && storedOptions.join(',')===tones.join(',')){
         return { tone:storedTone, options:storedOptions };
       }
@@ -22,8 +22,8 @@ document.documentElement.classList.add('js');
 
     var draw=pickOptions();
     try{
-      sessionStorage.setItem(toneKey,draw.start);
-      sessionStorage.setItem(optionsKey,JSON.stringify(draw.options));
+      localStorage.setItem(toneKey,draw.start);
+      localStorage.setItem(optionsKey,JSON.stringify(draw.options));
     }catch(e){}
     return { tone:draw.start, options:draw.options };
   }
@@ -60,7 +60,7 @@ document.documentElement.classList.add('js');
       button.addEventListener('click',function(){
         tone=button.dataset.paperTone;
         apply(tone);
-        try{sessionStorage.setItem(toneKey,tone);}catch(e){}
+        try{localStorage.setItem(toneKey,tone);}catch(e){}
       });
     });
   }
