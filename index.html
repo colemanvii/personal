@@ -66,6 +66,42 @@ body.landing .seven{font-size:12px;gap:10px;row-gap:10px}
 body.landing .landing-ident{font-size:8px;left:16px;bottom:16px}
 body.landing .landing-paper{bottom:13px}
 }
+
+/* Mobile composition: deliberate two-line masthead and compact palette controls.
+   Desktop geometry and all palette values remain untouched. */
+@media(max-width:720px){
+ body.landing .landing-frame{height:100dvh;min-height:100dvh;overflow:hidden}
+ body.landing .seven{
+  top:46%;width:calc(100% - 36px);max-width:440px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:0 13px;row-gap:20px;line-height:1.2;font-size:16px;
+  letter-spacing:-.025em;text-align:center;white-space:nowrap
+ }
+ body.landing .seven .name{
+  flex:0 0 100%;text-align:center;font-size:21px;
+  letter-spacing:-.035em
+ }
+ body.landing .seven a{font-size:16px}
+ body.landing .seven .slash{font-size:15px}
+ body.landing .landing-paper{
+  bottom:clamp(72px,11dvh,108px);gap:1px;
+ }
+ body.landing .landing-paper button{
+  width:36px;height:44px;min-height:44px;
+ }
+ body.landing .landing-paper button::after{
+  width:17px;height:17px;left:9.5px;top:13.5px;
+ }
+ body.landing .landing-ident{
+  left:20px;bottom:22px;font-size:9px;
+  line-height:1.45;letter-spacing:.06em;
+ }
+}
+@media(max-width:360px){
+ body.landing .seven{column-gap:10px}
+ body.landing .seven a{font-size:14px}
+ body.landing .seven .name{font-size:19px}
+}
 </style>
 </head>
 <body class="landing">
