@@ -9,7 +9,7 @@
 .contact-card{margin:13px 0 14px;padding:17px 18px 14px;background:#faf9f6;border:1px solid #e2ded9;max-width:390px}
 .contact-card{color:#332d38;--muted:#777078;--rule:#d5d0d1;--accent:#874b71;--ink:#332d38}
 .contact-card label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px}
-.contact-card input,.contact-card textarea{display:block;width:100%;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);font:12px/1.5 var(--mono);padding:7px 0 9px;outline:none;resize:none;min-width:0}
+.contact-card input,.contact-card textarea{appearance:none;-webkit-appearance:none;caret-color:var(--accent);display:block;width:100%;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);font:12px/1.5 var(--mono);padding:7px 0 9px;outline:none;resize:none;min-width:0}
 .contact-card input:focus,.contact-card textarea:focus{border-bottom-color:var(--accent)}
 .contact-card input::placeholder,.contact-card textarea::placeholder{color:var(--muted);opacity:.7}
 .contact-card .contact-field{margin-bottom:14px}
@@ -77,6 +77,11 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 .about-page .footer{padding:6px 0}
 }
 
+/* Only while a mobile form control is focused may the document move to keep typing visible. */
+@media(max-width:850px){
+html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact-card :focus){height:auto;overflow-y:auto;overscroll-behavior:auto}
+.about-page:has(.contact-card :focus) .shell{height:auto;min-height:100dvh;overflow:visible}
+}
 </style>
 </head><body class="about-page"><div class="shell">
 <header class="site-head">
