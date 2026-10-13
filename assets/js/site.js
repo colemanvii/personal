@@ -1,34 +1,21 @@
 document.documentElement.classList.add('js');
 (function(){
-  var toneKey='cole-paper-tone';
-  var optionsKey='cole-paper-options';
-  var tones=['tan','brown','white','gray','purple','sienna','umber','mustard','marigold','pulp-orange','peach','acid-yellow'];
-  var labels={
-    tan:'Tan',
-    brown:'Warm brown',
-    white:'White',
-    gray:'Soft grey',
-    purple:'Purple',
-    sienna:'Burnt sienna',
-    umber:'Burnt umber',
-    mustard:'Mustard',
-    marigold:'Marigold',
-    'pulp-orange':'Pulp orange',
-    peach:'Peach',
-    'acid-yellow':'Acid yellow'
-  };
+  var toneKey='cole-paper-tone-v2';
+  var optionsKey='cole-paper-options-v2';
+  var tones=['field-notes','violet-hour','red-earth'];
+  var labels={'field-notes':'Field Notes — wheat and eggplant','violet-hour':'Violet Hour — lilac and plum','red-earth':'Red Earth — terracotta and ivory'};
 
-  var softTones=['white','tan','brown'];
+  var softTones=tones;
 
   function pickOptions(){
-    return { start:'white', options:['white','tan','brown'] };
+    return { start:'field-notes', options:tones.slice() };
   }
 
   function getVisitState(){
     try{
       var storedTone=sessionStorage.getItem(toneKey);
       var storedOptions=JSON.parse(sessionStorage.getItem(optionsKey) || 'null');
-      if(storedTone && ['white','tan','brown'].includes(storedTone) && Array.isArray(storedOptions) && storedOptions.join(',')==='white,tan,brown'){
+      if(storedTone && tones.includes(storedTone) && Array.isArray(storedOptions) && storedOptions.join(',')===tones.join(',')){
         return { tone:storedTone, options:storedOptions };
       }
     }catch(e){}
