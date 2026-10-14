@@ -128,9 +128,9 @@
 .work-index .ramsey-hill-plate{background:#fff;aspect-ratio:1/1;max-height:min(44vh,450px);margin-inline:auto}
 .work-index .ramsey-hill-plate img{object-fit:contain}
 /* Joseph Martin: three real pieces in the established static reading pane. */
-.work-index .joseph-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.work-index .joseph-gallery .photo-plate{aspect-ratio:3/4;background:#faf9f6}
-.work-index .joseph-gallery .photo-plate img{object-fit:contain}
+.work-index .joseph-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:start}
+.work-index .joseph-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
+.work-index .joseph-gallery .photo-plate img{display:block;width:100%;height:auto;object-fit:contain}
 @media(max-width:480px){.work-index .joseph-gallery{gap:6px}}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
