@@ -332,3 +332,6 @@ html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
   outline:none;
   cursor:inherit;
 }
+
+/* Off-white is the standard palette for fresh visits, including direct project links. */
+:root:not([data-tone]){--paper:#f4f3ee;--ink:#292725;--muted:#77736e;--rule:#d1cec6;--accent:#a43f33}
