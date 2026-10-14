@@ -2,7 +2,7 @@ document.documentElement.classList.add('js');
 (function(){
   var toneKey='cole-paper-tone-v2';
   var optionsKey='cole-paper-options-v2';
-  var tones=['field-notes','violet-hour','red-earth','off-white'];
+  var tones=['off-white','field-notes','violet-hour','red-earth'];
   var labels={'field-notes':'Field Notes — wheat and eggplant','violet-hour':'Violet Hour — lilac and plum','red-earth':'Red Earth — terracotta and ivory','off-white':'Off White — warm paper and dark ink'};
 
   var softTones=tones;
