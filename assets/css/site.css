@@ -317,3 +317,18 @@ body.landing .entry-right{display:none!important}
 html[data-tone="off-white"]{--paper:#f4f3ee;--ink:#292725;--muted:#77736e;--rule:#d1cec6;--accent:#a43f33}
 .landing-paper button[data-paper-tone="off-white"]::after{background:#f4f3ee}
 .landing-paper button[data-paper-tone="off-white"]{background:#f4f3ee}
+
+/* Shared Freeman-style whole-label highlight on all interior pages.
+   Limited to text links and text actions; never highlight image plates or swatches. */
+html body:not(.landing) a:not(:has(img)):is(:hover,:focus-visible),
+html body:not(.landing) button.expand-button:is(:hover,:focus-visible),
+html body:not(.landing) button.panel-close:is(:hover,:focus-visible),
+html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
+  color:var(--paper)!important;
+  background:var(--accent)!important;
+  box-shadow:0 0 0 3px var(--accent)!important;
+  text-decoration:none!important;
+  border-color:transparent!important;
+  outline:none;
+  cursor:inherit;
+}
