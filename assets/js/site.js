@@ -1,20 +1,22 @@
 document.documentElement.classList.add('js');
 (function(){
-  var toneKey='cole-paper-tone-v2';
-  var optionsKey='cole-paper-options-v2';
+  var toneKey='cole-paper-tone-session-v3';
+  var optionsKey='cole-paper-options-session-v3';
   var tones=['off-white','field-notes','violet-hour','red-earth'];
   var labels={'field-notes':'Field Notes — wheat and eggplant','violet-hour':'Violet Hour — lilac and plum','red-earth':'Red Earth — terracotta and ivory','off-white':'Off White — warm paper and dark ink'};
 
-  var softTones=tones;
+  // A fresh visit starts off-white; palette changes last only for this tab.
 
   function pickOptions(){
-    return { start:'field-notes', options:tones.slice() };
+    return { start:'off-white', options:tones.slice() };
   }
+
+  if(document.body && document.body.classList.contains('landing')){ try{sessionStorage.removeItem(toneKey);sessionStorage.removeItem(optionsKey);}catch(e){} }
 
   function getVisitState(){
     try{
-      var storedTone=localStorage.getItem(toneKey);
-      var storedOptions=JSON.parse(localStorage.getItem(optionsKey) || 'null');
+      var storedTone=sessionStorage.getItem(toneKey);
+      var storedOptions=JSON.parse(sessionStorage.getItem(optionsKey) || 'null');
       if(storedTone && tones.includes(storedTone) && Array.isArray(storedOptions) && storedOptions.join(',')===tones.join(',')){
         return { tone:storedTone, options:storedOptions };
       }
@@ -22,8 +24,8 @@ document.documentElement.classList.add('js');
 
     var draw=pickOptions();
     try{
-      localStorage.setItem(toneKey,draw.start);
-      localStorage.setItem(optionsKey,JSON.stringify(draw.options));
+      sessionStorage.setItem(toneKey,draw.start);
+      sessionStorage.setItem(optionsKey,JSON.stringify(draw.options));
     }catch(e){}
     return { tone:draw.start, options:draw.options };
   }
@@ -60,7 +62,7 @@ document.documentElement.classList.add('js');
       button.addEventListener('click',function(){
         tone=button.dataset.paperTone;
         apply(tone);
-        try{localStorage.setItem(toneKey,tone);}catch(e){}
+        try{sessionStorage.setItem(toneKey,tone);}catch(e){}
       });
     });
   }
