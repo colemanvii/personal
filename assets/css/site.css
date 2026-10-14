@@ -335,3 +335,8 @@ html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
 
 /* Off-white is the standard palette for fresh visits, including direct project links. */
 :root:not([data-tone]){--paper:#f4f3ee;--ink:#292725;--muted:#77736e;--rule:#d1cec6;--accent:#a43f33}
+
+/* Monaco remains first; Menlo supplies an installed iOS terminal-style fallback. */
+@media(max-width:850px){
+ :root{--mono:Monaco,Menlo,"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+}

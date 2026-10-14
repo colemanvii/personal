@@ -135,6 +135,49 @@
 @media(max-width:480px){.work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}}
 .work-index .corey-artwork{aspect-ratio:auto;max-height:min(50vh,520px);border:0;background:transparent}
 .work-index .corey-artwork img{width:100%;height:100%;max-height:min(50vh,520px);object-fit:contain}
+
+/* Mobile refinement: preserve readable type and use the full index width. */
+@media(max-width:850px){
+ .work-index .section-head{display:flex;justify-content:space-between;gap:12px}
+ .work-index .index-layout{overflow:auto;overscroll-behavior:contain}
+ .work-index .index-table{font-size:13px;line-height:17px}
+ .work-index .index-table col:nth-child(1){width:32px}
+ .work-index .index-table col:nth-child(2){width:auto}
+ .work-index .index-table col:nth-child(3){display:none}
+ .work-index .index-table col:nth-child(4){width:58px}
+ .work-index .index-table td{height:33px;padding:0 6px 0 0}
+ .work-index .index-table td:nth-child(2){line-height:17px;overflow-wrap:normal}
+ .work-index .index-table td:nth-child(2) > :is(button,a){display:block;width:100%;min-height:32px;padding:7px 0;line-height:17px;box-sizing:border-box}
+ /* Fill the row's existing whitespace, including number/year columns.
+    Half a border pixel above/below meets the next row without overlap. */
+ .work-index .index-table td:nth-child(2) > :is(button,a){position:relative}
+ .work-index .index-table td:nth-child(2) > :is(button,a)::after{content:"";position:absolute;inset:-.5px -64px -.5px -32px}
+ .work-index .expand-button{position:relative;padding-left:18px!important}
+ .work-index .expand-button .indicator{position:absolute;left:0}
+ .work-index .index-layout:has(.work-panel.is-open){overflow:hidden}
+ .work-index .index-table[inert]{visibility:hidden}
+ .work-index .work-panel{overflow:auto;overscroll-behavior:contain}
+ .work-index .panel-id{margin-bottom:8px}
+ .work-index .panel-top{align-items:center;margin:0 0 14px;gap:12px}
+ .work-index .panel-title{min-width:0}
+ .work-index .panel-close{flex:none;min-width:60px;min-height:44px;white-space:nowrap;text-align:right}
+ .work-index .photo-plate{aspect-ratio:auto;max-height:none;background:transparent}
+ .work-index .photo-plate img{width:100%;height:auto;max-height:calc(100dvh - 250px);object-fit:contain}
+ .work-index .photo-pair,.work-index .ronnie-sequence{align-items:start}
+ .work-index .photo-pair .photo-plate,.work-index .ronnie-sequence .photo-plate{aspect-ratio:auto}
+ .work-index .release-list a{display:flex;align-items:center;min-height:44px}
+ .work-index .release-list li{padding:0}
+ .work-image-dialog .viewer-top{align-items:flex-start}
+ .work-image-dialog .viewer-close{flex:none;min-height:44px;min-width:60px;text-align:right}
+ .work-image-dialog .viewer-caption{flex-wrap:wrap}
+ .work-image-dialog .viewer-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .work-image-dialog .viewer-step{min-height:44px;min-width:64px;padding:0;border:0;background:transparent;color:inherit;font:11px/1.4 var(--mono)}
+}
+.viewer-navigation{display:none}
+@media(max-width:850px) and (min-height:880px){
+ .work-index .index-table td{height:37px}
+ .work-index .index-table td:nth-child(2) > :is(button,a){min-height:36px}
+}
 /* Scout Motors: preserve both framed works in their original portrait proportions. */
 .work-index .scout-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
 .work-index .scout-gallery .photo-plate img{display:block;width:100%;height:auto;object-fit:contain}
@@ -277,6 +320,7 @@
   <div class="viewer-frame">
     <div class="viewer-top"><span id="viewer-project">SELECTED WORK / IMAGE</span><button type="button" class="viewer-close" aria-label="Close enlarged image">CLOSE ×</button></div>
     <div class="viewer-image-wrap"><img class="viewer-image" id="viewer-image" alt=""></div>
+    <div class="viewer-navigation" aria-label="Image navigation"><button class="viewer-step" data-step="-1" type="button" aria-label="Previous image">← PREV</button><button class="viewer-step" data-step="1" type="button" aria-label="Next image">NEXT →</button></div>
     <div class="viewer-caption"><span id="viewer-caption">PORTFOLIO / PHOTOGRAPH</span><span id="viewer-count"></span></div>
   </div>
 </dialog>
@@ -291,8 +335,14 @@
   const archiveNames={};
   const archiveTitle=document.getElementById('archive-title');
   let active=null;
+  const table=document.querySelector('.index-table');
+  const mobile=matchMedia('(max-width:850px)');
+  function syncIndex(){table.inert=!!active && mobile.matches;}
+  mobile.addEventListener('change',syncIndex);
   function show(client){
     active=client;
+    syncIndex();
+    panel.scrollTop=0;
     buttons.forEach(button=>{
       const selected=button.dataset.client===client;
       button.setAttribute('aria-expanded',String(selected));
@@ -314,7 +364,7 @@
     if(origin)origin.focus();
   }));
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&active){
+    if(event.key==='Escape'&&active&&!document.getElementById('work-image-dialog').open){
       const prior=active;show(null);
       const origin=buttons.find(item=>item.dataset.client===prior);
       if(origin)origin.focus();
@@ -339,6 +389,7 @@
   const panel=img.closest('.panel-content');
   title.textContent=panel?.querySelector('.panel-title')?.textContent || 'SELECTED WORK';
   caption.textContent=img.alt||'PROJECT PHOTOGRAPH';
+  dialog.querySelectorAll('.viewer-step').forEach(button=>{button.disabled=gallery.length<2;});
   count.textContent=String(position+1).padStart(2,'0')+' / '+String(gallery.length).padStart(2,'0');
  }
  function open(img){
@@ -362,6 +413,9 @@
    if(event.key==='Enter'||event.key===' '){event.preventDefault();open(img);}
   });
  });
+ dialog.querySelectorAll('.viewer-step').forEach(button=>button.addEventListener('click',()=>{
+  position=(position+Number(button.dataset.step)+gallery.length)%gallery.length;render();
+ }));
  close.addEventListener('click',()=>dialog.close());
  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
  dialog.addEventListener('close',()=>{enlarged.removeAttribute('src');if(trigger?.isConnected)trigger.focus();});
