@@ -11,8 +11,6 @@ document.documentElement.classList.add('js');
     return { start:'off-white', options:tones.slice() };
   }
 
-  if(document.body && document.body.classList.contains('landing')){ try{sessionStorage.removeItem(toneKey);sessionStorage.removeItem(optionsKey);}catch(e){} }
-
   function getVisitState(){
     try{
       var storedTone=sessionStorage.getItem(toneKey);
@@ -52,6 +50,9 @@ document.documentElement.classList.add('js');
   }
 
   function bind(){
+    if(document.body.classList.contains('landing')){
+      try{sessionStorage.removeItem(toneKey);sessionStorage.removeItem(optionsKey);}catch(e){}
+    }
     var state=getVisitState();
     var tone=state.tone;
 
