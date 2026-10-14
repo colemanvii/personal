@@ -312,3 +312,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
 /* Homepage: omit the lower-right Selected Work / Est. 1994 caption. */
 body.landing .entry-right{display:none!important}
+
+/* Fourth visitor palette — quiet warm off-white, preserving the site's existing geometry. */
+html[data-tone="off-white"]{--paper:#f4f3ee;--ink:#292725;--muted:#77736e;--rule:#d1cec6;--accent:#a43f33}
+.landing-paper button[data-paper-tone="off-white"]::after{background:#f4f3ee}
+.landing-paper button[data-paper-tone="off-white"]{background:#f4f3ee}
