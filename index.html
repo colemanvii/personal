@@ -101,6 +101,13 @@ body.landing .landing-paper{bottom:13px}
   line-height:1.45;letter-spacing:.06em;
  }
 }
+/* Keep the mobile entrance on the same fallback stack as the index. */
+@media(max-width:720px){
+ body.landing,body.landing .seven,body.landing .landing-ident{font-family:var(--mono)}
+ /* Expand through existing whitespace; the 39.2px row pitch limits height. */
+ body.landing .seven a{position:relative}
+ body.landing .seven a::after{content:"";position:absolute;inset:-9px 0}
+}
 </style>
 </head>
 <body class="landing">
