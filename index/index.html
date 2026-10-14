@@ -148,6 +148,10 @@
  .work-index .index-table td{height:33px;padding:0 6px 0 0}
  .work-index .index-table td:nth-child(2){line-height:17px;overflow-wrap:normal}
  .work-index .index-table td:nth-child(2) > :is(button,a){display:block;width:100%;min-height:32px;padding:7px 0;line-height:17px;box-sizing:border-box}
+ /* Fill the row's existing whitespace, including number/year columns.
+    Half a border pixel above/below meets the next row without overlap. */
+ .work-index .index-table td:nth-child(2) > :is(button,a){position:relative}
+ .work-index .index-table td:nth-child(2) > :is(button,a)::after{content:"";position:absolute;inset:-.5px -64px -.5px -32px}
  .work-index .expand-button{position:relative;padding-left:18px!important}
  .work-index .expand-button .indicator{position:absolute;left:0}
  .work-index .index-layout:has(.work-panel.is-open){overflow:hidden}

@@ -1,3 +1,48 @@
+# Final mobile refinement pass — 2026-10-14
+
+## Typography finding and smallest fix
+
+The homepage hard-coded Monaco, "Courier New", monospace, whereas interior pages used a separate stack. Apple's current system-font inventory labels Monaco "system font macOS" but "downloadable iOS"; Menlo Regular and Courier New are system fonts on iOS. Therefore an ordinary iPhone without downloaded Monaco falls through to Courier New on the homepage. This is the supported explanation for the reported lighter appearance, not a measured diagnosis on the user's physical phone.
+
+Mobile now uses Monaco, Menlo, "SFMono-Regular", Consolas, "Liberation Mono", monospace. Monaco stays first; Menlo Regular replaces the typewriter-style Courier fallback. Homepage and index share the stack. No weight, size, tracking, color or smoothing changes were made. No font files or font-loading dependencies were added. Desktop CSS remains unaffected.
+
+A browser test deliberately removed Monaco from the CSS, then queried the actual platform font via Chrome DevTools: Menlo-Regular rendered the homepage and index at every tested phone size. Normal tests rendered Monaco. Separate 3× screenshots compare Courier New, Menlo and Monaco at the same 16px / 400 weight. These are controlled macOS browser renders, not physical iOS screenshots.
+
+The existing -webkit-font-smoothing: antialiased rule is nonstandard and not a reliable cross-platform weight control; changing it would not solve a different font family. It remains unchanged to preserve desktop appearance. Physical Safari rasterization should be judged on the public preview.
+
+Sources: https://developer.apple.com/fonts/system-fonts/ and https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-smooth
+
+## Invisible targets, unchanged composition
+
+Index actions now have an invisible pseudo-element covering exactly their existing row, including the number and year areas. Single-line effective targets are 339 × 33px, 354 × 33px and 394 × 37px at the requested widths. Wrapped rows have taller targets. The element boxes remain 32/36px; the extra pixel is the collapsed row-border space. Target bounds meet at row boundaries with no geometric overlap. Browser hit tests sampled one pixel inside both vertical edges at both horizontal edges of all 18 rows: all 72 points passed for each viewport, with both native Monaco and forced Menlo. Non-interactive rows stayed non-interactive. Subpixel queries within one pixel of a boundary are subject to browser hit-test rounding.
+
+The homepage links also receive invisible 9px padding above and below: 37.2px high targets inside the existing 39.2px pitch, leaving 2px between links. No text position or visual dimensions change. Further uniform height expansion beyond the index row pitch would overlap adjacent rows; 44px is not possible without changing density. The substantial gain here is full-row width, including short labels such as PBR.
+
+## Final measurements
+
+| Viewport | Index region / content height | Minimum effective index target | Page overflow | Result |
+|---|---|---|---|---|
+| 375 × 812 | 665 / 665 px | 339 × 33 px | None | All 18 complete names, no scrolling |
+| 390 × 844 | 697 / 697 px | 354 × 33 px | None | All 18 complete names, no scrolling |
+| 430 × 932 | 785 / 785 px | 394 × 37 px | None | All 18 complete names, no scrolling |
+| 320 × 568 | 436 / 697 px | 284 × 33 px | None | Content region scrolls 261 px |
+
+Same results with Monaco and with Monaco unavailable / Menlo selected. Title text bounds stay within their cells. All 17 images across eleven panels decode and use contain fitting at every tested width. All requested portrait sizes fit without index scrolling. Short-screen scrolling remains deliberate, preserving 13px text. Hotel Perle, The Bygone and Scout Motors remain non-interactive.
+
+Touch gallery next/previous, image close and restored focus, project close and restored focus, keyboard Enter/Escape, inert covered index, last-row reachability, navigation and palette persistence all pass. Landscape 812 × 375 remains covered by the interaction checks. No JavaScript exceptions or HTTP asset failures were recorded in the final local checks.
+
+## Desktop regression
+
+All 22 final 1440 × 900 screenshots are pixel-identical to the original 8c0e99b baseline: homepage, index, all eleven panels, and nine enlarged viewers. Zero changed pixels in every pair.
+
+## Review boundary
+
+Push only study/mobile-refinement. Cloudflare Pages project personal has production branch portfolio-v2 and automatic previews enabled for all other branches; this branch is a preview, not a production release. No merge or custom-domain deployment is authorized. Stop after the preview is ready for review.
+
+Physical iPhone Safari / VoiceOver validation is still outstanding. The public preview is intended for that review; the font-fallback evidence and automated browser tests do not substitute for a physical-device test.
+
+---
+
 # Mobile refinement audit
 
 Date: 2026-10-14. Baseline: origin/main at 8c0e99b. Branch: study/mobile-refinement.
