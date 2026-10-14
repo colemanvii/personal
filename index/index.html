@@ -167,12 +167,12 @@
 
     <div class="panel-content" data-panel="ernest" hidden>
       <div class="panel-top"><h2 class="panel-title">ERNEST</h2><button class="panel-close" type="button" aria-label="Close ERNEST">CLOSE ×</button></div>
-      <figure class="archive-plate is-pending" aria-label="ERNEST photograph awaiting upload"></figure>
+      <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/images/ernest.webp" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       <p class="archive-plate-caption">ERNEST / 2025</p>
     </div>
     <div class="panel-content" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
-      <div class="photo-pair"><figure class="archive-plate is-pending" aria-label="The Cowboyer image one awaiting upload"></figure><figure class="archive-plate is-pending" aria-label="The Cowboyer image two awaiting upload"></figure></div>
+      <div class="photo-pair"><figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/images/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure><figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/images/cowboyer-cover-02.webp" alt="The Cowboyer orange cover with small horseback rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure></div>
       <p class="archive-plate-caption">01—02 / THE COWBOYER / COVER STUDIES / 2026</p>
     </div>
     <div class="panel-content" data-panel="habitat" hidden>
@@ -211,7 +211,7 @@
   if(!panel||!buttons.length)return;
   const contents=Array.from(panel.querySelectorAll('.panel-content[data-panel]'));
   const placeholder=panel.querySelector('.panel-placeholder');
-  const archiveNames={freeman:'Freeman General Contracting',joseph:'Joseph Martin Hatmaker',ronnie:'Ronnie Hodges Performance Horses'};
+  const archiveNames={freeman:'Freeman General Contracting',joseph:'Joseph Martin Hatmaker'};
   const archiveTitle=document.getElementById('archive-title');
   let active=null;
   function show(client){
