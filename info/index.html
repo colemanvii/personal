@@ -3,7 +3,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>About — Cole Calfee</title>
 <meta name="description" content="About and contact information for Cole Calfee.">
-<script>try{const t=localStorage.getItem('cole-paper-tone-v2');if(['field-notes','violet-hour','red-earth'].includes(t))document.documentElement.dataset.tone=t;}catch(e){}</script>
+<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','violet-hour','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
 html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll-behavior:none}
