@@ -83,6 +83,9 @@ body.landing .landing-paper{bottom:13px}
  }
  body.landing .seven a{font-size:16px}
  body.landing .seven .slash{font-size:15px}
+ /* Stack navigation links individually on narrow screens. */
+ body.landing .seven a{flex:0 0 100%;text-align:center}
+ body.landing .seven .slash{display:none}
  body.landing .landing-paper{
   bottom:clamp(72px,11dvh,108px);gap:1px;
  }
