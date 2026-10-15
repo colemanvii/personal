@@ -63,8 +63,8 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 }
 
 /* ABOUT — first editorial study, October 2026. */
-.about-page .about-content{width:min(100%,980px);max-width:980px}
-.about-page .about-editorial{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(34px,6vw,90px);align-items:center}
+.about-page .about-content{width:min(100%,760px);max-width:760px}
+.about-page .about-editorial{display:block;max-width:680px}
 .about-page .about-intro{min-width:0}
 .about-page .about-name{font-size:clamp(30px,3.3vw,46px);margin-bottom:20px}
 .about-page .about-description{font-size:clamp(14px,1.3vw,17px);line-height:1.5;max-width:36ch}
@@ -74,7 +74,7 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 .about-page .about-image{margin:0;min-width:0}
 .about-page .about-image img{display:block;width:100%;height:clamp(215px,34vh,350px);object-fit:cover;filter:grayscale(100%)}
 .about-page .about-image figcaption{margin-top:9px;font:9px/1.35 var(--mono);color:var(--muted);letter-spacing:.025em}
-.about-page .contact-card{max-width:480px;margin-top:32px}
+.about-page .contact-card{max-width:480px;margin-top:44px}
 .about-page .contact-email{height:39px}
 .about-page .contact-message{height:66px}
 .about-page .section{padding:16px 0}
@@ -111,15 +111,13 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
     <div class="about-editorial">
       <div class="about-intro">
     <h1 class="about-name">Cole Calfee</h1>
-    <p class="about-description">Photography, design, and creative direction.</p>
-    <p class="about-statement">Drawn to good people, meaningful projects, and making things that last. I work across images, identities, and stories, with a belief that the best work comes from lasting relationships.</p>
+    <p class="about-description">Somewhere between art and work.</p>
     <p class="about-location">Nashville, Tennessee / North Georgia</p>
     <nav class="contact-links" aria-label="Contact links">
       <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
       <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
     </nav>
       </div>
-      <figure class="about-image"><img src="../assets/teton-valley-ranch.webp" alt="Landscape photograph from the work archive" loading="eager"><figcaption>FROM THE ARCHIVE / SELECTED PHOTOGRAPH</figcaption></figure>
     </div>
     <form class="contact-card" id="contact-form" action="/api/contact" method="post">
       <label class="contact-label" for="contact-email">GET IN TOUCH</label>
