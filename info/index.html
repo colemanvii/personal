@@ -61,6 +61,42 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
  html:has(body.about-page:has(.contact-card :focus)),body.about-page:has(.contact-card :focus){height:auto;min-height:100%;overflow-y:auto}
  .about-page:has(.contact-card :focus) .shell{height:auto;min-height:100dvh;overflow:visible}
 }
+
+/* ABOUT — first editorial study, October 2026. */
+.about-page .about-content{width:min(100%,980px);max-width:980px}
+.about-page .about-editorial{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(34px,6vw,90px);align-items:center}
+.about-page .about-intro{min-width:0}
+.about-page .about-name{font-size:clamp(30px,3.3vw,46px);margin-bottom:20px}
+.about-page .about-description{font-size:clamp(14px,1.3vw,17px);line-height:1.5;max-width:36ch}
+.about-page .about-statement{font:12px/1.7 var(--mono);color:var(--muted);max-width:49ch;margin:22px 0 0}
+.about-page .about-location{font-size:11px;margin-top:24px}
+.about-page .contact-links{margin-top:20px}
+.about-page .about-image{margin:0;min-width:0}
+.about-page .about-image img{display:block;width:100%;height:clamp(215px,34vh,350px);object-fit:cover;filter:grayscale(100%)}
+.about-page .about-image figcaption{margin-top:9px;font:9px/1.35 var(--mono);color:var(--muted);letter-spacing:.025em}
+.about-page .contact-card{max-width:480px;margin-top:32px}
+.about-page .contact-email{height:39px}
+.about-page .contact-message{height:66px}
+.about-page .section{padding:16px 0}
+@media(max-width:700px){
+ html:has(body.about-page),body.about-page{height:auto;min-height:100%;overflow-y:auto}
+ .about-page .shell{height:auto;min-height:100dvh;overflow:visible}
+ .about-page .about-content{max-width:440px}
+ .about-page .about-editorial{grid-template-columns:1fr;gap:22px}
+ .about-page .about-name{font-size:32px;margin-bottom:15px}
+ .about-page .about-statement{font-size:11px;margin-top:15px}
+ .about-page .about-location{margin-top:16px}
+ .about-page .contact-links{margin-top:16px}
+ .about-page .about-image img{height:180px}
+ .about-page .contact-card{margin-top:22px}
+ .about-page .section{padding:25px 0}
+}
+@media(max-height:780px) and (min-width:701px){
+ .about-page .about-image img{height:220px}
+ .about-page .about-statement{margin-top:14px}
+ .about-page .contact-card{margin-top:18px}
+ .about-page .contact-message{height:55px}
+}
 </style>
 </head><body class="about-page"><div class="shell">
 <header class="site-head">
@@ -72,15 +108,21 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 </header>
 <main class="section">
   <div class="about-content">
+    <div class="about-editorial">
+      <div class="about-intro">
     <h1 class="about-name">Cole Calfee</h1>
-    <p class="about-description">Somewhere between art and work.</p>
+    <p class="about-description">Photography, design, and creative direction.</p>
+    <p class="about-statement">Drawn to good people, meaningful projects, and making things that last. I work across images, identities, and stories, with a belief that the best work comes from lasting relationships.</p>
     <p class="about-location">Nashville, Tennessee / North Georgia</p>
     <nav class="contact-links" aria-label="Contact links">
       <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
       <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
     </nav>
+      </div>
+      <figure class="about-image"><img src="../assets/teton-valley-ranch.webp" alt="Landscape photograph from the work archive" loading="eager"><figcaption>FROM THE ARCHIVE / SELECTED PHOTOGRAPH</figcaption></figure>
+    </div>
     <form class="contact-card" id="contact-form" action="/api/contact" method="post">
-      <label class="contact-label" for="contact-email">SEND A NOTE</label>
+      <label class="contact-label" for="contact-email">GET IN TOUCH</label>
       <div class="contact-honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
       <input class="contact-email" id="contact-email" type="email" name="email" autocomplete="email" placeholder="Your email address" aria-label="Your email address" required maxlength="254">
       <textarea class="contact-message" id="contact-message" name="message" placeholder="What’s on your mind?" aria-label="Your message" required maxlength="3000"></textarea>
