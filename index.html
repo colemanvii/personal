@@ -74,7 +74,7 @@ body.landing .landing-paper{bottom:13px}
  body.landing .landing-frame{height:100dvh;min-height:100dvh;overflow:hidden}
  body.landing .seven{
   top:46%;width:calc(100% - 36px);max-width:440px;
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  display:grid;grid-template-columns:1fr;justify-items:center;align-items:center;
   gap:0 13px;row-gap:20px;line-height:1.2;font-size:16px;
   letter-spacing:-.025em;text-align:center;white-space:nowrap
  }
@@ -106,7 +106,7 @@ body.landing .landing-paper{bottom:13px}
  body.landing,body.landing .seven,body.landing .landing-ident{font-family:var(--mono)}
  /* Expand through existing whitespace; the 39.2px row pitch limits height. */
  body.landing .seven a{position:relative}
- body.landing .seven a::after{content:"";position:absolute;inset:-9px 0}
+ body.landing .seven a::after{content:"";position:absolute;top:-9px;bottom:-9px;left:50%;width:min(440px,calc(100vw - 36px));transform:translateX(-50%)}
 }
 </style>
 </head>
