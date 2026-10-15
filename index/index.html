@@ -202,6 +202,19 @@
 @media(max-height:700px){.work-index .kashus-main-plate img{max-height:calc(100dvh - 435px)}}
 .work-index .kashus-release-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 14px;margin-top:9px;font:10px/1.45 var(--mono)}.work-index .kashus-release-links a{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:3px 0;border-bottom:1px solid var(--rule)}.work-index .kashus-release-links a:hover{color:var(--accent)}.work-index .kashus-gallery-controls{margin-bottom:5px}.work-index .kashus-gallery .archive-plate-caption{margin-bottom:4px}
 .work-index .ramsey-marks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:center;margin:26px 0 20px}.work-index .ramsey-marks figure{min-width:0;margin:0;text-align:center}.work-index .ramsey-marks img{width:100%;height:clamp(90px,17vw,180px);object-fit:contain;display:block}.work-index .ramsey-marks figcaption{text-align:left;margin-top:12px}@media(max-width:700px){.work-index .ramsey-marks{gap:12px}.work-index .ramsey-marks img{height:135px}}
+
+/* Word-sized navigation, steady artwork stage, generous arrow targets. */
+.work-index .kashus-main-plate{height:clamp(180px,calc(100dvh - 465px),480px);display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y pinch-zoom}
+.work-index .kashus-main-plate img{width:100%;height:100%;max-height:none;object-fit:contain}
+.work-index .kashus-gallery-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:16px;margin:0 0 6px}
+.work-index .kashus-gallery-controls button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 8px;border:0;color:var(--ink);font:18px/1 var(--mono);cursor:inherit;touch-action:manipulation}
+.work-index .kashus-gallery-controls button:hover{color:var(--accent)}
+.work-index .kashus-gallery-controls button:focus-visible{outline:1px solid var(--accent);outline-offset:-5px}
+.work-index .kashus-image-count{font:10px/1.4 var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.work-index #kashus-image-caption{min-height:2.8em}
+.work-index .gallery-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-height:700px){.work-index .kashus-main-plate{height:clamp(150px,calc(100dvh - 435px),350px)}}
+
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -264,8 +277,8 @@
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <div class="kashus-gallery" aria-label="Kashus artwork and photography">
         <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/admat.jpg" alt="Harvest Moon tour poster" loading="eager"></figure>
-        <div class="kashus-gallery-controls" role="group" aria-label="Choose Kashus image"><button type="button" data-kashus-src="../assets/admat.jpg" data-kashus-alt="Harvest Moon tour poster" aria-pressed="true">01</button><button type="button" data-kashus-src="../assets/IMG_2786.JPG" data-kashus-alt="Act I: Summer Nights" data-kashus-link="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" aria-pressed="false">02</button><button type="button" data-kashus-src="../assets/Kashus%20Culpepper%20After%20Me%201.png" data-kashus-alt="After Me?" data-kashus-link="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" aria-pressed="false">03</button><button type="button" data-kashus-src="../assets/Kashus%20Culpepper%20Out%20of%20My%20Mind%201.png" data-kashus-alt="Out of My Mind" data-kashus-link="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" aria-pressed="false">04</button><button type="button" data-kashus-src="../assets/Kashus%20Culpepper%20Who%20Hurt%20You%201.png" data-kashus-alt="Who Hurt You" data-kashus-link="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" aria-pressed="false">05</button><button type="button" data-kashus-src="../assets/pmo.jpg" data-kashus-alt="Pour Me Out" data-kashus-link="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" aria-pressed="false">06</button><button type="button" data-kashus-src="../assets/kc1.jpeg" data-kashus-alt="Portrait 01" aria-pressed="false">07</button><button type="button" data-kashus-src="../assets/kc2.jpg" data-kashus-alt="Portrait 02" aria-pressed="false">08</button><button type="button" data-kashus-src="../assets/kc3.jpg" data-kashus-alt="Live photograph" aria-pressed="false">09</button></div>
-        <p class="archive-plate-caption" id="kashus-image-caption">01—09 / HARVEST MOON TOUR POSTER</p>
+        <div class="kashus-gallery-controls" role="group" aria-label="Browse Kashus images"><button type="button" data-kashus-step="-1" aria-label="Previous image" aria-controls="kashus-main-image">←</button><span class="kashus-image-count" id="kashus-image-count">01 / 09</span><button type="button" data-kashus-step="1" aria-label="Next image" aria-controls="kashus-main-image">→</button></div><span class="gallery-status" id="kashus-gallery-status" role="status" aria-live="polite" aria-atomic="true"></span>
+        <p class="archive-plate-caption" id="kashus-image-caption">HARVEST MOON TOUR POSTER</p>
         <nav class="kashus-release-links" aria-label="Listen to Kashus Culpepper releases"><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗</a><a href="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" target="_blank" rel="noopener noreferrer">Act I: Summer Nights ↗</a><a href="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" target="_blank" rel="noopener noreferrer">After Me? ↗</a><a href="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" target="_blank" rel="noopener noreferrer">Out of My Mind ↗</a><a href="https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc" target="_blank" rel="noopener noreferrer">Jenni ↗</a><a href="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" target="_blank" rel="noopener noreferrer">Who Hurt You ↗</a><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗</a></nav>
         <a class="kashus-project-link" href="../projects/kashus-culpepper/">VIEW FULL PROJECT ↗</a>
       </div>
@@ -466,18 +479,73 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
 });
 </script><script>
 (function(){
- var buttons=document.querySelectorAll('.kashus-gallery-controls button');
- var image=document.getElementById('kashus-main-image');
- var caption=document.getElementById('kashus-image-caption');
- buttons.forEach(function(button,index){
-  button.addEventListener('click',function(){
-   if(!image)return;
-   image.src=button.dataset.kashusSrc;
-   image.alt=button.dataset.kashusAlt;
-   caption.textContent=String(index+1).padStart(2,'0')+'—09 / '+button.dataset.kashusAlt.toUpperCase();
-
-   buttons.forEach(function(b){b.setAttribute('aria-pressed',String(b===button));});
-  });
+ const slides=[{"src":"../assets/admat.jpg","alt":"Harvest Moon tour poster"},{"src":"../assets/IMG_2786.JPG","alt":"Act I: Summer Nights"},{"src":"../assets/Kashus%20Culpepper%20After%20Me%201.png","alt":"After Me?"},{"src":"../assets/Kashus%20Culpepper%20Out%20of%20My%20Mind%201.png","alt":"Out of My Mind"},{"src":"../assets/Kashus%20Culpepper%20Who%20Hurt%20You%201.png","alt":"Who Hurt You"},{"src":"../assets/pmo.jpg","alt":"Pour Me Out"},{"src":"../assets/kc1.jpeg","alt":"Portrait 01"},{"src":"../assets/kc2.jpg","alt":"Portrait 02"},{"src":"../assets/kc3.jpg","alt":"Live photograph"}];
+ const gallery=document.querySelector('.kashus-gallery');
+ const image=document.getElementById('kashus-main-image');
+ if(!gallery||!image)return;
+ const plate=gallery.querySelector('.kashus-main-plate');
+ const caption=document.getElementById('kashus-image-caption');
+ const count=document.getElementById('kashus-image-count');
+ const status=document.getElementById('kashus-gallery-status');
+ let position=0,request=0,touch=null,suppressClickUntil=0;
+ const cache=new Map();
+ function prepare(index){
+  const slide=slides[index];
+  if(!cache.has(slide.src)){
+   const pending=new Image();
+   pending.src=slide.src;
+   cache.set(slide.src,pending.decode().then(()=>pending).catch(error=>{cache.delete(slide.src);throw error;}));
+  }
+  return cache.get(slide.src);
+ }
+ function preload(){
+  [1,-1].forEach(offset=>prepare((position+offset+slides.length)%slides.length).catch(()=>{}));
+ }
+ async function move(step){
+  position=(position+step+slides.length)%slides.length;
+  const target=position,token=++request;
+  gallery.setAttribute('aria-busy','true');
+  try{
+   await prepare(target);
+   if(token!==request)return;
+   image.src=slides[target].src;
+   image.alt=slides[target].alt;
+   count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+   caption.textContent=slides[target].alt.toUpperCase();
+   status.textContent='Image '+(target+1)+' of '+slides.length+': '+slides[target].alt;
+   preload();
+  }catch(error){
+   if(token===request)status.textContent='Image could not load. Use the arrows to continue.';
+  }finally{
+   if(token===request)gallery.setAttribute('aria-busy','false');
+  }
+ }
+ gallery.querySelectorAll('[data-kashus-step]').forEach(button=>{
+  button.addEventListener('click',()=>move(Number(button.dataset.kashusStep)));
  });
+ gallery.addEventListener('keydown',event=>{
+  if(document.getElementById('work-image-dialog').open)return;
+  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+   event.preventDefault();event.stopPropagation();move(event.key==='ArrowRight'?1:-1);
+  }
+ });
+ plate.addEventListener('touchstart',event=>{
+  touch=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
+ },{passive:true});
+ plate.addEventListener('touchmove',event=>{if(event.touches.length!==1)touch=null;},{passive:true});
+ plate.addEventListener('touchcancel',()=>{touch=null;},{passive:true});
+ plate.addEventListener('touchend',event=>{
+  if(!touch||!event.changedTouches.length)return;
+  const dx=event.changedTouches[0].clientX-touch.x,dy=event.changedTouches[0].clientY-touch.y;
+  touch=null;
+  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5){
+   suppressClickUntil=Date.now()+700;move(dx<0?1:-1);
+  }
+ },{passive:true});
+ plate.addEventListener('click',event=>{
+  if(Date.now()<suppressClickUntil){event.preventDefault();event.stopImmediatePropagation();}
+ },true);
+ image.draggable=false;
+ preload();
 })();
 </script></body></html>
