@@ -104,7 +104,7 @@
 @media(max-height:740px){.work-index .ronnie-sequence{gap:6px}.work-index .panel-top{margin-bottom:12px}}
 
 /* Freeman website specimen: a small static site entry, not another archive notice. */
-.work-index .freeman-live-thumb{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;background:#f4f4f1}
+.work-index .freeman-live-frame{position:absolute;left:0;top:0;width:400%;height:400%;border:0;display:block;transform:scale(.25);transform-origin:top left;pointer-events:none;background:#f4f4f1}
 .work-index .freeman-site-preview{position:relative;display:block;width:100%;height:clamp(185px,28vh,270px);background:#f4f4f1;color:#242424;border:1px solid #d7d7d1;text-decoration:none;overflow:hidden;box-shadow:none}
 .work-index .freeman-preview-nav{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap;font:9px/1 Monaco,"Courier New",monospace;letter-spacing:-.03em}
 .work-index .freeman-preview-nav strong{font-weight:700}
@@ -309,7 +309,7 @@
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
       <a class="freeman-site-preview" href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Freeman General Contracting website in a new tab">
-        <img class="freeman-live-thumb" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwww.freemangc.com%2F?w=1200" alt="Screenshot of the Freeman General Contracting website" loading="lazy" referrerpolicy="no-referrer">
+        <iframe class="freeman-live-frame" src="https://www.freemangc.com/" title="Live preview of Freeman General Contracting website" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
       </a>
       <p class="archive-plate-caption"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">WEBSITE ↗</a> <span class="freeman-preview-year">/ CREATIVE DIRECTION / 2026—</span></p>
       <div class="freeman-identity" aria-label="Freeman identity work">
