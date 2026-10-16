@@ -648,8 +648,8 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
  const figures=Array.from(gallery.querySelectorAll('figure'));
  let page=0;
  function render(){
-  figures.forEach((figure,i)=>{figure.hidden=i!==page;});
-  count.textContent=String(page+1).padStart(2,'0')+' / 04';
+  figures.forEach((figure,i)=>{figure.hidden=Math.floor(i/2)!==page;});
+  count.textContent=page===0?'01—02 / 04':'03—04 / 04';
  }
  document.querySelectorAll('[data-joseph-step]').forEach(button=>button.addEventListener('click',()=>{
   page=(page+1)%2;
