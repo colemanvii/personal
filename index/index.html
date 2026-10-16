@@ -139,6 +139,13 @@
 .work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
 .work-index .joseph-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
 .work-index .joseph-gallery .photo-plate img{display:block;width:100%;height:auto;object-fit:contain}
+.work-index .joseph-gallery .photo-plate[hidden]{display:none!important}
+.work-index .joseph-gallery .photo-plate img{max-height:min(39vh,340px);object-fit:contain}
+.work-index .joseph-navigation{display:flex;align-items:center;justify-content:space-between;margin:7px 0 10px;font:10px/1.4 var(--mono);color:var(--muted)}
+.work-index .joseph-navigation button{background:none;border:0;color:var(--ink);font:18px/1 var(--mono);min-width:44px;min-height:44px;padding:0;cursor:inherit}
+.work-index .joseph-navigation button:hover{color:var(--accent)}
+.work-index .joseph-navigation button:focus-visible{outline:1px solid var(--accent)}
+
 @media(max-width:480px){.work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 .work-index .corey-artwork{aspect-ratio:auto;max-height:min(50vh,520px);border:0;background:transparent}
 .work-index .corey-artwork img{width:100%;height:100%;max-height:min(50vh,520px);object-fit:contain}
@@ -306,10 +313,11 @@
       <div class="photo-pair joseph-gallery">
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-01.webp" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-02.webp" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/cg.png" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/jm3.png" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/cg.png" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/jm3.png" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
-      <p class="archive-plate-caption">01—04 / JOSEPH MARTIN / 2024</p>
+      <div class="joseph-navigation" role="group" aria-label="Joseph Martin artwork pages"><button type="button" data-joseph-step="-1" aria-label="Previous pair">←</button><span id="joseph-count">01—02 / 04</span><button type="button" data-joseph-step="1" aria-label="Next pair">→</button></div>
+      <p class="archive-plate-caption">JOSEPH MARTIN / ILLUSTRATION / 2024</p>
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
@@ -580,5 +588,22 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
  },true);
  image.draggable=false;
  preload();
+})();
+</script><script>
+(function(){
+ const gallery=document.querySelector('.joseph-gallery');
+ const count=document.getElementById('joseph-count');
+ if(!gallery||!count)return;
+ const figures=Array.from(gallery.querySelectorAll('figure'));
+ let page=0;
+ function render(){
+  figures.forEach((figure,i)=>{figure.hidden=Math.floor(i/2)!==page;});
+  count.textContent=page===0?'01—02 / 04':'03—04 / 04';
+ }
+ document.querySelectorAll('[data-joseph-step]').forEach(button=>button.addEventListener('click',()=>{
+  page=(page+1)%2;
+  render();
+ }));
+ render();
 })();
 </script></body></html>
