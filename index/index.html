@@ -254,6 +254,22 @@
 .work-index .teton-controls button[aria-pressed="true"]{color:var(--accent);text-decoration:underline;text-underline-offset:4px}
 .work-index .mags-photo{aspect-ratio:auto;width:100%;margin:0 0 12px;background:transparent}.work-index .mags-photo img{display:block;width:100%;height:auto;max-height:calc(100dvh - 310px);object-fit:contain}
 .work-index .teton-controls{flex-wrap:wrap;row-gap:6px}
+/* Photo series: stable stage, one photograph with obvious previous/next arrows. */
+.work-index .ronnie-gallery .photo-plate,.work-index .teton-gallery .photo-plate{
+ height:clamp(180px,48dvh,470px);display:flex;align-items:center;justify-content:center;overflow:hidden;border:0;
+}
+.work-index .ronnie-gallery .photo-plate img,.work-index .teton-gallery .photo-plate img{
+ width:100%;height:100%;max-height:none;object-fit:contain;
+}
+.work-index .ronnie-navigation,.work-index .teton-navigation{
+ display:flex;align-items:center;justify-content:space-between;margin:0 0 10px;color:var(--muted);font:11px/1.4 var(--mono)
+}
+.work-index .ronnie-navigation button,.work-index .teton-navigation button{
+ appearance:none;background:none;border:0;min-width:44px;min-height:44px;padding:0;
+ color:var(--ink);font:18px/1 var(--mono);cursor:inherit
+}
+.work-index .ronnie-navigation button:is(:hover,:focus-visible),.work-index .teton-navigation button:is(:hover,:focus-visible){color:var(--accent)}
+@media(max-height:700px){.work-index .ronnie-gallery .photo-plate,.work-index .teton-gallery .photo-plate{height:clamp(145px,39dvh,340px)}}
 /* Kashus: art first, natural proportions, fixed panel without scrolling. */
 .work-index .kashus-main-plate{aspect-ratio:auto;margin:0 0 10px;background:transparent;border:0;overflow:visible}
 .work-index .kashus-main-plate img{display:block;width:100%;height:auto;max-height:calc(100dvh - 465px);object-fit:contain}
@@ -432,12 +448,7 @@
       <div class="panel-top"><h2 class="panel-title">Ronnie Hodges Performance Horses</h2><button class="panel-close" type="button" aria-label="Close Ronnie Hodges photographs">CLOSE ×</button></div>
       <div class="ronnie-gallery" aria-label="Ronnie Hodges photographic series">
         <figure class="archive-plate photo-plate"><img id="ronnie-active-image" loading="lazy" src="../assets/ronnie-hodges-01.webp" alt="Ronnie Hodges speaking while seated on horseback"></figure>
-        <div class="ronnie-controls" role="group" aria-label="Choose Ronnie Hodges photograph">
-          <button type="button" data-ronnie-src="../assets/ronnie-hodges-01.webp" data-ronnie-alt="Ronnie Hodges speaking while seated on horseback" aria-pressed="true">01 / RONNIE</button>
-          <button type="button" data-ronnie-src="../assets/ronnie-hodges-02.webp" data-ronnie-alt="Riders holding ropes on horseback" aria-pressed="false">02 / RIDERS</button>
-          <button type="button" data-ronnie-src="../assets/ronnie-hodges-03.webp" data-ronnie-alt="Ronnie Hodges leaning over the fence" aria-pressed="false">03 / PORTRAIT</button>
-          <button type="button" data-ronnie-src="../assets/ronnie-hodges-04.webp" data-ronnie-alt="Two men resting by a horse enclosure" aria-pressed="false">04 / HORSES</button>
-        </div>
+        <div class="ronnie-navigation" role="group" aria-label="Browse Ronnie Hodges photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="ronnie-count">01 / 04</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
       <p class="archive-plate-caption">01—04 / RONNIE HODGES / PHOTOGRAPHY / 2022</p>
     </div>
@@ -445,7 +456,7 @@
       <div class="panel-top"><h2 class="panel-title">Teton Valley Ranch</h2><button class="panel-close" type="button" aria-label="Close Teton Valley Ranch">CLOSE ×</button></div>
       <div class="teton-gallery" aria-label="Teton Valley Ranch photographs">
         <figure class="archive-plate photo-plate"><img id="teton-active-image" loading="lazy" src="../assets/teton-valley-ranch.webp" alt="Lone horseback rider on a ridge at Teton Valley Ranch"></figure>
-        <div class="teton-controls" aria-label="Choose Teton photograph"><button type="button" data-teton-src="../assets/teton-valley-ranch.webp" data-teton-alt="Lone horseback rider on a ridge at Teton Valley Ranch" aria-pressed="true">01 / RIDGELINE</button><button type="button" data-teton-src="../assets/IMG_5723.JPG" data-teton-alt="Ranch worker holding horseshoes beside a timber wall" aria-pressed="false">02 / HORSESHOES</button><button type="button" data-teton-src="../assets/8F38731E-2435-4C66-ACA2-AB5677516F30.jpg" data-teton-alt="Pickup truck crossing a vast ranch landscape" aria-pressed="false">03 / CROSSING</button></div>
+        <div class="teton-navigation" role="group" aria-label="Browse Teton Valley Ranch photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="teton-count">01 / 03</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
       <p class="archive-plate-caption">01—03 / TETON VALLEY RANCH / PHOTOGRAPHY / 2015</p>
     </div>
@@ -588,22 +599,51 @@
  });
 })();
 </script><script>
-document.querySelectorAll('.ronnie-controls button').forEach(function(button){
- button.addEventListener('click',function(){
-  var img=document.getElementById('ronnie-active-image');
-  if(!img)return;
-  img.src=button.dataset.ronnieSrc;img.alt=button.dataset.ronnieAlt;
-  document.querySelectorAll('.ronnie-controls button').forEach(function(b){b.setAttribute('aria-pressed',String(b===button));});
+(function(){
+ const galleries=[
+  {name:'ronnie',slides:[
+    ['../assets/ronnie-hodges-01.webp','Ronnie Hodges speaking while seated on horseback'],
+    ['../assets/ronnie-hodges-02.webp','Riders holding ropes on horseback'],
+    ['../assets/ronnie-hodges-03.webp','Ronnie Hodges leaning over the fence'],
+    ['../assets/ronnie-hodges-04.webp','Two men resting by a horse enclosure']
+  ]},
+  {name:'teton',slides:[
+    ['../assets/teton-valley-ranch.webp','Lone horseback rider on a ridge at Teton Valley Ranch'],
+    ['../assets/IMG_5723.JPG','Ranch worker holding horseshoes beside a timber wall'],
+    ['../assets/8F38731E-2435-4C66-ACA2-AB5677516F30.jpg','Pickup truck crossing a vast ranch landscape']
+  ]}
+ ];
+ galleries.forEach(({name,slides})=>{
+  const gallery=document.querySelector('.'+name+'-gallery');
+  const image=document.getElementById(name+'-active-image');
+  const count=document.getElementById(name+'-count');
+  if(!gallery||!image||!count)return;
+  let position=0,request=0;
+  slides.forEach(([src])=>{const preload=new Image();preload.src=src;});
+  function move(delta){
+    const target=(position+delta+slides.length)%slides.length;
+    const ticket=++request;
+    const candidate=new Image();
+    candidate.onload=()=>{
+      if(ticket!==request)return;
+      position=target;
+      image.src=slides[target][0];
+      image.alt=slides[target][1];
+      count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+    };
+    candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
+    gallery.removeAttribute('data-load-error');
+    candidate.src=slides[target][0];
+  }
+  gallery.querySelectorAll('[data-photo-step]').forEach(button=>button.addEventListener('click',()=>move(Number(button.dataset.photoStep))));
+  gallery.addEventListener('keydown',event=>{
+    if(document.getElementById('work-image-dialog')?.open)return;
+    if(event.key==='ArrowRight'||event.key==='ArrowLeft'){
+      event.preventDefault();move(event.key==='ArrowRight'?1:-1);
+    }
+  });
  });
-});
-document.querySelectorAll('.teton-controls button').forEach(function(button){
- button.addEventListener('click',function(){
-  var img=document.getElementById('teton-active-image');
-  if(!img)return;
-  img.src=button.dataset.tetonSrc;img.alt=button.dataset.tetonAlt;
-  document.querySelectorAll('.teton-controls button').forEach(function(b){b.setAttribute('aria-pressed',String(b===button));});
- });
-});
+})();
 </script><script>
 (function(){
  const slides=[{"src":"../assets/pmo.jpg","alt":"Pour Me Out"},{"src":"https://bigloud.com/wp-content/uploads/2025/01/KC_Jenni_Artwork_1x1-1024x1024.jpg","alt":"Jenni"},{"src":"../assets/IMG_2786.JPG","alt":"Act I: Summer Nights"},{"src":"../assets/Kashus%20Culpepper%20After%20Me%201.png","alt":"After Me?"},{"src":"../assets/Kashus%20Culpepper%20Out%20of%20My%20Mind%201.png","alt":"Out of My Mind"},{"src":"../assets/Kashus%20Culpepper%20Who%20Hurt%20You%201.png","alt":"Who Hurt You"},{"src":"../assets/kc1.jpeg","alt":"Portrait 01"},{"src":"../assets/kc2.jpg","alt":"Portrait 02"},{"src":"../assets/kc3.jpg","alt":"Live performance"},{"src":"../assets/admat.jpg","alt":"Harvest Moon tour poster"}];
