@@ -127,6 +127,33 @@
 .work-index [data-panel="freeman"] .freeman-identity-art img{width:82%;max-width:340px;max-height:72%;object-fit:contain}
 .work-index .freeman-web-link{margin-top:22px}
 @media(max-height:700px){.work-index [data-panel="freeman"] .freeman-identity-art{height:clamp(150px,36dvh,260px)}}
+/* Freeman: real live site preview above a quieter eagle specimen. */
+.work-index [data-panel="freeman"] .freeman-site-live{
+  display:block;position:relative;width:100%;height:clamp(155px,28dvh,250px);
+  border:1px solid var(--rule);background:#f4f4f1;overflow:hidden;
+}
+.work-index [data-panel="freeman"] .freeman-site-live .freeman-live-frame{
+  position:absolute;top:0;left:0;width:400%;height:400%;display:block;
+  transform:scale(.25);transform-origin:top left;border:0;pointer-events:none;
+  background:#f4f4f1;
+}
+.work-index [data-panel="freeman"] .freeman-site-visit{
+  position:absolute;right:12px;bottom:12px;padding:5px 7px;
+  background:#f4f4f1;color:#292725;font:9px/1.4 var(--mono);
+  letter-spacing:.01em;
+}
+.work-index [data-panel="freeman"] .freeman-site-label{margin:10px 0 0}
+.work-index [data-panel="freeman"] .freeman-identity{border-top:1px solid var(--rule);margin:15px 0 0;padding:13px 0 0}
+.work-index [data-panel="freeman"] .freeman-identity-art{
+  height:clamp(85px,15dvh,145px);padding:14px;background:#f4f4f1;
+}
+.work-index [data-panel="freeman"] .freeman-identity-art img{
+  width:48%;max-width:165px;max-height:67%;object-fit:contain;
+}
+@media(max-height:700px){
+  .work-index [data-panel="freeman"] .freeman-site-live{height:clamp(125px,24dvh,170px)}
+  .work-index [data-panel="freeman"] .freeman-identity-art{height:80px}
+}
 /* Work image viewer: full-size inspection without altering the static index. */
 .work-index .photo-plate:has(img:not([hidden])){cursor:zoom-in}
 .work-index .photo-plate:has(img:not([hidden])):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -382,11 +409,15 @@
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
+      <a class="freeman-site-preview freeman-site-live" href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer" aria-label="Open the live Freeman General Contracting website in a new tab">
+        <iframe class="freeman-live-frame" src="https://www.freemangc.com/" title="Live view of Freeman General Contracting website" tabindex="-1" aria-hidden="true" loading="lazy"></iframe>
+        <span class="freeman-site-visit" aria-hidden="true">VISIT WEBSITE ↗</span>
+      </a>
+      <p class="archive-plate-caption freeman-site-label"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">LIVE WEBSITE ↗</a> / CREATIVE DIRECTION / 2026—</p>
       <div class="freeman-identity" aria-label="Freeman identity work">
         <div class="freeman-identity-art"><img src="../assets/freeman-eagle.svg" alt="Original Freeman eagle identity mark" loading="lazy"></div>
         <p class="archive-plate-caption">IDENTITY / EAGLE MARK / 2023</p>
       </div>
-      <p class="archive-plate-caption freeman-web-link"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">EXPLORE LIVE WEBSITE ↗</a> / CREATIVE DIRECTION / 2026—</p>
     </div>
     <div class="panel-content" data-panel="ramsey-hill" hidden>
       <div class="panel-top"><h2 class="panel-title">Ramsey Hill Contracting</h2><button class="panel-close" type="button" aria-label="Close Ramsey Hill Contracting">CLOSE ×</button></div>
