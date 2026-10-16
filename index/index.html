@@ -121,6 +121,12 @@
 .work-index .freeman-identity-art img{display:block;width:75%;max-width:270px;max-height:78%;object-fit:contain}
 .work-index .freeman-identity .archive-plate-caption{margin-top:9px}
 @media(max-height:700px){.work-index [data-panel="freeman"] .freeman-site-preview{height:145px}.work-index .freeman-identity{margin-top:12px;padding-top:10px}.work-index .freeman-identity-art{height:95px}}
+/* Freeman portfolio plate: real identity work, not a simulated website preview. */
+.work-index [data-panel="freeman"] .freeman-identity{border:0;margin:0;padding:0}
+.work-index [data-panel="freeman"] .freeman-identity-art{height:clamp(205px,42dvh,410px);padding:22px;background:#f4f4f1}
+.work-index [data-panel="freeman"] .freeman-identity-art img{width:82%;max-width:340px;max-height:72%;object-fit:contain}
+.work-index .freeman-web-link{margin-top:22px}
+@media(max-height:700px){.work-index [data-panel="freeman"] .freeman-identity-art{height:clamp(150px,36dvh,260px)}}
 /* Work image viewer: full-size inspection without altering the static index. */
 .work-index .photo-plate:has(img:not([hidden])){cursor:zoom-in}
 .work-index .photo-plate:has(img:not([hidden])):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -371,14 +377,11 @@
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
-      <a class="freeman-site-preview" href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Freeman General Contracting website in a new tab">
-        <span class="freeman-preview-nav" aria-hidden="true"><strong>FREEMAN GENERAL CONTRACTING</strong><span class="freeman-preview-slash">/</span><span>COMPANY</span><span class="freeman-preview-slash">/</span><span>PROJECTS</span></span><span class="freeman-preview-footer" aria-hidden="true">BUILT FOR GENERATIONS</span>
-      </a>
-      <p class="archive-plate-caption"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">LIVE WEBSITE ↗</a> <span class="freeman-preview-year">/ CREATIVE DIRECTION / 2026—</span></p>
       <div class="freeman-identity" aria-label="Freeman identity work">
-        <div class="freeman-identity-art"><img src="../assets/freeman-eagle.svg" alt="Original orange Freeman eagle identity mark" loading="lazy"></div>
+        <div class="freeman-identity-art"><img src="../assets/freeman-eagle.svg" alt="Original Freeman eagle identity mark" loading="lazy"></div>
         <p class="archive-plate-caption">IDENTITY / EAGLE MARK / 2023</p>
       </div>
+      <p class="archive-plate-caption freeman-web-link"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">EXPLORE LIVE WEBSITE ↗</a> / CREATIVE DIRECTION / 2026—</p>
     </div>
     <div class="panel-content" data-panel="ramsey-hill" hidden>
       <div class="panel-top"><h2 class="panel-title">Ramsey Hill Contracting</h2><button class="panel-close" type="button" aria-label="Close Ramsey Hill Contracting">CLOSE ×</button></div>
