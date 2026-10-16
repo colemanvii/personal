@@ -151,25 +151,14 @@
 @media(max-height:700px){.work-index .drawings-stage{height:clamp(155px,40dvh,340px)}}
 /* Twelve selected entries still fit the intended fixed-height work index. */
 @media(min-width:851px){.work-index .index-table td{padding-top:clamp(3px,.62vh,7px);padding-bottom:clamp(3px,.62vh,7px)}}
-/* Cowboyer: uniform single-cover stage, consistent with Teton Valley Ranch. */
-.work-index .cowboyer-gallery{display:block;width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
-.work-index .cowboyer-gallery .photo-plate{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;aspect-ratio:auto;overflow:hidden}
-.work-index .cowboyer-gallery .photo-plate[hidden]{display:none!important}
-.work-index .cowboyer-gallery .photo-plate img{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
-/* Cover mockups 03–04 reproduce the physical staging of the actual first
-   two Cowboyer mockup photographs: same backdrop, position, spine and shadow.
-   The uploaded artwork remains an unmodified image layer. */
-.work-index .cowboyer-gallery .cowboyer-mockup{background:transparent}
-.work-index .cowboyer-gallery .cowboyer-mockup-surface{
-  position:relative;display:block;height:100%;width:auto;max-width:100%;
-  aspect-ratio:696/882;background-position:center;background-size:100% 100%;background-repeat:no-repeat;
-}
-.work-index .cowboyer-gallery .cowboyer-mockup[data-cover="03"] .cowboyer-mockup-surface{background-image:url("../assets/cowboyer-cover-02.webp")}
-.work-index .cowboyer-gallery .cowboyer-mockup[data-cover="04"] .cowboyer-mockup-surface{background-image:url("../assets/cowboyer-cover-01.webp")}
-.work-index .cowboyer-gallery .cowboyer-mockup .cowboyer-mockup-surface img{
-  position:absolute;top:29.4%;left:30.1%;width:41.2%;height:42.1%;
-  max-height:none;object-fit:fill;display:block;
-}
+/* Cowboyer: one fixed-size render surface for every cover. */
+.work-index .cowboyer-gallery{width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
+.work-index .cowboyer-stage{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;overflow:hidden}
+.work-index .cowboyer-canvas{position:relative;height:100%;width:auto;max-width:100%;aspect-ratio:696/882;background-position:center;background-size:100% 100%;background-repeat:no-repeat}
+.work-index .cowboyer-canvas img{display:block;width:100%;height:100%;object-fit:contain}
+.work-index .cowboyer-canvas.is-composite[data-cover="03"]{background-image:url("../assets/cowboyer-cover-02.webp")}
+.work-index .cowboyer-canvas.is-composite[data-cover="04"]{background-image:url("../assets/cowboyer-cover-01.webp")}
+.work-index .cowboyer-canvas.is-composite img{position:absolute;top:29.4%;left:30.1%;width:41.2%;height:42.1%;object-fit:fill}
 .work-index .cowboyer-navigation{display:flex;align-items:center;justify-content:space-between;margin:6px 0 8px;font:10px/1.4 var(--mono);color:var(--muted)}
 .work-index .cowboyer-navigation button{background:none;border:0;color:var(--ink);font:18px/1 var(--mono);min-width:44px;min-height:44px;padding:0;cursor:inherit}
 .work-index .cowboyer-navigation button:hover{color:var(--accent)}
@@ -424,10 +413,11 @@
     <div class="panel-content" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
       <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/cowboyer-cover-02.webp" alt="The Cowboyer orange cover with small horseback rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate cowboyer-mockup" data-cover="03" hidden><div class="cowboyer-mockup-surface"><img loading="lazy" src="../assets/Group%20394.png" alt="The Cowboyer red illustrated cover with lassoing cowboy and cream paper" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></div></figure>
-        <figure class="archive-plate photo-plate cowboyer-mockup" data-cover="04" hidden><div class="cowboyer-mockup-surface"><img loading="lazy" src="../assets/Group%20393.png" alt="The Cowboyer illustrated cover showing a cowboy observing a mushroom cloud in the desert" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></div></figure>
+        <figure class="archive-plate photo-plate cowboyer-stage">
+          <div class="cowboyer-canvas" id="cowboyer-canvas" data-cover="01">
+            <img id="cowboyer-active-image" loading="eager" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
+          </div>
+        </figure>
       </div>
       <div class="cowboyer-navigation" role="group" aria-label="Browse The Cowboyer covers">
         <button type="button" data-cowboyer-step="-1" aria-label="Previous cover">←</button><span id="cowboyer-count">01 / 04</span><button type="button" data-cowboyer-step="1" aria-label="Next cover">→</button>
@@ -734,19 +724,40 @@
 })();
 </script><script>
 (function(){
- const gallery=document.querySelector('.cowboyer-gallery');
+ const slides=[
+  {src:'../assets/cowboyer-cover-01.webp',alt:'The Cowboyer / Bison',cover:'01',composite:false},
+  {src:'../assets/cowboyer-cover-02.webp',alt:'The Cowboyer / Orange Rider',cover:'02',composite:false},
+  {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
+  {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
+ ];
  const count=document.getElementById('cowboyer-count');
- if(!gallery||!count)return;
- const figures=Array.from(gallery.querySelectorAll('figure'));
- let page=0;
- function render(){
-  figures.forEach((figure,i)=>{figure.hidden=i!==page;});
-  count.textContent=String(page+1).padStart(2,'0')+' / 04';
+ const canvas=document.getElementById('cowboyer-canvas');
+ const image=document.getElementById('cowboyer-active-image');
+ if(!gallery||!canvas||!image||!count)return;
+ let position=0,request=0;
+ slides.forEach(slide=>{const asset=new Image();asset.src=slide.src;});
+ function move(step){
+  const target=(position+step+slides.length)%slides.length;
+  const ticket=++request;
+  const candidate=new Image();
+  candidate.onload=()=>{
+   if(ticket!==request)return;
+   position=target;
+   const slide=slides[position];
+   canvas.dataset.cover=slide.cover;
+   canvas.classList.toggle('is-composite',slide.composite);
+   image.src=slide.src;image.alt=slide.alt;
+   count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  };
+  candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
+  gallery.removeAttribute('data-load-error');
+  candidate.src=slides[target].src;
  }
- document.querySelectorAll('[data-cowboyer-step]').forEach(button=>button.addEventListener('click',()=>{
-  page=(page+Number(button.dataset.cowboyerStep)+figures.length)%figures.length;render();
- }));
- render();
+ gallery.querySelectorAll('[data-cowboyer-step]').forEach(button=>button.addEventListener('click',()=>move(Number(button.dataset.cowboyerStep))));
+ gallery.addEventListener('keydown',event=>{
+  if(document.getElementById('work-image-dialog')?.open)return;
+  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();move(event.key==='ArrowRight'?1:-1);}
+ });
 })();
 </script><script>
 (function(){
