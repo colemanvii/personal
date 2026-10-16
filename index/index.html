@@ -135,15 +135,16 @@
 .work-image-dialog .viewer-caption{display:flex;justify-content:space-between;gap:12px;font:10px/1.4 var(--mono);text-transform:uppercase;color:var(--muted)}
 .work-index .ramsey-hill-plate{background:#fff;aspect-ratio:1/1;max-height:min(44vh,450px);margin-inline:auto}
 .work-index .ramsey-hill-plate img{object-fit:contain}
-/* Cowboyer covers: two full-sized works per page within the fixed reading pane. */
-.work-index .cowboyer-gallery{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px}
-.work-index .cowboyer-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent;margin:0}
+/* Cowboyer: uniform single-cover stage, consistent with Teton Valley Ranch. */
+.work-index .cowboyer-gallery{display:block;width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
+.work-index .cowboyer-gallery .photo-plate{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;aspect-ratio:auto;overflow:hidden}
 .work-index .cowboyer-gallery .photo-plate[hidden]{display:none!important}
-.work-index .cowboyer-gallery .photo-plate img{display:block;width:100%;height:auto;max-height:min(41vh,370px);object-fit:contain}
-.work-index .cowboyer-navigation{display:flex;align-items:center;justify-content:space-between;margin:8px 0 8px;font:10px/1.4 var(--mono);color:var(--muted)}
+.work-index .cowboyer-gallery .photo-plate img{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
+.work-index .cowboyer-navigation{display:flex;align-items:center;justify-content:space-between;margin:6px 0 8px;font:10px/1.4 var(--mono);color:var(--muted)}
 .work-index .cowboyer-navigation button{background:none;border:0;color:var(--ink);font:18px/1 var(--mono);min-width:44px;min-height:44px;padding:0;cursor:inherit}
 .work-index .cowboyer-navigation button:hover{color:var(--accent)}
 .work-index .cowboyer-navigation button:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+@media(max-height:700px){.work-index .cowboyer-gallery{height:clamp(175px,43dvh,360px)}}
 /* Joseph Martin: real pieces in the established static reading pane. */
 .work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
 .work-index .joseph-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
@@ -359,14 +360,14 @@
     </div>
     <div class="panel-content" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
-      <div class="photo-pair cowboyer-gallery" aria-label="The Cowboyer cover studies">
+      <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/cowboyer-cover-02.webp" alt="The Cowboyer orange cover with small horseback rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/Group%20394.png" alt="The Cowboyer red illustrated cover with lassoing cowboy and cream paper" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/Group%20393.png" alt="The Cowboyer illustrated cover showing a cowboy observing a mushroom cloud in the desert" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="cowboyer-navigation" role="group" aria-label="Browse The Cowboyer covers">
-        <button type="button" data-cowboyer-step="-1" aria-label="Previous covers">←</button><span id="cowboyer-count">01—02 / 04</span><button type="button" data-cowboyer-step="1" aria-label="Next covers">→</button>
+        <button type="button" data-cowboyer-step="-1" aria-label="Previous cover">←</button><span id="cowboyer-count">01 / 04</span><button type="button" data-cowboyer-step="1" aria-label="Next cover">→</button>
       </div>
       <p class="archive-plate-caption">THE COWBOYER / COVER STUDIES / 2026</p>
     </div>
@@ -633,8 +634,8 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
  const figures=Array.from(gallery.querySelectorAll('figure'));
  let page=0;
  function render(){
-  figures.forEach((figure,i)=>{figure.hidden=Math.floor(i/2)!==page;});
-  count.textContent=page===0?'01—02 / 04':'03—04 / 04';
+  figures.forEach((figure,i)=>{figure.hidden=i!==page;});
+  count.textContent=String(page+1).padStart(2,'0')+' / 04';
  }
  document.querySelectorAll('[data-joseph-step]').forEach(button=>button.addEventListener('click',()=>{
   page=(page+1)%2;
@@ -654,7 +655,7 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
   count.textContent=page===0?'01—02 / 04':'03—04 / 04';
  }
  document.querySelectorAll('[data-cowboyer-step]').forEach(button=>button.addEventListener('click',()=>{
-  page=(page+1)%2;render();
+  page=(page+Number(button.dataset.cowboyerStep)+figures.length)%figures.length;render();
  }));
  render();
 })();
