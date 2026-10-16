@@ -135,6 +135,16 @@
 .work-image-dialog .viewer-caption{display:flex;justify-content:space-between;gap:12px;font:10px/1.4 var(--mono);text-transform:uppercase;color:var(--muted)}
 .work-index .ramsey-hill-plate{background:#fff;aspect-ratio:1/1;max-height:min(44vh,450px);margin-inline:auto}
 .work-index .ramsey-hill-plate img{object-fit:contain}
+/* Drawings — one original sheet at a time; no fake paper, no crop. */
+.work-index .drawings-gallery{width:100%}
+.work-index .drawings-stage{width:100%;height:clamp(180px,48dvh,470px);margin:0 0 8px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.work-index .drawings-stage img{width:100%;height:100%;object-fit:contain}
+.work-index .drawings-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font:11px/1.4 var(--mono);color:var(--muted)}
+.work-index .drawings-controls button{appearance:none;background:none;border:0;color:var(--ink);font:18px/1 var(--mono);padding:0;min-width:44px;min-height:44px;cursor:inherit}
+.work-index .drawings-controls button:is(:hover,:focus-visible){color:var(--accent)}
+@media(max-height:700px){.work-index .drawings-stage{height:clamp(155px,40dvh,340px)}}
+/* Twelve selected entries still fit the intended fixed-height work index. */
+@media(min-width:851px){.work-index .index-table td{padding-top:clamp(3px,.62vh,7px);padding-bottom:clamp(3px,.62vh,7px)}}
 /* Cowboyer: uniform single-cover stage, consistent with Teton Valley Ranch. */
 .work-index .cowboyer-gallery{display:block;width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
 .work-index .cowboyer-gallery .photo-plate{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;aspect-ratio:auto;overflow:hidden}
@@ -281,9 +291,9 @@
   <div class="section-head">
     <h1 class="section-title">WORK INDEX</h1>
     <div class="index-tools" role="group" aria-label="Work index view">
-      <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>11</span></button>
+      <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>12</span></button>
       <span class="index-view-divider" aria-hidden="true">/</span>
-      <button class="index-view" data-index-view="all" type="button" aria-pressed="false" aria-controls="work-index-table">ALL <span>21</span></button>
+      <button class="index-view" data-index-view="all" type="button" aria-pressed="false" aria-controls="work-index-table">ALL <span>22</span></button>
     </div>
   </div>
   <div class="index-layout"><table class="index-table" id="work-index-table" aria-label="Selected work">
@@ -294,23 +304,24 @@
       <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2026</td></tr>
       <tr><td>003</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="scout" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Scout Motors</button></td><td>Illustration</td><td>2026</td></tr>
       <tr><td>004</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="cowboyer" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>The Cowboyer</button></td><td>Cover studies</td><td>2026</td></tr>
-      <tr><td>005</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ramsey-hill" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ramsey Hill Contracting</button></td><td>Logo</td><td>2026</td></tr>
-      <tr><td>006</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗</a></td><td>Apprentice</td><td>2025</td></tr>
-      <tr><td>007</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ernest" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>ERNEST</button></td><td>Illustration</td><td>2025</td></tr>
-      <tr><td>008</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="habitat" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Habitat Ranch</button></td><td>Photography</td><td>2025</td></tr>
-      <tr><td>009</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="pbr" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>PBR</button></td><td>Client</td><td>2025</td></tr>
-      <tr><td>010</td><td><button class="expand-button" type="button" data-client="corey" aria-expanded="false" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Corey Kent</button></td><td>Artwork / 1 release</td><td>2025</td></tr>
-      <tr><td>011</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="joseph" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Joseph Martin</button></td><td>Illustration / Artwork</td><td>2024</td></tr>
-      <tr><td>012</td><td><a href="https://www.hotelperle.com/" target="_blank" rel="noopener noreferrer">Hotel Perle ↗</a></td><td>Illustration / Brand</td><td>2024—25</td></tr>
-      <tr><td>013</td><td><a href="https://thebygone.co/" target="_blank" rel="noopener noreferrer">The Bygone ↗</a></td><td>Illustration</td><td>2024</td></tr>
-      <tr><td>014</td><td><a href="https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz" target="_blank" rel="noopener noreferrer" aria-label="Listen to Tree Birds by Dylan Gossett on Spotify">Dylan Gossett — Tree Birds ↗</a></td><td>Artwork</td><td>2024</td></tr>
-      <tr><td>015</td><td><a href="https://open.spotify.com/track/1HIGTfMjZeqweuDuAmpCRk" target="_blank" rel="noopener noreferrer">Abbie Callahan — Linger ↗</a></td><td>Music</td><td>2024</td></tr>
-      <tr><td>016</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ronnie" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ronnie Hodges Performance Horses</button></td><td>Photography</td><td>2022</td></tr>
-      <tr><td>017</td><td><a href="https://www.imdb.com/title/tt5836316/" target="_blank" rel="noopener noreferrer">The Last Movie Star ↗</a></td><td>Production Intern</td><td>2016</td></tr>
-      <tr><td>018</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="teton" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Teton Valley Ranch</button></td><td>Photography</td><td>2015</td></tr>
-      <tr><td>019</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
-      <tr><td>020</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗</a></td><td>Illustration</td><td>2025</td></tr>
-      <tr><td>021</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗</a></td><td>Photography</td><td>2025</td></tr>
+      <tr><td>005</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
+      <tr><td>006</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ramsey-hill" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ramsey Hill Contracting</button></td><td>Logo</td><td>2026</td></tr>
+      <tr><td>007</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗</a></td><td>Apprentice</td><td>2025</td></tr>
+      <tr><td>008</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ernest" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>ERNEST</button></td><td>Illustration</td><td>2025</td></tr>
+      <tr><td>009</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="habitat" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Habitat Ranch</button></td><td>Photography</td><td>2025</td></tr>
+      <tr><td>010</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="pbr" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>PBR</button></td><td>Client</td><td>2025</td></tr>
+      <tr><td>011</td><td><button class="expand-button" type="button" data-client="corey" aria-expanded="false" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Corey Kent</button></td><td>Artwork / 1 release</td><td>2025</td></tr>
+      <tr><td>012</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="joseph" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Joseph Martin</button></td><td>Illustration / Artwork</td><td>2024</td></tr>
+      <tr><td>013</td><td><a href="https://www.hotelperle.com/" target="_blank" rel="noopener noreferrer">Hotel Perle ↗</a></td><td>Illustration / Brand</td><td>2024—25</td></tr>
+      <tr><td>014</td><td><a href="https://thebygone.co/" target="_blank" rel="noopener noreferrer">The Bygone ↗</a></td><td>Illustration</td><td>2024</td></tr>
+      <tr><td>015</td><td><a href="https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz" target="_blank" rel="noopener noreferrer" aria-label="Listen to Tree Birds by Dylan Gossett on Spotify">Dylan Gossett — Tree Birds ↗</a></td><td>Artwork</td><td>2024</td></tr>
+      <tr><td>016</td><td><a href="https://open.spotify.com/track/1HIGTfMjZeqweuDuAmpCRk" target="_blank" rel="noopener noreferrer">Abbie Callahan — Linger ↗</a></td><td>Music</td><td>2024</td></tr>
+      <tr><td>017</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ronnie" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ronnie Hodges Performance Horses</button></td><td>Photography</td><td>2022</td></tr>
+      <tr><td>018</td><td><a href="https://www.imdb.com/title/tt5836316/" target="_blank" rel="noopener noreferrer">The Last Movie Star ↗</a></td><td>Production Intern</td><td>2016</td></tr>
+      <tr><td>019</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="teton" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Teton Valley Ranch</button></td><td>Photography</td><td>2015</td></tr>
+      <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
+      <tr><td>021</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗</a></td><td>Illustration</td><td>2025</td></tr>
+      <tr><td>022</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗</a></td><td>Photography</td><td>2025</td></tr>
     </tbody>
   </table>
   <aside class="work-panel" id="selected-work-panel" aria-label="Selected client releases">
@@ -379,6 +390,18 @@
       <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/ernest.webp" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       <p class="archive-plate-caption">ERNEST / 2025</p>
     </div>
+    <div class="panel-content" data-panel="drawings" hidden>
+      <div class="panel-top"><h2 class="panel-title">Drawings</h2><button class="panel-close" type="button" aria-label="Close Drawings">CLOSE ×</button></div>
+      <div class="drawings-gallery" aria-label="Independent drawings">
+        <figure class="archive-plate photo-plate drawings-stage"><img id="drawings-active-image" loading="lazy" src="../assets/2%202%201.png" alt="Bison study"></figure>
+        <div class="drawings-controls" role="group" aria-label="Browse drawings">
+          <button type="button" data-drawings-step="-1" aria-label="Previous drawing">←</button>
+          <span id="drawings-count">01 / 11</span>
+          <button type="button" data-drawings-step="1" aria-label="Next drawing">→</button>
+        </div>
+      </div>
+      <p class="archive-plate-caption" id="drawings-caption">BISON STUDY / INDEPENDENT WORK</p>
+    </div>
     <div class="panel-content" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
       <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
@@ -443,7 +466,7 @@
 </div><script src="../assets/js/site.js"></script><script>
 (function(){
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
-  const featured=new Set(['freeman','kashus','scout','cowboyer','ramsey-hill','ernest','pbr','corey','joseph','ronnie','teton']);
+  const featured=new Set(['freeman','kashus','scout','cowboyer','drawings','ramsey-hill','ernest','pbr','corey','joseph','ronnie','teton']);
   const viewButtons=Array.from(document.querySelectorAll('[data-index-view]'));
   const rows=Array.from(document.querySelectorAll('.index-table tbody tr'));
   let showAll=false;
@@ -681,5 +704,28 @@ document.querySelectorAll('.teton-controls button').forEach(function(button){
   page=(page+Number(button.dataset.cowboyerStep)+figures.length)%figures.length;render();
  }));
  render();
+})();
+</script><script>
+(function(){
+ const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
+ const gallery=document.querySelector('.drawings-gallery');
+ const image=document.getElementById('drawings-active-image');
+ const count=document.getElementById('drawings-count');
+ const caption=document.getElementById('drawings-caption');
+ if(!gallery||!image||!count||!caption)return;
+ let position=0;
+ function show(index){
+   position=(index+slides.length)%slides.length;
+   const slide=slides[position];
+   image.src=slide.src;image.alt=slide.caption;
+   count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+   caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
+ }
+ gallery.querySelectorAll('[data-drawings-step]').forEach(button=>button.addEventListener('click',()=>show(position+Number(button.dataset.drawingsStep))));
+ gallery.addEventListener('keydown',event=>{
+   if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+     event.preventDefault();show(position+(event.key==='ArrowRight'?1:-1));
+   }
+ });
 })();
 </script></body></html>
