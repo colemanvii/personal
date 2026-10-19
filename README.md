@@ -21,8 +21,11 @@ Vercel and GitHub Pages also build `main` but do not serve the domain.
 
 - `functions/api/contact.js` — contact handler on Cloudflare Pages; needs the
   encrypted variable `RESEND_API_KEY`. Until it is set, About shows only the
-  Email link.
-- `api/contact.js` — the same handler for the Vercel deployment.
+  Email link. Mail is sent only for colecalfee.com and www.colecalfee.com,
+  where the zone's rate-limiting rule on `POST /api/contact` applies; set
+  `CONTACT_ANY_HOST=true` only for local testing.
+- `api/contact.js` — the same handler for the Vercel deployment, which never
+  serves the custom domain and so never sends.
 - `404.html` — served with a 404 status for unknown paths; keep its links
   root-relative.
 

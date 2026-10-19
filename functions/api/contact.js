@@ -4,6 +4,15 @@
 
 // 3000 characters of message plus an email address, with room for escaping.
 const MAX_BODY = 16384;
+// Mail is sent only for the custom domain, which the zone's rate-limiting rule
+// covers. *.pages.dev hosts report "not configured" so they can't be used to
+// go around that rule. CONTACT_ANY_HOST=true lifts this for local testing.
+const DELIVERY_HOSTS = new Set(['colecalfee.com', 'www.colecalfee.com']);
+
+function deliverable(request, env) {
+  if (!env.RESEND_API_KEY) return false;
+  return env.CONTACT_ANY_HOST === 'true' || DELIVERY_HOSTS.has(new URL(request.url).hostname);
+}
 
 function json(status, body) {
   return new Response(JSON.stringify(body), {
@@ -18,8 +27,8 @@ function json(status, body) {
 
 // The About page asks before showing the form, so a visitor never writes a
 // note that cannot be delivered. Reports only whether delivery is configured.
-export function onRequestGet({ env }) {
-  return json(200, { configured: Boolean(env.RESEND_API_KEY) });
+export function onRequestGet({ request, env }) {
+  return json(200, { configured: deliverable(request, env) });
 }
 
 export async function onRequestPost({ request, env }) {
@@ -45,7 +54,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const key = env.RESEND_API_KEY;
-  if (!key) {
+  if (!deliverable(request, env)) {
     return json(503, { error: 'Messaging is not configured yet.' });
   }
 

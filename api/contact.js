@@ -1,9 +1,16 @@
 // Vercel serverless contact handler. RESEND_API_KEY is configured privately in Vercel.
 const ORIGINS = new Set([
   'https://colecalfee.com',
-  'https://www.colecalfee.com',
-  'https://colecalfee.vercel.app'
+  'https://www.colecalfee.com'
 ]);
+// colecalfee.com is served by Cloudflare Pages, so this deployment only
+// answers on *.vercel.app hosts that no rate-limiting rule covers. It sends
+// mail only for the custom domain, i.e. never in the current setup.
+const DELIVERY_HOSTS = new Set(['colecalfee.com', 'www.colecalfee.com']);
+
+function deliverable(req) {
+  return Boolean(process.env.RESEND_API_KEY) && DELIVERY_HOSTS.has(String(req.headers.host || '').toLowerCase());
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -11,7 +18,7 @@ module.exports = async function handler(req, res) {
 
   // The About page asks before showing the form; report only whether delivery is configured.
   if (req.method === 'GET') {
-    return res.status(200).json({ configured: Boolean(process.env.RESEND_API_KEY) });
+    return res.status(200).json({ configured: deliverable(req) });
   }
 
   if (req.method !== 'POST') {
@@ -34,7 +41,7 @@ module.exports = async function handler(req, res) {
   }
 
   const key = process.env.RESEND_API_KEY;
-  if (!key) {
+  if (!deliverable(req)) {
     return res.status(503).json({ error: 'Messaging is not configured yet.' });
   }
 
