@@ -344,6 +344,36 @@
 @media(hover:none) and (pointer:coarse){
  .work-index .work-panel:has(.panel-content:not([hidden]) .photo-plate[role="button"]) .panel-id::after{content:" / TAP IMAGE TO ENLARGE"}
 }
+/* Quiet index. On wide screens an open project takes the stage: numbers and
+   names stay exactly where they are, Role / Work and Year step back into the
+   pane, and the artwork fills the pane's height. */
+.work-index .panel-role{display:none}
+@media(min-width:1180px){
+ .work-index .index-layout:has(.work-panel.is-open){grid-template-columns:max-content minmax(0,1fr)}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table{table-layout:auto}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table :is(th,td):nth-child(n+3){display:none}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(2){width:auto}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(n+3){width:0}
+ .work-index .panel-role{display:block;margin:-12px 0 18px;font:10px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+ /* The pane's remaining height is the image stage; galleries with arrows give back their control row. */
+ .work-index .work-panel{--stage:calc(100dvh - 352px)}
+ .work-index .work-panel [data-panel="joseph"]{--stage:calc(100dvh - 410px)}
+ /* One reading column, as wide as a pair at full height: title, artwork,
+    arrows and caption share it, and CLOSE × sits on its right edge. */
+ .work-index .work-panel .panel-content{max-width:calc(1.6 * (var(--stage) + 2px) + 10px)}
+ /* Each plate is exactly its image. Pairs fill the column; single pieces centre in it. */
+ .work-index .work-panel :is(.photo-pair,.joseph-gallery){grid-template-columns:repeat(2,minmax(0,max-content));justify-content:center}
+ .work-index .work-panel :is(.photo-pair,.joseph-gallery) .photo-plate,
+ .work-index .work-panel .archive-plate.photo-plate:is(.whole-plate,.mags-photo){width:fit-content;max-width:100%;margin-inline:auto}
+ .work-index .work-panel :is(.photo-pair,.joseph-gallery) .photo-plate img,
+ .work-index .work-panel .archive-plate.photo-plate:is(.whole-plate,.mags-photo) img{width:auto;max-width:100%;height:var(--stage);max-height:none;object-fit:contain}
+ /* Galleries use the same stage, less their arrow row; Kashus also gives room to its release links. */
+ .work-index .work-panel :is(.drawings-stage,.ronnie-gallery .photo-plate,.teton-gallery .photo-plate){height:calc(var(--stage) - 56px)}
+ .work-index .work-panel .cowboyer-gallery{height:calc(var(--stage) - 56px)}
+ .work-index .work-panel .corey-artwork,.work-index .work-panel .corey-artwork img{max-height:var(--stage)}
+ .work-index .work-panel .kashus-main-plate{height:clamp(180px,calc(100dvh - 488px),480px)}
+ .work-index .work-panel .kashus-release-links{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -572,6 +602,17 @@
     contents.forEach(content=>{content.hidden=content.dataset.panel!==(archiveNames[client]?'archive':client==='teton'?'teton-photo':client==='ronnie'?'ronnie-photo':client);});
     placeholder.hidden=!!client;
     panel.classList.toggle('is-open',!!client);
+    // Role / Work and Year follow the project into the pane (shown on wide screens).
+    panel.querySelectorAll('.panel-role').forEach(role=>role.remove());
+    const origin=buttons.find(button=>button.dataset.client===client);
+    const top=panel.querySelector('.panel-content:not([hidden]) .panel-top');
+    if(origin&&top){
+      const row=origin.closest('tr');
+      const role=document.createElement('p');
+      role.className='panel-role';
+      role.textContent=row.cells[2].textContent.trim()+' / '+row.cells[3].textContent.trim();
+      top.after(role);
+    }
     if(client && matchMedia('(max-width:850px)').matches){
       const close=panel.querySelector('.panel-content:not([hidden]) .panel-close');
       if(close)close.focus();
