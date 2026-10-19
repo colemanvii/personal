@@ -344,6 +344,13 @@
 @media(hover:none) and (pointer:coarse){
  .work-index .work-panel:has(.panel-content:not([hidden]) .photo-plate[role="button"]) .panel-id::after{content:" / TAP IMAGE TO ENLARGE"}
 }
+/* Balanced split: from 1240px the reading pane is permanently wider. Nothing
+   changes when a project opens, so the index never reflows; below 1240px the
+   original proportions keep every row on one line. */
+@media(min-width:1240px){
+ .work-index .index-layout{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+ .work-index .index-table col:nth-child(2){width:42%}
+}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
