@@ -119,7 +119,7 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
     </nav>
       </div>
     </div>
-    <form class="contact-card" id="contact-form" action="/api/contact" method="post">
+    <form class="contact-card" id="contact-form" action="/api/contact" method="post" hidden>
       <label class="contact-label" for="contact-email">GET IN TOUCH</label>
       <div class="contact-honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
       <input class="contact-email" id="contact-email" type="email" name="email" autocomplete="email" placeholder="Your email address" aria-label="Your email address" required maxlength="254">
@@ -139,6 +139,12 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
  if(!form)return;
  const button=form.querySelector('button[type="submit"]');
  const status=document.getElementById('contact-status');
+ // Show the form only once the host confirms delivery is configured;
+ // otherwise the Email link above remains the way to get in touch.
+ fetch('/api/contact',{headers:{Accept:'application/json'},cache:'no-store'})
+  .then(response=>response.ok?response.json():null)
+  .then(state=>{if(state&&state.configured===true)form.hidden=false;})
+  .catch(()=>{});
  form.addEventListener('submit',async function(event){
   event.preventDefault();
   if(!form.reportValidity())return;
@@ -153,7 +159,9 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({message:message,email:form.elements.email.value.trim(),website:form.elements.website.value})
    });
-   if(!response.ok)throw new Error('Send failed');
+   // Require the handler's JSON receipt, not just any successful page.
+   const receipt=await response.json().catch(()=>null);
+   if(!response.ok||!receipt||receipt.ok!==true)throw new Error('Send failed');
    form.elements.message.value='';
    form.elements.email.value='';
    status.textContent='MESSAGE SENT. THANK YOU.';

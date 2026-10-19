@@ -9,8 +9,13 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
+  // The About page asks before showing the form; report only whether delivery is configured.
+  if (req.method === 'GET') {
+    return res.status(200).json({ configured: Boolean(process.env.RESEND_API_KEY) });
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
