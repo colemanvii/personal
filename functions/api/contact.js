@@ -1,13 +1,9 @@
 // Cloudflare Pages Function contact handler. colecalfee.com is served by
 // Cloudflare Pages; api/contact.js remains for the Vercel deployment.
 // RESEND_API_KEY is configured privately as an encrypted Pages variable.
-const ORIGINS = new Set([
-  'https://colecalfee.com',
-  'https://www.colecalfee.com',
-  'https://personal-7jh.pages.dev'
-]);
-// Branch and commit previews: https://<label>.personal-7jh.pages.dev
-const PREVIEW_ORIGIN = /^https:\/\/[a-z0-9-]+\.personal-7jh\.pages\.dev$/;
+
+// 3000 characters of message plus an email address, with room for escaping.
+const MAX_BODY = 16384;
 
 function json(status, body) {
   return new Response(JSON.stringify(body), {
@@ -27,10 +23,25 @@ export function onRequestGet({ env }) {
 }
 
 export async function onRequestPost({ request, env }) {
-  // Browser-origin check limits casual cross-site form abuse.
+  // Only the About page on this same host may post. Browsers always send
+  // Origin on POST, so a missing one means a script. This stops casual
+  // cross-site and scripted abuse; volume abuse with a forged Origin is left
+  // to the zone's rate-limiting rule.
   const origin = request.headers.get('Origin');
-  if (origin && !ORIGINS.has(origin) && !PREVIEW_ORIGIN.test(origin)) {
+  if (!origin || origin !== new URL(request.url).origin) {
     return json(403, { error: 'Origin not allowed.' });
+  }
+
+  // The About page only sends JSON; refusing other types keeps cross-site
+  // "simple" requests (text/plain, form posts) out entirely.
+  const type = request.headers.get('Content-Type') || '';
+  if (!/^application\/json\b/i.test(type)) {
+    return json(415, { error: 'Invalid request.' });
+  }
+
+  // A real note fits well under MAX_BODY; refuse anything larger unread.
+  if (Number(request.headers.get('Content-Length') || 0) > MAX_BODY) {
+    return json(413, { error: 'Message is too long.' });
   }
 
   const key = env.RESEND_API_KEY;
@@ -39,8 +50,11 @@ export async function onRequestPost({ request, env }) {
   }
 
   let body;
-  try { body = await request.json(); }
-  catch (_) { return json(400, { error: 'Invalid request.' }); }
+  try {
+    const text = await request.text();
+    if (text.length > MAX_BODY) return json(413, { error: 'Message is too long.' });
+    body = JSON.parse(text);
+  } catch (_) { return json(400, { error: 'Invalid request.' }); }
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return json(400, { error: 'Invalid request.' });
   }

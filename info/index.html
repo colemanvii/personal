@@ -141,7 +141,9 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
  const status=document.getElementById('contact-status');
  // Show the form only once the host confirms delivery is configured;
  // otherwise the Email link above remains the way to get in touch.
- fetch('/api/contact',{headers:{Accept:'application/json'},cache:'no-store'})
+ // A slow answer is treated as "no", so the form never appears late.
+ const timeout=window.AbortSignal&&AbortSignal.timeout?AbortSignal.timeout(5000):undefined;
+ fetch('/api/contact',{headers:{Accept:'application/json'},cache:'no-store',signal:timeout})
   .then(response=>response.ok?response.json():null)
   .then(state=>{if(state&&state.configured===true)form.hidden=false;})
   .catch(()=>{});

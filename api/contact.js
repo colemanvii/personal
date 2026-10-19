@@ -19,10 +19,18 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  // Browser-origin check limits casual cross-site form abuse.
+  // Browsers always send Origin on POST, so a missing one means a script.
   const origin = req.headers.origin;
-  if (origin && !ORIGINS.has(origin)) {
+  if (!origin || !ORIGINS.has(origin)) {
     return res.status(403).json({ error: 'Origin not allowed.' });
+  }
+
+  // Only the About page's JSON; keeps cross-site "simple" requests out.
+  if (!/^application\/json\b/i.test(req.headers['content-type'] || '')) {
+    return res.status(415).json({ error: 'Invalid request.' });
+  }
+  if (Number(req.headers['content-length'] || 0) > 16384) {
+    return res.status(413).json({ error: 'Message is too long.' });
   }
 
   const key = process.env.RESEND_API_KEY;
