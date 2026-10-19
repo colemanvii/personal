@@ -340,3 +340,9 @@ html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
 @media(max-width:850px){
  :root{--mono:Monaco,Menlo,"SFMono-Regular",Consolas,"Liberation Mono",monospace}
 }
+
+/* Small-text legibility on interior pages: muted text at least 4.5:1 on each
+   paper. Only the grey shifts, toward its own ink; the homepage is unchanged. */
+html[data-tone="off-white"] body:not(.landing){--muted:#726e6a}
+html[data-tone="violet-hour"] body:not(.landing){--muted:#5d4468}
+html[data-tone="red-earth"] body:not(.landing){--muted:#f6e3be}
