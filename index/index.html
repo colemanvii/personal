@@ -829,7 +829,8 @@
   {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
   {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
  ];
- const gallery=document.querySelector('.cowboyer-gallery');
+ // Include the sibling navigation controls in the gallery event scope.
+ const gallery=document.querySelector('[data-panel="cowboyer"]');
  const count=document.getElementById('cowboyer-count');
  const canvas=document.getElementById('cowboyer-canvas');
  const image=document.getElementById('cowboyer-active-image');
