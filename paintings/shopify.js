@@ -20,3 +20,24 @@ document.querySelectorAll("[data-product]").forEach(card => {
     // Missing or invalid links stay in inquiry mode, never simulate checkout.
   }
 });
+
+/* Try to display the product's own Shopify image. If the storefront blocks
+   cross-origin reads, leave the photo hidden rather than show a broken image. */
+const SHOPIFY_HANDLES = {flowers:"flowers-in-mccarty-vase","red-sea":"red-sea"};
+document.querySelectorAll("[data-product]").forEach(async card => {
+  const handle = SHOPIFY_HANDLES[card.dataset.product];
+  if (!handle) return;
+  try {
+    const response = await fetch("https://241880-3.myshopify.com/products/" + handle + ".js", {mode:"cors"});
+    if (!response.ok) return;
+    const product = await response.json();
+    const raw = product.featured_image || product.images?.[0];
+    const source = typeof raw === "string" ? raw : raw?.src;
+    if (!source) return;
+    const image = card.querySelector(".work-image img");
+    image.onload = () => { image.hidden = false; image.parentElement.hidden = false; };
+    image.src = source.startsWith("//") ? "https:" + source : source;
+  } catch (_) {
+    // A restricted Shopify storefront may prevent cross-origin image discovery.
+  }
+});
