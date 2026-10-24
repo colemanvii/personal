@@ -94,6 +94,15 @@ html:has(body.paintings),body.paintings{height:100%;overflow:hidden}
  .paintings .work-image{max-height:46dvh}
  .paintings .note{display:none}
 }
+
+/* Essentials only: artwork, name, dimensions, price and purchase. */
+.paintings .intro{border-bottom:0}
+.paintings .site-head{border-bottom:0}
+.paintings .catalog{align-content:center}
+.paintings .work-title{margin:5px 0 3px}
+.paintings .spec{display:block}
+.paintings .detail{color:var(--muted)}
+.paintings .action{border-bottom:0;text-decoration:underline;text-underline-offset:4px}
 </style>
 </head>
 <body class="paintings">
@@ -103,26 +112,25 @@ html:has(body.paintings),body.paintings{height:100%;overflow:hidden}
 <nav class="nav" aria-label="Primary"><a href="../index/">Work index</a><a href="../info/">Info</a></nav>
 </header>
 <main>
-<div class="intro"><h1>New Paintings</h1><small>Original works / 2026</small></div>
+<div class="intro"><h1>New Paintings</h1></div>
 <section class="catalog" aria-label="New original paintings">
 <article data-product="flowers">
 <div class="work-image"><img src="../assets/paintings/flowers.jpg" alt="Flowers, an original red painting with a vase of flowers" loading="lazy" onerror="this.parentElement.hidden=true"><span class="missing" hidden>Photograph forthcoming</span></div>
 <h2 class="work-title">Flowers</h2>
-<div class="spec"><p class="detail">Oil on canvas · 16 × 24 in.</p><p class="detail">Original / One of one</p></div>
-<a class="action" data-checkout hidden rel="noopener noreferrer">Purchase painting ↗</a>
+<div class="spec"><p class="detail">24 × 30 in. · $1,800</p></div>
+<a class="action" data-checkout hidden rel="noopener noreferrer">Purchase ↗</a>
 <p class="availability" data-pending>To purchase, <a href="mailto:hello@colecalfee.com?subject=Flowers%20painting%20inquiry" style="text-decoration:underline;text-underline-offset:3px">inquire by email ↗</a></p>
 </article>
 <article data-product="red-sea">
 <div class="work-image"><img src="../assets/paintings/red-sea.jpg" alt="Red Sea, a large original red abstract painting" loading="lazy" onerror="this.parentElement.hidden=true"><span class="missing" hidden>Photograph forthcoming</span></div>
 <h2 class="work-title">Red Sea</h2>
-<div class="spec"><p class="detail">Oil on canvas · 36 × 48 in.</p><p class="detail">Original / One of one</p></div>
-<a class="action" data-checkout hidden rel="noopener noreferrer">Purchase painting ↗</a>
+<div class="spec"><p class="detail">36 × 48 in. · $2,400</p></div>
+<a class="action" data-checkout hidden rel="noopener noreferrer">Purchase ↗</a>
 <p class="availability" data-pending>To purchase, <a href="mailto:hello@colecalfee.com?subject=Red%20Sea%20painting%20inquiry" style="text-decoration:underline;text-underline-offset:3px">inquire by email ↗</a></p>
 </article>
 </section>
-<p class="note">All paintings are original works. For questions about delivery, collection, or the work itself, <a style="text-decoration:underline" href="mailto:hello@colecalfee.com">get in touch</a>.</p>
 </main>
-<footer class="footer"><span>© 2026 Cole Calfee</span><a href="../">Home ↗</a></footer>
+
 </div>
 <script src="../assets/js/site.js"></script>
 <script src="./shopify.js"></script>
