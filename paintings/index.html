@@ -26,7 +26,7 @@
 .paintings .detail{margin:0}
 .paintings .action{display:inline-block;margin-top:20px;padding:9px 0;border-bottom:1px solid var(--ink);font:12px/1.4 var(--mono);letter-spacing:.015em}
 .paintings .action:hover,.paintings .action:focus-visible{background:var(--ink);color:var(--paper);outline:0;box-shadow:0 0 0 5px var(--ink)}
-.paintings .action[hidden],.paintings .work-image img[hidden]{display:none}
+.paintings .action[hidden],.paintings .work-image img[hidden],.paintings .work-image[hidden]{display:none}
 .paintings .availability{font:10px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:20px}
 .paintings .note{max-width:520px;margin-top:70px;text-transform:none}
 @media(max-width:650px){.paintings .catalog{grid-template-columns:1fr;gap:65px}.paintings .intro{display:block}.paintings .intro small{display:block;margin-top:18px}.paintings main{padding-top:48px}.paintings .work-image{aspect-ratio:4/5}.paintings .site-head{display:flex;align-items:baseline}.paintings .nav{margin-left:auto}}
@@ -42,14 +42,14 @@
 <div class="intro"><h1>Available Paintings</h1><small>Original works / 2026</small></div>
 <section class="catalog" aria-label="Available original paintings">
 <article data-product="flowers">
-<div class="work-image"><img src="../assets/paintings/flowers.jpg" alt="Flowers, an original red painting with a vase of flowers" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="missing" hidden>Photograph forthcoming</span></div>
+<div class="work-image"><img src="../assets/paintings/flowers.jpg" alt="Flowers, an original red painting with a vase of flowers" loading="lazy" onerror="this.parentElement.hidden=true"><span class="missing" hidden>Photograph forthcoming</span></div>
 <h2 class="work-title">Flowers</h2>
 <div class="spec"><p class="detail">Oil on canvas · 16 × 24 in.</p><p class="detail">Original / One of one</p></div>
 <a class="action" data-checkout hidden rel="noopener noreferrer">Purchase painting ↗</a>
 <p class="availability" data-pending>To purchase, <a href="mailto:hello@colecalfee.com?subject=Flowers%20painting%20inquiry" style="text-decoration:underline;text-underline-offset:3px">inquire by email ↗</a></p>
 </article>
 <article data-product="red-sea">
-<div class="work-image"><img src="../assets/paintings/red-sea.jpg" alt="Red Sea, a large original red abstract painting" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="missing" hidden>Photograph forthcoming</span></div>
+<div class="work-image"><img src="../assets/paintings/red-sea.jpg" alt="Red Sea, a large original red abstract painting" loading="lazy" onerror="this.parentElement.hidden=true"><span class="missing" hidden>Photograph forthcoming</span></div>
 <h2 class="work-title">Red Sea</h2>
 <div class="spec"><p class="detail">Oil on canvas · 36 × 48 in.</p><p class="detail">Original / One of one</p></div>
 <a class="action" data-checkout hidden rel="noopener noreferrer">Purchase painting ↗</a>
