@@ -346,3 +346,11 @@ html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
 html[data-tone="off-white"] body:not(.landing){--muted:#726e6a}
 html[data-tone="violet-hour"] body:not(.landing){--muted:#5d4468}
 html[data-tone="red-earth"] body:not(.landing){--muted:#f6e3be}
+
+/* Cyber white — pure RGB white is the default canvas, not warm paper. */
+:root, :root:not([data-tone]), html[data-tone="off-white"]{
+ --paper:#ffffff;--ink:#111111;--muted:#626262;--rule:#d9d9d9;--accent:#a43f33;
+}
+.landing-paper button[data-paper-tone="off-white"]::after{background:#ffffff}
+.landing-paper button[data-paper-tone="off-white"]{background:#ffffff}
+html[data-tone="off-white"] body:not(.landing){--muted:#626262}
