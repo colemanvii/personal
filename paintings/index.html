@@ -30,6 +30,49 @@
 .paintings .availability{font:10px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:20px}
 .paintings .note{max-width:520px;margin-top:70px;text-transform:none}
 @media(max-width:650px){.paintings .catalog{grid-template-columns:1fr;gap:65px}.paintings .intro{display:block}.paintings .intro small{display:block;margin-top:18px}.paintings main{padding-top:48px}.paintings .work-image{aspect-ratio:4/5}.paintings .site-head{display:flex;align-items:baseline}.paintings .nav{margin-left:auto}}
+
+/* Fixed-screen composition: the entire release is visible without page scrolling. */
+html:has(body.paintings),body.paintings{height:100%;overflow:hidden}
+.paintings{height:100dvh;min-height:0;overflow:hidden}
+.paintings .shell{height:100dvh;min-height:0;max-width:none;display:flex;flex-direction:column}
+.paintings .site-head{flex:0 0 auto}
+.paintings main{min-height:0;flex:1;display:flex;flex-direction:column;padding:clamp(12px,2.8dvh,30px) 0 clamp(8px,1.5dvh,18px)}
+.paintings .intro{flex:0 0 auto;margin:0 0 clamp(10px,2dvh,24px);padding:0 0 clamp(10px,1.6dvh,18px);align-items:baseline}
+.paintings h1{font:400 clamp(15px,1.55vw,23px)/1.25 var(--mono);letter-spacing:-.035em}
+.paintings .catalog{min-height:0;flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,4vw,64px)}
+.paintings article{min-height:0;display:flex;flex-direction:column}
+.paintings .work-image{flex:1;min-height:0;aspect-ratio:auto;border:0}
+.paintings .work-image img{width:100%;height:100%;object-fit:contain}
+.paintings .work-title{font:400 clamp(15px,1.65vw,23px)/1.15 var(--mono);letter-spacing:-.035em;margin:8px 0 3px}
+.paintings .detail{font-size:clamp(9px,.77vw,11px)}
+.paintings .action{margin-top:6px;padding:4px 0;font-size:11px;align-self:flex-start}
+.paintings .availability{margin-top:7px}
+.paintings .note{flex:0 0 auto;margin:clamp(8px,1.4dvh,16px) 0 0;font-size:10px;line-height:1.35}
+.paintings .footer{flex:0 0 auto;padding:clamp(6px,1dvh,12px) 0}
+@media(max-width:650px){
+ .paintings .shell{width:calc(100% - 28px)}
+ .paintings .site-head{display:flex;gap:8px;align-items:center}
+ .paintings .nav{gap:10px;margin-left:auto;font-size:10px!important}
+ .paintings .brand{font-size:11px!important}
+ .paintings main{padding-top:12px;padding-bottom:8px}
+ .paintings .intro{display:flex;gap:12px;margin-bottom:12px;align-items:baseline}
+ .paintings .intro small{margin:0;font-size:8px}
+ .paintings .catalog{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .paintings .work-image{aspect-ratio:auto}
+ .paintings .work-title{font-size:14px;margin-top:7px}
+ .paintings .spec{display:block}
+ .paintings .detail{font-size:9px;line-height:1.3}
+ .paintings .detail:nth-child(2){display:none}
+ .paintings .action{font-size:10px;line-height:1.3}
+ .paintings .note{font-size:9px}
+ .paintings .footer{font-size:9px}
+}
+@media(max-height:560px){
+ .paintings .intro{margin-bottom:6px;padding-bottom:6px}
+ .paintings .note{display:none}
+ .paintings .work-title{margin-top:4px}
+ .paintings .detail:nth-child(2){display:none}
+}
 </style>
 </head>
 <body class="paintings">
