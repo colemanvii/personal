@@ -73,6 +73,27 @@ html:has(body.paintings),body.paintings{height:100%;overflow:hidden}
  .paintings .work-title{margin-top:4px}
  .paintings .detail:nth-child(2){display:none}
 }
+
+/* Study 02 — smaller 4:5 photographic plates, aligned as a single exhibition. */
+.paintings .catalog{align-items:start;align-content:center;justify-items:center;gap:clamp(24px,5vw,90px)}
+.paintings article{width:100%;max-width:440px;min-height:0;align-self:center}
+.paintings .work-image{
+  flex:none;width:auto;height:auto;
+  aspect-ratio:4/5;max-width:100%;
+  max-height:min(55dvh,570px);
+  margin:0 auto 12px;overflow:hidden;
+}
+.paintings .work-image img{width:100%;height:100%;object-fit:cover;object-position:center}
+.paintings .work-title{margin-top:0}
+@media(max-width:650px){
+ .paintings .catalog{gap:clamp(12px,3vw,24px);align-content:center}
+ .paintings article{max-width:100%;align-self:center}
+ .paintings .work-image{aspect-ratio:4/5;max-height:min(47dvh,450px);margin-bottom:9px}
+}
+@media(max-height:650px){
+ .paintings .work-image{max-height:46dvh}
+ .paintings .note{display:none}
+}
 </style>
 </head>
 <body class="paintings">
