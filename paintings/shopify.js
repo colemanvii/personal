@@ -2,8 +2,8 @@
    Prefer Shopify product URLs or share links where Shopify handles live inventory,
    shipping and tax. Never invent or hardcode prices/availability on this site. */
 const SHOPIFY_PRODUCTS = Object.freeze({
-  flowers: "",
-  "red-sea": ""
+  flowers: "https://241880-3.myshopify.com/products/flowers-in-mccarty-vase",
+  "red-sea": "https://241880-3.myshopify.com/products/red-sea"
 });
 document.querySelectorAll("[data-product]").forEach(card => {
   const url = SHOPIFY_PRODUCTS[card.dataset.product];
