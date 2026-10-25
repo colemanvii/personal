@@ -64,6 +64,8 @@ function fromProduct(product, store) {
   const description = plainText(product.body_html);
   const sizeSource = [product.title, ...variants.map(v => v.title), ...description].join(' \n ');
   const size = sizeSource.match(SIZE);
+  // A description line that only restates the size adds nothing to the record.
+  const notes = description.filter(line => line.replace(SIZE, '').replace(/[\s.,;:·—–-]/g, '') !== '');
   const images = (product.images || [])
     .filter(image => image && image.src)
     .map(image => ({
@@ -77,7 +79,7 @@ function fromProduct(product, store) {
     title: product.title,
     images,
     size: size ? `${size[1]} × ${size[2]} in.` : null,
-    description,
+    description: notes,
     status: available ? 'available' : 'sold',
     price: available && forSale ? forSale.price : null,
     checkout: available && forSale ? `${store}/cart/${forSale.id}:1` : null,
