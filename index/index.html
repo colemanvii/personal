@@ -22,7 +22,10 @@
 .work-index .index-table col:nth-child(4){width:62px}
 .work-index .index-table td:first-child,.work-index .index-table td:nth-child(3),.work-index .index-table td:last-child{color:var(--muted)}
 .work-index .index-table th:last-child,.work-index .index-table td:last-child{text-align:right;padding-right:0}
-.work-index .index-table a:hover,.work-index .index-table a:focus-visible,.work-index .expand-button:hover,.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
+.work-index .index-table a:focus-visible,
+.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
+@media(hover:hover){.work-index .index-table a:hover,
+.work-index .expand-button:hover{background:var(--ink);color:var(--paper);outline-offset:3px}}
 .work-index .index-table td:nth-child(2){overflow-wrap:anywhere}
 .work-index .expand-button,.work-index .panel-close{font:inherit;color:inherit;background:transparent;border:0;padding:0;text-align:left;cursor:pointer}
 .work-index .expand-button .indicator{display:inline-block;min-width:18px;color:var(--accent)}
@@ -36,7 +39,8 @@
 .work-index .panel-close{font-size:11px;color:var(--muted)}
 .work-index .release-list{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
 .work-index .release-list li{border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:clamp(9px,1.3vh,15px) 0;font-size:12px}
-.work-index .release-list a:hover,.work-index .release-list a:focus-visible{background:var(--ink);color:var(--paper)}
+.work-index .release-list a:focus-visible{background:var(--ink);color:var(--paper)}
+@media(hover:hover){.work-index .release-list a:hover{background:var(--ink);color:var(--paper)}}
 .work-index .release-label{color:var(--muted);font-size:9px}
 .work-index .back{margin-top:14px;align-self:flex-start}
 @media(max-width:850px){
@@ -162,7 +166,8 @@
 .work-image-dialog .viewer-frame{height:100%;display:flex;flex-direction:column;gap:14px}
 .work-image-dialog .viewer-top{display:flex;align-items:center;justify-content:space-between;gap:20px;font:11px/1.4 var(--mono);text-transform:uppercase}
 .work-image-dialog .viewer-close{padding:0;border:0;background:transparent;color:var(--ink);font:inherit;cursor:inherit}
-.work-image-dialog .viewer-close:is(:hover,:focus-visible){background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);outline:0}
+.work-image-dialog .viewer-close:focus-visible{background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);outline:0}
+@media(hover:hover){.work-image-dialog .viewer-close:hover{background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);outline:0}}
 .work-image-dialog .viewer-image-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
 .work-image-dialog .viewer-image{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .work-image-dialog .viewer-caption{display:flex;justify-content:space-between;gap:12px;font:10px/1.4 var(--mono);text-transform:uppercase;color:var(--muted)}
@@ -314,7 +319,8 @@
 .work-index .index-view span{font-variant-numeric:tabular-nums}
 .work-index .index-view[aria-pressed="true"]{color:var(--accent);border-bottom-color:var(--accent)}
 .work-index .index-view-divider{color:var(--muted);opacity:.5}
-.work-index .index-view:is(:hover,:focus-visible){background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);border-color:transparent;outline:0}
+.work-index .index-view:focus-visible{background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);border-color:transparent;outline:0}
+@media(hover:hover){.work-index .index-view:hover{background:var(--accent);color:var(--paper);box-shadow:0 0 0 3px var(--accent);border-color:transparent;outline:0}}
 .work-index .index-table tr[hidden]{display:none}
 @media(max-width:480px){.work-index .index-tools{gap:9px;font-size:10px}}
 
@@ -382,6 +388,20 @@
 .work-index .index-table{font-size:clamp(12px,1vw,14px);letter-spacing:-.015em}
 .work-index .panel-title{font-size:clamp(18px,1.7vw,24px)}
 .work-index .index-count,.work-index .panel-id{font-family:var(--mono)}
+
+/* Typography release, 2026-10-25: names and roles in Helvetica Neue; catalogue
+   numbers, years, column labels and controls in monospace. */
+.work-index .index-table :is(th,td:first-child,td:last-child){font-family:var(--mono);font-size:max(.8em,10px);letter-spacing:0;font-variant-numeric:tabular-nums}
+.work-index .index-table .indicator{font-family:var(--mono)}
+.work-index .panel-close{font-family:var(--mono);font-size:11px;letter-spacing:.02em}
+.work-index [data-panel="freeman"] .freeman-site-visit{font-size:10px}
+/* Until the script sets the first project, the pane is not painted. */
+.work-index .work-panel.is-starting{visibility:hidden}
+/* Release titles name works: Helvetica Neue. */
+.work-index .kashus-release-links{font-family:var(--sans);font-size:12px;letter-spacing:-.01em}
+/* 44px touch targets for Selected / All and Close, without moving them. */
+.work-index :is(.index-view,.panel-close){position:relative}
+.work-index :is(.index-view,.panel-close)::after{content:"";position:absolute;inset:-15px -6px}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -389,7 +409,7 @@
 </header>
 <main class="section">
   <div class="section-head">
-    <h1 class="section-title">WORK INDEX</h1>
+    <h1 class="section-title">Work Index</h1>
     <div class="index-tools" role="group" aria-label="Work index view">
       <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>12</span></button>
       <span class="index-view-divider" aria-hidden="true">/</span>
@@ -406,25 +426,25 @@
       <tr><td>004</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="cowboyer" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>The Cowboyer</button></td><td>Cover studies</td><td>2026</td></tr>
       <tr><td>005</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
       <tr><td>006</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ramsey-hill" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ramsey Hill Contracting</button></td><td>Logo</td><td>2026</td></tr>
-      <tr><td>007</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗</a></td><td>Apprentice</td><td>2025</td></tr>
+      <tr hidden><td>007</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗</a></td><td>Apprentice</td><td>2025</td></tr>
       <tr><td>008</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ernest" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>ERNEST</button></td><td>Illustration</td><td>2025</td></tr>
-      <tr><td>009</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="habitat" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Habitat Ranch</button></td><td>Photography</td><td>2025</td></tr>
+      <tr hidden><td>009</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="habitat" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Habitat Ranch</button></td><td>Photography</td><td>2025</td></tr>
       <tr><td>010</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="pbr" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>PBR</button></td><td>Client</td><td>2025</td></tr>
       <tr><td>011</td><td><button class="expand-button" type="button" data-client="corey" aria-expanded="false" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Corey Kent</button></td><td>Artwork / 1 release</td><td>2025</td></tr>
       <tr><td>012</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="joseph" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Joseph Martin</button></td><td>Illustration / Artwork</td><td>2024</td></tr>
-      <tr><td>013</td><td><a href="https://www.hotelperle.com/" target="_blank" rel="noopener noreferrer">Hotel Perle ↗</a></td><td>Illustration / Brand</td><td>2024—25</td></tr>
-      <tr><td>014</td><td><a href="https://thebygone.co/" target="_blank" rel="noopener noreferrer">The Bygone ↗</a></td><td>Illustration</td><td>2024</td></tr>
-      <tr><td>015</td><td><a href="https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz" target="_blank" rel="noopener noreferrer" aria-label="Listen to Tree Birds by Dylan Gossett on Spotify">Dylan Gossett — Tree Birds ↗</a></td><td>Artwork</td><td>2024</td></tr>
-      <tr><td>016</td><td><a href="https://open.spotify.com/track/1HIGTfMjZeqweuDuAmpCRk" target="_blank" rel="noopener noreferrer">Abbie Callahan — Linger ↗</a></td><td>Music</td><td>2024</td></tr>
+      <tr hidden><td>013</td><td><a href="https://www.hotelperle.com/" target="_blank" rel="noopener noreferrer">Hotel Perle ↗</a></td><td>Illustration / Brand</td><td>2024—25</td></tr>
+      <tr hidden><td>014</td><td><a href="https://thebygone.co/" target="_blank" rel="noopener noreferrer">The Bygone ↗</a></td><td>Illustration</td><td>2024</td></tr>
+      <tr hidden><td>015</td><td><a href="https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz" target="_blank" rel="noopener noreferrer" aria-label="Listen to Tree Birds by Dylan Gossett on Spotify">Dylan Gossett — Tree Birds ↗</a></td><td>Artwork</td><td>2024</td></tr>
+      <tr hidden><td>016</td><td><a href="https://open.spotify.com/track/1HIGTfMjZeqweuDuAmpCRk" target="_blank" rel="noopener noreferrer">Abbie Callahan — Linger ↗</a></td><td>Music</td><td>2024</td></tr>
       <tr><td>017</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ronnie" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ronnie Hodges Performance Horses</button></td><td>Photography</td><td>2022</td></tr>
-      <tr><td>018</td><td><a href="https://www.imdb.com/title/tt5836316/" target="_blank" rel="noopener noreferrer">The Last Movie Star ↗</a></td><td>Production Intern</td><td>2016</td></tr>
+      <tr hidden><td>018</td><td><a href="https://www.imdb.com/title/tt5836316/" target="_blank" rel="noopener noreferrer">The Last Movie Star ↗</a></td><td>Production Intern</td><td>2016</td></tr>
       <tr><td>019</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="teton" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Teton Valley Ranch</button></td><td>Photography</td><td>2015</td></tr>
-      <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
-      <tr><td>021</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗</a></td><td>Illustration</td><td>2025</td></tr>
-      <tr><td>022</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗</a></td><td>Photography</td><td>2025</td></tr>
+      <tr hidden><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
+      <tr hidden><td>021</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗</a></td><td>Illustration</td><td>2025</td></tr>
+      <tr hidden><td>022</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗</a></td><td>Photography</td><td>2025</td></tr>
     </tbody>
   </table></div>
-  <aside class="work-panel" id="selected-work-panel" aria-label="Selected client releases">
+  <aside class="work-panel is-starting" id="selected-work-panel" aria-label="Selected client releases">
     <p class="panel-id">SELECTED WORK</p>
     <p class="panel-placeholder">SELECT A PROJECT<br>TO VIEW THE WORK.</p>
     <div class="panel-content archive-content" data-panel="archive" hidden>
@@ -581,6 +601,7 @@
   viewButtons.forEach(button=>button.addEventListener('click',()=>{
     showAll=button.dataset.indexView==='all';
     updateIndex();
+    revealList();
   }));
   updateIndex();
   const panel=document.getElementById('selected-work-panel');
@@ -624,8 +645,18 @@
     }
   }
   buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
-  // Begin with Freeman selected; visitors can still close it or choose another project.
-  show('freeman');
+  // Begin with Freeman selected where the pane sits beside the index. On phones
+  // the pane covers the list, so the list comes first.
+  if(!mobile.matches)show('freeman');
+  // The pane stays invisible until its first state is set, so it never shifts.
+  panel.classList.remove('is-starting');
+  // Changing Selected / All shows the list: on phones the open pane would hide
+  // it, and a project the filter removes should not stay open anywhere.
+  function revealList(){
+    if(!active)return;
+    const row=buttons.find(button=>button.dataset.client===active)?.closest('tr');
+    if(mobile.matches||!row||row.hidden)show(null);
+  }
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
     const origin=buttons.find(item=>item.dataset.client===prior);
