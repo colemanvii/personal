@@ -118,6 +118,9 @@ html body.landing .landing-ident{font-family:var(--mono);text-transform:uppercas
 @media(min-width:721px){
  /* Mixed case closes the space after the name; restore what mono gave it. */
  html body.landing .seven .name{margin-right:.35em}
+ /* A 44px touch target on tablets, as phones already have; nothing moves. */
+ html body.landing .seven a{position:relative}
+ html body.landing .seven a::after{content:"";position:absolute;inset:-14px -6px}
 }
 @media(max-width:720px){
  html body.landing .seven{font-size:18px;row-gap:20px}

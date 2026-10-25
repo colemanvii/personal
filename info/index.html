@@ -4,7 +4,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>About — Cole Calfee</title>
 <meta name="description" content="About and contact information for Cole Calfee.">
-<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','violet-hour','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
+<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
 html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -17,7 +17,8 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 .about-page .about-location{margin:24px 0 0;font:400 clamp(12px,1.1vw,15px)/1.5 var(--mono);color:var(--muted)}
 .about-page .contact-links{margin-top:36px;display:flex;gap:28px;font:11px/1.4 var(--mono);text-transform:uppercase}
 .about-page .contact-links a{text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:5px}
-.about-page .contact-links a:hover,.about-page .contact-links a:focus-visible{color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px var(--accent);color:var(--paper);border-color:transparent}
+.about-page .contact-links a:focus-visible{color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px var(--accent);color:var(--paper);border-color:transparent}
+@media(hover:hover){.about-page .contact-links a:hover{color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px var(--accent);color:var(--paper);border-color:transparent}}
 @media(max-width:700px){
  .about-page .site-head{grid-template-columns:1fr auto}
  .about-page .section{padding:28px 0}
@@ -103,6 +104,15 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
 .about-page .contact-links{font-family:var(--sans)}
 .about-page .about-name{letter-spacing:-.04em}
 .about-page .about-description{letter-spacing:-.015em}
+
+/* Typography release, 2026-10-25: the contact links read as words in Helvetica
+   Neue; the place line is information, in monospace. 44px touch targets. */
+.about-page .contact-links{font:14px/1.4 var(--sans);letter-spacing:-.01em;text-transform:none}
+.about-page .contact-links a{position:relative}
+.about-page .contact-links a::after{content:"";position:absolute;inset:-12px -6px}
+.about-page .about-location{font:12px/1.5 var(--mono);letter-spacing:0}
+.about-page .contact-submit button{position:relative}
+.about-page .contact-submit button::after{content:"";position:absolute;inset:-12px -6px}
 </style>
 </head><body class="about-page"><div class="shell">
 <header class="site-head">
@@ -117,8 +127,8 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
     <p class="about-description">Somewhere between art and work.</p>
     <p class="about-location">Nashville, Tennessee / North Georgia</p>
     <nav class="contact-links" aria-label="Contact links">
-      <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
-      <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
+      <a href="mailto:colecalfee@gmail.com">Email ↗</a>
+      <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
     </nav>
       </div>
     </div>

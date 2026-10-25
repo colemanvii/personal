@@ -10,7 +10,8 @@
 .project-art{margin:0 auto;width:min(100%,860px)}
 .project-art img{width:100%;height:auto}
 .project-nav{display:flex;justify-content:space-between;gap:24px;margin-top:40px;font-size:12px}
-.project-nav a:hover,.project-nav a:focus-visible{background:var(--ink);color:var(--paper)}
+.project-nav a:focus-visible{background:var(--ink);color:var(--paper)}
+@media(hover:hover){.project-nav a:hover{background:var(--ink);color:var(--paper)}}
 @media(max-width:560px){.project-head{flex-direction:column;gap:6px}.section{padding-top:40px}}
 .kashus-gallery{width:min(100%,860px);margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 18px}.gallery-figure{margin:0;min-width:0}.gallery-figure:first-child{grid-column:1/-1}.gallery-figure img{display:block;width:100%;height:auto;object-fit:contain}.gallery-figure figcaption{margin-top:9px;font-size:10px}@media(max-width:650px){.kashus-gallery{grid-template-columns:1fr;gap:26px}.gallery-figure:first-child{grid-column:auto}}
 </style>
@@ -19,7 +20,7 @@
 <div class="shell">
 <header class="site-head">
 <a class="brand" href="../../">Cole Calfee</a>
-<nav class="nav" aria-label="Primary"><a href="../../index/">WORK INDEX</a><a href="../../info/">ABOUT</a></nav>
+<nav class="nav" aria-label="Primary"><a href="/index/">Work Index</a><a href="/paintings/">Paintings</a><a href="/info/">About</a></nav>
 </header>
 <main class="section" id="project">
 <div class="project-head"><h1 class="section-title">Kashus Culpepper</h1><p class="meta">Artwork / 2026</p></div>
