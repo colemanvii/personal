@@ -97,14 +97,22 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
  .about-page .contact-card{margin-top:18px}
  .about-page .contact-message{height:55px}
 }
+/* Typography, 2026-10-25: Helvetica Neue for the name, line, place and
+   links; monospace stays for the form label and send status. */
+.about-page .about-name{font-family:var(--sans);letter-spacing:-.03em}
+.about-page :is(.about-description,.about-location,.contact-links,.contact-email,.contact-message,.contact-submit button){font-family:var(--sans);letter-spacing:-.005em}
+.about-page .about-location{font-size:15px}
+.about-page .contact-links{font-size:15px;text-transform:none}
+.about-page .contact-submit button{font-size:14px}
+.about-page :is(.contact-email,.contact-message){font-size:15px}
 </style>
 </head><body class="about-page"><div class="shell">
 <header class="site-head">
   <a class="brand" href="/">Cole Calfee</a>
   <nav class="nav" aria-label="Primary">
-  <a href="/index/">WORK INDEX</a>
-  <a href="/paintings/">PAINTINGS</a>
-  <a aria-current="page" href="/about/">ABOUT</a>
+  <a href="/index/">Work Index</a>
+  <a href="/paintings/">Paintings</a>
+  <a aria-current="page" href="/about/">About</a>
   </nav>
 </header>
 <main class="section">
@@ -115,8 +123,8 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
     <p class="about-description">Somewhere between art and work.</p>
     <p class="about-location">Nashville, Tennessee / North Georgia</p>
     <nav class="contact-links" aria-label="Contact links">
-      <a href="mailto:colecalfee@gmail.com">EMAIL ↗</a>
-      <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
+      <a href="mailto:colecalfee@gmail.com">Email ↗</a>
+      <a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
     </nav>
       </div>
     </div>
@@ -126,7 +134,7 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
       <input class="contact-email" id="contact-email" type="email" name="email" autocomplete="email" placeholder="Your email address" aria-label="Your email address" required maxlength="254">
       <textarea class="contact-message" id="contact-message" name="message" placeholder="What’s on your mind?" aria-label="Your message" required maxlength="3000"></textarea>
       <div class="contact-submit">
-        <button type="submit">SEND MESSAGE ↗</button>
+        <button type="submit">Send message ↗</button>
         <p class="contact-note" id="contact-status" role="status" aria-live="polite"></p>
       </div>
     </form>
@@ -154,7 +162,7 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
   const message=form.elements.message.value.trim();
   if(message.length<3){status.textContent='Please write a little more.';return;}
   button.disabled=true;
-  button.textContent='SENDING…';
+  button.textContent='Sending…';
   status.textContent='Sending your note…';
   try{
    const response=await fetch('/api/contact',{
@@ -168,10 +176,10 @@ html:has(body.about-page),body.about-page{height:100%;overflow:hidden;overscroll
    form.elements.message.value='';
    form.elements.email.value='';
    status.textContent='MESSAGE SENT. THANK YOU.';
-   button.textContent='SEND ANOTHER ↗';
+   button.textContent='Send another ↗';
   }catch(error){
    status.textContent='Could not send. Try again, or use the email link.';
-   button.textContent='TRY AGAIN ↗';
+   button.textContent='Try again ↗';
   }finally{button.disabled=false;}
  });
 })();

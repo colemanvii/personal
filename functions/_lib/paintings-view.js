@@ -31,9 +31,9 @@ ${image ? `<meta property="og:image" content="${escapeHTML(image)}">\n<meta name
 <header class="site-head">
   <a class="brand" href="/">Cole Calfee</a>
   <nav class="nav" aria-label="Primary">
-  <a href="/index/">WORK INDEX</a>
-  <a aria-current="page" href="/paintings/">PAINTINGS</a>
-  <a href="/about/">ABOUT</a>
+  <a href="/index/">Work Index</a>
+  <a aria-current="page" href="/paintings/">Paintings</a>
+  <a href="/about/">About</a>
   </nav>
 </header>
 ${body}
@@ -93,7 +93,7 @@ export function renderArchive({ works, currency }, origin) {
   const first = works.find(w => w.images[0]);
   const body = `<main class="section paintings-archive">
   <div class="paintings-lede">
-    <h1 class="section-title">PAINTINGS</h1>
+    <h1 class="section-title">Paintings</h1>
     <p class="meta">${pad(works.length)} works${available.length ? ` · ${pad(available.length)} available` : ''}</p>
   </div>
   ${group('Available', available)}

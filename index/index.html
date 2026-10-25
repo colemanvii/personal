@@ -374,18 +374,26 @@
  .work-index .work-panel .kashus-main-plate{height:clamp(180px,calc(100dvh - 488px),480px)}
  .work-index .work-panel .kashus-release-links{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+/* Typography, 2026-10-25: names, roles and headings in Helvetica Neue;
+   numbers, years, column labels, captions and controls stay monospace. */
+.work-index .index-table{font-family:var(--sans);font-size:clamp(13px,1.05vw,15px);letter-spacing:-.005em}
+.work-index .index-table :is(th,td:first-child,td:last-child){font-family:var(--mono);font-size:max(.78em,10px);letter-spacing:-.01em}
+.work-index .index-table .indicator{font-family:var(--mono)}
+.work-index .panel-title{font-family:var(--sans);letter-spacing:-.02em}
+.work-index .kashus-release-links{font-family:var(--sans);font-size:13px}
+@media(max-width:850px){.work-index .index-table{font-size:clamp(13px,1.8vh,15px)}}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <a class="brand" href="/">Cole Calfee</a>
   <nav class="nav" aria-label="Primary">
-  <a aria-current="page" href="/index/">WORK INDEX</a>
-  <a href="/paintings/">PAINTINGS</a>
-  <a href="/about/">ABOUT</a>
+  <a aria-current="page" href="/index/">Work Index</a>
+  <a href="/paintings/">Paintings</a>
+  <a href="/about/">About</a>
   </nav>
 </header>
 <main class="section">
   <div class="section-head">
-    <h1 class="section-title">WORK INDEX</h1>
+    <h1 class="section-title">Work Index</h1>
     <div class="index-tools" role="group" aria-label="Work index view">
       <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>12</span></button>
       <span class="index-view-divider" aria-hidden="true">/</span>

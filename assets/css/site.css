@@ -368,3 +368,19 @@ html[data-tone="off-white"] body:not(.landing){--muted:#626262}
 /* Typography, 2026-10-25: Helvetica Neue is the reading face; monospace is
    kept for catalogue numbers and technical metadata. */
 :root{--sans:"Helvetica Neue",Helvetica,Arial,sans-serif}
+
+/* Interior pages read in Helvetica Neue, mixed case. Monospace keeps the
+   technical register: catalogue numbers, years, counts, sizes, captions,
+   status lines and small controls (.meta, .caption, .footer, .back and the
+   page-level rules that name var(--mono)). */
+body:not(.landing){font-family:var(--sans);font-size:15px;line-height:1.45;letter-spacing:-.005em}
+body:not(.landing) .site-head .brand,
+body:not(.landing) .site-head .nav{font-family:var(--sans);font-size:15px;letter-spacing:-.01em;text-transform:none}
+body:not(.landing) .section-title{font-family:var(--sans);font-size:17px;line-height:1.3;letter-spacing:-.015em;text-transform:none}
+body:not(.landing) :is(.section-note,.info-copy,.info-small){font-family:var(--sans);letter-spacing:-.005em}
+@media(max-width:600px){
+ body:not(.landing) .site-head .brand,body:not(.landing) .site-head .nav{font-size:15px}
+}
+@media(max-width:380px){
+ body:not(.landing) .site-head .brand,body:not(.landing) .site-head .nav{font-size:14px}
+}
