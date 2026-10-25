@@ -352,3 +352,12 @@ html[data-tone="off-white"] body:not(.landing){--muted:#626262}
 
 /* Homepage Helvetica Neue study, 2026-10-25. */
 :root{--sans:"Helvetica Neue",Helvetica,Arial,sans-serif}
+
+/* Sitewide typography contract: Helvetica Neue for identity, navigation, titles,
+   work and prose. Monospaced type is reserved for compact archival metadata. */
+body:not(.landing){font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body:not(.landing) .brand,body:not(.landing) .nav,
+body:not(.landing) .section-title,body:not(.landing) .section-note,
+body:not(.landing) .index-row{font-family:var(--sans);letter-spacing:-.02em;text-transform:none}
+body:not(.landing) .brand{font-size:15px}
+body:not(.landing) .nav{font-size:14px}
