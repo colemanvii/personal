@@ -2,8 +2,8 @@ document.documentElement.classList.add('js');
 (function(){
   var toneKey='cole-paper-tone-session-v3';
   var optionsKey='cole-paper-options-session-v3';
-  var tones=['off-white','field-notes','violet-hour','red-earth'];
-  var labels={'field-notes':'Field Notes — wheat and eggplant','violet-hour':'Violet Hour — lilac and plum','red-earth':'Red Earth — terracotta and ivory','off-white':'Cyber White — pure white and dark ink'};
+  var tones=['off-white','field-notes','red-earth'];
+  var labels={'off-white':'Paper — white and dark ink','field-notes':'Sand — wheat and eggplant','red-earth':'Rust — terracotta and ivory'};
 
   // A fresh visit starts off-white; palette changes last only for this tab.
 

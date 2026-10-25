@@ -24,7 +24,7 @@ function page({ title, description, canonical, image, body }) {
 <meta property="og:description" content="${escapeHTML(description)}">
 <meta property="og:url" content="${escapeHTML(canonical)}">
 ${image ? `<meta property="og:image" content="${escapeHTML(image)}">\n<meta name="twitter:card" content="summary_large_image">` : '<meta name="twitter:card" content="summary">'}
-<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','violet-hour','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
+<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/paintings.css">
 </head><body class="paintings"><div class="shell">

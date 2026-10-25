@@ -108,17 +108,31 @@ body.landing .landing-paper{bottom:13px}
  body.landing .seven a{position:relative}
  body.landing .seven a::after{content:"";position:absolute;top:-9px;bottom:-9px;left:50%;width:min(440px,calc(100vw - 36px));transform:translateX(-50%)}
 }
+
+/* Typography, 2026-10-25. The name and the three destinations are set in
+   Helvetica Neue, mixed case; composition, spacing and colour are unchanged.
+   The corner ident stays in monospace, as metadata. */
+html body.landing .seven{font-family:var(--sans);font-size:17px;font-weight:400;letter-spacing:-.012em;text-transform:none}
+html body.landing .seven :is(.name,a,.slash){font-family:inherit;letter-spacing:inherit}
+html body.landing .landing-ident{font-family:var(--mono);text-transform:uppercase}
+@media(min-width:721px){
+ /* Mixed case closes the space after the name; restore what mono gave it. */
+ html body.landing .seven .name{margin-right:.35em}
+}
+@media(max-width:720px){
+ html body.landing .seven{font-size:18px;row-gap:20px}
+}
 </style>
 </head>
 <body class="landing">
 <main class="landing-frame" aria-label="Cole Calfee">
   <nav class="seven" aria-label="Primary">
-    <span class="name">COLE CALFEE</span>
-    <a href="/index/">WORK INDEX</a>
+    <span class="name">Cole Calfee</span>
+    <a href="/index/">Work Index</a>
     <span class="slash" aria-hidden="true">/</span>
-    <a href="/paintings/">PAINTINGS</a>
+    <a href="/paintings/">Paintings</a>
     <span class="slash" aria-hidden="true">/</span>
-    <a href="/about/">ABOUT</a>
+    <a href="/about/">About</a>
   </nav>
   <div class="landing-ident">COLE CALFEE</div>
 </main>
