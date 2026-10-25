@@ -354,3 +354,19 @@ html[data-tone="red-earth"] body:not(.landing){--muted:#f6e3be}
 .landing-paper button[data-paper-tone="off-white"]::after{background:#ffffff}
 .landing-paper button[data-paper-tone="off-white"]{background:#ffffff}
 html[data-tone="off-white"] body:not(.landing){--muted:#626262}
+
+/* Primary navigation, 2026-10-25: Work Index / Paintings / About on every
+   interior page. One line at phone width; each link keeps a 44px touch target
+   through negative margin, so the header's height does not change. */
+.site-head{grid-template-columns:1fr auto;align-items:baseline}
+.site-head .nav{flex-wrap:nowrap;white-space:nowrap}
+.site-head .nav a,.site-head .brand{display:inline-block;padding-block:14px;margin-block:-14px}
+.site-head .nav a[aria-current="page"]{border-bottom:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+@media(max-width:600px){
+ body:not(.landing) .site-head .nav,body:not(.landing) .site-head .brand{font-size:13px;letter-spacing:-.03em}
+ .site-head .nav{gap:14px}
+}
+@media(max-width:380px){
+ .site-head .nav{gap:10px}
+ body:not(.landing) .site-head .nav,body:not(.landing) .site-head .brand{font-size:12px}
+}
