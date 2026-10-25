@@ -1,0 +1,34 @@
+html,body{min-height:100%}
+body.shop-page{font-family:var(--mono);background:var(--paper);color:var(--ink)}
+.shop-head{padding:28px 28px 0}
+.shop-head .seven{justify-content:flex-start}
+.shop-head .seven a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
+.shop-grid{width:min(1180px,calc(100% - 56px));margin:84px auto 120px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px 34px}
+.product{appearance:none;border:0;background:transparent;color:inherit;padding:0;margin:0;text-align:left;font:inherit;cursor:inherit}
+.product-image{display:block;border:1px solid var(--ink);background:#fff}
+.product-image img{width:100%;height:auto}
+.product-meta{display:grid;gap:4px;margin-top:10px;font-size:12px;line-height:1.45;letter-spacing:.03em;text-transform:uppercase}
+.product-meta span:last-child{color:var(--muted)}
+.product-dialog{width:100vw;height:100vh;max-width:none;max-height:none;margin:0;border:0;padding:0;background:var(--paper);color:var(--ink)}
+.product-dialog::backdrop{background:transparent}
+.product-dialog[open]{display:block}
+.product-close{position:absolute;top:30px;right:30px;border:0;background:transparent;color:inherit;font:12px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:0;cursor:inherit}
+.product-detail{width:min(900px,calc(100% - 56px));margin:120px auto 0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:70px;align-items:start}
+.product-detail-image{border:1px solid var(--ink);background:#fff}
+.product-detail-image img{width:100%;height:auto}
+.product-detail-copy{display:grid;gap:22px;font-size:12px;line-height:1.45;letter-spacing:.03em;text-transform:uppercase}
+.product-detail-copy p{margin:0}
+.product-detail-copy label{margin-top:4px}
+.product-detail-copy select,.buy{width:max-content;min-width:150px;border:1px solid var(--ink);border-radius:0;background:transparent;color:inherit;font:12px/1.4 var(--mono);padding:10px 14px;text-transform:uppercase}
+.buy{margin-top:4px;opacity:.5}
+.product-note{max-width:210px;font-size:10px;line-height:1.45}
+@media(max-width:850px){
+  .shop-head{padding:22px 18px 0}
+  .shop-grid{width:calc(100% - 36px);grid-template-columns:1fr 1fr;gap:40px 18px;margin-top:64px}
+  .product-detail{width:calc(100% - 36px);grid-template-columns:1fr;gap:26px;margin-top:82px;padding-bottom:40px}
+  .product-close{top:20px;right:18px}
+}
+@media(max-width:560px){
+  .shop-grid{grid-template-columns:1fr}
+  .shop-head .seven{width:100%;line-height:2.15}
+}

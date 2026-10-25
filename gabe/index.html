@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Copy Prompt from Cole</title>
+<style>
+:root{--bg:#d8d7cf;--ink:#24241f}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);display:grid;place-items:center;font-family:"Courier New",Courier,monospace}
+button{appearance:none;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:18px 24px;font:700 14px/1 "Courier New",Courier,monospace;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+button:hover,button.copied{background:var(--ink);color:var(--bg)}
+</style>
+</head>
+<body>
+<button id="copy">COPY PROMPT FROM COLE</button>
+<script>
+const text = `Build a marketing strategy for Freeman General Contracting.
+
+Take into consideration my taste, instincts, values, ambitions, and the way I think about the company.
+
+Also consider the fact that I have added a new team member to focus on brand, creative direction, storytelling, photography, documentation, content, and business development.
+
+Do not build a generic construction marketing plan.
+
+The creative point of view should be grounded in the belief that the work already contains the brand.
+
+We should not manufacture an identity and impose it on the company. We should uncover what is already distinctive about Freeman, document it beautifully, organize it, interpret it, and make it legible to the right people.
+
+The aesthetic and strategic lens should feel closer to architecture, hospitality, editorial publishing, monographs, field journals, craftsmanship, and material culture rather than conventional contractor advertising.
+
+Favor restraint, atmosphere, materiality, evidence, specificity, quiet confidence, intelligent documentation, beautiful but honest photography, real field moments, strong typography and editorial presentation, and long-term body-of-work thinking.
+
+Avoid generic “luxury builder” positioning, glossy corporate branding, trend-driven social content, empty lifestyle imagery, constant posting for its own sake, marketing jargon, over-explaining, and anything that feels artificial, performative, or detached from the actual work.
+
+A core creative idea to explore is:
+
+Finished Result ↔ Field Evidence
+
+The finished project matters, but so do the decisions, details, materials, people, constraints, craft, corrections, and problem-solving that produced it.
+
+Consider how Freeman can turn those things into a recognizable and cumulative body of work.
+
+Think about how the new creative/brand role should operate inside the company — not as a separate marketing department, but as someone embedded close to the work, noticing and capturing what matters, preserving institutional knowledge, shaping the company’s visual and editorial language, and translating that into business-development leverage.
+
+Consider brand positioning, photography, project documentation, field notes, case studies, website, social publishing, proposals, presentations, client experience, architect and designer relationships, hospitality and developer relationships, partnerships, earned media, institutional memory, business development, and how one completed project can generate the next right project.
+
+The goal is not maximum reach.
+
+The goal is to make Freeman increasingly coherent, recognizable, culturally distinct, and trusted by the right people.
+
+Identify:
+1. What Freeman should become known for.
+2. What is already distinctive but under-articulated.
+3. Who the right audience and relationship network is.
+4. What stories, details, and evidence should be captured from every project.
+5. What visual and editorial system should be built.
+6. How brand and business development should reinforce each other.
+7. What the creative director should spend time on versus ignore.
+8. What should be built over the next 6–12 months.
+9. What would feel off-brand or strategically distracting.
+10. The five highest-leverage moves to make next.
+
+Be critical and specific.
+
+Do not simply validate the current direction.
+
+Push toward a strategy that feels commercially intelligent, culturally sharp, and unmistakably Freeman.`;
+
+const btn = document.getElementById('copy');
+btn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(text);
+  btn.textContent = 'COPIED FROM COLE';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = 'COPY PROMPT FROM COLE';
+    btn.classList.remove('copied');
+  }, 1800);
+});
+</script>
+</body>
+</html>

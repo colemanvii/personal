@@ -1,47 +1,27 @@
 // Vercel serverless contact handler. RESEND_API_KEY is configured privately in Vercel.
 const ORIGINS = new Set([
   'https://colecalfee.com',
-  'https://www.colecalfee.com'
+  'https://www.colecalfee.com',
+  'https://colecalfee.vercel.app'
 ]);
-// colecalfee.com is served by Cloudflare Pages, so this deployment only
-// answers on *.vercel.app hosts that no rate-limiting rule covers. It sends
-// mail only for the custom domain, i.e. never in the current setup.
-const DELIVERY_HOSTS = new Set(['colecalfee.com', 'www.colecalfee.com']);
-
-function deliverable(req) {
-  return Boolean(process.env.RESEND_API_KEY) && DELIVERY_HOSTS.has(String(req.headers.host || '').toLowerCase());
-}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  // The About page asks before showing the form; report only whether delivery is configured.
-  if (req.method === 'GET') {
-    return res.status(200).json({ configured: deliverable(req) });
-  }
-
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'GET, POST');
+    res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  // Browsers always send Origin on POST, so a missing one means a script.
+  // Browser-origin check limits casual cross-site form abuse.
   const origin = req.headers.origin;
-  if (!origin || !ORIGINS.has(origin)) {
+  if (origin && !ORIGINS.has(origin)) {
     return res.status(403).json({ error: 'Origin not allowed.' });
   }
 
-  // Only the About page's JSON; keeps cross-site "simple" requests out.
-  if (!/^application\/json\b/i.test(req.headers['content-type'] || '')) {
-    return res.status(415).json({ error: 'Invalid request.' });
-  }
-  if (Number(req.headers['content-length'] || 0) > 16384) {
-    return res.status(413).json({ error: 'Message is too long.' });
-  }
-
   const key = process.env.RESEND_API_KEY;
-  if (!deliverable(req)) {
+  if (!key) {
     return res.status(503).json({ error: 'Messaging is not configured yet.' });
   }
 

@@ -4,7 +4,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>Work Index — Cole Calfee</title>
 <meta name="description" content="Selected artwork, photography, identities, and digital experiences by Cole Calfee.">
-<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
+<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','violet-hour','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
 .work-index{height:100dvh;overflow:hidden}
@@ -374,26 +374,22 @@
  .work-index .work-panel .kashus-main-plate{height:clamp(180px,calc(100dvh - 488px),480px)}
  .work-index .work-panel .kashus-release-links{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-/* Typography, 2026-10-25: names, roles and headings in Helvetica Neue;
-   numbers, years, column labels, captions and controls stay monospace. */
-.work-index .index-table{font-family:var(--sans);font-size:clamp(13px,1.05vw,15px);letter-spacing:-.005em}
-.work-index .index-table :is(th,td:first-child,td:last-child){font-family:var(--mono);font-size:max(.78em,10px);letter-spacing:-.01em}
-.work-index .index-table .indicator{font-family:var(--mono)}
-.work-index .panel-title{font-family:var(--sans);letter-spacing:-.02em}
-.work-index .kashus-release-links{font-family:var(--sans);font-size:13px}
-@media(max-width:850px){.work-index .index-table{font-size:clamp(13px,1.8vh,15px)}}
+
+
+/* Work Index shares the site's Helvetica Neue identity and main type scale. */
+.work-index .index-table,.work-index .panel-title,.work-index .panel-close,
+.work-index .expand-button,.work-index .work-panel{font-family:var(--sans)}
+.work-index .index-table{font-size:clamp(12px,1vw,14px);letter-spacing:-.015em}
+.work-index .panel-title{font-size:clamp(18px,1.7vw,24px)}
+.work-index .index-count,.work-index .panel-id{font-family:var(--mono)}
 </style></head><body class="work-index"><div class="shell">
 <header class="site-head">
-  <a class="brand" href="/">Cole Calfee</a>
-  <nav class="nav" aria-label="Primary">
-  <a aria-current="page" href="/index/">Work Index</a>
-  <a href="/paintings/">Paintings</a>
-  <a href="/about/">About</a>
-  </nav>
+  <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
+  <nav class="nav" aria-label="Primary"><a aria-current="page" href="/index/">Work Index</a><a href="/paintings/">Paintings</a><a href="/info/">About</a></nav>
 </header>
 <main class="section">
   <div class="section-head">
-    <h1 class="section-title">Work Index</h1>
+    <h1 class="section-title">WORK INDEX</h1>
     <div class="index-tools" role="group" aria-label="Work index view">
       <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>12</span></button>
       <span class="index-view-divider" aria-hidden="true">/</span>
@@ -442,23 +438,23 @@
     <div class="panel-content" data-panel="scout" hidden>
       <div class="panel-top"><h2 class="panel-title">Scout Motors</h2><button class="panel-close" type="button" aria-label="Close Scout Motors artwork">CLOSE ×</button></div>
       <div class="photo-pair scout-gallery">
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/web/s1.webp" width="6762" height="8452" alt="Framed Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/web/s2.webp" width="7101" height="8876" alt="Framed Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s1.jpeg" width="6762" height="8452" alt="Framed Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s2.jpeg" width="7101" height="8876" alt="Framed Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <p class="archive-plate-caption">01—02 / SCOUT MOTORS / ILLUSTRATION / 2026</p>
     </div>
     <div class="panel-content" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
-      <div class="kashus-gallery" aria-label="Kashus artwork and photography">
-        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/web/pmo.webp" alt="Pour Me Out" loading="lazy"></figure>
+      <div class="kashus-gallery" id="kashus-full-gallery" aria-label="Kashus artwork and photography">
+        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/kc3.jpg" alt="Live performance" loading="eager"></figure>
         <div class="kashus-gallery-controls" role="group" aria-label="Browse Kashus images"><button type="button" data-kashus-step="-1" aria-label="Previous image" aria-controls="kashus-main-image">←</button><span class="kashus-image-count" id="kashus-image-count">01 / 10</span><button type="button" data-kashus-step="1" aria-label="Next image" aria-controls="kashus-main-image">→</button></div><span class="gallery-status" id="kashus-gallery-status" role="status" aria-live="polite" aria-atomic="true"></span>
-        <p class="archive-plate-caption" id="kashus-image-caption">POUR ME OUT</p>
-        <nav class="kashus-release-links" aria-label="Listen to Kashus Culpepper releases"><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗</a><a href="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" target="_blank" rel="noopener noreferrer">Act I: Summer Nights ↗</a><a href="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" target="_blank" rel="noopener noreferrer">After Me? ↗</a><a href="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" target="_blank" rel="noopener noreferrer">Out of My Mind ↗</a><a href="https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc" target="_blank" rel="noopener noreferrer">Jenni ↗</a><a href="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" target="_blank" rel="noopener noreferrer">Who Hurt You ↗</a><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗</a></nav>
+        <p class="archive-plate-caption" id="kashus-image-caption">LIVE PERFORMANCE</p>
       </div>
+      <nav class="kashus-release-links" aria-label="Listen to Kashus Culpepper releases"><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗</a><a href="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" target="_blank" rel="noopener noreferrer">Act I: Summer Nights ↗</a><a href="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" target="_blank" rel="noopener noreferrer">After Me? ↗</a><a href="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" target="_blank" rel="noopener noreferrer">Out of My Mind ↗</a><a href="https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc" target="_blank" rel="noopener noreferrer">Jenni ↗</a><a href="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" target="_blank" rel="noopener noreferrer">Who Hurt You ↗</a><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗</a></nav>
     </div>
     <div class="panel-content" data-panel="corey" hidden>
       <div class="panel-top"><h2 class="panel-title">Corey Kent</h2><button class="panel-close" type="button" aria-label="Close Corey Kent releases">CLOSE ×</button></div>
-      <figure class="archive-plate photo-plate corey-artwork"><img loading="lazy" src="../assets/web/ck.webp" width="4000" height="4000" alt="Corey Kent Poster Child EP artwork in blue on cream" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <figure class="archive-plate photo-plate corey-artwork"><img loading="lazy" src="../assets/ck.jpg" width="4000" height="4000" alt="Corey Kent Poster Child EP artwork in blue on cream" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       <p class="archive-plate-caption"><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">POSTER CHILD EP ↗</a> / COVER ARTWORK / 2025</p>
     </div>
 
@@ -467,8 +463,8 @@
       <div class="photo-pair joseph-gallery">
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-01.webp" width="1100" height="1375" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-02.webp" width="1100" height="1375" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/web/cg.webp" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/web/jm3.webp" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="joseph-navigation" role="group" aria-label="Joseph Martin artwork pages"><button type="button" data-joseph-step="-1" aria-label="Previous pair">←</button><span id="joseph-count">01—02 / 04</span><button type="button" data-joseph-step="1" aria-label="Next pair">→</button></div>
       <p class="archive-plate-caption">JOSEPH MARTIN / ILLUSTRATION / 2024</p>
@@ -498,7 +494,7 @@
     <div class="panel-content" data-panel="drawings" hidden>
       <div class="panel-top"><h2 class="panel-title">Drawings</h2><button class="panel-close" type="button" aria-label="Close Drawings">CLOSE ×</button></div>
       <div class="drawings-gallery" aria-label="Independent drawings">
-        <figure class="archive-plate photo-plate drawings-stage"><img id="drawings-active-image" loading="lazy" src="../assets/web/2-2-1.webp" alt="Bison study"></figure>
+        <figure class="archive-plate photo-plate drawings-stage"><img id="drawings-active-image" loading="lazy" src="../assets/2%202%201.png" alt="Bison study"></figure>
         <div class="drawings-controls" role="group" aria-label="Browse drawings">
           <button type="button" data-drawings-step="-1" aria-label="Previous drawing">←</button>
           <span id="drawings-count">01 / 11</span>
@@ -512,7 +508,7 @@
       <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
         <figure class="archive-plate photo-plate cowboyer-stage">
           <div class="cowboyer-canvas" id="cowboyer-canvas" data-cover="01">
-            <img id="cowboyer-active-image" loading="lazy" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
+            <img id="cowboyer-active-image" loading="eager" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
           </div>
         </figure>
       </div>
@@ -549,7 +545,7 @@
     </div>
     <div class="panel-content" data-panel="mags" hidden>
       <div class="panel-top"><h2 class="panel-title">Mags Duval</h2><button class="panel-close" type="button" aria-label="Close Mags Duval">CLOSE ×</button></div>
-      <figure class="archive-plate photo-plate mags-photo"><img loading="lazy" src="../assets/web/m2.webp" width="3601" height="3601" alt="Portrait of Mags Duval holding a red rose" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <figure class="archive-plate photo-plate mags-photo"><img loading="lazy" src="../assets/M2.jpeg" width="3601" height="3601" alt="Portrait of Mags Duval holding a red rose" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       <p class="archive-plate-caption">01 / MAGS DUVAL / PHOTOGRAPHY / 2024</p>
     </div>
   </aside></div>
@@ -565,15 +561,6 @@
 </dialog>
 <footer class="footer"><span>© 2026 Cole Calfee</span></footer>
 </div><script src="../assets/js/site.js"></script><script>
-/* Galleries warm their next images only once their panel is open, so the
-   Index itself loads only what is on screen. */
-function whenShown(element,run){
- const panel=element&&element.closest('[data-panel]');
- if(!panel||!panel.hidden){run();return;}
- const watch=new MutationObserver(()=>{if(!panel.hidden){watch.disconnect();run();}});
- watch.observe(panel,{attributes:true,attributeFilter:['hidden']});
-}
-</script><script>
 (function(){
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
   const featured=new Set(['freeman','kashus','scout','cowboyer','drawings','ramsey-hill','ernest','pbr','corey','joseph','ronnie','teton']);
@@ -637,6 +624,8 @@ function whenShown(element,run){
     }
   }
   buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
+  // Begin with Freeman selected; visitors can still close it or choose another project.
+  show('freeman');
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
     const origin=buttons.find(item=>item.dataset.client===prior);
@@ -716,8 +705,8 @@ function whenShown(element,run){
   ]},
   {name:'teton',slides:[
     ['../assets/teton-valley-ranch.webp','Lone horseback rider on a ridge at Teton Valley Ranch'],
-    ['../assets/web/img-5723.webp','Ranch worker holding horseshoes beside a timber wall'],
-    ['../assets/web/8f38731e-2435-4c66-aca2-ab5677516f30.webp','Pickup truck crossing a vast ranch landscape']
+    ['../assets/IMG_5723.JPG','Ranch worker holding horseshoes beside a timber wall'],
+    ['../assets/8F38731E-2435-4C66-ACA2-AB5677516F30.jpg','Pickup truck crossing a vast ranch landscape']
   ]}
  ];
  galleries.forEach(({name,slides})=>{
@@ -726,7 +715,7 @@ function whenShown(element,run){
   const count=document.getElementById(name+'-count');
   if(!gallery||!image||!count)return;
   let position=0,request=0;
-  whenShown(gallery,()=>slides.forEach(([src])=>{const preload=new Image();preload.src=src;}));
+  slides.forEach(([src])=>{const preload=new Image();preload.src=src;});
   function move(delta){
     const target=(position+delta+slides.length)%slides.length;
     const ticket=++request;
@@ -753,7 +742,7 @@ function whenShown(element,run){
 })();
 </script><script>
 (function(){
- const slides=[{"src":"../assets/web/pmo.webp","alt":"Pour Me Out"},{"src":"../assets/web/kc-jenni-artwork-1x1-scaled.webp","alt":"Jenni"},{"src":"../assets/web/img-2786.webp","alt":"Act I: Summer Nights"},{"src":"../assets/web/kashus-culpepper-after-me-1.webp","alt":"After Me?"},{"src":"../assets/web/kashus-culpepper-out-of-my-mind-1.webp","alt":"Out of My Mind"},{"src":"../assets/web/kashus-culpepper-who-hurt-you-1.webp","alt":"Who Hurt You"},{"src":"../assets/kc1.jpeg","alt":"Portrait 01"},{"src":"../assets/kc2.jpg","alt":"Portrait 02"},{"src":"../assets/kc3.jpg","alt":"Live performance"},{"src":"../assets/web/admat.webp","alt":"Harvest Moon tour poster"}];
+ const slides=[{"src":"../assets/pmo.jpg","alt":"Pour Me Out"},{"src":"https://bigloud.com/wp-content/uploads/2025/01/KC_Jenni_Artwork_1x1-1024x1024.jpg","alt":"Jenni"},{"src":"../assets/IMG_2786.JPG","alt":"Act I: Summer Nights"},{"src":"../assets/Kashus%20Culpepper%20After%20Me%201.png","alt":"After Me?"},{"src":"../assets/Kashus%20Culpepper%20Out%20of%20My%20Mind%201.png","alt":"Out of My Mind"},{"src":"../assets/Kashus%20Culpepper%20Who%20Hurt%20You%201.png","alt":"Who Hurt You"},{"src":"../assets/kc1.jpeg","alt":"Portrait 01"},{"src":"../assets/kc2.jpg","alt":"Portrait 02"},{"src":"../assets/kc3.jpg","alt":"Live performance"},{"src":"../assets/admat.jpg","alt":"Harvest Moon tour poster"}];
  const gallery=document.querySelector('.kashus-gallery');
  const image=document.getElementById('kashus-main-image');
  if(!gallery||!image)return;
@@ -820,7 +809,7 @@ function whenShown(element,run){
   if(Date.now()<suppressClickUntil){event.preventDefault();event.stopImmediatePropagation();}
  },true);
  image.draggable=false;
- whenShown(gallery,preload);
+ preload();
 })();
 </script><script>
 (function(){
@@ -844,8 +833,8 @@ function whenShown(element,run){
  const slides=[
   {src:'../assets/cowboyer-cover-01.webp',alt:'The Cowboyer / Bison',cover:'01',composite:false},
   {src:'../assets/cowboyer-cover-02.webp',alt:'The Cowboyer / Orange Rider',cover:'02',composite:false},
-  {src:'../assets/web/group-394.webp',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
-  {src:'../assets/web/group-393.webp',alt:'The Cowboyer / Desert',cover:'04',composite:true}
+  {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
+  {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
  ];
  // Include the sibling navigation controls in the gallery event scope.
  const gallery=document.querySelector('[data-panel="cowboyer"]');
@@ -854,7 +843,7 @@ function whenShown(element,run){
  const image=document.getElementById('cowboyer-active-image');
  if(!gallery||!canvas||!image||!count)return;
  let position=0,request=0;
- whenShown(gallery,()=>slides.forEach(slide=>{const asset=new Image();asset.src=slide.src;}));
+ slides.forEach(slide=>{const asset=new Image();asset.src=slide.src;});
  function move(step){
   const target=(position+step+slides.length)%slides.length;
   const ticket=++request;
@@ -880,7 +869,7 @@ function whenShown(element,run){
 })();
 </script><script>
 (function(){
- const slides=[{"src":"../assets/web/2-2-1.webp","caption":"Bison study"},{"src":"../assets/web/2-611.webp","caption":"Portrait study"},{"src":"../assets/web/11724-1-3-1.webp","caption":"Lakeside Club"},{"src":"../assets/web/11724-10-1.webp","caption":"Broadcast portrait"},{"src":"../assets/web/11724-11-1.webp","caption":"Lewis Grizzard"},{"src":"../assets/web/ivory-paper-texture-6-1.webp","caption":"Western sketchbook I"},{"src":"../assets/web/ivory-paper-texture-8-1.webp","caption":"Western sketchbook II"},{"src":"../assets/web/jeauxben-george-1.webp","caption":"Dog studies"},{"src":"../assets/web/rd-tattoo-1-1.webp","caption":"Sketchbook III"},{"src":"../assets/web/rd-tattoo-2-1.webp","caption":"Sketchbook IV"},{"src":"../assets/web/rd-tattoo-3.webp","caption":"Sketchbook V"}];
+ const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
  const gallery=document.querySelector('.drawings-gallery');
  const image=document.getElementById('drawings-active-image');
  const count=document.getElementById('drawings-count');
