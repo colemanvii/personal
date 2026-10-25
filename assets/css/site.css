@@ -278,9 +278,6 @@ body:not(.landing) .index-row{font-size:13px;letter-spacing:-.015em}
 :root,html[data-tone="field-notes"]{
   --paper:#e9d5af;--ink:#452d56;--muted:#69516b;--rule:#b8a18b;--accent:#a43f33;
 }
-html[data-tone="violet-hour"]{
-  --paper:#c8b8dd;--ink:#412a4c;--muted:#664c71;--rule:#a18eae;--accent:#804b37;
-}
 html[data-tone="red-earth"]{
   --paper:#a94735;--ink:#f8e7c1;--muted:#f0d0af;--rule:#ce8670;--accent:#ffe29d;
 }
@@ -304,7 +301,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .landing-paper button::before{display:none}
 .landing-paper button::after{content:"";position:absolute;width:18px;height:18px;top:13px;left:13px;border:1px solid var(--muted)}
 .landing-paper button[data-paper-tone="field-notes"]::after{background:#e9d5af}
-.landing-paper button[data-paper-tone="violet-hour"]::after{background:#c8b8dd}
 .landing-paper button[data-paper-tone="red-earth"]::after{background:#a94735}
 .landing-paper button[aria-pressed="true"]{outline:0}
 .landing-paper button[aria-pressed="true"]::after{outline:1px solid var(--ink);outline-offset:3px}
@@ -344,7 +340,6 @@ html body:not(.landing) .contact-submit button:is(:hover,:focus-visible){
 /* Small-text legibility on interior pages: muted text at least 4.5:1 on each
    paper. Only the grey shifts, toward its own ink; the homepage is unchanged. */
 html[data-tone="off-white"] body:not(.landing){--muted:#726e6a}
-html[data-tone="violet-hour"] body:not(.landing){--muted:#5d4468}
 html[data-tone="red-earth"] body:not(.landing){--muted:#f6e3be}
 
 /* Cyber white — pure RGB white is the default canvas, not warm paper. */
@@ -354,3 +349,6 @@ html[data-tone="red-earth"] body:not(.landing){--muted:#f6e3be}
 .landing-paper button[data-paper-tone="off-white"]::after{background:#ffffff}
 .landing-paper button[data-paper-tone="off-white"]{background:#ffffff}
 html[data-tone="off-white"] body:not(.landing){--muted:#626262}
+
+/* Homepage Helvetica Neue study, 2026-10-25. */
+:root{--sans:"Helvetica Neue",Helvetica,Arial,sans-serif}
