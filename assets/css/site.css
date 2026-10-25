@@ -286,7 +286,6 @@ body.landing{background:var(--paper);color:var(--ink)}
 .seven > * + *::before{color:var(--muted)}
 .entry-corner{color:var(--muted)}
 .landing-paper button[data-paper-tone="field-notes"]{background:#e9d5af}
-.landing-paper button[data-paper-tone="violet-hour"]{background:#c8b8dd}
 .landing-paper button[data-paper-tone="red-earth"]{background:#a94735}
 .landing-paper button{border-color:var(--muted)}
 .landing-paper button[aria-pressed="true"]{outline:1px solid var(--ink);outline-offset:3px}

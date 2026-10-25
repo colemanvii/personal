@@ -4,7 +4,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>Work Index — Cole Calfee</title>
 <meta name="description" content="Selected artwork, photography, identities, and digital experiences by Cole Calfee.">
-<script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','violet-hour','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
+<script>document.documentElement.classList.add('js');try{const t=sessionStorage.getItem('cole-paper-tone-session-v3');document.documentElement.dataset.tone=['off-white','field-notes','red-earth'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="../assets/css/site.css">
 <style>
 .work-index{height:100dvh;overflow:hidden}
@@ -396,7 +396,7 @@
 .work-index .panel-close{font-family:var(--mono);font-size:11px;letter-spacing:.02em}
 .work-index [data-panel="freeman"] .freeman-site-visit{font-size:10px}
 /* Until the script sets the first project, the pane is not painted. */
-.work-index .work-panel.is-starting{visibility:hidden}
+.js .work-index .work-panel.is-starting{visibility:hidden}
 /* Release titles name works: Helvetica Neue. */
 .work-index .kashus-release-links{font-family:var(--sans);font-size:12px;letter-spacing:-.01em}
 /* 44px touch targets for Selected / All and Close, without moving them. */
