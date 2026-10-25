@@ -57,6 +57,47 @@ body.paintings{height:100dvh;overflow:hidden}
  .paintings .caption{min-height:17px;padding-top:2px;margin-top:2px}
  .paintings .caption h2{font-size:9px}
 }
+
+/* V2 study: deliberate exhibition sheet, canvas-focused presentation.
+   Source photographs are preserved for the full-image detail view. */
+.paintings .gallery{grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));column-gap:clamp(7px,1.4vw,20px);row-gap:clamp(12px,2vh,26px)}
+.paintings .piece{justify-content:center}
+.paintings .image-button{flex:1;min-height:0;overflow:hidden;position:relative;align-items:center;justify-content:center}
+.paintings .image-button img{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
+.paintings .caption{min-height:27px;align-items:start;padding-top:5px;border-top:1px solid var(--rule);margin-top:6px}
+.paintings .caption h2{font:400 clamp(10px,.82vw,12px)/1.2 var(--sans);text-transform:none}
+.paintings .caption p{display:none}
+.paintings .gallery .piece{transition:opacity .18s ease}
+@media(hover:hover) and (pointer:fine){.paintings .gallery:has(.piece:hover) .piece:not(:hover){opacity:.25}}
+.paintings .gallery .piece:focus-within{opacity:1}
+.paintings .intro{padding-bottom:12px;margin-bottom:18px}
+@media(min-width:701px){
+/* Crop only the photograph's surrounding room, not the painted canvas.
+   Zoom ratios based on relative canvas coverage in the existing photos. */
+.paintings .piece .image-button img{object-fit:cover}
+.paintings #harvest img{object-position:50% 52%}
+.paintings #porter-study img{object-position:50% 49%}
+.paintings #harvest-2 img{object-position:50% 44%}
+.paintings #flowers-in-a-jug img{object-position:50% 48%}
+.paintings #nine-ball img{object-position:49% 51%}
+.paintings #little-window img{object-position:51% 51%}
+.paintings #zen-bison img{object-position:51% 50%}
+.paintings #fj40 img{object-position:50% 51%}
+.paintings #scout img{object-position:50% 51%}
+.paintings #target img{object-position:50% 49%}
+.paintings #purple-haze img{object-position:50% 50%}
+.paintings #peach-circuit img{object-position:50% 46%}
+.paintings #red-sea img{object-position:57% 51%}
+.paintings #flowers-in-mccarty-vase img{object-position:50% 49%}
+}
+@media(max-width:700px){
+.paintings .gallery{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));column-gap:7px;row-gap:7px}
+.paintings .image-button img{object-fit:contain}
+.paintings .caption{min-height:18px;margin-top:2px;padding-top:3px}
+.paintings .caption h2{font-size:9px}
+.paintings .sale{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.paintings .gallery .piece{transition:none}}
 </style></head><body class="paintings"><div class="shell"><header class="site-head"><a class="brand" href="/">Cole Calfee</a><nav class="nav"><a href="/index/">Work Index</a><a href="/paintings/" aria-current="page">Paintings</a><a href="/info/">About</a></nav></header><main><div class="intro"><h1>Paintings</h1><span class="count">14 WORKS / ONGOING</span></div><div class="gallery"><article class="piece" id="harvest"><button type="button" class="image-button" data-open="0" aria-label="Enlarge Harvest 1"><img src="https://cdn.shopify.com/s/files/1/0629/9264/6301/files/3BA076D0-E6B9-496D-95B6-8B44B926EDD6_2.jpg?v=1758652922" alt="Harvest 1, Oil on canvas" loading="eager" decoding="async"></button><div class="caption"><div><h2>Harvest 1</h2><p>Oil on canvas · 36 × 36 in.</p></div><div class="sale">SOLD</div></div></article>
 <article class="piece" id="porter-study"><button type="button" class="image-button" data-open="1" aria-label="Enlarge Porter Study"><img src="https://cdn.shopify.com/s/files/1/0629/9264/6301/files/03.png?v=1758650578" alt="Porter Study, Oil on linen" loading="eager" decoding="async"></button><div class="caption"><div><h2>Porter Study</h2><p>Oil on linen · 11 × 14 in.</p></div><div class="sale">SOLD</div></div></article>
 <article class="piece" id="harvest-2"><button type="button" class="image-button" data-open="2" aria-label="Enlarge Peace of Wild Things"><img src="https://cdn.shopify.com/s/files/1/0629/9264/6301/files/Peace_of_Wild_Things.jpg?v=1763127111" alt="Peace of Wild Things, Oil on canvas" loading="eager" decoding="async"></button><div class="caption"><div><h2>Peace of Wild Things</h2><p>Oil on canvas · 30 × 30 in.</p></div><div class="sale">SOLD</div></div></article>
