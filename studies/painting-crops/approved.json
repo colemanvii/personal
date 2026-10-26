@@ -1,0 +1,9 @@
+{
+  "_about": "Which proposed crops are used in the iPhone gallery thumbnails. Approved 26 Oct 2026, provisionally. To revert a crop, move its handle to held and run apply.py.",
+  "approved": ["harvest", "porter-study", "harvest-2", "flowers-in-a-jug", "nine-ball", "little-window", "zen-bison", "fj40", "scout", "target", "purple-haze"],
+  "held": {
+    "peach-circuit": "Hanging jeans cover the canvas's left edge; held at original framing.",
+    "red-sea": "Paint buckets stand in front of the canvas's lower edge; held at original framing.",
+    "flowers-in-mccarty-vase": "Paint buckets stand in front of the canvas's lower edge; held at original framing."
+  }
+}

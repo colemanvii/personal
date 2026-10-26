@@ -1,0 +1,98 @@
+/* Commerce: the purchase section of a work's label, and the cart.
+   Built on the site's own tokens so every paper tone carries through.
+   Controls inherit the site's crosshair cursor rather than a pointer. */
+
+/* Navigation count — appears only once something is in the cart. */
+.cart-toggle{appearance:none;-webkit-appearance:none;background:none;border:0;border-radius:0;padding:0;margin:0;font:inherit;letter-spacing:inherit;color:inherit;cursor:inherit;touch-action:manipulation}
+.cart-toggle[hidden]{display:none}
+.cart-toggle span{font-family:var(--mono);font-size:.8em;margin-left:.2em}
+.cart-toggle:hover,.cart-toggle:focus-visible{color:var(--accent)}
+
+/* ---------- Purchase section ---------- */
+.buy{display:flex;flex-direction:column;min-width:0;margin-top:26px;padding-top:18px;border-top:1px solid var(--rule);font-family:var(--sans);color:var(--ink)}
+.buy[hidden]{display:none}
+.buy-price{font:400 21px/1.2 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:0;min-height:1.2em}
+.buy-options fieldset{border:0;margin:20px 0 0;padding:0;min-width:0}
+.buy-options legend{font:11px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.03em;color:var(--muted);padding:0;margin:0 0 8px}
+.buy-options label{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;margin:0 6px 6px 0;border:1px solid var(--rule);font-size:14px;letter-spacing:-.01em;cursor:inherit;touch-action:manipulation}
+.buy-options input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.buy-options label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.buy-options label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.buy-options .is-unavailable{color:var(--muted)}
+.buy-options .is-unavailable span{text-decoration:line-through}
+.buy-options small{font:10px var(--mono);text-transform:uppercase}
+.buy-views{display:flex;gap:8px;margin:20px 0 0;overflow-x:auto;scrollbar-width:none}
+.buy-views[hidden]{display:none}
+.buy-views button{flex:none;width:48px;aspect-ratio:4/5;height:auto;padding:2px;border:1px solid transparent;border-radius:0;background:none;cursor:inherit;touch-action:manipulation}
+.buy-views button[aria-pressed="true"]{border-color:var(--ink)}
+.buy-views img{display:block;width:100%;height:100%;object-fit:contain}
+.buy-action{margin-top:22px}
+.buy-status,.cart-status{font:12px/1.45 var(--mono);color:var(--accent);margin:10px 0 0}
+.buy-status:empty,.cart-status:empty{display:none}
+.buy-note{font:11px/1.5 var(--mono);color:var(--muted);margin:16px 0 0}
+
+/* One quiet action style for add-to-cart and checkout: a ruled line of type, filled only when pressed. */
+.buy .buy-add,.cart-panel .cart-checkout{display:block;width:100%;min-height:52px;padding:0 18px;border:1px solid var(--ink);border-radius:0;background:transparent;color:var(--ink);font:400 15px/1 var(--sans);letter-spacing:-.01em;cursor:inherit;touch-action:manipulation;-webkit-appearance:none}
+.buy .buy-add:disabled,.cart-panel .cart-checkout:disabled{background:transparent;color:var(--muted);border-color:var(--rule)}
+.buy .buy-add:not(:disabled):active,.cart-panel .cart-checkout:not(:disabled):active{background:var(--ink);color:var(--paper)}
+@media(hover:hover){.buy .buy-add:not(:disabled):hover,.cart-panel .cart-checkout:not(:disabled):hover{background:var(--ink);color:var(--paper)}}
+.buy button:focus-visible,.cart-panel button:focus-visible,.cart-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- Cart: a gallery invoice ----------
+   iPhone: a sheet rising from the bottom, only as tall as its contents.
+   Desktop: a drawer on the right, the invoice set at the top of the page. */
+body dialog.cart-panel{position:fixed;inset:auto 0 0 0;margin:0;width:100%;max-width:none;height:auto;max-height:92dvh;padding:0;border:0;border-top:1px solid var(--rule);background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+body dialog.cart-panel::backdrop{background:rgba(0,0,0,.28)}
+.cart-sheet{display:flex;flex-direction:column;max-height:92dvh;--cart-gutter:18px}
+.cart-top{flex:none;display:flex;justify-content:space-between;align-items:center;padding:6px var(--cart-gutter) 4px;border-bottom:1px solid var(--rule)}
+.cart-top h2{font:400 18px/1.2 var(--sans);letter-spacing:-.02em;margin:0}
+.cart-panel .cart-close{background:none;border:0;border-radius:0;padding:0 0 0 18px;min-height:44px;color:inherit;font:12px var(--mono);cursor:inherit;touch-action:manipulation}
+.cart-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 var(--cart-gutter)}
+.cart-ledger{display:flex;justify-content:space-between;gap:12px;margin:0;padding:12px 0;border-bottom:1px solid var(--rule);font:10px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.cart-empty{display:none;font:400 15px/1.4 var(--sans);letter-spacing:-.01em;color:var(--muted);margin:28px 0 36px}
+.cart-panel.is-empty .cart-empty{display:block}
+.cart-panel.is-empty :is(.cart-totals,.cart-action,.cart-lines){display:none}
+
+.cart-lines{list-style:none;margin:0;padding:0}
+.cart-line{display:grid;grid-template-columns:min(31vw,128px) minmax(0,1fr);gap:18px;align-items:start;padding:22px 0;border-bottom:1px solid var(--rule)}
+.cart-plate{aspect-ratio:4/5;display:flex;align-items:center;justify-content:center}
+.cart-plate img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.cart-number{font:10px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.cart-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.cart-title{font:400 18px/1.2 var(--sans);letter-spacing:-.025em;margin:0}
+.cart-price{font:400 15px/1.2 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap;margin:0}
+.cart-meta{font:11px/1.45 var(--mono);color:var(--muted);margin:5px 0 0}
+.cart-meta.cart-alert{color:var(--accent);text-transform:uppercase}
+.cart-controls{display:flex;align-items:center;gap:16px;margin-top:6px}
+.cart-panel .cart-remove{background:none;border:0;border-radius:0;padding:0;min-height:44px;font:11px var(--mono);color:var(--muted);text-decoration:underline;text-underline-offset:2px;cursor:inherit;touch-action:manipulation}
+.cart-stepper{display:inline-flex;align-items:center;border:1px solid var(--rule)}
+.cart-panel .cart-stepper button{width:44px;height:40px;background:none;border:0;border-radius:0;color:inherit;font:16px var(--sans);cursor:inherit;touch-action:manipulation}
+.cart-stepper span{min-width:22px;text-align:center;font:13px var(--mono)}
+.cart-panel button:disabled{opacity:.45}
+.cart-panel .cart-checkout:disabled{opacity:1}
+
+.cart-totals{margin:0;padding:16px 0 0}
+.cart-totals div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.cart-totals dt,.cart-totals dd{margin:0}
+.cart-totals div:first-child{font:400 17px/1.3 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cart-later{margin-top:6px;font:11px/1.45 var(--mono);color:var(--muted)}
+.cart-body > .cart-status{margin:14px 0 0}
+.cart-action{position:sticky;bottom:0;margin-top:22px;padding:0 0 calc(18px + env(safe-area-inset-bottom));background:var(--paper)}
+.cart-secure{font:11px/1.5 var(--mono);color:var(--muted);text-align:center;margin:10px 0 0}
+
+/* The handoff: say where the visitor is going and with what, then let Shopify take over. */
+.cart-handoff{display:none;padding:36px var(--cart-gutter) calc(48px + env(safe-area-inset-bottom))}
+.cart-panel.is-leaving .cart-body{display:none}
+.cart-panel.is-leaving .cart-handoff{display:block}
+.cart-handoff p{margin:0}
+.cart-handoff-kicker{font:10px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.cart-handoff-title{font:400 22px/1.25 var(--sans);letter-spacing:-.025em;margin-top:10px!important}
+.cart-handoff-note{font:11px/1.5 var(--mono);color:var(--muted);margin-top:14px!important;max-width:36ch}
+
+@media(min-width:701px){
+  body dialog.cart-panel{inset:0 0 0 auto;width:min(460px,100vw);height:100dvh;max-height:none;border-top:0;border-left:1px solid var(--rule)}
+  .cart-sheet{height:100%;max-height:none;--cart-gutter:30px}
+  .cart-top{padding-top:14px;padding-bottom:10px}
+  .cart-line{grid-template-columns:120px minmax(0,1fr)}
+  .cart-handoff{padding-top:48px}
+}

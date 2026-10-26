@@ -1,0 +1,189 @@
+{
+  "harvest": {
+    "crop": [
+      147,
+      206,
+      1020,
+      1275
+    ],
+    "gain": 1.26,
+    "source": [
+      1288,
+      1610
+    ]
+  },
+  "porter-study": {
+    "crop": [
+      564,
+      688,
+      757,
+      947
+    ],
+    "gain": 2.48,
+    "source": [
+      1878,
+      2348
+    ]
+  },
+  "harvest-2": {
+    "crop": [
+      179,
+      229,
+      921,
+      1151
+    ],
+    "gain": 1.46,
+    "source": [
+      1346,
+      1682
+    ]
+  },
+  "flowers-in-a-jug": {
+    "crop": [
+      326,
+      384,
+      638,
+      797
+    ],
+    "gain": 2.02,
+    "source": [
+      1290,
+      1612
+    ]
+  },
+  "nine-ball": {
+    "crop": [
+      1382,
+      1636,
+      1310,
+      1638
+    ],
+    "gain": 3.07,
+    "source": [
+      4025,
+      5031
+    ]
+  },
+  "little-window": {
+    "crop": [
+      1236,
+      1460,
+      1725,
+      2156
+    ],
+    "gain": 2.4,
+    "source": [
+      4138,
+      5173
+    ]
+  },
+  "zen-bison": {
+    "crop": [
+      1294,
+      1595,
+      1523,
+      1904
+    ],
+    "gain": 2.68,
+    "source": [
+      4087,
+      5109
+    ]
+  },
+  "fj40": {
+    "crop": [
+      1292,
+      1580,
+      1751,
+      2189
+    ],
+    "gain": 2.45,
+    "source": [
+      4284,
+      5355
+    ]
+  },
+  "scout": {
+    "crop": [
+      853,
+      967,
+      1757,
+      2196
+    ],
+    "gain": 1.95,
+    "source": [
+      3421,
+      4276
+    ]
+  },
+  "target": {
+    "crop": [
+      1378,
+      1658,
+      1563,
+      1954
+    ],
+    "gain": 2.74,
+    "source": [
+      4284,
+      5355
+    ]
+  },
+  "purple-haze": {
+    "crop": [
+      1329,
+      1519,
+      1681,
+      2101
+    ],
+    "gain": 2.54,
+    "source": [
+      4270,
+      5337
+    ]
+  },
+  "peach-circuit": {
+    "crop": [
+      359,
+      335,
+      513,
+      642
+    ],
+    "gain": 2.37,
+    "source": [
+      1215,
+      1519
+    ],
+    "resolution": "Crop is 513 px wide: below the 516 px a 3x iPhone tile would use; served at its own size, never upscaled.",
+    "note": "Hanging jeans cover part of the canvas's left edge in the photograph."
+  },
+  "red-sea": {
+    "crop": [
+      258,
+      304,
+      801,
+      1001
+    ],
+    "gain": 1.61,
+    "source": [
+      1290,
+      1613
+    ],
+    "note": "Paint buckets stand in front of the canvas's lower edge in the photograph."
+  },
+  "flowers-in-mccarty-vase": {
+    "crop": [
+      419,
+      419,
+      464,
+      581
+    ],
+    "gain": 2.78,
+    "source": [
+      1290,
+      1613
+    ],
+    "resolution": "Crop is 464 px wide: below the 516 px a 3x iPhone tile would use; served at its own size, never upscaled.",
+    "note": "Paint buckets stand in front of the canvas's lower edge in the photograph."
+  }
+}
