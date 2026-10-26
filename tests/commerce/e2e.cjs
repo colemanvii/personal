@@ -24,6 +24,9 @@ const SHOTS = process.env.SCREENSHOTS;
 const API = "**/api/2026-10/graphql.json";
 const VIEWPORTS = {desktop: {viewport: {width: 1440, height: 900}}, iphone: devices["iPhone 15"]};
 
+/* Works that hang in the site's own photographs rather than Shopify's. */
+const OWN_PHOTOS = ["harvest", "harvest-2", "flowers-in-a-jug", "target"];
+
 let browser;
 const results = [];
 
@@ -182,8 +185,14 @@ async function run() {
         await page.$$eval(".gallery img", imgs => imgs.forEach(img => { img.loading = "eager"; }));
         await page.waitForFunction(() => [...document.querySelectorAll(".gallery img")].every(img => img.complete && img.currentSrc), null, {timeout: 20000});
         const framing = await page.$$eval(".piece", ps => Object.fromEntries(ps.map(p => [p.dataset.handle, p.querySelector(".image-button img").currentSrc.includes("crop=region")])));
-        for (const handle of ["peach-circuit", "red-sea", "flowers-in-mccarty-vase"]) assert.equal(framing[handle], false, `${handle} is cropped but held`);
-        assert.equal(Object.values(framing).filter(Boolean).length, 11, "expected 11 cropped thumbnails");
+        for (const handle of ["peach-circuit", "red-sea", "flowers-in-mccarty-vase", ...OWN_PHOTOS]) assert.equal(framing[handle], false, `${handle} is cropped but held`);
+        assert.equal(Object.values(framing).filter(Boolean).length, 7, "expected 7 cropped thumbnails");
+        // The site's own photographs hang whole, at the original's proportions.
+        for (const handle of OWN_PHOTOS) {
+          const img = await page.locator(`.piece[data-handle="${handle}"] .image-button img`).evaluate(img => ({src: img.currentSrc, w: img.naturalWidth, h: img.naturalHeight}));
+          assert.ok(img.src.includes("/assets/paintings/"), `${handle} thumbnail is ${img.src}`);
+          assert.ok(Math.abs(img.h / img.w - 1.25) < 0.005, `${handle} thumbnail is ${img.w}×${img.h}`);
+        }
         await minTarget(page.locator('.piece[data-handle="red-sea"] .sale-open'), "Available label");
         await page.locator('.piece[data-handle="red-sea"]').scrollIntoViewIfNeeded();
         await shot(page, `${viewport}-1b-gallery-available`);
@@ -205,11 +214,17 @@ async function run() {
       assert.equal(await page.locator("#detail-number").innerText(), "01 / 14");
       // Harvest 1 has two photographs in Shopify; both can be examined.
       assert.equal(await page.locator(".buy-views button").count(), 2);
-      // The viewer shows the original photograph, never the gallery crop.
-      const viewed = await page.locator("#detail-image").evaluate(img => img.currentSrc || img.src);
-      assert.ok(!viewed.includes("crop="), `viewer shows a crop: ${viewed}`);
+      // The viewer shows the site's own photograph, even once Shopify has answered;
+      // Shopify's second photograph is still a view away, and the first view returns.
+      const viewed = () => page.locator("#detail-image").evaluate(img => img.currentSrc || img.src);
+      await page.waitForFunction(() => document.getElementById("detail-image").complete);
+      assert.ok((await viewed()).includes("/assets/paintings/"), `viewer shows ${await viewed()}`);
+      await page.locator(".buy-views button").nth(1).click();
+      assert.ok((await viewed()).includes("Left.jpg"), `second view shows ${await viewed()}`);
+      await page.locator(".buy-views button").nth(0).click();
+      assert.ok((await viewed()).includes("/assets/paintings/"), `first view shows ${await viewed()}`);
       if (viewport === "desktop") {
-        const thumb = await page.locator('.piece[data-handle="harvest"] .image-button img').evaluate(img => img.currentSrc);
+        const thumb = await page.locator('.piece[data-handle="porter-study"] .image-button img').evaluate(img => img.currentSrc);
         assert.ok(thumb.includes("crop=region"), "desktop thumbnail lacks its approved crop");
       }
       await shot(page, `${viewport}-2-sold`);

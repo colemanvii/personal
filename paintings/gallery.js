@@ -30,6 +30,19 @@ function source(img, url) {
   img.sizes = "(max-width: 700px) 100vw, 66vw";
 }
 
+/* Some works hang in the site's own photograph rather than Shopify's: its
+   sizes are already in the gallery markup, up to the untouched original. */
+const thumbOf = piece => piece.querySelector(".image-button img");
+export const hasOwnPhoto = piece => !/^https?:/.test(thumbOf(piece).getAttribute("src"));
+
+function photograph(img, piece) {
+  const original = thumbOf(piece);
+  if (!hasOwnPhoto(piece)) return source(img, original.getAttribute("src"));
+  img.src = original.getAttribute("src");
+  img.srcset = original.getAttribute("srcset");
+  img.sizes = "(max-width: 700px) 100vw, 66vw";
+}
+
 export const titleOf = piece => piece.querySelector(".caption h3").textContent;
 export const detailsOf = piece => piece.querySelector(".caption p")?.textContent || "";
 export const numberOf = piece => piece.querySelector(".caption").dataset.number;
@@ -46,7 +59,7 @@ export function partsOf(piece) {
 
 /* One slide per work; images load as they come near. */
 const slides = pieces.map((piece, i) => {
-  const original = piece.querySelector(".image-button img");
+  const original = thumbOf(piece);
   const slide = document.createElement("figure");
   slide.className = "viewer-slide";
   slide.setAttribute("role", "group");
@@ -56,17 +69,19 @@ const slides = pieces.map((piece, i) => {
   img.alt = original.alt;
   img.loading = "lazy";
   img.decoding = "async";
-  source(img, original.getAttribute("src"));
+  photograph(img, piece);
   slide.append(img);
   track.append(slide);
   return slide;
 });
 
-/* Show another photograph of the work on show (a variant or another view). */
+/* Show another photograph of the work on show (a variant or another view);
+   no url returns to the photograph it hangs in. */
 export function setImage(url, alt) {
   const img = slides[index]?.querySelector("img");
   if (!img) return;
-  source(img, url);
+  if (url) source(img, url);
+  else photograph(img, pieces[index]);
   if (alt != null) img.alt = alt;
 }
 
