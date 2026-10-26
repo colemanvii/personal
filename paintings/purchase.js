@@ -2,9 +2,9 @@
  *
  * The gallery markup stays the record of the work and its no-JavaScript
  * fallback; paintings/gallery.js owns the viewer. This script asks Shopify
- * for live price, images and availability, marks each wall label, and adds a
- * purchase section to the viewer's label for available works. Shopify decides
- * what is for sale; the page never overrides it. */
+ * for live price, images and availability, marks each wall label, and fills
+ * the viewer's sale line: availability and price, and for available works one
+ * quiet action. Shopify decides what is for sale; the page never overrides it. */
 import {fetchProducts, addToCart, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage, cartStore} from "/assets/js/storefront.js";
 import {mountCart, openCart, setLineDescriber} from "/assets/js/cart.js";
 import {setImage, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
@@ -14,7 +14,10 @@ const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
 const dialog = document.getElementById("painting-detail");
 const label = document.getElementById("detail-label");
 const state = document.getElementById("detail-state");
-const price = document.getElementById("detail-price"); // set beside the title
+const price = document.getElementById("detail-price");
+const action = document.getElementById("detail-action");
+const sale = label.querySelector(".label-sale");
+const more = label.querySelector(".label-more");
 
 const products = new Map();
 let loadState = "loading";
@@ -29,7 +32,7 @@ setLineDescriber(product => {
   return piece && {title: titleOf(piece), details: detailsOf(piece), number: numberOf(piece)};
 });
 
-/* ---------- Viewer: other views and the purchase section ---------- */
+/* ---------- Viewer: the sale line, options, and other views ---------- */
 
 const views = document.createElement("div");
 views.className = "buy-views";
@@ -37,22 +40,33 @@ views.setAttribute("role", "group");
 views.setAttribute("aria-label", "More views");
 views.hidden = true;
 
+/* Options (print editions only) sit above the sale line; the action sits in it;
+   the status and a short note follow it. */
 const panel = document.createElement("section");
 panel.className = "buy";
 panel.hidden = true;
-panel.setAttribute("aria-label", "Purchase");
-panel.innerHTML = `
-  <div class="buy-options"></div>
-  <div class="buy-action">
-    <button type="button" class="buy-add"></button>
-    <p class="buy-status" role="status" aria-live="polite"></p>
-  </div>
-  <p class="buy-note">Shipping and taxes are calculated at checkout. Payment is completed securely through Shopify.</p>`;
-label.append(views, panel);
+panel.setAttribute("aria-label", "Purchase options");
+panel.innerHTML = `<div class="buy-options"></div>`;
+const after = document.createElement("div");
+after.className = "buy-after";
+after.innerHTML = `
+  <p class="buy-status" role="status" aria-live="polite"></p>
+  <p class="buy-note">Shipping and taxes are calculated at checkout, through Shopify.</p>`;
+sale.before(panel);
+sale.after(after);
+more.prepend(views);
 
 const $ = selector => panel.querySelector(selector);
-const addButton = $(".buy-add");
-const say = message => { $(".buy-status").textContent = message || ""; };
+const addButton = document.createElement("button");
+addButton.type = "button";
+addButton.className = "buy-add";
+action.append(addButton);
+const status = after.querySelector(".buy-status");
+const say = message => {
+  status.textContent = message || "";
+  // Messages sit just below the sale line; make sure the visitor sees them.
+  if (message) status.scrollIntoView({block: "nearest"});
+};
 
 function inCart(variant) {
   return cartStore.cart?.lines.nodes.find(line => line.merchandise.id === variant?.id);
@@ -145,7 +159,7 @@ function renderPanel() {
   const edition = isEdition(product);
   price.textContent = variant ? formatMoney(variant.price) : priceLabel(product);
   if (!variant || !variant.availableForSale) setState(edition ? "Sold out" : "Sold", true);
-  else setState(edition ? "Edition print · Available" : "Original · Available", false);
+  else setState(edition ? "Edition print" : "Available", false);
   renderOptions(product, current.selection);
 
   const line = inCart(variant);
@@ -154,7 +168,7 @@ function renderPanel() {
     addButton.textContent = edition ? "Sold out" : "Sold";
   } else if (line && !edition) {
     addButton.disabled = false;
-    addButton.textContent = "In your cart — view cart";
+    addButton.textContent = "In your cart";
     addButton.onclick = showCart;
   } else {
     addButton.disabled = false;
@@ -195,7 +209,7 @@ function showPiece(piece) {
   say("");
   const buyable = loadState !== "ready" || Boolean(product?.availableForSale);
   dialog.classList.toggle("is-buyable", buyable);
-  panel.hidden = !buyable;
+  panel.hidden = after.hidden = action.hidden = !buyable;
   if (!buyable) price.textContent = "";
   if (product && !product.availableForSale) setState(isEdition(product) ? "Sold out" : "Sold", true);
   else if (!product && piece.querySelector('.sale[data-state="sold"]')) setState("Sold", true);

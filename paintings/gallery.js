@@ -31,6 +31,16 @@ export const titleOf = piece => piece.querySelector(".caption h2").textContent;
 export const detailsOf = piece => piece.querySelector(".caption p")?.textContent || "";
 export const numberOf = piece => String(pieces.indexOf(piece) + 1).padStart(2, "0");
 
+/* "Oil on canvas · 36 × 48 in." becomes a medium line and a size line with
+   centimetres, as a monograph sets them. A year shows only when a work has
+   one (data-year on its article); none is ever guessed. */
+export function partsOf(piece) {
+  const [medium, size = ""] = detailsOf(piece).split(" · ");
+  const inches = size.match(/([\d.]+)\s*×\s*([\d.]+)\s*in\./);
+  const cm = inches ? ` / ${(inches[1] * 2.54).toFixed(1)} × ${(inches[2] * 2.54).toFixed(1)} cm` : "";
+  return {medium, size: size ? size + cm : "", year: piece.dataset.year || ""};
+}
+
 /* One slide per work; images load as they come near. */
 const slides = pieces.map((piece, i) => {
   const original = piece.querySelector(".image-button img");
@@ -73,7 +83,12 @@ function present(i) {
   const piece = pieces[i];
   slides[i].querySelector("img").id = "detail-image";
   document.getElementById("detail-name").textContent = titleOf(piece);
-  document.getElementById("detail-info").textContent = detailsOf(piece);
+  const parts = partsOf(piece);
+  document.getElementById("detail-medium").textContent = parts.medium;
+  document.getElementById("detail-size").textContent = parts.size;
+  const year = document.getElementById("detail-year");
+  year.textContent = parts.year;
+  year.hidden = !parts.year;
   document.getElementById("detail-number").textContent = `${numberOf(piece)} / ${String(pieces.length).padStart(2, "0")}`;
   document.getElementById("detail-state").replaceChildren();
   document.getElementById("detail-price").textContent = "";

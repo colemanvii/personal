@@ -199,6 +199,9 @@ async function run() {
       assert.equal(await viewerName(page), "Harvest 1");
       assert.equal(await page.locator("#detail-state").innerText(), "SOLD");
       assert.equal(await page.locator(".buy").isHidden(), true);
+      assert.equal(await page.locator("#detail-action").isHidden(), true, "a sold work offers an action");
+      assert.equal(await page.locator("#detail-price").innerText(), "", "a sold work shows a price");
+      if (viewport === "iphone") await onScreen(page, page.locator(".label-sale"), "Sold line");
       assert.equal(await page.locator("#detail-number").innerText(), "01 / 14");
       // Harvest 1 has two photographs in Shopify; both can be examined.
       assert.equal(await page.locator(".buy-views button").count(), 2);
@@ -260,25 +263,29 @@ async function run() {
       const add = page.locator(".buy-add");
       await add.waitFor();
       assert.equal(await viewerName(page), "Red Sea");
-      assert.equal(await page.locator("#detail-info").innerText(), "Oil on canvas · 36 × 48 in.");
-      assert.equal(await page.locator("#detail-state").innerText(), "ORIGINAL · AVAILABLE");
+      assert.equal(await page.locator("#detail-medium").innerText(), "Oil on canvas");
+      assert.equal(await page.locator("#detail-size").innerText(), "36 × 48 in. / 91.4 × 121.9 cm");
+      assert.equal(await page.locator("#detail-year").isHidden(), true, "a year shows without one being supplied");
+      assert.equal(await page.locator("#detail-state").innerText(), "AVAILABLE");
       assert.equal(await page.locator(".buy-price").innerText(), "$2,400");
       assert.equal(await add.innerText(), "Add to cart");
       await shot(page, `${viewport}-3-available`);
       if (viewport === "iphone") {
         // The painting first, and its whole label with the action on the same screen.
-        for (const [selector, name] of [["#detail-name", "Title"], ["#detail-price", "Price"], ["#detail-info", "Size"], ["#detail-state", "Availability"], [".buy-add", "Add to cart"]]) {
+        for (const [selector, name] of [["#detail-name", "Title"], ["#detail-medium", "Medium"], ["#detail-size", "Size"], [".label-sale", "Sale line"], ["#detail-price", "Price"], [".buy-add", "Add to cart"]]) {
           await onScreen(page, page.locator(selector), name);
         }
+        // As much painting as the screen allows: wider than the gallery margins, never cropped.
         const slide = await page.locator("#detail-image").boundingBox();
-        assert.ok(slide.width >= 330, `painting is only ${slide.width}px wide`);
+        assert.ok(slide.width >= 360, `painting is only ${slide.width}px wide`);
+        assert.ok(Math.abs(slide.height / slide.width - 1.25) < 0.01, "painting proportions changed");
         await minTarget(add, "Add to cart");
         await shot(page, `${viewport}-3b-available-label`);
       }
 
       await add.click();
       await page.locator(".buy-status", {hasText: "Added to your cart."}).waitFor();
-      assert.equal(await add.innerText(), "In your cart — view cart");
+      assert.equal(await add.innerText(), "In your cart");
       assert.equal(await page.locator(".cart-toggle").innerText(), "Cart 1");
       if (viewport === "iphone") await onScreen(page, page.locator(".buy-status"), "Added message");
       await shot(page, `${viewport}-4-added`);
@@ -434,7 +441,7 @@ async function run() {
     await intercept(page, (body, json) => {
       if (body.query.startsWith("query Cart") && json.data.cart) json.data.cart.lines.nodes.forEach(l => { l.merchandise.availableForSale = false; });
     });
-    await page.locator(".buy-add").click(); // "In your cart — view cart"
+    await page.locator(".buy-add").click(); // "In your cart"
     await page.locator("dialog.cart-panel[open] .cart-checkout").click();
     await page.locator(".cart-status", {hasText: "is no longer available"}).waitFor();
     assert.equal(await page.locator(".cart-checkout").isDisabled(), true);
