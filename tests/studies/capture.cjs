@@ -21,6 +21,9 @@ const DEPTH = 2400; // CSS pixels of gallery to show, about three and a half scr
 
 async function loadedArtwork(page) {
   await page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]'), null, {timeout: 20000});
+  // Full-page captures can miss lazy or undecoded images; load and decode every plate first.
+  await page.$$eval(".gallery img", imgs => imgs.forEach(img => { img.loading = "eager"; }));
+  await page.evaluate(() => Promise.all([...document.querySelectorAll(".gallery img")].map(img => img.decode().catch(() => {}))));
   // Bring every plate into view once so lazy images load, then return to the top.
   const height = await page.evaluate(() => document.documentElement.scrollHeight);
   for (let y = 0; y < height; y += 500) {

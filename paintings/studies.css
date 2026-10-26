@@ -24,7 +24,7 @@ html[data-study="1"] .paintings .piece:nth-child(3n+2) .caption{text-align:right
    the painting the whole screen, chrome floating in its margin, the label
    waiting below. */
 html[data-study="2"] .paintings .intro{margin-bottom:30px}
-html[data-study="2"] .paintings .gallery{display:grid;grid-template-columns:1fr 1fr;column-gap:14px;row-gap:34px}
+html[data-study="2"] .paintings .gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:auto;column-gap:14px;row-gap:34px}
 html[data-study="2"] .paintings .piece{margin:0}
 html[data-study="2"] .paintings .caption{display:block;margin-top:9px}
 html[data-study="2"] .paintings .caption::before{display:block;font-size:10px;margin-bottom:4px}
@@ -40,7 +40,7 @@ html[data-study="2"] #painting-detail .label{border-top:1px solid var(--rule);pa
    The whole collection held in a tight three-column index; the largest
    canvases (36 in. and over) break out to the full column as plates. */
 html[data-study="3"] .paintings .intro{margin-bottom:24px}
-html[data-study="3"] .paintings .gallery{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:row dense;column-gap:10px;row-gap:24px}
+html[data-study="3"] .paintings .gallery{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:none;grid-auto-rows:auto;grid-auto-flow:row dense;column-gap:10px;row-gap:24px}
 html[data-study="3"] .paintings .piece{margin:0;min-width:0}
 html[data-study="3"] .paintings .caption{display:block;margin-top:7px}
 html[data-study="3"] .paintings .caption::before{display:block;font-size:9px;margin-bottom:3px}
