@@ -14,6 +14,7 @@ const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
 const dialog = document.getElementById("painting-detail");
 const label = document.getElementById("detail-label");
 const state = document.getElementById("detail-state");
+const price = document.getElementById("detail-price"); // set beside the title
 
 const products = new Map();
 let loadState = "loading";
@@ -41,7 +42,6 @@ panel.className = "buy";
 panel.hidden = true;
 panel.setAttribute("aria-label", "Purchase");
 panel.innerHTML = `
-  <p class="buy-price"></p>
   <div class="buy-options"></div>
   <div class="buy-action">
     <button type="button" class="buy-add"></button>
@@ -130,7 +130,7 @@ function renderPanel() {
   addButton.onclick = null;
 
   if (!product) {
-    $(".buy-price").textContent = "";
+    price.textContent = "";
     $(".buy-options").replaceChildren();
     addButton.disabled = loadState === "loading";
     addButton.textContent = loadState === "loading" ? "Checking availability…" : "Try again";
@@ -143,7 +143,7 @@ function renderPanel() {
 
   const variant = findVariant(product, current.selection);
   const edition = isEdition(product);
-  $(".buy-price").textContent = variant ? formatMoney(variant.price) : priceLabel(product);
+  price.textContent = variant ? formatMoney(variant.price) : priceLabel(product);
   if (!variant || !variant.availableForSale) setState(edition ? "Sold out" : "Sold", true);
   else setState(edition ? "Edition print · Available" : "Original · Available", false);
   renderOptions(product, current.selection);
@@ -196,6 +196,7 @@ function showPiece(piece) {
   const buyable = loadState !== "ready" || Boolean(product?.availableForSale);
   dialog.classList.toggle("is-buyable", buyable);
   panel.hidden = !buyable;
+  if (!buyable) price.textContent = "";
   if (product && !product.availableForSale) setState(isEdition(product) ? "Sold out" : "Sold", true);
   else if (!product && piece.querySelector('.sale[data-state="sold"]')) setState("Sold", true);
   renderViews(product, product && findVariant(product, current.selection));
