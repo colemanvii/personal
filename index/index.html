@@ -181,7 +181,7 @@
 /* Cowboyer: one fixed-size render surface for every cover. */
 .work-index .cowboyer-gallery{width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
 .work-index .cowboyer-stage{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;overflow:hidden}
-.work-index .cowboyer-canvas{position:relative;height:100%;width:auto;max-width:100%;aspect-ratio:696/882;background-position:center;background-size:100% 100%;background-repeat:no-repeat}
+.work-index .cowboyer-canvas{position:relative;height:100%;width:auto;max-width:100%;aspect-ratio:696/882;background-position:center;background-size:100% 100%;background-repeat:no-repeat;overflow:hidden;isolation:isolate}
 .work-index .cowboyer-canvas img{display:block;width:100%;height:100%;object-fit:contain}
 .work-index .cowboyer-canvas.is-composite[data-cover="03"]{background-image:url("../assets/cowboyer-cover-02.webp")}
 .work-index .cowboyer-canvas.is-composite[data-cover="04"]{background-image:url("../assets/cowboyer-cover-01.webp")}
@@ -530,10 +530,10 @@
     <div class="panel-content" data-panel="ronnie-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Ronnie Hodges Performance Horses</h2><button class="panel-close" type="button" aria-label="Close Ronnie Hodges photographs">CLOSE ×</button></div>
       <div class="ronnie-gallery" aria-label="Ronnie Hodges photographic series">
-        <figure class="archive-plate photo-plate"><img id="ronnie-active-image" loading="lazy" src="../assets/ronnie-hodges-01.webp" alt="Ronnie Hodges speaking while seated on horseback"></figure>
-        <div class="ronnie-navigation" role="group" aria-label="Browse Ronnie Hodges photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="ronnie-count">01 / 04</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
+        <figure class="archive-plate photo-plate"><img id="ronnie-active-image" loading="lazy" src="../assets/ronnie-hodges-01.webp" width="750" height="749" alt="Ronnie Hodges speaking while seated on horseback"></figure>
+        <div class="ronnie-navigation" role="group" aria-label="Browse Ronnie Hodges photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="ronnie-count">01 / 02</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
-      <p class="archive-plate-caption">01—04 / RONNIE HODGES / PHOTOGRAPHY / 2022</p>
+      <p class="archive-plate-caption">01—02 / RONNIE HODGES / PHOTOGRAPHY / 2022</p>
     </div>
     <div class="panel-content" data-panel="teton-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Teton Valley Ranch</h2><button class="panel-close" type="button" aria-label="Close Teton Valley Ranch">CLOSE ×</button></div>
@@ -699,8 +699,6 @@
  const galleries=[
   {name:'ronnie',slides:[
     ['../assets/ronnie-hodges-01.webp','Ronnie Hodges speaking while seated on horseback'],
-    ['../assets/ronnie-hodges-02.webp','Riders holding ropes on horseback'],
-    ['../assets/ronnie-hodges-03.webp','Ronnie Hodges leaning over the fence'],
     ['../assets/ronnie-hodges-04.webp','Two men resting by a horse enclosure']
   ]},
   {name:'teton',slides:[
