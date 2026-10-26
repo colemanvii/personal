@@ -1,4 +1,4 @@
-/* Browser tests for the paintings purchase portal.
+/* Browser tests for the paintings gallery and its purchase portal.
  *
  * Run from the repository root:
  *   python3 -m http.server 4173 --bind 127.0.0.1 &
@@ -10,7 +10,11 @@
  * "mocked" tests intercept Shopify responses to produce states the live
  * catalog cannot (errors, slow responses, variants, a work selling mid-visit).
  *
- * Needs the playwright package and its Chromium. SCREENSHOTS=dir saves images. */
+ * Needs the playwright package and its Chromium. SCREENSHOTS=dir saves images;
+ * ONLY=text runs the tests whose names contain it.
+ * STAND_IN_IMAGES=1 draws plain 4:5 tiles in place of artwork photographs, for
+ * environments that cannot reach cdn.shopify.com. Every Shopify photograph of
+ * these works is 4:5, so composition is true; the paintings themselves are not. */
 const {chromium, devices} = require("playwright");
 const assert = require("node:assert/strict");
 const path = require("node:path");
@@ -26,9 +30,17 @@ const results = [];
 async function shot(page, name) {
   if (SHOTS) await page.screenshot({path: path.join(SHOTS, `${name}.png`)});
 }
+const TONES = ["#c9c3b7", "#b8b2a6", "#d3cdc2", "#a9a397"];
+function standIn(url) {
+  const tone = TONES[[...url].reduce((a, c) => a + c.charCodeAt(0), 0) % TONES.length];
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000"><rect width="800" height="1000" fill="${tone}"/></svg>`;
+}
 
 async function withPage(viewport, fn) {
   const context = await browser.newContext(VIEWPORTS[viewport]);
+  if (process.env.STAND_IN_IMAGES) {
+    await context.route("https://cdn.shopify.com/**", route => route.fulfill({contentType: "image/svg+xml", body: standIn(route.request().url())}));
+  }
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", e => errors.push(e.message));
@@ -41,6 +53,7 @@ async function withPage(viewport, fn) {
 }
 
 async function test(name, fn) {
+  if (process.env.ONLY && !name.includes(process.env.ONLY)) return;
   try {
     await fn();
     results.push(["ok", name]);
@@ -52,8 +65,8 @@ async function test(name, fn) {
 }
 
 const caption = (page, handle) => page.locator(`.piece[data-handle="${handle}"] .sale`);
-async function ready(page) {
-  await page.goto(`${BASE}/paintings/`);
+async function ready(page, url = "/paintings/") {
+  await page.goto(`${BASE}${url}`);
   await page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]'), null, {timeout: 20000});
 }
 async function open(page, handle) {
@@ -63,9 +76,9 @@ async function open(page, handle) {
 /* Ask Shopify directly, from the browser, what is for sale right now. */
 async function shopifyTruth(page, handles) {
   return page.evaluate(async handles => {
-    const {fetchProducts, priceLabel} = await import("/assets/js/storefront.js");
+    const {fetchProducts} = await import("/assets/js/storefront.js");
     const map = await fetchProducts(handles);
-    return Object.fromEntries([...map].map(([h, p]) => [h, p && {available: p.availableForSale, price: priceLabel(p)}]));
+    return Object.fromEntries([...map].map(([h, p]) => [h, p && {available: p.availableForSale}]));
   }, handles);
 }
 async function emptyCart(page) {
@@ -88,6 +101,15 @@ async function onScreen(page, locator, label) {
 async function minTarget(locator, label) {
   const box = await locator.boundingBox();
   assert.ok(box && box.height >= 44, `${label} is ${box && box.height}px tall; needs 44px`);
+}
+const viewerName = page => page.locator("#detail-name").innerText();
+async function swipe(page, dx) {
+  await page.evaluate(dx => {
+    const target = document.querySelector("#painting-detail .full-art");
+    const at = x => [new Touch({identifier: 1, target, clientX: x, clientY: 300})];
+    target.dispatchEvent(new TouchEvent("touchstart", {touches: at(200), changedTouches: at(200), bubbles: true}));
+    target.dispatchEvent(new TouchEvent("touchend", {touches: [], changedTouches: at(200 + dx), bubbles: true}));
+  }, dx);
 }
 
 /* Replace Shopify's answer for one operation, pass everything else through. */
@@ -127,84 +149,165 @@ async function run() {
   browser = await chromium.launch(process.env.HTTPS_PROXY ? {proxy: {server: process.env.HTTPS_PROXY, bypass: "127.0.0.1,localhost"}} : {});
 
   for (const viewport of ["desktop", "iphone"]) {
-    await test(`live/${viewport}: gallery captions match Shopify exactly`, () => withPage(viewport, async page => {
+    await test(`live/${viewport}: wall labels match Shopify, with no prices and no store chrome`, () => withPage(viewport, async page => {
       await ready(page);
       const handles = await page.$$eval(".piece[data-handle]", ps => ps.map(p => p.dataset.handle));
       assert.equal(handles.length, 14);
       const truth = await shopifyTruth(page, handles);
       for (const handle of handles) {
         assert.ok(truth[handle], `${handle} is missing from Shopify`);
-        const text = (await caption(page, handle).innerText()).trim();
-        assert.equal(text, truth[handle].available ? truth[handle].price : "SOLD", handle);
+        assert.equal((await caption(page, handle).innerText()).trim(), truth[handle].available ? "AVAILABLE" : "SOLD", handle);
       }
+      assert.equal(await page.locator(".gallery .sale").filter({hasText: "$"}).count(), 0, "a wall label shows a price");
       assert.equal(await page.locator('a[href*="myshopify.com/products"]').count(), 0, "links out to the Shopify storefront");
-      await noHorizontalScroll(page);
-      // Commerce stays out of sight until someone chooses a work.
       assert.equal(await page.locator(".cart-toggle").isHidden(), true, "empty cart shows in the navigation");
+      await noHorizontalScroll(page);
       await shot(page, `${viewport}-1-gallery`);
+      if (viewport === "iphone") {
+        // A sequence of plates: each painting spans the text column, and the page scrolls.
+        const width = (await page.locator(".piece .image-button").first().boundingBox()).width;
+        assert.ok(width >= 393 - 36 - 1, `plate is only ${width}px wide`);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight * 4), "gallery does not scroll");
+        await minTarget(page.locator('.piece[data-handle="red-sea"] .sale-open'), "Available label");
+        await page.locator('.piece[data-handle="red-sea"]').scrollIntoViewIfNeeded();
+        await shot(page, `${viewport}-1b-gallery-available`);
+      } else {
+        const cursor = await page.locator(".piece .image-button").first().evaluate(el => getComputedStyle(el).cursor);
+        assert.match(cursor, /^url\(/, `cursor over a painting is ${cursor}`);
+      }
     }));
 
-    await test(`live/${viewport}: sold work opens without a purchase panel`, () => withPage(viewport, async page => {
+    await test(`live/${viewport}: a sold work opens as a plate with its label, no purchase section`, () => withPage(viewport, async page => {
       await ready(page);
       await open(page, "harvest");
+      assert.equal(await viewerName(page), "Harvest 1");
+      assert.equal(await page.locator("#detail-state").innerText(), "SOLD");
       assert.equal(await page.locator(".buy").isHidden(), true);
-      assert.match(await page.locator("#detail-info").innerText(), /SOLD$/);
+      assert.equal(await page.locator("#detail-number").innerText(), "01 / 14");
+      // Harvest 1 has two photographs in Shopify; both can be examined.
+      assert.equal(await page.locator(".buy-views button").count(), 2);
+      await shot(page, `${viewport}-2-sold`);
     }));
 
-    await test(`live/${viewport}: add to cart, persist, review, hand off to checkout, empty`, () => withPage(viewport, async page => {
+    await test(`live/${viewport}: moving between works`, () => withPage(viewport, async page => {
+      await ready(page);
+      await open(page, "harvest");
+      await page.locator("#detail-next").click();
+      assert.equal(await viewerName(page), "Porter Study");
+      await page.locator("#detail-prev").click();
+      await page.locator("#detail-prev").click();
+      assert.equal(await viewerName(page), "Flowers in McCarty Vase", "previous from the first work wraps to the last");
+      assert.equal(new URL(page.url()).hash, "#flowers-in-mccarty-vase");
+      if (viewport === "iphone") {
+        await swipe(page, -120);
+        assert.equal(await viewerName(page), "Harvest 1", "swipe left shows the next work");
+        await swipe(page, 120);
+        assert.equal(await viewerName(page), "Flowers in McCarty Vase", "swipe right shows the previous work");
+        await swipe(page, -20);
+        assert.equal(await viewerName(page), "Flowers in McCarty Vase", "a small drag does not move");
+        await minTarget(page.locator("#detail-next"), "Next");
+        await minTarget(page.locator("#detail-close"), "Close");
+      } else {
+        await page.keyboard.press("ArrowRight");
+        assert.equal(await viewerName(page), "Harvest 1");
+        await page.keyboard.press("ArrowLeft");
+        assert.equal(await viewerName(page), "Flowers in McCarty Vase");
+      }
+      await page.locator("#detail-close").click();
+      // The dialog's close event, which clears the link, arrives just after the click.
+      await page.waitForFunction(() => !document.getElementById("painting-detail").open && !location.hash, null, {timeout: 2000});
+    }));
+
+    await test(`live/${viewport}: a shared link opens that work`, () => withPage(viewport, async page => {
+      await ready(page, "/paintings/#red-sea");
+      await page.locator("#painting-detail[open]").waitFor();
+      assert.equal(await viewerName(page), "Red Sea");
+      await page.locator(".buy-add", {hasText: "Add to cart"}).waitFor();
+    }));
+
+    await test(`live/${viewport}: add to cart, persist, review${viewport === "desktop" ? ", hand off to checkout" : ""}, empty`, () => withPage(viewport, async page => {
       await ready(page);
       await emptyCart(page);
       await open(page, "red-sea");
       const add = page.locator(".buy-add");
       await add.waitFor();
-      assert.equal(await page.locator(".buy-title").textContent(), "Red Sea");
+      assert.equal(await viewerName(page), "Red Sea");
+      assert.equal(await page.locator("#detail-info").innerText(), "Oil on canvas · 36 × 48 in.");
+      assert.equal(await page.locator("#detail-state").innerText(), "ORIGINAL · AVAILABLE");
       assert.equal(await page.locator(".buy-price").innerText(), "$2,400");
       assert.equal(await add.innerText(), "Add to cart");
+      await shot(page, `${viewport}-3-available`);
       if (viewport === "iphone") {
+        // The painting comes first; the label begins on the first screen.
+        await onScreen(page, page.locator("#detail-name"), "Title");
+        await add.scrollIntoViewIfNeeded();
         await onScreen(page, add, "Add to cart");
         await minTarget(add, "Add to cart");
-        await minTarget(page.locator("#detail-close"), "Close");
-        await shot(page, `${viewport}-2-panel`);
-      } else await shot(page, `${viewport}-2-panel`);
+        await shot(page, `${viewport}-3b-available-label`);
+      }
 
       await add.click();
       await page.locator(".buy-status", {hasText: "Added to your cart."}).waitFor();
       assert.equal(await add.innerText(), "In your cart — view cart");
       assert.equal(await page.locator(".cart-toggle").innerText(), "Cart 1");
       if (viewport === "iphone") await onScreen(page, page.locator(".buy-status"), "Added message");
-      await shot(page, `${viewport}-3-added`);
+      await shot(page, `${viewport}-4-added`);
 
       // The cart belongs to Shopify and survives a reload.
       await page.reload();
+      await page.locator("#painting-detail[open]").waitFor(); // the URL still names the work
+      assert.equal(await viewerName(page), "Red Sea");
+      await page.locator("#detail-close").click();
       await page.locator(".cart-toggle:not([hidden])").waitFor();
       await page.locator(".cart-toggle").click();
       const cart = page.locator("dialog.cart-panel[open]");
       await cart.waitFor();
       assert.equal(await cart.locator(".cart-title").innerText(), "Red Sea");
+      assert.equal(await cart.locator(".cart-number").innerText(), "NO. 13");
+      assert.deepEqual(await cart.locator(".cart-meta").allInnerTexts(), ["Oil on canvas · 36 × 48 in.", "Original"]);
+      assert.equal(await cart.locator(".cart-price").innerText(), "$2,400");
       assert.equal(await cart.locator("[data-subtotal]").innerText(), "$2,400");
       if (viewport === "iphone") {
+        await onScreen(page, cart.locator(".cart-checkout"), "Checkout");
         await minTarget(cart.locator(".cart-checkout"), "Checkout");
         await minTarget(cart.locator(".cart-remove"), "Remove");
         await minTarget(cart.locator(".cart-close"), "Close cart");
       }
-      await shot(page, `${viewport}-4-cart`);
+      await shot(page, `${viewport}-5-cart`);
 
-      // Checkout is the only step that leaves colecalfee.com. Capture the handoff, do not load it.
-      let handoff;
-      await page.route("https://241880-3.myshopify.com/cart/c/**", route => { handoff = route.request().url(); route.abort(); });
-      await cart.locator(".cart-checkout").click();
-      await page.waitForFunction(() => true, null, {timeout: 500}).catch(() => {});
-      await new Promise(r => setTimeout(r, 2500));
-      assert.match(handoff || "", /^https:\/\/241880-3\.myshopify\.com\/cart\/c\/[^?]+\?key=/, "checkout handoff not requested");
-      await page.unroute("https://241880-3.myshopify.com/cart/c/**");
+      // Checkout handoff runs on desktop only: in Chromium's iPhone emulation, cancelling the
+      // held checkout navigation races Chromium's error page (see tests/commerce/HARNESS.md).
+      // The real handoff has been verified by hand on an iPhone.
+      if (viewport === "desktop") {
+        // Checkout is the only step that leaves colecalfee.com. Capture the handoff, do not load it.
+        // Hold the request so the handoff can be seen, then cancel it. What the visitor
+        // sees as the browser leaves is recorded at beforeunload, since the page cannot
+        // be queried while a navigation is pending.
+        await page.evaluate(() => addEventListener("beforeunload", () => {
+          const note = document.querySelector(".cart-handoff");
+          localStorage.setItem("test-handoff", JSON.stringify({text: note.textContent.replace(/\s+/g, " ").trim(), visible: note.checkVisibility()}));
+        }));
+        let held;
+        const requested = new Promise(resolve => page.route("https://241880-3.myshopify.com/cart/c/**", route => { held = route; resolve(route.request().url()); }));
+        await cart.locator(".cart-checkout").click();
+        const handoff = await requested;
+        assert.match(handoff, /^https:\/\/241880-3\.myshopify\.com\/cart\/c\/[^?]+\?key=/, "checkout handoff not requested");
+        await held.abort();
+        await page.unroute("https://241880-3.myshopify.com/cart/c/**");
+        // Cancelling the navigation makes Chromium show its error page; let it settle first.
+        await page.waitForURL(/^chrome-error:/, {timeout: 5000}).catch(() => {});
+        await page.goto(`${BASE}/paintings/`);
+        const seen = JSON.parse(await page.evaluate(() => localStorage.getItem("test-handoff")));
+        assert.equal(seen.visible, true, "handoff message hidden while leaving");
+        assert.match(seen.text, /Secure checkout Red Sea — \$2,400 Continuing to Shopify/);
 
-      await page.goto(`${BASE}/paintings/`);
-      await page.locator(".cart-toggle:not([hidden])").waitFor();
-      await page.locator(".cart-toggle").click();
+        await page.locator(".cart-toggle:not([hidden])").waitFor();
+        await page.locator(".cart-toggle").click();
+      }
       await page.locator(".cart-remove").click();
       await page.locator("dialog.cart-panel.is-empty").waitFor();
       assert.equal(await page.locator(".cart-toggle").isHidden(), true);
-      await shot(page, `${viewport}-5-empty`);
+      await shot(page, `${viewport}-7-empty`);
     }));
   }
 
@@ -226,7 +329,6 @@ async function run() {
     await open(page, "red-sea");
     assert.equal(await page.locator(".buy-add").innerText(), "Checking availability…");
     assert.equal(await page.locator(".buy-add").isDisabled(), true);
-    await shot(page, "iphone-6-loading");
     await page.locator(".buy-add", {hasText: "Add to cart"}).waitFor({timeout: 20000});
   }));
 
@@ -235,9 +337,9 @@ async function run() {
     await page.goto(`${BASE}/paintings/`);
     await page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]'));
     assert.equal(await caption(page, "red-sea").innerText(), "INQUIRE");
+    assert.equal(await caption(page, "harvest").innerText(), "SOLD");
     await open(page, "red-sea");
-    await page.locator(".buy-status", {hasText: "Live prices could not be loaded."}).waitFor();
-    await shot(page, "iphone-7-error");
+    await page.locator(".buy-status", {hasText: "Availability could not be loaded."}).waitFor();
     await page.unroute(API);
     await page.locator(".buy-add", {hasText: "Try again"}).click();
     await page.locator(".buy-add", {hasText: "Add to cart"}).waitFor({timeout: 20000});
@@ -253,13 +355,12 @@ async function run() {
       }
     });
     await ready(page);
-    assert.equal(await caption(page, "red-sea").innerText(), "From $225");
+    assert.equal(await caption(page, "red-sea").innerText(), "AVAILABLE");
     await open(page, "red-sea");
     assert.deepEqual(await page.locator(".buy-options legend").allTextContents(), ["Size", "Framing"]);
     assert.equal(await page.locator(".buy-price").innerText(), "$225");
-    assert.match(await page.locator(".buy-state").innerText(), /edition print/i);
+    assert.match(await page.locator("#detail-state").innerText(), /edition print/i);
     await minTarget(page.locator(".buy-options label").first(), "Option");
-    // 8 × 10 Unframed is sold out and says so.
     assert.equal(await page.locator(".buy-options label.is-unavailable").count(), 1);
     await page.locator(".buy-options label", {hasText: "16 × 20 in."}).click();
     assert.equal(await page.locator(".buy-price").innerText(), "$395");
@@ -269,6 +370,7 @@ async function run() {
     await page.locator(".buy-options label", {hasText: "8 × 10 in."}).click();
     assert.equal(await page.locator(".buy-add").innerText(), "Sold out");
     assert.equal(await page.locator(".buy-add").isDisabled(), true);
+    await page.locator(".buy-options").scrollIntoViewIfNeeded();
     await shot(page, "iphone-8-variants");
   }));
 

@@ -1,0 +1,70 @@
+/* Paintings: art-direction pass.
+   Loaded after the page's own styles. On iPhone the contact sheet becomes a
+   sequence of plates; everywhere, a selected work opens as a plate with its
+   wall label. Desktop keeps the full-collection plate. */
+
+/* The site's crosshair stays over the work. */
+.paintings .image-button,.paintings dialog button{cursor:inherit}
+
+/* ---------- Wall labels ----------
+   A label states only whether a work is sold. Sold work carries the gallery's
+   red dot (the same red as the crosshair's centre); price waits in the viewer. */
+.paintings .sale{color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.paintings .sale[data-state="available"]{color:var(--ink)}
+.paintings .sale[data-state="sold"]::before,#detail-state[data-state="sold"]::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}
+.paintings .sale[data-live="pending"]{opacity:.35}
+.sale-open{appearance:none;-webkit-appearance:none;position:relative;background:none;border:0;border-radius:0;padding:0;margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:inherit;touch-action:manipulation}
+.sale-open{padding:15px 0;margin:-15px 0}
+.sale-open:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(hover:hover){.sale-open:hover{color:var(--accent)}}
+
+/* ---------- iPhone: a sequence of plates ---------- */
+@media(max-width:700px){
+  body.paintings,.paintings .shell{height:auto;overflow:visible}
+  .paintings main{display:block;padding:22px 0 24px}
+  .paintings .intro{margin-bottom:26px;padding-bottom:12px}
+  .paintings .gallery{display:block;counter-reset:plate}
+  .paintings .piece{display:block;overflow:visible;margin:0 0 52px;counter-increment:plate}
+  .paintings .image-button{display:block;width:100%;height:auto;aspect-ratio:4/5;padding:0;overflow:visible;touch-action:manipulation}
+  .paintings .image-button img{width:100%;height:100%;max-height:none;object-fit:contain}
+  .paintings .caption{display:grid;grid-template-columns:3ch minmax(0,1fr) auto;column-gap:10px;align-items:baseline;margin-top:12px;padding-top:0;min-height:0;border:0}
+  .paintings .caption::before{content:counter(plate,decimal-leading-zero);font:11px/1.3 var(--mono);color:var(--muted)}
+  .paintings .caption h2{font:400 16px/1.25 var(--sans);letter-spacing:-.02em;text-transform:none;margin:0}
+  .paintings .caption p{display:block;font:11px/1.45 var(--mono);color:var(--muted);margin:4px 0 0}
+  .paintings .sale{font:11px/1.3 var(--mono);margin:0;white-space:nowrap}
+}
+
+/* ---------- The viewer: a plate and its wall label ---------- */
+.paintings dialog#painting-detail{padding:0}
+#painting-detail .full{display:block;height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#painting-detail .top{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;background:var(--paper);padding:max(2px,env(safe-area-inset-top)) 8px 2px 6px;border-bottom:1px solid var(--rule)}
+.viewer-nav{display:flex;align-items:center}
+.paintings dialog .viewer-nav button{min-width:44px;min-height:44px;padding:0;font:16px/1 var(--sans);color:var(--ink)}
+#detail-number{font:11px/1 var(--mono);letter-spacing:.04em;color:var(--muted);min-width:8ch;text-align:center}
+.paintings dialog #detail-close{min-height:44px;padding:0 10px 0 18px}
+#painting-detail .full-art{display:flex;justify-content:center;align-items:center;height:auto;padding:0}
+#painting-detail .full-art img{display:block;width:100%;height:auto;max-width:100%;max-height:calc(100svh - 150px);object-fit:contain;touch-action:pan-y pinch-zoom}
+#painting-detail .label{padding:16px 18px 28px}
+#detail-name{font:400 22px/1.2 var(--sans);letter-spacing:-.025em;margin:0}
+#detail-info{font:11px/1.5 var(--mono);color:var(--muted);margin:6px 0 0}
+#detail-state{font:11px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.03em;color:var(--muted);margin:10px 0 0}
+#detail-state:empty{display:none}
+#detail-state[data-state="available"]{color:var(--ink)}
+
+@media(max-width:700px){
+  /* The action follows the visitor once the purchase section is reached. */
+  #painting-detail .buy-note{order:1}
+  #painting-detail .buy-action{order:2;position:sticky;bottom:0;z-index:2;margin:18px -18px 0;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--rule)}
+  #painting-detail .buy-status{text-align:center}
+}
+
+/* Desktop: the painting holds the stage; the label sits in a quiet column. */
+@media(min-width:701px){
+  .paintings dialog#painting-detail{padding:24px 30px 30px}
+  #painting-detail .full{display:grid;grid-template-columns:minmax(0,1fr) clamp(280px,25vw,360px);grid-template-rows:auto minmax(0,1fr);column-gap:clamp(28px,4vw,64px);overflow:hidden}
+  #painting-detail .top{grid-column:1/-1;position:static;padding:0 0 8px}
+  #painting-detail .full-art{grid-column:1;grid-row:2;min-height:0;padding:24px 0 0}
+  #painting-detail .full-art img{width:auto;max-height:100%}
+  #painting-detail .label{grid-column:2;grid-row:2;min-height:0;overflow-y:auto;padding:24px 0 0}
+  #detail-name{font-size:24px}
+}
