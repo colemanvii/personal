@@ -1,0 +1,31 @@
+{% comment %}
+  Real option-value URLs work without JavaScript and avoid the 250-variant loop limit.
+  Keep sold-out/nonexistent combinations reachable so another option can be changed.
+{% endcomment %}
+<div class="cc-gallery__options">
+  {% for option in product.options_with_values %}
+    <fieldset>
+      <legend>{{ option.name | escape }}</legend>
+      <ul role="list">
+        {% for value in option.values %}
+          {%- capture option_ids -%}
+            {%- for other_option in product.options_with_values -%}
+              {%- unless forloop.first -%},{%- endunless -%}
+              {%- if other_option.position == option.position -%}
+                {{- value.id -}}
+              {%- else -%}
+                {%- for other_value in other_option.values -%}{%- if other_value.selected -%}{{- other_value.id -}}{%- endif -%}{%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+          {%- assign option_url = product.url | append: '?option_values=' | append: option_ids -%}
+          {% if value.product_url != blank %}{% assign option_url = value.product_url %}{% endif %}
+          <li><a href="{{ option_url | escape }}" data-option-link data-option-id="{{ value.id }}"
+            {% if value.selected %}aria-current="true"{% endif %}>
+            {{ value.name | escape }}{% unless value.available %}<span class="cc-gallery__option-note"> — unavailable</span>{% endunless %}
+          </a></li>
+        {% endfor %}
+      </ul>
+    </fieldset>
+  {% endfor %}
+</div>

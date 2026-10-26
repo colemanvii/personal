@@ -1,0 +1,35 @@
+<div class="cc-gallery__media">
+  {% if images.size > 0 %}
+    <div class="cc-gallery__plates" data-plates>
+      {% for media in images %}
+        {%- liquid
+          assign image = media.preview_image
+          assign image_alt = media.alt | default: product.title
+          assign loading = 'lazy'
+          if image.id == lead_image.id or lead_image == blank and forloop.first
+            assign loading = 'eager'
+          endif
+        -%}
+        <figure class="cc-gallery__plate" id="ColeImage-{{ section_id }}-{{ media.id }}" data-media-id="{{ media.id }}" {% if image.id == lead_image.id %}data-lead{% endif %}>
+          <a href="{{ image | image_url: width: 3000 }}" data-enlarge aria-label="Enlarge {{ image_alt | escape }}, image {{ forloop.index }} of {{ images.size }}">
+            {{ image | image_url: width: 1800 | image_tag: widths: '360, 540, 750, 1000, 1400, 1800', sizes: '(min-width: 900px) 60vw, calc(100vw - 36px)', loading: loading, alt: image_alt }}
+          </a>
+          <figcaption>{{ forloop.index }} / {{ images.size }}<span>View full image</span></figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+    {% if images.size > 1 %}
+      <nav class="cc-gallery__image-nav" aria-label="Artwork images" data-image-nav hidden>
+        {% for media in images %}
+          <button type="button" data-show-image="{{ media.id }}" aria-controls="ColeImage-{{ section_id }}-{{ media.id }}" aria-label="Show image {{ forloop.index }} of {{ images.size }}">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</button>
+        {% endfor %}
+      </nav>
+    {% endif %}
+    <dialog class="cc-gallery__dialog" aria-label="Enlarged artwork" data-dialog>
+      <form method="dialog"><button type="submit" autofocus>Close <span aria-hidden="true">&times;</span></button></form>
+      <img alt="" width="1800" height="1800" data-dialog-image>
+    </dialog>
+  {% else %}
+    <p class="cc-gallery__image-missing">{{ product.title | escape }}<br>Image forthcoming</p>
+  {% endif %}
+</div>

@@ -1,0 +1,12 @@
+{% comment %}Variant dimensions override product dimensions. Omit unknown facts.{% endcomment %}
+{%- assign dimensions = variant.metafields.artwork.dimensions.value | default: product.metafields.artwork.dimensions.value -%}
+<dl class="cc-gallery__facts">
+  {% if product.metafields.artwork.medium.value != blank %}<div><dt>Medium</dt><dd>{{ product.metafields.artwork.medium.value | escape }}</dd></div>{% endif %}
+  {% if dimensions != blank %}<div><dt>Dimensions</dt><dd>{{ dimensions | escape }}</dd></div>{% endif %}
+  {% if artwork_kind == 'edition' %}
+    {% if product.metafields.artwork.edition_size.value != blank %}<div><dt>Edition</dt><dd>Edition of {{ product.metafields.artwork.edition_size.value | escape }}</dd></div>{% endif %}
+    {% if product.metafields.artwork.paper.value != blank %}<div><dt>Paper</dt><dd>{{ product.metafields.artwork.paper.value | escape }}</dd></div>{% endif %}
+    {% if product.metafields.artwork.signature.value != blank %}<div><dt>Signature</dt><dd>{{ product.metafields.artwork.signature.value | escape }}</dd></div>{% endif %}
+  {% endif %}
+  {% if product.metafields.artwork.framing.value != blank %}<div><dt>Framing</dt><dd>{{ product.metafields.artwork.framing.value | escape }}</dd></div>{% endif %}
+</dl>

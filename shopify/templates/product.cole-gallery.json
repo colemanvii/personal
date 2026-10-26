@@ -1,0 +1,16 @@
+{
+  "layout": "cole-gallery",
+  "sections": {
+    "main": {
+      "type": "cole-artwork-product",
+      "settings": {
+        "show_navigation": true,
+        "home_url": "https://colecalfee.com",
+        "index_url": "https://colecalfee.com/index/",
+        "paintings_url": "https://colecalfee.com/paintings/",
+        "about_url": "https://colecalfee.com/info/"
+      }
+    }
+  },
+  "order": ["main"]
+}

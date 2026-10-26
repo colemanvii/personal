@@ -1,0 +1,9 @@
+<header class="cc-gallery__header cc-gallery__shell">
+  <a class="cc-gallery__brand" href="{{ section.settings.home_url | escape }}">Cole Calfee</a>
+  <nav class="cc-gallery__nav" aria-label="Gallery">
+    <a href="{{ section.settings.index_url | escape }}">Work Index</a>
+    <a href="{{ section.settings.paintings_url | escape }}">Paintings</a>
+    <a href="{{ section.settings.about_url | escape }}">About</a>
+    <a class="cc-gallery__cart" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">Cart <span>({{ cart.item_count }})</span></a>
+  </nav>
+</header>
