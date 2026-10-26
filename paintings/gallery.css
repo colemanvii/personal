@@ -77,15 +77,13 @@
 @media(min-width:701px){
   .paintings .gallery-available{--cols:2;max-width:80%;column-gap:clamp(36px,4.4vw,72px)}
 }
-/* Desktop: each plate hangs smaller than its column, and the room it gives up
-   becomes whitespace between the works rather than larger photographs.
-   Outer plates keep to the page margins; the gaps between works open up. */
+/* Desktop: the available works hang as one centred pair, two 390 px plates
+   with a 48 px pause between them, top-aligned, each caption as wide as its
+   painting. The archive keeps its approved three-column grid. */
 @media(min-width:701px){
-  .paintings .gallery-available .piece{width:75%}
-  .paintings .gallery-available .piece:nth-child(2n){margin-left:auto}
-  .paintings .gallery-archive .piece{width:85%}
-  .paintings .gallery-archive .piece:nth-child(3n+2){margin-inline:auto}
-  .paintings .gallery-archive .piece:nth-child(3n){margin-left:auto}
+  .paintings .gallery-available{grid-template-columns:repeat(2,390px);justify-content:center;align-items:start;column-gap:48px;max-width:none}
+  .paintings .gallery-available .piece{width:auto}
+  .paintings #selected-archive{margin-top:72px}
 }
 @media(max-width:700px){
   .paintings .section-head{margin-bottom:22px}

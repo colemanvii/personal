@@ -219,24 +219,24 @@ async function run() {
       await ready(page);
       await open(page, "harvest");
       await page.locator("#detail-next").click();
-      assert.equal(await viewerName(page), "Porter Study");
+      assert.equal(await viewerName(page), "Peace of Wild Things");
       await page.locator("#detail-prev").click();
       assert.equal(await viewerName(page), "Harvest 1");
       assert.equal(new URL(page.url()).hash, "#harvest");
       // The neighbouring works are named, across sections.
       assert.equal(await page.locator("#detail-prev").innerText(), "← Flowers in McCarty Vase");
-      assert.equal(await page.locator("#detail-next").innerText(), "Porter Study →");
+      assert.equal(await page.locator("#detail-next").innerText(), "Peace of Wild Things →");
       if (viewport === "iphone") {
         await swipe(page, -260);
-        assert.equal(await viewerName(page), "Porter Study", "dragging left shows the next work");
-        assert.equal(new URL(page.url()).hash, "#porter-study");
+        assert.equal(await viewerName(page), "Peace of Wild Things", "dragging left shows the next work");
+        assert.equal(new URL(page.url()).hash, "#harvest-2");
         await swipe(page, 260);
         assert.equal(await viewerName(page), "Harvest 1", "dragging right shows the previous work");
         await minTarget(page.locator("#detail-next"), "Next");
         await minTarget(page.locator("#detail-close"), "Close");
       } else {
         await page.keyboard.press("ArrowRight");
-        assert.equal(await viewerName(page), "Porter Study");
+        assert.equal(await viewerName(page), "Peace of Wild Things");
         await page.keyboard.press("ArrowLeft");
         assert.equal(await viewerName(page), "Harvest 1");
       }
@@ -361,7 +361,8 @@ async function run() {
      decides where each work hangs; Shopify only changes its state. */
   const PUBLISHED = {
     available: [["red-sea", "13"], ["flowers-in-mccarty-vase", "14"]],
-    archive: ["harvest", "porter-study", "harvest-2", "flowers-in-a-jug", "nine-ball", "little-window", "zen-bison", "fj40", "scout", "target", "purple-haze", "peach-circuit"].map((h, i) => [h, String(i + 1).padStart(2, "0")])
+    // Harvest 1 and Peace of Wild Things hang as a pair; Porter Study follows. Numbers never change.
+    archive: [["harvest", "01"], ["harvest-2", "03"], ["porter-study", "02"], ...["flowers-in-a-jug", "nine-ball", "little-window", "zen-bison", "fj40", "scout", "target", "purple-haze", "peach-circuit"].map((h, i) => [h, String(i + 4).padStart(2, "0")])]
   };
   const sections = async page => ({
     available: await page.$$eval(".gallery-available .piece", ps => ps.map(p => [p.dataset.handle, p.querySelector(".caption").dataset.number])),
@@ -393,15 +394,24 @@ async function run() {
         const plate = await page.locator(".gallery-available .image-button").first().boundingBox();
         assert.ok(plate.width >= 393 - 36 - 1, "available works lack presence on iPhone");
       } else {
-        // Desktop plates hang smaller than their columns, leaving whitespace;
-        // available works are never smaller than the archive's.
-        const [a, b] = await Promise.all([".gallery-available", ".gallery-archive"].map(sel => page.locator(`${sel} .image-button`).first().boundingBox()));
-        assert.ok(a.width >= b.width, `available ${a.width}px is smaller than archive ${b.width}px`);
-        for (const [sel, share] of [[".gallery-available", 0.75], [".gallery-archive", 0.85]]) {
-          const [plate, column] = await page.locator(`${sel} .piece`).first().evaluate(el => [el.querySelector(".image-button").getBoundingClientRect().width, el.parentElement.getBoundingClientRect().width]);
-          const cols = sel === ".gallery-available" ? 2 : 3;
-          assert.ok(plate < column / cols * share + 2, `${sel} plate ${plate}px fills its column`);
+        // Desktop: the available works hang as one centred pair, 390 px plates 48 px apart,
+        // top-aligned, captions as wide as their paintings; the archive fills its columns.
+        const plates = await page.$$eval(".gallery-available .piece", ps => ps.map(p => {
+          const img = p.querySelector(".image-button").getBoundingClientRect(), cap = p.querySelector(".caption").getBoundingClientRect();
+          return {left: img.left, right: img.right, top: img.top, width: img.width, capLeft: cap.left, capWidth: cap.width};
+        }));
+        const head = await page.locator("#available-works .section-head").boundingBox();
+        assert.equal(plates.length, 2);
+        for (const p of plates) {
+          assert.ok(Math.abs(p.width - 390) <= 2, `available plate is ${p.width}px wide`);
+          assert.ok(Math.abs(p.capLeft - p.left) <= 1 && Math.abs(p.capWidth - p.width) <= 1, "a caption does not align with its painting");
         }
+        assert.ok(Math.abs(plates[1].left - plates[0].right - 48) <= 2, `gap is ${plates[1].left - plates[0].right}px`);
+        assert.equal(Math.round(plates[0].top), Math.round(plates[1].top), "the pair is not top-aligned");
+        const leftSpace = plates[0].left - head.x, rightSpace = head.x + head.width - plates[1].right;
+        assert.ok(Math.abs(leftSpace - rightSpace) <= 2, `pair is off-centre (${leftSpace}px vs ${rightSpace}px)`);
+        const [archivePlate, archiveColumn] = await page.locator(".gallery-archive .piece").first().evaluate(el => [el.querySelector(".image-button").getBoundingClientRect().width, el.getBoundingClientRect().width]);
+        assert.ok(Math.abs(archivePlate - archiveColumn) <= 1, "archive plates no longer fill their columns");
       }
     }));
 
@@ -437,6 +447,25 @@ async function run() {
       // Harvest 1: Shopify decides it can be bought, in its archive position.
       assert.equal(await caption(page, "harvest").innerText(), "AVAILABLE");
       assert.equal(await page.locator(".buy-add").innerText(), "Add to cart");
+    }));
+  }
+
+  for (const viewport of ["desktop", "iphone"]) {
+    await test(`live/${viewport}: Harvest 1 and Peace of Wild Things hang side by side`, () => withPage(viewport, async page => {
+      await ready(page);
+      const order = await page.$$eval(".gallery-archive .piece", ps => ps.map(p => p.id));
+      assert.equal(order.indexOf("harvest-2"), order.indexOf("harvest") + 1, "the pair is not adjacent in the page");
+      const box = id => page.locator(`#${id} .image-button`).boundingBox();
+      const [a, b] = [await box("harvest"), await box("harvest-2")];
+      assert.equal(Math.round(a.y), Math.round(b.y), "the pair does not share a row");
+      assert.ok(b.x > a.x + a.width, "Peace of Wild Things is not beside Harvest 1");
+      assert.equal(await page.locator("#harvest .caption").getAttribute("data-number"), "01");
+      assert.equal(await page.locator("#harvest-2 .caption").getAttribute("data-number"), "03");
+      if (viewport === "desktop") {
+        const c = await box("porter-study");
+        assert.equal(Math.round(c.y), Math.round(a.y), "Porter Study does not complete the first archive row");
+        assert.ok(c.x > b.x + b.width, "Porter Study is not third in the row");
+      }
     }));
   }
 
