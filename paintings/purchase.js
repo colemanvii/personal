@@ -8,7 +8,7 @@
  * work hangs. */
 import {fetchProducts, addToCart, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage, cartStore} from "/assets/js/storefront.js";
 import {mountCart, openCart, setLineDescriber} from "/assets/js/cart.js";
-import {setImage, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
+import {setImage, hasOwnPhoto, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
 
 const FRESH_FOR = 60 * 1000;
 const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
@@ -116,12 +116,16 @@ function renderOptions(product, selection) {
   }
 }
 
-/* Every work with more than one photograph can be examined from each, sold or not. */
+/* Every work with more than one photograph can be examined from each, sold or not.
+   Where the site hangs a work in its own photograph, that photograph replaces
+   Shopify's featured image; Shopify's other views follow it. */
 function renderViews(product, variant) {
-  const images = product?.images.nodes || [];
+  const shopify = product?.images.nodes || [];
+  const own = hasOwnPhoto(current.piece);
+  const images = own && shopify.length ? [{url: null, thumb: current.piece.querySelector(".image-button img").currentSrc || current.piece.querySelector(".image-button img").getAttribute("src")}, ...shopify.slice(1)] : shopify;
   views.replaceChildren();
   views.hidden = images.length < 2;
-  if (variant?.image) setImage(variant.image.url);
+  if (variant?.image && !(own && variant.image.url === shopify[0]?.url)) setImage(variant.image.url);
   if (images.length < 2) return;
   const title = titleOf(current.piece);
   images.forEach((image, i) => {
@@ -130,7 +134,7 @@ function renderViews(product, variant) {
     button.setAttribute("aria-label", `${title}, view ${i + 1} of ${images.length}`);
     button.setAttribute("aria-pressed", String(i === 0));
     const img = document.createElement("img");
-    img.src = sizedImage(image.url, 200);
+    img.src = image.url ? sizedImage(image.url, 200) : image.thumb;
     img.alt = "";
     img.onerror = () => button.remove();
     button.append(img);
