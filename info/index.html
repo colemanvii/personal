@@ -26,24 +26,40 @@
   .about .site-head a[aria-current]{border-bottom:0}
 }
 
-/* A · Colophon. Set within the first column of the gallery's three: the statement, then the facts in a ruled list,
-   a narrow column of labels beside their values. */
-.about main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(28px,3.6vw,60px);align-content:start;padding:clamp(40px,5.5vw,84px) 0 96px}
-.colophon-head{grid-column:1/3}
-.colophon-head h1{margin:0;font:400 15px/1.3 var(--sans);letter-spacing:-.02em}
-.colophon-head p{margin:14px 0 0;font:400 clamp(28px,2.9vw,42px)/1.1 var(--sans);letter-spacing:-.035em;max-width:15ch;text-wrap:balance}
-.facts{grid-column:1;margin:clamp(44px,5vw,72px) 0 0;display:grid;grid-template-columns:110px minmax(0,1fr);border-top:1px solid var(--rule)}
-.facts div{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:baseline;padding:13px 0 14px;border-bottom:1px solid var(--rule)}
-.facts dt{grid-column:1}
-.facts dd{grid-column:2;margin:0;font:400 15px/1.35 var(--sans);letter-spacing:-.015em;min-width:0;overflow-wrap:anywhere}
+/* A centred note. One column, a restrained measure, centred on the page: who and where, then how to reach
+   Cole, then a note to write him. Fields are ruled lines in the gallery's typography, never boxes. */
+.about main{width:min(100%,560px);margin:0 auto;padding:clamp(48px,6.5vw,96px) 0 clamp(64px,8vw,120px)}
+.note-head{text-align:center}
+.note-head h1{margin:0;font:400 15px/1.3 var(--sans);letter-spacing:-.02em}
+.note-head .statement{margin:14px 0 0;font:400 clamp(28px,2.9vw,40px)/1.1 var(--sans);letter-spacing:-.035em;text-wrap:balance}
+.note-head .label{margin:18px 0 0}
+.reach{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 28px;margin:26px 0 0;font:400 15px/1.35 var(--sans);letter-spacing:-.015em}
+.note{margin-top:clamp(48px,6vw,72px);padding-top:26px;border-top:1px solid var(--rule)}
+.note label{display:block}
+.note .field{display:block;width:100%;margin:8px 0 0;padding:8px 0 10px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);font:400 17px/1.5 var(--sans);letter-spacing:-.01em;outline:0;-webkit-appearance:none;appearance:none;transition:border-color .15s}
+.note .field::placeholder{color:var(--muted);opacity:.75}
+.note .field:focus{border-bottom-color:var(--ink)}
+.note textarea.field{min-height:236px;resize:none;field-sizing:content}
+.note .message-label{margin-top:30px}
+.note-send{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-top:20px}
+.note-status{margin:0;font:11px/1.5 var(--mono);letter-spacing:.03em;color:var(--muted);min-height:1.5em}
+.note-status[data-state="sent"]{color:var(--ink)}
+.note-status[data-state="error"]{color:var(--accent)}
+.note-send button{flex:none;appearance:none;-webkit-appearance:none;border:0;border-radius:0;background:none;padding:12px 0;margin:-12px 0;color:var(--ink);font:400 15px/1 var(--sans);letter-spacing:-.01em;cursor:inherit;touch-action:manipulation}
+.note-send button::after{content:" \2192"}
+.note-send button:hover{color:var(--accent)}
+.note-send button:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
+.note-send button:disabled{color:var(--muted)}
+.note-send button:disabled::after{content:""}
+.note .honey{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 @media(max-width:700px){
-  .about main{grid-template-columns:1fr;padding:30px 0 56px}
-  .colophon-head,.facts{grid-column:1}
-  .colophon-head h1{font-size:13px}
-  .colophon-head p{margin-top:10px;font-size:27px;line-height:1.12}
-  .facts{margin-top:36px;grid-template-columns:96px minmax(0,1fr)}
-  .facts div{grid-column:1/-1;padding:12px 0 13px}
-  .facts dd{font-size:15px}
+  .about main{padding:34px 0 64px}
+  .note-head h1{font-size:13px}
+  .note-head .statement{margin-top:10px;font-size:27px;line-height:1.12}
+  .note-head .label{margin-top:14px}
+  .reach{margin-top:20px;gap:8px 22px}
+  .note{margin-top:40px;padding-top:22px}
+  .note textarea.field{min-height:200px}
 }
 </style>
 </head><body class="about"><div class="shell">
@@ -52,15 +68,52 @@
   <nav class="nav" aria-label="Primary"><a href="/index/">Index</a><a href="/paintings/">Paintings</a><a aria-current="page" href="/info/">About</a></nav>
 </header>
 <main>
-  <header class="colophon-head">
+  <header class="note-head">
     <h1>Cole Calfee</h1>
-    <p>Somewhere between art and work.</p>
+    <p class="statement">Somewhere between art and work.</p>
+    <p class="label">Nashville, Tennessee / North Georgia</p>
+    <p class="reach"><span><a class="line" href="mailto:colecalfee@gmail.com">colecalfee@gmail.com</a> <span class="ext" aria-hidden="true">&#x2197;&#xFE0E;</span></span><span><a class="line" href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">@colecalfee</a> <span class="ext" aria-hidden="true">&#x2197;&#xFE0E;</span></span></p>
   </header>
-  <dl class="facts">
-    <div><dt class="label">Based</dt><dd>Nashville, Tennessee / North Georgia</dd></div>
-    <div><dt class="label">Email</dt><dd><a class="line" href="mailto:colecalfee@gmail.com">colecalfee@gmail.com</a> <span class="ext" aria-hidden="true">&#x2197;&#xFE0E;</span></dd></div>
-    <div><dt class="label">Instagram</dt><dd><a class="line" href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener noreferrer">@colecalfee</a> <span class="ext" aria-hidden="true">&#x2197;&#xFE0E;</span></dd></div>
-  </dl>
+  <form class="note" id="note" action="/api/contact" method="post" novalidate>
+    <label class="label" for="note-email">Your email</label>
+    <input class="field" id="note-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" spellcheck="false">
+    <label class="label message-label" for="note-message">Message</label>
+    <textarea class="field" id="note-message" name="message" required minlength="3" maxlength="5000" placeholder="Dear Cole,"></textarea>
+    <div class="honey" aria-hidden="true"><label for="note-website">Leave this empty</label><input id="note-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+    <div class="note-send">
+      <p class="note-status" id="note-status" role="status" aria-live="polite"></p>
+      <button type="submit">Send message</button>
+    </div>
+  </form>
 </main>
 <footer class="footer"><span>© 2026 Cole Calfee</span></footer>
-</div><script src="/assets/js/site.js"></script></body></html>
+</div><script src="/assets/js/site.js"></script>
+<script>
+/* The note posts to /api/contact (functions/api/contact.js). Success is shown
+   only when the server answers {ok: true}; anything else says what went wrong. */
+(function(){
+  var form=document.getElementById('note'), status=document.getElementById('note-status'), button=form.querySelector('button');
+  var opened=Date.now();
+  function say(text,state){status.textContent=text;if(state)status.dataset.state=state;else delete status.dataset.state;}
+  form.addEventListener('submit',async function(event){
+    event.preventDefault();
+    var email=form.elements.email, message=form.elements.message;
+    if(!email.value.trim()||!email.checkValidity()){say('Please enter your email address.','error');email.focus();return;}
+    if(message.value.trim().length<3){say('Please write a few words first.','error');message.focus();return;}
+    button.disabled=true;button.textContent='Sending';say('Sending your note…');
+    try{
+      var response=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:email.value.trim(),message:message.value.trim(),website:form.elements.website.value,elapsed:Date.now()-opened})});
+      var data=await response.json().catch(function(){return {};});
+      if(response.ok&&data.ok===true){
+        form.reset();opened=Date.now();
+        say('Sent. Thank you for writing.','sent');button.textContent='Send another';
+      }else{
+        say(data.error||'Your note could not be sent. Please try again, or write to colecalfee@gmail.com.','error');button.textContent='Try again';
+      }
+    }catch(error){
+      say('Your note could not be sent. Please check your connection and try again, or write to colecalfee@gmail.com.','error');button.textContent='Try again';
+    }finally{button.disabled=false;}
+  });
+})();
+</script></body></html>
