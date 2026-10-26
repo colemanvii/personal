@@ -6,12 +6,10 @@
  * at a time. Anything that adds to a work's label, such as purchasing,
  * listens for "painting:show" and reads the piece from the event.
  *
- * The viewer follows the page: Available Works first, then the Selected
- * Archive. When a work moves between sections, syncOrder() updates the
- * sequence; each work keeps its own catalogue number throughout. */
+ * The viewer follows the published page: Available Works first, then the
+ * Selected Archive, each work with its own catalogue number. */
 
-const allPieces = () => [...document.querySelectorAll(".gallery .piece")];
-let pieces = allPieces();
+const pieces = [...document.querySelectorAll(".gallery .piece")];
 const dialog = document.getElementById("painting-detail");
 const track = dialog.querySelector(".viewer-track");
 const scroller = dialog.querySelector(".full");
@@ -46,9 +44,8 @@ export function partsOf(piece) {
   return {medium, size: size ? size + cm : "", year: piece.dataset.year || ""};
 }
 
-/* One slide per work, kept with its work; images load as they come near. */
-const slideFor = new Map();
-let slides = pieces.map((piece, i) => {
+/* One slide per work; images load as they come near. */
+const slides = pieces.map((piece, i) => {
   const original = piece.querySelector(".image-button img");
   const slide = document.createElement("figure");
   slide.className = "viewer-slide";
@@ -62,7 +59,6 @@ let slides = pieces.map((piece, i) => {
   source(img, original.getAttribute("src"));
   slide.append(img);
   track.append(slide);
-  slideFor.set(piece, slide);
   return slide;
 });
 
@@ -83,8 +79,8 @@ function label(button, i, arrow) {
 }
 
 /* Fill the label for the centred work and tell listeners. */
-function present(i, force = false) {
-  if (i === index && !force) return;
+function present(i) {
+  if (i === index) return;
   slides[index]?.querySelector("img")?.removeAttribute("id");
   index = i;
   const piece = pieces[i];
@@ -149,22 +145,6 @@ document.addEventListener("keydown", event => {
   if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
   if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
 });
-
-/* Re-read the page order after works move between sections. */
-export function syncOrder() {
-  const showing = pieces[index];
-  pieces = allPieces();
-  slides = pieces.map(piece => slideFor.get(piece));
-  track.append(...slides);
-  slides.forEach((slide, n) => slide.setAttribute("aria-label", `${n + 1} of ${slides.length}`));
-  if (dialog.open && showing) {
-    const i = pieces.indexOf(showing);
-    track.scrollTo({left: slides[i].offsetLeft - track.offsetLeft - (track.clientWidth - slides[i].clientWidth) / 2, behavior: "instant"});
-    slides[index]?.querySelector("img")?.removeAttribute("id");
-    index = -1;
-    present(i, true);
-  }
-}
 
 /* The work on show, for modules that start listening after it opened. */
 export const currentPiece = () => (dialog.open && index >= 0 ? pieces[index] : null);

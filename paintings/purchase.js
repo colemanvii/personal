@@ -4,10 +4,11 @@
  * fallback; paintings/gallery.js owns the viewer. This script asks Shopify
  * for live price, images and availability, marks each wall label, and fills
  * the viewer's sale line: availability and price, and for available works one
- * quiet action. Shopify decides what is for sale; the page never overrides it. */
+ * quiet action. Shopify decides what is for sale; the page decides where each
+ * work hangs. */
 import {fetchProducts, addToCart, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage, cartStore} from "/assets/js/storefront.js";
 import {mountCart, openCart, setLineDescriber} from "/assets/js/cart.js";
-import {setImage, titleOf, detailsOf, numberOf, currentPiece, syncOrder} from "/paintings/gallery.js";
+import {setImage, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
 
 const FRESH_FOR = 60 * 1000;
 const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
@@ -226,35 +227,14 @@ if (currentPiece()) showPiece(currentPiece()); // opened from a shared link befo
 dialog.addEventListener("close", () => { current = null; });
 cartStore.subscribe(() => { if (current && !panel.hidden) renderPanel(); });
 
-/* ---------- Sections: Available Works, then the Selected Archive ----------
-   The page is published with each work in the section Shopify reported when
-   it was built, so nothing moves while inventory loads. Once Shopify answers,
-   a work moves only if its availability has changed. If Shopify cannot be
-   reached, the published arrangement stays and nothing is offered for sale. */
-
-const availableGrid = document.querySelector(".gallery-available");
-const archiveGrid = document.querySelector(".gallery-archive");
-
-function setCount(grid) {
-  const count = grid.children.length;
-  grid.closest(".collection").hidden = count === 0;
-  grid.closest(".collection").querySelector(".section-count").textContent = `${count} ${count === 1 ? "work" : "works"}`;
-}
-
-function arrange() {
-  if (loadState !== "ready") return;
-  const byNumber = (a, b) => numberOf(a).localeCompare(numberOf(b));
-  const forSale = pieces.filter(p => products.get(p.dataset.handle)?.availableForSale).sort(byNumber);
-  const archive = pieces.filter(p => !forSale.includes(p)).sort(byNumber);
-  const placed = grid => [...grid.children];
-  const same = (a, b) => a.length === b.length && a.every((p, i) => p === b[i]);
-  if (same(placed(availableGrid), forSale) && same(placed(archiveGrid), archive)) return;
-  availableGrid.append(...forSale);
-  archiveGrid.append(...archive);
-  setCount(availableGrid);
-  setCount(archiveGrid);
-  syncOrder();
-}
+/* ---------- Curation and commerce ----------
+   The page's HTML decides where every work hangs: Available Works or the
+   Selected Archive, its order and its number. Shopify never moves a work.
+   It decides only each work's live state: the wall label, price, and
+   whether it can be added to the cart. A work that sells shows SOLD where
+   it hangs until the page is deliberately republished with it in the
+   archive. If Shopify cannot be reached, the composition is unchanged and
+   nothing is offered for sale. */
 
 /* ---------- Wall labels: a quiet state, never a price ---------- */
 
@@ -296,7 +276,6 @@ async function loadProducts() {
     loadState = "error";
   }
   pieces.forEach(renderCaption);
-  arrange();
   if (current) showPiece(current.piece);
 }
 
@@ -307,11 +286,14 @@ async function refresh(handle) {
     if (!product) return;
     products.set(handle, product);
     renderCaption(pieceFor(handle));
-    arrange();
     if (current?.piece.dataset.handle === handle) {
       current.product = product;
-      if (!findVariant(product, current.selection)?.availableForSale) current.selection = initialSelection(product);
-      renderPanel();
+      // No longer for sale: show it as sold where it hangs, with no action.
+      if (!product.availableForSale) showPiece(current.piece);
+      else {
+        if (!findVariant(product, current.selection)?.availableForSale) current.selection = initialSelection(product);
+        renderPanel();
+      }
     }
   } catch (_) {
     // Keep the last known state; Shopify still validates at cart and checkout.

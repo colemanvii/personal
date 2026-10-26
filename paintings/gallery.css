@@ -68,7 +68,6 @@
    after whitespace and a fine rule and keeps the approved grids. Available
    works get a little more room and a fuller label (medium and size); still
    no price on the wall. */
-.paintings .collection[hidden]{display:none}
 .paintings .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:0 0 30px}
 .paintings .section-head h2{display:flex;align-items:baseline;gap:14px;margin:0;font:400 15px/1.3 var(--sans);letter-spacing:-.02em}
 .paintings .section-head h2 span,.paintings .section-count{font:11px/1.3 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
