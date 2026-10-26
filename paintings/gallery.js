@@ -121,8 +121,9 @@ dialog.addEventListener("close", () => {
   pieces[index]?.querySelector(".image-button").focus({preventScroll: true});
   index = -1;
 });
-dialog.addEventListener("keydown", event => {
-  if (event.target.closest("input, select, textarea")) return;
+/* Listen on the document: focus can leave the dialog when a step link hides at either end. */
+document.addEventListener("keydown", event => {
+  if (!dialog.open || event.target.closest("input, select, textarea")) return;
   if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
   if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
 });

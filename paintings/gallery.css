@@ -3,6 +3,9 @@
    plate; on iPhone the collection is two even columns. Everywhere, a work
    opens as a plate with its wall label. */
 
+/* Approved crops arrive as an iPhone-only <source>; the picture element adds no box of its own. */
+.paintings .image-button picture{display:contents}
+
 /* The site's crosshair stays over the work. */
 .paintings .image-button,.paintings dialog button{cursor:inherit}
 
@@ -13,7 +16,7 @@
 .paintings .sale[data-state="available"]{color:var(--ink)}
 .paintings .sale[data-state="sold"]::before,#detail-state[data-state="sold"]::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}
 .paintings .sale[data-live="pending"]{opacity:.35}
-.sale-open{appearance:none;-webkit-appearance:none;position:relative;background:none;border:0;border-radius:0;padding:15px 0;margin:-15px 0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:inherit;touch-action:manipulation}
+.sale-open{appearance:none;-webkit-appearance:none;position:relative;background:none;border:0;border-radius:0;padding:16px 0;margin:-16px 0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:inherit;touch-action:manipulation}
 .sale-open:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(hover:hover){.sale-open:hover{color:var(--accent)}}
 

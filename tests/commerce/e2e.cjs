@@ -103,13 +103,22 @@ async function minTarget(locator, label) {
   assert.ok(box && box.height >= 44, `${label} is ${box && box.height}px tall; needs 44px`);
 }
 const viewerName = page => page.locator("#detail-name").innerText();
+/* A real touch drag across the painting strip, through Chromium's input pipeline,
+   so the strip's own scroll snapping decides where it lands. dx < 0 drags left. */
 async function swipe(page, dx) {
-  await page.evaluate(dx => {
-    const target = document.querySelector("#painting-detail .full-art");
-    const at = x => [new Touch({identifier: 1, target, clientX: x, clientY: 300})];
-    target.dispatchEvent(new TouchEvent("touchstart", {touches: at(200), changedTouches: at(200), bubbles: true}));
-    target.dispatchEvent(new TouchEvent("touchend", {touches: [], changedTouches: at(200 + dx), bubbles: true}));
-  }, dx);
+  const before = await viewerName(page);
+  const box = await page.locator(".viewer-track").boundingBox();
+  const x = Math.round(box.x + box.width / 2 - dx / 2), y = Math.round(box.y + box.height / 2);
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Input.dispatchTouchEvent", {type: "touchStart", touchPoints: [{x, y}]});
+  for (let step = 1; step <= 10; step++) {
+    await cdp.send("Input.dispatchTouchEvent", {type: "touchMove", touchPoints: [{x: Math.round(x + dx * step / 10), y}]});
+    await page.waitForTimeout(16);
+  }
+  await cdp.send("Input.dispatchTouchEvent", {type: "touchEnd", touchPoints: []});
+  await cdp.detach();
+  await page.waitForFunction(b => document.getElementById("detail-name").textContent !== b, before, {timeout: 2000}).catch(() => {});
+  await page.waitForTimeout(250);
 }
 
 /* Replace Shopify's answer for one operation, pass everything else through. */
@@ -164,10 +173,17 @@ async function run() {
       await noHorizontalScroll(page);
       await shot(page, `${viewport}-1-gallery`);
       if (viewport === "iphone") {
-        // A sequence of plates: each painting spans the text column, and the page scrolls.
-        const width = (await page.locator(".piece .image-button").first().boundingBox()).width;
-        assert.ok(width >= 393 - 36 - 1, `plate is only ${width}px wide`);
-        assert.ok(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight * 4), "gallery does not scroll");
+        // Direction 02: two even columns of 4:5 plates.
+        const boxes = await page.locator(".piece .image-button").evaluateAll(els => els.slice(0, 2).map(el => el.getBoundingClientRect().toJSON()));
+        assert.ok(Math.abs(boxes[0].width - (393 - 36 - 14) / 2) <= 1, `plate is ${boxes[0].width}px wide`);
+        assert.ok(Math.abs(boxes[0].height / boxes[0].width - 1.25) < 0.01, "plates are not 4:5");
+        assert.equal(Math.round(boxes[0].top), Math.round(boxes[1].top), "the first two works do not share a row");
+        // Approved crops reach the thumbnails only; held works keep their original framing.
+        await page.$$eval(".gallery img", imgs => imgs.forEach(img => { img.loading = "eager"; }));
+        await page.waitForFunction(() => [...document.querySelectorAll(".gallery img")].every(img => img.complete && img.currentSrc), null, {timeout: 20000});
+        const framing = await page.$$eval(".piece", ps => Object.fromEntries(ps.map(p => [p.dataset.handle, p.querySelector(".image-button img").currentSrc.includes("crop=region")])));
+        for (const handle of ["peach-circuit", "red-sea", "flowers-in-mccarty-vase"]) assert.equal(framing[handle], false, `${handle} is cropped but held`);
+        assert.equal(Object.values(framing).filter(Boolean).length, 11, "expected 11 cropped thumbnails");
         await minTarget(page.locator('.piece[data-handle="red-sea"] .sale-open'), "Available label");
         await page.locator('.piece[data-handle="red-sea"]').scrollIntoViewIfNeeded();
         await shot(page, `${viewport}-1b-gallery-available`);
@@ -186,6 +202,13 @@ async function run() {
       assert.equal(await page.locator("#detail-number").innerText(), "01 / 14");
       // Harvest 1 has two photographs in Shopify; both can be examined.
       assert.equal(await page.locator(".buy-views button").count(), 2);
+      // The viewer shows the original photograph, never the gallery crop.
+      const viewed = await page.locator("#detail-image").evaluate(img => img.currentSrc || img.src);
+      assert.ok(!viewed.includes("crop="), `viewer shows a crop: ${viewed}`);
+      if (viewport === "desktop") {
+        const thumb = await page.locator('.piece[data-handle="harvest"] .image-button img').evaluate(img => img.currentSrc);
+        assert.ok(!thumb.includes("crop="), "desktop gallery uses a crop");
+      }
       await shot(page, `${viewport}-2-sold`);
     }));
 
@@ -195,24 +218,29 @@ async function run() {
       await page.locator("#detail-next").click();
       assert.equal(await viewerName(page), "Porter Study");
       await page.locator("#detail-prev").click();
-      await page.locator("#detail-prev").click();
-      assert.equal(await viewerName(page), "Flowers in McCarty Vase", "previous from the first work wraps to the last");
-      assert.equal(new URL(page.url()).hash, "#flowers-in-mccarty-vase");
+      assert.equal(await viewerName(page), "Harvest 1");
+      assert.equal(new URL(page.url()).hash, "#harvest");
+      // The neighbouring works are named; the first work has nothing before it.
+      assert.equal(await page.locator("#detail-prev").isHidden(), true);
+      assert.equal(await page.locator("#detail-next").innerText(), "Porter Study →");
       if (viewport === "iphone") {
-        await swipe(page, -120);
-        assert.equal(await viewerName(page), "Harvest 1", "swipe left shows the next work");
-        await swipe(page, 120);
-        assert.equal(await viewerName(page), "Flowers in McCarty Vase", "swipe right shows the previous work");
-        await swipe(page, -20);
-        assert.equal(await viewerName(page), "Flowers in McCarty Vase", "a small drag does not move");
+        await swipe(page, -260);
+        assert.equal(await viewerName(page), "Porter Study", "dragging left shows the next work");
+        assert.equal(new URL(page.url()).hash, "#porter-study");
+        await swipe(page, 260);
+        assert.equal(await viewerName(page), "Harvest 1", "dragging right shows the previous work");
         await minTarget(page.locator("#detail-next"), "Next");
         await minTarget(page.locator("#detail-close"), "Close");
       } else {
         await page.keyboard.press("ArrowRight");
-        assert.equal(await viewerName(page), "Harvest 1");
+        assert.equal(await viewerName(page), "Porter Study");
         await page.keyboard.press("ArrowLeft");
-        assert.equal(await viewerName(page), "Flowers in McCarty Vase");
+        assert.equal(await viewerName(page), "Harvest 1");
       }
+      await page.evaluate(() => document.getElementById("detail-close").click());
+      await page.locator('.piece[data-handle="flowers-in-mccarty-vase"] .image-button').click();
+      await page.locator("#painting-detail[open]").waitFor();
+      assert.equal(await page.locator("#detail-next").isHidden(), true, "the last work has nothing after it");
       await page.locator("#detail-close").click();
       // The dialog's close event, which clears the link, arrives just after the click.
       await page.waitForFunction(() => !document.getElementById("painting-detail").open && !location.hash, null, {timeout: 2000});
@@ -238,10 +266,12 @@ async function run() {
       assert.equal(await add.innerText(), "Add to cart");
       await shot(page, `${viewport}-3-available`);
       if (viewport === "iphone") {
-        // The painting comes first; the label begins on the first screen.
-        await onScreen(page, page.locator("#detail-name"), "Title");
-        await add.scrollIntoViewIfNeeded();
-        await onScreen(page, add, "Add to cart");
+        // The painting first, and its whole label with the action on the same screen.
+        for (const [selector, name] of [["#detail-name", "Title"], ["#detail-price", "Price"], ["#detail-info", "Size"], ["#detail-state", "Availability"], [".buy-add", "Add to cart"]]) {
+          await onScreen(page, page.locator(selector), name);
+        }
+        const slide = await page.locator("#detail-image").boundingBox();
+        assert.ok(slide.width >= 330, `painting is only ${slide.width}px wide`);
         await minTarget(add, "Add to cart");
         await shot(page, `${viewport}-3b-available-label`);
       }
