@@ -9,7 +9,7 @@
   --mono:Monaco,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box}
-html{background:var(--paper);color:var(--ink)}
+html{background:var(--paper);color:var(--ink);font-variant-emoji:text}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:none;text-rendering:geometricPrecision;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' viewBox='0 0 29 29'%3E%3Cpath d='M14.5 1v27M1 14.5h27' stroke='%23171715' stroke-width='1.2'/%3E%3Ccircle cx='14.5' cy='14.5' r='2.2' fill='%238f251e'/%3E%3C/svg%3E") 14 14, crosshair}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit;text-decoration:none;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' viewBox='0 0 29 29'%3E%3Cpath d='M14.5 1v27M1 14.5h27' stroke='%23171715' stroke-width='1.2'/%3E%3Ccircle cx='14.5' cy='14.5' r='2.2' fill='%238f251e'/%3E%3C/svg%3E") 14 14, crosshair}
