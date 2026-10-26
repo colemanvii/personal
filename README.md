@@ -45,6 +45,13 @@ node --test tests/commerce/unit.test.mjs
 node tests/commerce/e2e.cjs   # needs the local server above and Playwright; creates and empties a real cart, never places an order
 ```
 
+Site checks: arrows such as ↗ and ↔ always carry U+FE0E so iOS draws them as type, never emoji, and the About page keeps its colophon, email and Instagram links.
+
+```sh
+node --test tests/site/arrows.test.mjs
+node tests/site/about.e2e.cjs   # needs the local server above and Playwright; BASE_URL=https://colecalfee.com checks production
+```
+
 Keep the presentation simple, personable, and static. Add real work before adding more interface. Check home and all discipline routes on desktop and mobile before publishing.
 
 This is the current portfolio repository. Older site experiments belong in `colemanvii/colemanvii`.
