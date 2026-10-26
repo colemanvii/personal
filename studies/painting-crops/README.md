@@ -13,17 +13,17 @@ uncropped photographs.
   than the photograph, never upscaled; proposes no crop under 15% gain.
 - `crops.json`: the proposed regions (output of `plan.py`).
 
-Applied provisionally (26 Oct 2026) to the iPhone gallery thumbnails only:
+Applied provisionally (26 Oct 2026) to the gallery thumbnails, on iPhone and desktop:
 
 - `approved.json`: which crops are used (11) and which are held at their
   original framing (Peach Circuit, Red Sea, Flowers in McCarty Vase), with
   reasons.
 - `apply.py`: writes approved crops into `paintings/index.html` as an
-  iPhone-only `<source>` beside the untouched original. To revert a crop,
+  `<source>` beside the untouched original. To revert a crop,
   move its handle to `held` and run
   `python3 studies/painting-crops/apply.py paintings/index.html`.
 
-Desktop and the enlarged viewer always use the original photographs.
+The enlarged viewer always uses the original photographs.
 
 Checked on 26 Oct 2026: Shopify's crops match a local crop of each original
 to within JPEG noise (mean difference 0.4/255 or less), and crops smaller
