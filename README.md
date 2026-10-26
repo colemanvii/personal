@@ -47,7 +47,7 @@ node tests/commerce/e2e.cjs   # needs the local server above and Playwright; cre
 
 ## Contact form
 
-The note form on About posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.js`) on the same domain. It sends each note to colecalfee@gmail.com through Resend, from `contact@colecalfee.com`, with the visitor's address as Reply-To. The Resend key lives only in Cloudflare: Pages project → Settings → Variables and Secrets → `RESEND_API_KEY` (encrypted), set for both Production and Preview. Without it the endpoint answers 503 and the page says the note could not be sent; it never reports success unless Resend accepted the note. Spam protection is server-side: a hidden honeypot field, a minimum time on the page, a same-site Origin check, and size limits. (`api/contact.js` is the older Vercel version and is not used by colecalfee.com.)
+The note form on About posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.js`) on the same domain. It sends each note to colecalfee@gmail.com through Resend, from `contact@colecalfee.com`, with the visitor's address as Reply-To. The Resend key lives only in Cloudflare: Pages project → Settings → Variables and Secrets → `RESEND_API_KEY` (encrypted), set for both Production and Preview. Without it the endpoint answers 503 and the page says the note could not be sent; it never reports success unless Resend accepted the note. Spam protection is server-side: a hidden honeypot field, a minimum time on the page, a same-site Origin check, and size limits.
 
 ```sh
 node --test tests/site/contact.test.mjs   # the endpoint, with Resend stubbed
