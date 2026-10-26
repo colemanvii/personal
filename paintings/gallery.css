@@ -39,15 +39,15 @@
   .paintings .image-button{display:block;width:100%;height:auto;aspect-ratio:4/5;padding:0;overflow:visible;touch-action:manipulation}
   .paintings .image-button img{width:100%;height:100%;max-height:none;object-fit:contain}
   .paintings .caption{display:block;margin-top:9px;padding-top:0;min-height:0;border:0}
-  .paintings .caption::before{content:counter(plate,decimal-leading-zero);display:block;font:10px/1.3 var(--mono);color:var(--muted);margin-bottom:4px}
-  .paintings .caption h2{font:400 13px/1.25 var(--sans);letter-spacing:-.02em;text-transform:none;margin:0}
+  .paintings .caption::before{content:attr(data-number);display:block;font:10px/1.3 var(--mono);color:var(--muted);margin-bottom:4px}
+  .paintings .caption h3{font:400 13px/1.25 var(--sans);letter-spacing:-.02em;text-transform:none;margin:0}
   .paintings .caption p{display:none}
   .paintings .sale{display:block;font:10px/1.3 var(--mono);margin:5px 0 0;white-space:nowrap}
 }
 
 /* ---------- Desktop: the collection, given room ----------
-   The page scrolls; paintings are large, even 4:5 plates in three columns
-   (four as a comparison study), each with a one-line wall label: number,
+   The page scrolls; paintings are large, even 4:5 plates in three columns,
+   each with a one-line wall label: number,
    title, state. Same crops and labels as the approved iPhone gallery. */
 @media(min-width:701px){
   body.paintings,.paintings .shell{height:auto;overflow:visible}
@@ -58,14 +58,31 @@
   .paintings .image-button{display:block;width:100%;height:auto;aspect-ratio:4/5;padding:0;overflow:visible}
   .paintings .image-button img{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
   .paintings .caption{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:14px;align-items:baseline;margin-top:14px;padding-top:0;min-height:0;border:0}
-  .paintings .caption::before{content:counter(plate,decimal-leading-zero);font:11px/1.3 var(--mono);color:var(--muted)}
-  .paintings .caption h2{font:400 15px/1.3 var(--sans);letter-spacing:-.02em;text-transform:none;margin:0}
+  .paintings .caption::before{content:attr(data-number);font:11px/1.3 var(--mono);color:var(--muted)}
+  .paintings .caption h3{font:400 15px/1.3 var(--sans);letter-spacing:-.02em;text-transform:none;margin:0}
   .paintings .caption p{display:none}
   .paintings .sale{font:11px/1.3 var(--mono);margin:0;white-space:nowrap}
 }
-/* Study: four columns, from 1100 px wide (paintings/desktop-study.js, ?cols=4). */
-@media(min-width:1100px){
-  html[data-cols="4"] .paintings .gallery{--cols:4;column-gap:clamp(24px,2.6vw,44px);row-gap:clamp(48px,5vw,80px)}
+/* ---------- Sections: Available Works, then the Selected Archive ----------
+   A quiet heading for each: section number, name, count. The archive opens
+   after whitespace and a fine rule and keeps the approved grids. Available
+   works get a little more room and a fuller label (medium and size); still
+   no price on the wall. */
+.paintings .collection[hidden]{display:none}
+.paintings .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:0 0 30px}
+.paintings .section-head h2{display:flex;align-items:baseline;gap:14px;margin:0;font:400 15px/1.3 var(--sans);letter-spacing:-.02em}
+.paintings .section-head h2 span,.paintings .section-count{font:11px/1.3 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.paintings #selected-archive{margin-top:clamp(88px,9vw,136px);padding-top:16px;border-top:1px solid var(--rule)}
+.paintings .gallery-available .caption p{display:block;font:11px/1.45 var(--mono);color:var(--muted);text-transform:none;letter-spacing:0;margin:4px 0 0}
+
+@media(min-width:701px){
+  .paintings .gallery-available{--cols:2;max-width:80%;column-gap:clamp(36px,4.4vw,72px)}
+}
+@media(max-width:700px){
+  .paintings .section-head{margin-bottom:22px}
+  .paintings #selected-archive{margin-top:72px;padding-top:14px}
+  .paintings .gallery-available{grid-template-columns:1fr;row-gap:44px}
+  .paintings .gallery-available .caption h3{font-size:15px}
 }
 
 /* ---------- The individual view: a monograph page ----------

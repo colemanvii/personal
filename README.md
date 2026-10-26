@@ -36,6 +36,8 @@ colecalfee.com is the whole storefront; Shopify (`241880-3.myshopify.com`) is on
 - `assets/css/commerce.css` — purchase panel and cart styles
 - `paintings/purchase.js` — live captions and the purchase panel in the enlarged view
 
+The paintings page has two sections: Available Works and the Selected Archive. Each work is published in the section Shopify last reported, so nothing moves while inventory loads; when Shopify answers, any work whose availability changed moves to the other section, in catalogue order. If Shopify cannot be reached the published arrangement stays and nothing is offered for sale. After inventory changes, move the work's `<article>` to its new section in `paintings/index.html` so the published page matches again. Each work keeps its catalogue number (`data-number` on its caption) wherever it appears.
+
 Each gallery work names its Shopify product with `data-handle`. Shopify decides what is for sale. Tag a product `edition` (or give it a product type containing "print") to sell it in quantity with variant options; anything else is treated as a one-of-a-kind original.
 
 ```sh

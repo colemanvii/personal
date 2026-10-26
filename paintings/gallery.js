@@ -4,9 +4,14 @@
  * so a swipe on iPhone moves the next work in under the finger. The label
  * follows whichever painting is centred. Buttons and arrow keys move one work
  * at a time. Anything that adds to a work's label, such as purchasing,
- * listens for "painting:show" and reads the piece from the event. */
+ * listens for "painting:show" and reads the piece from the event.
+ *
+ * The viewer follows the page: Available Works first, then the Selected
+ * Archive. When a work moves between sections, syncOrder() updates the
+ * sequence; each work keeps its own catalogue number throughout. */
 
-const pieces = [...document.querySelectorAll(".gallery .piece")];
+const allPieces = () => [...document.querySelectorAll(".gallery .piece")];
+let pieces = allPieces();
 const dialog = document.getElementById("painting-detail");
 const track = dialog.querySelector(".viewer-track");
 const scroller = dialog.querySelector(".full");
@@ -27,9 +32,9 @@ function source(img, url) {
   img.sizes = "(max-width: 700px) 100vw, 66vw";
 }
 
-export const titleOf = piece => piece.querySelector(".caption h2").textContent;
+export const titleOf = piece => piece.querySelector(".caption h3").textContent;
 export const detailsOf = piece => piece.querySelector(".caption p")?.textContent || "";
-export const numberOf = piece => String(pieces.indexOf(piece) + 1).padStart(2, "0");
+export const numberOf = piece => piece.querySelector(".caption").dataset.number;
 
 /* "Oil on canvas · 36 × 48 in." becomes a medium line and a size line with
    centimetres, as a monograph sets them. A year shows only when a work has
@@ -41,8 +46,9 @@ export function partsOf(piece) {
   return {medium, size: size ? size + cm : "", year: piece.dataset.year || ""};
 }
 
-/* One slide per work; images load as they come near. */
-const slides = pieces.map((piece, i) => {
+/* One slide per work, kept with its work; images load as they come near. */
+const slideFor = new Map();
+let slides = pieces.map((piece, i) => {
   const original = piece.querySelector(".image-button img");
   const slide = document.createElement("figure");
   slide.className = "viewer-slide";
@@ -56,6 +62,7 @@ const slides = pieces.map((piece, i) => {
   source(img, original.getAttribute("src"));
   slide.append(img);
   track.append(slide);
+  slideFor.set(piece, slide);
   return slide;
 });
 
@@ -76,8 +83,8 @@ function label(button, i, arrow) {
 }
 
 /* Fill the label for the centred work and tell listeners. */
-function present(i) {
-  if (i === index) return;
+function present(i, force = false) {
+  if (i === index && !force) return;
   slides[index]?.querySelector("img")?.removeAttribute("id");
   index = i;
   const piece = pieces[i];
@@ -126,7 +133,7 @@ track.addEventListener("scroll", () => {
   }, 80);
 }, {passive: true});
 
-pieces.forEach((piece, i) => piece.querySelector(".image-button").addEventListener("click", () => go(i)));
+pieces.forEach(piece => piece.querySelector(".image-button").addEventListener("click", () => go(pieces.indexOf(piece))));
 prev.addEventListener("click", () => go(index - 1));
 next.addEventListener("click", () => go(index + 1));
 document.getElementById("detail-close").addEventListener("click", () => dialog.close());
@@ -142,6 +149,22 @@ document.addEventListener("keydown", event => {
   if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
   if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
 });
+
+/* Re-read the page order after works move between sections. */
+export function syncOrder() {
+  const showing = pieces[index];
+  pieces = allPieces();
+  slides = pieces.map(piece => slideFor.get(piece));
+  track.append(...slides);
+  slides.forEach((slide, n) => slide.setAttribute("aria-label", `${n + 1} of ${slides.length}`));
+  if (dialog.open && showing) {
+    const i = pieces.indexOf(showing);
+    track.scrollTo({left: slides[i].offsetLeft - track.offsetLeft - (track.clientWidth - slides[i].clientWidth) / 2, behavior: "instant"});
+    slides[index]?.querySelector("img")?.removeAttribute("id");
+    index = -1;
+    present(i, true);
+  }
+}
 
 /* The work on show, for modules that start listening after it opened. */
 export const currentPiece = () => (dialog.open && index >= 0 ? pieces[index] : null);

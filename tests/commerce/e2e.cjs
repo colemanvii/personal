@@ -173,8 +173,8 @@ async function run() {
       await noHorizontalScroll(page);
       await shot(page, `${viewport}-1-gallery`);
       if (viewport === "iphone") {
-        // Direction 02: two even columns of 4:5 plates.
-        const boxes = await page.locator(".piece .image-button").evaluateAll(els => els.slice(0, 2).map(el => el.getBoundingClientRect().toJSON()));
+        // Direction 02: the archive in two even columns of 4:5 plates.
+        const boxes = await page.locator(".gallery-archive .piece .image-button").evaluateAll(els => els.slice(0, 2).map(el => el.getBoundingClientRect().toJSON()));
         assert.ok(Math.abs(boxes[0].width - (393 - 36 - 14) / 2) <= 1, `plate is ${boxes[0].width}px wide`);
         assert.ok(Math.abs(boxes[0].height / boxes[0].width - 1.25) < 0.01, "plates are not 4:5");
         assert.equal(Math.round(boxes[0].top), Math.round(boxes[1].top), "the first two works do not share a row");
@@ -210,7 +210,7 @@ async function run() {
       assert.ok(!viewed.includes("crop="), `viewer shows a crop: ${viewed}`);
       if (viewport === "desktop") {
         const thumb = await page.locator('.piece[data-handle="harvest"] .image-button img').evaluate(img => img.currentSrc);
-        assert.ok(!thumb.includes("crop="), "desktop gallery uses a crop");
+        assert.ok(thumb.includes("crop=region"), "desktop thumbnail lacks its approved crop");
       }
       await shot(page, `${viewport}-2-sold`);
     }));
@@ -223,8 +223,8 @@ async function run() {
       await page.locator("#detail-prev").click();
       assert.equal(await viewerName(page), "Harvest 1");
       assert.equal(new URL(page.url()).hash, "#harvest");
-      // The neighbouring works are named; the first work has nothing before it.
-      assert.equal(await page.locator("#detail-prev").isHidden(), true);
+      // The neighbouring works are named, across sections.
+      assert.equal(await page.locator("#detail-prev").innerText(), "← Flowers in McCarty Vase");
       assert.equal(await page.locator("#detail-next").innerText(), "Porter Study →");
       if (viewport === "iphone") {
         await swipe(page, -260);
@@ -240,9 +240,18 @@ async function run() {
         await page.keyboard.press("ArrowLeft");
         assert.equal(await viewerName(page), "Harvest 1");
       }
+      // The sequence follows the page: Available Works, then the archive, numbers kept.
       await page.evaluate(() => document.getElementById("detail-close").click());
-      await page.locator('.piece[data-handle="flowers-in-mccarty-vase"] .image-button').click();
-      await page.locator("#painting-detail[open]").waitFor();
+      await open(page, "red-sea");
+      assert.equal(await page.locator("#detail-prev").isHidden(), true, "the first work on the page has nothing before it");
+      assert.equal(await page.locator("#detail-number").innerText(), "13 / 14");
+      await page.locator("#detail-next").click();
+      assert.equal(await viewerName(page), "Flowers in McCarty Vase");
+      await page.locator("#detail-next").click();
+      assert.equal(await viewerName(page), "Harvest 1", "the archive follows the available works");
+      assert.equal(await page.locator("#detail-number").innerText(), "01 / 14");
+      await page.evaluate(() => document.getElementById("detail-close").click());
+      await open(page, "peach-circuit");
       assert.equal(await page.locator("#detail-next").isHidden(), true, "the last work has nothing after it");
       await page.locator("#detail-close").click();
       // The dialog's close event, which clears the link, arrives just after the click.
@@ -348,6 +357,86 @@ async function run() {
     }));
   }
 
+  for (const viewport of ["desktop", "iphone"]) {
+    await test(`live/${viewport}: Available Works and the archive follow Shopify, numbers kept`, () => withPage(viewport, async page => {
+      await ready(page);
+      const handles = await page.$$eval(".piece[data-handle]", ps => ps.map(p => p.dataset.handle));
+      const truth = await shopifyTruth(page, handles);
+      const section = sel => page.$$eval(`${sel} .piece`, ps => ps.map(p => [p.dataset.handle, p.querySelector(".caption").dataset.number]));
+      const available = await section(".gallery-available"), archive = await section(".gallery-archive");
+      assert.deepEqual(available.map(([h]) => h).sort(), handles.filter(h => truth[h].available).sort(), "Available Works differs from Shopify");
+      assert.deepEqual(archive.map(([h]) => h).sort(), handles.filter(h => !truth[h].available).sort(), "the archive differs from Shopify");
+      for (const list of [available, archive]) assert.deepEqual(list.map(([, n]) => n), list.map(([, n]) => n).sort(), "a section is out of catalogue order");
+      assert.equal(await page.locator("#available-works .section-count").innerText(), `${available.length} WORKS`);
+      assert.equal(await page.locator("#selected-archive .section-count").innerText(), `${archive.length} WORKS`);
+      assert.equal(await page.locator('.piece[data-handle="red-sea"] .caption').getAttribute("data-number"), "13");
+      if (viewport === "iphone") {
+        const plate = await page.locator(".gallery-available .image-button").first().boundingBox();
+        assert.ok(plate.width >= 393 - 36 - 1, "available works lack presence on iPhone");
+      } else {
+        const [a, b] = await Promise.all([".gallery-available", ".gallery-archive"].map(s => page.locator(`${s} .image-button`).first().boundingBox()));
+        assert.ok(a.width > b.width * 1.1 && a.width < b.width * 1.5, `available ${a.width}px vs archive ${b.width}px`);
+      }
+    }));
+  }
+
+  await test("mocked/iphone: nothing moves while inventory loads when Shopify agrees with the page", () => withPage("iphone", async page => {
+    await page.route(API, async route => { await new Promise(r => setTimeout(r, 1500)); await route.continue(); });
+    await page.goto(`${BASE}/paintings/`);
+    await page.locator('.sale[data-live="pending"]').first().waitFor();
+    const where = () => page.$$eval(".piece", ps => ps.map(p => { const r = p.getBoundingClientRect(); return [p.id, Math.round(r.top + scrollY), Math.round(r.left)]; }));
+    const before = await where();
+    await page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]'), null, {timeout: 20000});
+    assert.deepEqual(await where(), before, "works moved while inventory loaded");
+  }));
+
+  for (const viewport of ["desktop", "iphone"]) {
+    await test(`mocked/${viewport}: works move between sections when Shopify inventory changes`, () => withPage(viewport, async page => {
+      // Shopify reports Red Sea sold and Harvest 1 available again.
+      await intercept(page, (body, json) => {
+        if (!body.query.startsWith("query Works")) return;
+        for (const [alias, handle] of Object.entries(body.variables)) {
+          const product = json.data["w" + alias.slice(1)];
+          if (!product) continue;
+          const available = handle === "red-sea" ? false : handle === "harvest" ? true : product.availableForSale;
+          product.availableForSale = available;
+          product.variants.nodes.forEach(v => { v.availableForSale = available; });
+        }
+      });
+      await ready(page);
+      const numbers = sel => page.$$eval(`${sel} .caption`, cs => cs.map(c => c.dataset.number));
+      assert.deepEqual(await numbers(".gallery-available"), ["01", "14"]);
+      assert.deepEqual(await numbers(".gallery-archive"), ["02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"]);
+      assert.equal(await caption(page, "red-sea").innerText(), "SOLD");
+      assert.equal(await caption(page, "harvest").innerText(), "AVAILABLE");
+      await open(page, "harvest");
+      assert.equal(await page.locator("#detail-number").innerText(), "01 / 14", "Harvest 1 lost its number");
+      assert.equal(await page.locator(".buy-add").innerText(), "Add to cart");
+      await page.locator("#detail-next").click();
+      assert.equal(await viewerName(page), "Flowers in McCarty Vase");
+      await page.locator("#detail-next").click();
+      assert.equal(await viewerName(page), "Porter Study");
+      await page.evaluate(() => document.getElementById("detail-close").click());
+      await open(page, "red-sea");
+      assert.equal(await page.locator("#detail-state").innerText(), "SOLD");
+      assert.equal(await page.locator("#detail-action").isHidden(), true, "a sold work is offered for sale");
+    }));
+  }
+
+  await test("mocked/desktop: with nothing for sale, Available Works disappears", () => withPage("desktop", async page => {
+    await intercept(page, (body, json) => {
+      if (!body.query.startsWith("query Works")) return;
+      for (const key of Object.keys(json.data)) if (json.data[key]) {
+        json.data[key].availableForSale = false;
+        json.data[key].variants.nodes.forEach(v => { v.availableForSale = false; });
+      }
+    });
+    await ready(page);
+    assert.equal(await page.locator("#available-works").isHidden(), true);
+    assert.equal(await page.locator(".gallery-archive .piece").count(), 14);
+    assert.equal(await page.locator("#selected-archive .section-count").innerText(), "14 WORKS");
+  }));
+
   await test("live/desktop: a stale cart id starts a fresh cart", () => withPage("desktop", async page => {
     await page.goto(`${BASE}/paintings/`);
     await page.evaluate(() => localStorage.setItem("cc-shopify-cart", "gid://shopify/Cart/doesnotexist000?key=abc"));
@@ -375,7 +464,13 @@ async function run() {
     await page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]'));
     assert.equal(await caption(page, "red-sea").innerText(), "INQUIRE");
     assert.equal(await caption(page, "harvest").innerText(), "SOLD");
+    // The published arrangement stays; nothing can be bought until Shopify confirms it.
+    assert.deepEqual(await page.$$eval(".gallery-available .piece", ps => ps.map(p => p.id)), ["red-sea", "flowers-in-mccarty-vase"]);
+    await open(page, "harvest");
+    assert.equal(await page.locator(".buy-add", {hasText: "Add to cart"}).count(), 0, "a work is offered for sale without Shopify");
+    await page.evaluate(() => document.getElementById("detail-close").click());
     await open(page, "red-sea");
+    assert.equal(await page.locator(".buy-add", {hasText: "Add to cart"}).count(), 0, "a work is offered for sale without Shopify");
     await page.locator(".buy-status", {hasText: "Availability could not be loaded."}).waitFor();
     await page.unroute(API);
     await page.locator(".buy-add", {hasText: "Try again"}).click();
@@ -428,8 +523,12 @@ async function run() {
     await open(page, "red-sea");
     await page.locator(".buy-add", {hasText: "Add to cart"}).click();
     await page.locator(".buy-status", {hasText: "This work has just sold."}).waitFor();
-    await page.locator(".buy-add", {hasText: "Sold"}).waitFor();
+    // It becomes an archive work: sold, no action, its explanation still in view.
+    await page.locator("#detail-state", {hasText: "SOLD"}).waitFor();
+    assert.equal(await page.locator("#detail-action").isHidden(), true);
+    assert.equal(await page.locator(".buy-status").isVisible(), true, "the reason it sold vanished");
     assert.equal(await caption(page, "red-sea").innerText(), "SOLD");
+    assert.ok(await page.locator('.gallery-archive .piece[data-handle="red-sea"]').count(), "the sold work stayed in Available Works");
   }));
 
   await test("mocked/desktop: checkout is held when a cart line is no longer available", () => withPage("desktop", async page => {

@@ -7,7 +7,7 @@
  * quiet action. Shopify decides what is for sale; the page never overrides it. */
 import {fetchProducts, addToCart, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage, cartStore} from "/assets/js/storefront.js";
 import {mountCart, openCart, setLineDescriber} from "/assets/js/cart.js";
-import {setImage, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
+import {setImage, titleOf, detailsOf, numberOf, currentPiece, syncOrder} from "/paintings/gallery.js";
 
 const FRESH_FOR = 60 * 1000;
 const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
@@ -40,8 +40,9 @@ views.setAttribute("role", "group");
 views.setAttribute("aria-label", "More views");
 views.hidden = true;
 
-/* Options (print editions only) sit above the sale line; the action sits in it;
-   the status and a short note follow it. */
+/* Options (print editions only) sit above the sale line; the action sits in it.
+   Below it, a status line that stays visible even when a work has just sold,
+   and a short note shown only for works on sale. */
 const panel = document.createElement("section");
 panel.className = "buy";
 panel.hidden = true;
@@ -49,11 +50,13 @@ panel.setAttribute("aria-label", "Purchase options");
 panel.innerHTML = `<div class="buy-options"></div>`;
 const after = document.createElement("div");
 after.className = "buy-after";
-after.innerHTML = `
-  <p class="buy-status" role="status" aria-live="polite"></p>
-  <p class="buy-note">Shipping and taxes are calculated at checkout, through Shopify.</p>`;
+after.innerHTML = `<p class="buy-note">Shipping and taxes are calculated at checkout, through Shopify.</p>`;
+const status = document.createElement("p");
+status.className = "buy-status";
+status.setAttribute("role", "status");
+status.setAttribute("aria-live", "polite");
 sale.before(panel);
-sale.after(after);
+sale.after(status, after);
 more.prepend(views);
 
 const $ = selector => panel.querySelector(selector);
@@ -61,7 +64,6 @@ const addButton = document.createElement("button");
 addButton.type = "button";
 addButton.className = "buy-add";
 action.append(addButton);
-const status = after.querySelector(".buy-status");
 const say = message => {
   status.textContent = message || "";
   // Messages sit just below the sale line; make sure the visitor sees them.
@@ -205,8 +207,9 @@ function showCart() {
 
 function showPiece(piece) {
   const product = products.get(piece.dataset.handle) || null;
+  // Keep a message (such as "This work has just sold.") when the same work is shown again.
+  if (current?.piece !== piece) say("");
   current = {piece, product, selection: product ? initialSelection(product) : {}};
-  say("");
   const buyable = loadState !== "ready" || Boolean(product?.availableForSale);
   dialog.classList.toggle("is-buyable", buyable);
   panel.hidden = after.hidden = action.hidden = !buyable;
@@ -222,6 +225,36 @@ dialog.addEventListener("painting:show", event => showPiece(event.detail.piece))
 if (currentPiece()) showPiece(currentPiece()); // opened from a shared link before this module ran
 dialog.addEventListener("close", () => { current = null; });
 cartStore.subscribe(() => { if (current && !panel.hidden) renderPanel(); });
+
+/* ---------- Sections: Available Works, then the Selected Archive ----------
+   The page is published with each work in the section Shopify reported when
+   it was built, so nothing moves while inventory loads. Once Shopify answers,
+   a work moves only if its availability has changed. If Shopify cannot be
+   reached, the published arrangement stays and nothing is offered for sale. */
+
+const availableGrid = document.querySelector(".gallery-available");
+const archiveGrid = document.querySelector(".gallery-archive");
+
+function setCount(grid) {
+  const count = grid.children.length;
+  grid.closest(".collection").hidden = count === 0;
+  grid.closest(".collection").querySelector(".section-count").textContent = `${count} ${count === 1 ? "work" : "works"}`;
+}
+
+function arrange() {
+  if (loadState !== "ready") return;
+  const byNumber = (a, b) => numberOf(a).localeCompare(numberOf(b));
+  const forSale = pieces.filter(p => products.get(p.dataset.handle)?.availableForSale).sort(byNumber);
+  const archive = pieces.filter(p => !forSale.includes(p)).sort(byNumber);
+  const placed = grid => [...grid.children];
+  const same = (a, b) => a.length === b.length && a.every((p, i) => p === b[i]);
+  if (same(placed(availableGrid), forSale) && same(placed(archiveGrid), archive)) return;
+  availableGrid.append(...forSale);
+  archiveGrid.append(...archive);
+  setCount(availableGrid);
+  setCount(archiveGrid);
+  syncOrder();
+}
 
 /* ---------- Wall labels: a quiet state, never a price ---------- */
 
@@ -263,6 +296,7 @@ async function loadProducts() {
     loadState = "error";
   }
   pieces.forEach(renderCaption);
+  arrange();
   if (current) showPiece(current.piece);
 }
 
@@ -273,6 +307,7 @@ async function refresh(handle) {
     if (!product) return;
     products.set(handle, product);
     renderCaption(pieceFor(handle));
+    arrange();
     if (current?.piece.dataset.handle === handle) {
       current.product = product;
       if (!findVariant(product, current.selection)?.availableForSale) current.selection = initialSelection(product);
