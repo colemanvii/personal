@@ -152,6 +152,8 @@ dialog.addEventListener("click", event => { if (event.target === dialog) dialog.
 dialog.addEventListener("close", () => {
   history.replaceState(null, "", location.pathname + location.search);
   pieces[index]?.querySelector(".image-button").focus({preventScroll: true});
+  // Release the work on show before forgetting it, so the next opening starts clean.
+  slides[index]?.querySelector("img")?.removeAttribute("id");
   index = -1;
 });
 /* Listen on the document: focus can leave the dialog when a step link hides at either end. */

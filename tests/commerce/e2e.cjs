@@ -106,6 +106,26 @@ async function minTarget(locator, label) {
   assert.ok(box && box.height >= 44, `${label} is ${box && box.height}px tall; needs 44px`);
 }
 const viewerName = page => page.locator("#detail-name").innerText();
+/* Every id on the page is unique, and the viewer's one #detail-image is the
+   photograph of the work on show, never one left behind by an earlier visit. */
+async function noStaleViewer(page, title) {
+  const state = await page.evaluate(() => {
+    const ids = [...document.querySelectorAll("[id]")].map(el => el.id);
+    const images = [...document.querySelectorAll("#detail-image")];
+    const shown = document.querySelector('.viewer-slide[aria-hidden="false"] img');
+    return {duplicates: [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))], count: images.length, onShow: images[0] === shown, alt: images[0]?.alt || ""};
+  });
+  assert.deepEqual(state.duplicates, [], `duplicate ids: ${state.duplicates.join(", ")}`);
+  if (!title) return assert.ok(state.count <= 1, `${state.count} #detail-image elements`);
+  assert.equal(state.count, 1, `${state.count} #detail-image elements`);
+  assert.ok(state.onShow, "#detail-image is not the work on show");
+  assert.ok(state.alt.startsWith(title), `#detail-image shows "${state.alt}", expected ${title}`);
+  assert.equal(await viewerName(page), title);
+}
+const closeViewer = async page => {
+  await page.locator("#detail-close").click();
+  await page.waitForFunction(() => !document.getElementById("painting-detail").open);
+};
 /* A real touch drag across the painting strip, through Chromium's input pipeline,
    so the strip's own scroll snapping decides where it lands. dx < 0 drags left. */
 async function swipe(page, dx) {
@@ -271,6 +291,77 @@ async function run() {
       await page.locator("#detail-close").click();
       // The dialog's close event, which clears the link, arrives just after the click.
       await page.waitForFunction(() => !document.getElementById("painting-detail").open && !location.hash, null, {timeout: 2000});
+    }));
+
+    await test(`live/${viewport}: opening, closing and switching never leaves a stale element`, () => withPage(viewport, async page => {
+      await ready(page);
+      await noStaleViewer(page);
+      // Open, step, close; then open other works, the same work again, and step across sections.
+      await open(page, "harvest");
+      await noStaleViewer(page, "Harvest 1");
+      await page.locator("#detail-next").click();
+      await noStaleViewer(page, "Peace of Wild Things");
+      await closeViewer(page);
+      await noStaleViewer(page);
+      await open(page, "target");
+      await noStaleViewer(page, "Target");
+      await closeViewer(page);
+      await open(page, "target");
+      await noStaleViewer(page, "Target");
+      await page.locator("#detail-prev").click();
+      await noStaleViewer(page, "Scout");
+      if (viewport === "iphone") {
+        await swipe(page, -260);
+        await noStaleViewer(page, "Target");
+        await swipe(page, 260);
+        await noStaleViewer(page, "Scout");
+      } else {
+        await page.keyboard.press("ArrowRight");
+        await noStaleViewer(page, "Target");
+        await page.keyboard.press("ArrowLeft");
+        await noStaleViewer(page, "Scout");
+        // Escape closes the dialog natively; the next opening starts clean.
+        await page.keyboard.press("Escape");
+        await page.waitForFunction(() => !document.getElementById("painting-detail").open);
+        await noStaleViewer(page);
+        await open(page, "red-sea");
+        await noStaleViewer(page, "Red Sea");
+      }
+      for (const handle of ["peach-circuit", "harvest", "peach-circuit"]) {
+        if (await page.locator("#painting-detail[open]").count()) await closeViewer(page);
+        await open(page, handle);
+        await noStaleViewer(page, handle === "harvest" ? "Harvest 1" : "Peach Circuit");
+      }
+      // The photograph on show is still the work's own, and its sale line still loads.
+      await closeViewer(page);
+      await open(page, "harvest-2");
+      await noStaleViewer(page, "Peace of Wild Things");
+      assert.ok((await page.locator("#detail-image").evaluate(img => img.currentSrc || img.src)).includes("/assets/paintings/"));
+      assert.equal(await page.locator("#detail-state").innerText(), "SOLD");
+      await closeViewer(page);
+      await open(page, "red-sea");
+      await page.waitForFunction(() => document.querySelector(".buy-add")?.textContent === "Add to cart", null, {timeout: 20000});
+      await noStaleViewer(page, "Red Sea");
+      // A shared link, then leaving the page and coming back with the browser's Back.
+      await page.goto(`${BASE}/paintings/#fj40`);
+      await page.reload();
+      await page.locator("#painting-detail[open]").waitFor();
+      await noStaleViewer(page, "FJ40");
+      await closeViewer(page);
+      await open(page, "nine-ball");
+      await noStaleViewer(page, "Nine Ball");
+      await closeViewer(page);
+      await page.goto(`${BASE}/info/`);
+      await page.goBack();
+      await page.locator(".gallery .piece").first().waitFor();
+      await noStaleViewer(page);
+      await open(page, "little-window");
+      await noStaleViewer(page, "Little Window");
+      await page.goForward();
+      assert.equal(new URL(page.url()).pathname, "/info/");
+      await page.goBack();
+      await page.locator(".gallery .piece").first().waitFor();
+      await noStaleViewer(page, await page.locator("#painting-detail[open]").count() ? "Little Window" : undefined);
     }));
 
     await test(`live/${viewport}: a shared link opens that work`, () => withPage(viewport, async page => {
