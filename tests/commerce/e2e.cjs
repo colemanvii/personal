@@ -393,8 +393,15 @@ async function run() {
         const plate = await page.locator(".gallery-available .image-button").first().boundingBox();
         assert.ok(plate.width >= 393 - 36 - 1, "available works lack presence on iPhone");
       } else {
+        // Desktop plates hang smaller than their columns, leaving whitespace;
+        // available works are never smaller than the archive's.
         const [a, b] = await Promise.all([".gallery-available", ".gallery-archive"].map(sel => page.locator(`${sel} .image-button`).first().boundingBox()));
-        assert.ok(a.width > b.width * 1.1 && a.width < b.width * 1.5, `available ${a.width}px vs archive ${b.width}px`);
+        assert.ok(a.width >= b.width, `available ${a.width}px is smaller than archive ${b.width}px`);
+        for (const [sel, share] of [[".gallery-available", 0.75], [".gallery-archive", 0.85]]) {
+          const [plate, column] = await page.locator(`${sel} .piece`).first().evaluate(el => [el.querySelector(".image-button").getBoundingClientRect().width, el.parentElement.getBoundingClientRect().width]);
+          const cols = sel === ".gallery-available" ? 2 : 3;
+          assert.ok(plate < column / cols * share + 2, `${sel} plate ${plate}px fills its column`);
+        }
       }
     }));
 
