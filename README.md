@@ -45,7 +45,15 @@ node --test tests/commerce/unit.test.mjs
 node tests/commerce/e2e.cjs   # needs the local server above and Playwright; creates and empties a real cart, never places an order
 ```
 
-Site checks: arrows such as ↗ and ↔ always carry U+FE0E so iOS draws them as type, never emoji, and the About page keeps its colophon, email and Instagram links.
+## Contact form
+
+The note form on About posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.js`) on the same domain. It sends each note to colecalfee@gmail.com through Resend, from `contact@colecalfee.com`, with the visitor's address as Reply-To. The Resend key lives only in Cloudflare: Pages project → Settings → Variables and Secrets → `RESEND_API_KEY` (encrypted), set for both Production and Preview. Without it the endpoint answers 503 and the page says the note could not be sent; it never reports success unless Resend accepted the note. Spam protection is server-side: a hidden honeypot field, a minimum time on the page, a same-site Origin check, and size limits.
+
+```sh
+node --test tests/site/contact.test.mjs   # the endpoint, with Resend stubbed
+```
+
+Site checks: arrows such as ↗ and ↔ always carry U+FE0E so iOS draws them as type, never emoji, and the About page keeps its email and Instagram links and a working note form.
 
 ```sh
 node --test tests/site/arrows.test.mjs
