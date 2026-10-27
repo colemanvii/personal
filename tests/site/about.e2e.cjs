@@ -54,37 +54,56 @@ const status = page => page.locator("#note-status");
       return {context, page, errors};
     };
 
-    await test(`${viewport}: a centred note, composed from the top`, async () => {
+    await test(`${viewport}: a letter, composed in the middle of the page`, async () => {
       const {context, page, errors} = await open();
       assert.equal(await page.locator("h1").innerText(), "Cole Calfee");
-      assert.equal(await page.locator(".statement").innerText(), "Somewhere between art and work.");
-      assert.equal(await page.locator(".note-head .label").innerText(), "NASHVILLE, TENNESSEE / NORTH GEORGIA");
-      const box = await page.locator("main").boundingBox();
+      assert.equal(await page.locator(".who p").innerText(), "Somewhere between art and work.");
+      assert.equal(await page.locator(".return .label").innerText(), "NASHVILLE, TENNESSEE / NORTH GEORGIA");
+      // One column, no wider than 600px, centred on the page.
       const width = await page.evaluate(() => document.documentElement.clientWidth);
-      assert.ok(box.width <= 561, `column is ${box.width}px wide`);
-      assert.ok(Math.abs(box.x + box.width / 2 - width / 2) <= 1, "the column is not centred");
-      for (const sel of ["h1", ".statement", ".reach"]) {
-        const b = await page.locator(sel).evaluate(el => { const r = document.createRange(); r.selectNodeContents(el); const t = r.getBoundingClientRect(); return t.left + t.width / 2; });
-        assert.ok(Math.abs(b - width / 2) <= 2, `${sel} is not centred`);
+      const column = await page.locator(".letter").boundingBox();
+      assert.ok(column.width <= 601, `column is ${column.width}px wide`);
+      assert.ok(Math.abs(column.x + column.width / 2 - width / 2) <= 1, "the column is not centred");
+      // The letterhead: who on the left edge of the column, the return address flush right, side by side.
+      const who = await page.locator(".who").boundingBox(), ret = await page.locator(".return").boundingBox();
+      assert.ok(Math.abs(who.x - column.x) <= 1, "the name does not start at the column's left edge");
+      assert.ok(Math.abs(ret.x + ret.width - (column.x + column.width)) <= 1, "the return address is not flush right");
+      assert.ok(ret.x > who.x + who.width - 1 && ret.y < who.y + who.height, "the letterhead is not side by side");
+      // Nothing is larger than the gallery's own titles.
+      const sizes = await page.$$eval("main *", els => els.map(el => parseFloat(getComputedStyle(el).fontSize)));
+      assert.ok(Math.max(...sizes) <= 22, `largest type is ${Math.max(...sizes)}px`);
+      if (viewport === "iphone") {
+        const gap = await page.evaluate(() => document.querySelector("h1").getBoundingClientRect().top - document.querySelector(".site-head").getBoundingClientRect().bottom);
+        assert.ok(gap > 0 && gap < 50, `content starts ${gap}px below the header`);
       }
-      const gap = await page.evaluate(() => document.querySelector("h1").getBoundingClientRect().top - document.querySelector(".site-head").getBoundingClientRect().bottom);
-      assert.ok(gap > 0 && gap < (viewport === "iphone" ? 60 : 110), `content starts ${gap}px below the header`);
       assert.deepEqual(await page.$$eval(".site-head a", as => as.map(a => [a.textContent, a.getAttribute("href")])), [["Cole Calfee", "/"], ["Index", "/index/"], ["Paintings", "/paintings/"], ["About", "/info/"]]);
       assert.equal(await page.locator('.nav a[aria-current="page"]').innerText(), "About");
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, "page scrolls sideways");
-      // Fields are ruled lines, not boxes: no fill, no side borders, no rounding; type large enough that iOS does not zoom.
-      for (const sel of ["#note-email", "#note-message"]) {
-        const s = await page.locator(sel).evaluate(el => { const c = getComputedStyle(el); return {bg: c.backgroundColor, left: c.borderLeftWidth, top: c.borderTopWidth, radius: c.borderRadius, size: parseFloat(c.fontSize)}; });
-        assert.deepEqual([s.bg, s.left, s.top, s.radius], ["rgba(0, 0, 0, 0)", "0px", "0px", "0px"], `${sel} looks like a box`);
-        assert.ok(s.size >= 16, `${sel} is ${s.size}px, iOS will zoom`);
+      // Fields are ruled lines with square corners, type large enough that iOS does not zoom; the message box is faintly tinted.
+      const style = sel => page.locator(sel).evaluate(el => { const c = getComputedStyle(el); return {bg: c.backgroundColor, left: c.borderLeftWidth, top: c.borderTopWidth, bottom: c.borderBottomWidth, radius: c.borderRadius, size: parseFloat(c.fontSize)}; });
+      const email = await style("#note-email"), message = await style("#note-message");
+      for (const s of [email, message]) {
+        assert.deepEqual([s.left, s.top, s.bottom, s.radius], ["0px", "0px", "1px", "0px"]);
+        assert.ok(s.size >= 16, `field type is ${s.size}px, iOS will zoom`);
       }
+      assert.equal(email.bg, "rgba(0, 0, 0, 0)", "the email line is filled");
+      const paper = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      assert.notEqual(message.bg, paper, "the message box is not tinted");
+      assert.notEqual(message.bg, "rgba(0, 0, 0, 0)", "the message box is not tinted");
+      // The message box starts at three lines and grows as the note is written.
+      const before = (await page.locator("#note-message").boundingBox()).height;
+      assert.ok(before < 110, `message box starts ${before}px tall`);
+      await page.locator("#note-message").click();
+      await page.keyboard.type("Hello,\n\n1\n2\n3\n4\n5\n6");
+      const after = (await page.locator("#note-message").boundingBox()).height;
+      assert.ok(after > before + 80, `message box grew from ${before}px to ${after}px`);
       assert.deepEqual(errors, []);
       await context.close();
     });
 
     await test(`${viewport}: email and Instagram links, arrows as type`, async () => {
       const {context, page} = await open();
-      const link = page.locator(`.reach a[href="mailto:${EMAIL}"]`);
+      const link = page.locator(`.return a[href="mailto:${EMAIL}"]`);
       assert.equal(await link.innerText(), EMAIL, "the full address is written out");
       assert.notEqual(await link.evaluate(a => getComputedStyle(a).userSelect), "none");
       const prevented = await link.evaluate(a => { let p = null; a.addEventListener("click", e => { p = e.defaultPrevented; e.preventDefault(); }, {once: true}); a.click(); return p; });
