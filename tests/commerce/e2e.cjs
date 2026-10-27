@@ -122,9 +122,11 @@ async function noStaleViewer(page, title) {
   assert.ok(state.alt.startsWith(title), `#detail-image shows "${state.alt}", expected ${title}`);
   assert.equal(await viewerName(page), title);
 }
+/* The dialog closes at once, but its close event, which clears the work from
+   the address, arrives a moment later: wait for both before moving on. */
 const closeViewer = async page => {
   await page.locator("#detail-close").click();
-  await page.waitForFunction(() => !document.getElementById("painting-detail").open);
+  await page.waitForFunction(() => !document.getElementById("painting-detail").open && !location.hash);
 };
 /* A real touch drag across the painting strip, through Chromium's input pipeline,
    so the strip's own scroll snapping decides where it lands. dx < 0 drags left. */
@@ -322,7 +324,7 @@ async function run() {
         await noStaleViewer(page, "Scout");
         // Escape closes the dialog natively; the next opening starts clean.
         await page.keyboard.press("Escape");
-        await page.waitForFunction(() => !document.getElementById("painting-detail").open);
+        await page.waitForFunction(() => !document.getElementById("painting-detail").open && !location.hash);
         await noStaleViewer(page);
         await open(page, "red-sea");
         await noStaleViewer(page, "Red Sea");
