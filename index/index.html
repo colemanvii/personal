@@ -663,7 +663,8 @@
   buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
   // Desktop may show the first reading pane; mobile must open on the index list.
   // Otherwise the full-screen mobile pane hides every row on first arrival.
-  show(mobile.matches ? null : 'paintings');
+  const hashTarget=decodeURIComponent(location.hash.slice(1));
+  show(buttons.some(button=>button.dataset.client===hashTarget) ? hashTarget : (mobile.matches ? null : 'paintings'));
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
     const origin=buttons.find(item=>item.dataset.client===prior);
