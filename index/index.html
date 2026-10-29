@@ -527,9 +527,9 @@
     <div class="panel-content" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <div class="kashus-gallery" id="kashus-full-gallery" aria-label="Kashus artwork and photography">
-        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/kc3.jpg" alt="Live performance" loading="eager"></figure>
+        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="eager"></figure>
         <div class="kashus-gallery-controls" role="group" aria-label="Browse Kashus images"><button type="button" data-kashus-step="-1" aria-label="Previous image" aria-controls="kashus-main-image">←</button><span class="kashus-image-count" id="kashus-image-count">01 / 10</span><button type="button" data-kashus-step="1" aria-label="Next image" aria-controls="kashus-main-image">→</button></div><span class="gallery-status" id="kashus-gallery-status" role="status" aria-live="polite" aria-atomic="true"></span>
-        <p class="archive-plate-caption" id="kashus-image-caption">LIVE PERFORMANCE</p>
+        <p class="archive-plate-caption" id="kashus-image-caption">POUR ME OUT</p>
       </div>
       <nav class="kashus-release-links" aria-label="Listen to Kashus Culpepper releases"><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗︎</a><a href="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" target="_blank" rel="noopener noreferrer">Act I: Summer Nights ↗︎</a><a href="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" target="_blank" rel="noopener noreferrer">After Me? ↗︎</a><a href="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" target="_blank" rel="noopener noreferrer">Out of My Mind ↗︎</a><a href="https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc" target="_blank" rel="noopener noreferrer">Jenni ↗︎</a><a href="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" target="_blank" rel="noopener noreferrer">Who Hurt You ↗︎</a><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗︎</a></nav>
     </div>
@@ -770,8 +770,13 @@
  }
  function open(img){
   const panel=img.closest('.panel-content');
-  gallery=Array.from(panel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
-  position=gallery.indexOf(img);
+  if(panel?.dataset.panel==='kashus' && Array.isArray(window.__kashusSlides)){
+   gallery=window.__kashusSlides.map(slide=>({src:slide.src,alt:slide.alt}));
+   position=Number(img.dataset.slideIndex||0);
+  }else{
+   gallery=Array.from(panel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
+   position=gallery.indexOf(img);
+  }
   if(position<0)return;
   trigger=img.closest('.photo-plate');
   render();
@@ -849,6 +854,7 @@
 </script><script>
 (function(){
  const slides=[{"src":"../assets/pmo.jpg","alt":"Pour Me Out"},{"src":"https://bigloud.com/wp-content/uploads/2025/01/KC_Jenni_Artwork_1x1-1024x1024.jpg","alt":"Jenni"},{"src":"../assets/IMG_2786.JPG","alt":"Act I: Summer Nights"},{"src":"../assets/Kashus%20Culpepper%20After%20Me%201.png","alt":"After Me?"},{"src":"../assets/Kashus%20Culpepper%20Out%20of%20My%20Mind%201.png","alt":"Out of My Mind"},{"src":"../assets/Kashus%20Culpepper%20Who%20Hurt%20You%201.png","alt":"Who Hurt You"},{"src":"../assets/kc1.jpeg","alt":"Portrait 01"},{"src":"../assets/kc2.jpg","alt":"Portrait 02"},{"src":"../assets/kc3.jpg","alt":"Live performance"},{"src":"../assets/admat.jpg","alt":"Harvest Moon tour poster"}];
+ window.__kashusSlides=slides;
  const gallery=document.querySelector('.kashus-gallery');
  const image=document.getElementById('kashus-main-image');
  if(!gallery||!image)return;
@@ -879,6 +885,7 @@
    position=target;
    image.src=slides[target].src;
    image.alt=slides[target].alt;
+   image.dataset.slideIndex=String(target);
    count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slides[target].alt.toUpperCase();
    status.textContent='Image '+(target+1)+' of '+slides.length+': '+slides[target].alt;
