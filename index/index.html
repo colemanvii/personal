@@ -464,7 +464,7 @@
 <main class="section">
   <div class="section-head">
     <h1 class="section-title">INDEX</h1>
-    <div class="index-tools"><button class="index-view" type="button" data-index-view="selected" aria-pressed="true">Selected</button><span class="index-view-divider" aria-hidden="true">/</span><button class="index-view" type="button" data-index-view="all" aria-pressed="false">All</button><span class="index-count" aria-live="polite">8 WORKS</span></div>
+    <span class="index-count" aria-label="23 works">23 WORKS</span>
   </div>
   <div class="index-layout"><div class="index-scroll"><table class="index-table" id="work-index-table" aria-label="Complete work index">
     <colgroup><col><col><col><col></colgroup>
@@ -650,43 +650,41 @@
   const tbody=indexTable.tBodies[0];
   const rows=Array.from(tbody.rows).sort((a,b)=>Number(a.cells[0].textContent)-Number(b.cells[0].textContent));
   rows.forEach(row=>tbody.appendChild(row));
-  const selectedClients=new Set(['paintings','freeman','kashus','scout','habitat','corey','joseph','drawings']);
-  const selectedRows=rows.filter(row=>selectedClients.has(row.querySelector('[data-client]')?.dataset.client));
-  const viewButtons=Array.from(document.querySelectorAll('[data-index-view]'));
-  const countLabel=document.querySelector('.index-count');
-  const scroll=document.querySelector('.index-scroll');
   const pagination=document.getElementById('index-pagination');
   const pageCount=pagination.querySelector('.index-page-count');
   const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
+  const scroll=document.querySelector('.index-scroll');
   const PAGE_SIZE=12;
-  let currentView='selected';
   let currentPage=0;
   function updateIndex(){
-    const visibleRows=currentView==='selected'?selectedRows:rows;
-    const numberOfPages=Math.max(1,Math.ceil(visibleRows.length/PAGE_SIZE));
+    const numberOfPages=Math.ceil(rows.length/PAGE_SIZE);
     currentPage=Math.max(0,Math.min(currentPage,numberOfPages-1));
-    rows.forEach(row=>{row.hidden=true;});
-    visibleRows.forEach((row,i)=>{row.hidden=i<currentPage*PAGE_SIZE||i>=(currentPage+1)*PAGE_SIZE;});
-    pagination.hidden=numberOfPages<2;
-    scroll.classList.toggle('is-selected',currentView==='selected');
-    countLabel.textContent=visibleRows.length+' WORKS';
+    rows.forEach((row,i)=>{row.hidden=i<currentPage*PAGE_SIZE||i>=(currentPage+1)*PAGE_SIZE;});
+    pagination.hidden=numberOfPages<=1;
     pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(numberOfPages).padStart(2,'0');
     pageButtons.forEach(button=>{button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===numberOfPages-1;});
-    viewButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.indexView===currentView)));
-    indexTable.setAttribute('aria-label',(currentView==='selected'?'Selected':'Complete')+' work index, page '+(currentPage+1)+' of '+numberOfPages);
+    indexTable.setAttribute('aria-label','Complete work index, page '+(currentPage+1)+' of '+numberOfPages);
     scroll.scrollTop=0;
   }
-  viewButtons.forEach(button=>button.addEventListener('click',()=>{
-    if(currentView===button.dataset.indexView)return;
-    currentView=button.dataset.indexView;
-    currentPage=0;
+  function turnPage(delta){
+    const next=currentPage+delta;
+    if(next<0||next>=Math.ceil(rows.length/PAGE_SIZE))return;
+    currentPage=next;
     updateIndex();
-  }));
-  pageButtons.forEach(button=>button.addEventListener('click',()=>{
-    if(button.disabled)return;
-    currentPage+=Number(button.dataset.indexPage);
-    updateIndex();
-  }));
+  }
+  pageButtons.forEach(button=>button.addEventListener('click',()=>turnPage(Number(button.dataset.indexPage))));
+  let touchStart=null;
+  scroll.addEventListener('touchstart',event=>{
+    if(event.touches.length!==1){touchStart=null;return;}
+    touchStart={x:event.touches[0].clientX,y:event.touches[0].clientY};
+  },{passive:true});
+  scroll.addEventListener('touchend',event=>{
+    if(!touchStart||event.changedTouches.length!==1)return;
+    const dx=event.changedTouches[0].clientX-touchStart.x;
+    const dy=event.changedTouches[0].clientY-touchStart.y;
+    touchStart=null;
+    if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)turnPage(dx<0?1:-1);
+  },{passive:true});
   updateIndex();
   const panel=document.getElementById('selected-work-panel');
   if(!panel||!buttons.length)return;
