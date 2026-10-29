@@ -7,7 +7,7 @@
 <title>Cole Calfee</title>
 <meta name="description" content="Cole Calfee — selected creative work.">
 <link rel="canonical" href="https://colecalfee.com/">
-<link rel="stylesheet" href="/assets/css/site.css?v=10">
+<link rel="stylesheet" href="/assets/css/site.css?v=11">
 <script src="/assets/js/site.js?v=8"></script>
 <style>
 /* Freeman V5 landing geometry: source-matched values. */
@@ -139,6 +139,14 @@ html body.landing .landing-paper button[data-paper-tone][aria-pressed="true"]::a
 }
 html body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff!important}
 html body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628!important}
+
+/* Visible permanent one-pixel frame INSIDE each colour square; no selection box. */
+html body.landing .landing-paper button[data-paper-tone]::after,
+html body.landing .landing-paper button[data-paper-tone][aria-pressed="true"]::after{
+  border:0!important;
+  outline:0!important;
+  box-shadow:inset 0 0 0 1px #666!important;
+}
 </style>
 </head>
 <body class="landing">
