@@ -6,8 +6,7 @@
  * the viewer's sale line: availability and price, and for available works one
  * quiet action. Shopify decides what is for sale; the page decides where each
  * work hangs. */
-import {fetchProducts, addToCart, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage, cartStore} from "/assets/js/storefront.js";
-import {mountCart, openCart, setLineDescriber} from "/assets/js/cart.js";
+import {fetchProducts, storefront, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage} from "/assets/js/storefront.js";
 import {setImage, hasOwnPhoto, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
 
 const FRESH_FOR = 60 * 1000;
@@ -27,11 +26,7 @@ let current = null; // {piece, product, selection}
 
 const pieceFor = handle => pieces.find(p => p.dataset.handle === handle);
 
-mountCart();
-setLineDescriber(product => {
-  const piece = pieceFor(product.handle);
-  return piece && {title: titleOf(piece), details: detailsOf(piece), number: numberOf(piece)};
-});
+
 
 /* ---------- Viewer: the sale line, options, and other views ---------- */
 
@@ -71,8 +66,30 @@ const say = message => {
   if (message) status.scrollIntoView({block: "nearest"});
 };
 
-function inCart(variant) {
-  return cartStore.cart?.lines.nodes.find(line => line.merchandise.id === variant?.id);
+/* Each original gets its own fresh Shopify checkout, with no on-site cart. */
+let checkoutBusy = false;
+async function checkoutVariant(variant, button) {
+  if (checkoutBusy || !variant?.availableForSale) return;
+  checkoutBusy = true;
+  const old = button.textContent;
+  button.disabled = true;
+  button.textContent = "Preparing secure checkout…";
+  say("");
+  try {
+    const data = await storefront(
+      "mutation DirectCheckout($id: ID!) { cartCreate(input: {lines: [{merchandiseId: $id, quantity: 1}]}) { cart { checkoutUrl } userErrors { message } } }",
+      {id: variant.id}
+    );
+    const result = data.cartCreate;
+    if (result?.userErrors?.length) throw new Error(result.userErrors[0].message);
+    if (!result?.cart?.checkoutUrl) throw new Error("Shopify checkout is unavailable.");
+    window.location.assign(result.cart.checkoutUrl);
+  } catch (error) {
+    checkoutBusy = false;
+    button.disabled = false;
+    button.textContent = old;
+    say((error.message || "Checkout unavailable.") + " Please try again.");
+  }
 }
 
 function setState(text, sold) {
@@ -169,45 +186,14 @@ function renderPanel() {
   else setState(edition ? "Edition print" : "Available", false);
   renderOptions(product, current.selection);
 
-  const line = inCart(variant);
   if (!variant || !variant.availableForSale) {
     addButton.disabled = true;
     addButton.textContent = edition ? "Sold out" : "Sold";
-  } else if (line && !edition) {
-    addButton.disabled = false;
-    addButton.textContent = "In your cart";
-    addButton.onclick = showCart;
   } else {
     addButton.disabled = false;
-    addButton.textContent = line ? "Add another" : "Add to cart";
-    addButton.onclick = () => add(variant);
+    addButton.textContent = "Purchase ↗";
+    addButton.onclick = () => checkoutVariant(variant, addButton);
   }
-}
-
-async function add(variant) {
-  const added = current;
-  addButton.disabled = true;
-  addButton.textContent = "Adding…";
-  say("");
-  try {
-    const {warnings} = await addToCart(variant.id, 1);
-    if (current !== added) return;
-    const soldOut = warnings.find(w => w.code === "MERCHANDISE_OUT_OF_STOCK");
-    if (soldOut) {
-      say("This work has just sold.");
-      await refresh(added.product.handle);
-      return;
-    }
-    say(warnings[0]?.message || "Added to your cart.");
-  } catch (error) {
-    say(`${error.message} Please try again.`);
-  }
-  if (current === added) renderPanel();
-}
-
-function showCart() {
-  dialog.close();
-  openCart();
 }
 
 function showPiece(piece) {
@@ -229,7 +215,6 @@ function showPiece(piece) {
 dialog.addEventListener("painting:show", event => showPiece(event.detail.piece));
 if (currentPiece()) showPiece(currentPiece()); // opened from a shared link before this module ran
 dialog.addEventListener("close", () => { current = null; });
-cartStore.subscribe(() => { if (current && !panel.hidden) renderPanel(); });
 
 /* ---------- Curation and commerce ----------
    The page's HTML decides where every work hangs: Available Works or the
@@ -255,9 +240,9 @@ function renderCaption(piece) {
     const open = document.createElement("button");
     open.type = "button";
     open.className = "sale-open";
-    open.textContent = "Available";
-    open.setAttribute("aria-label", `${title} is available. View the work`);
-    open.onclick = () => imageButton.click();
+    open.textContent = "Purchase ↗";
+    open.setAttribute("aria-label", `Purchase ${title} through Shopify checkout`);
+    open.onclick = () => { const variant = findVariant(product, initialSelection(product)); if (variant?.availableForSale) checkoutVariant(variant, open); };
     sale.append(open);
     imageButton.setAttribute("aria-label", `View ${title}, available`);
   } else {
