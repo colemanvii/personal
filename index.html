@@ -7,7 +7,7 @@
 <title>Cole Calfee</title>
 <meta name="description" content="Cole Calfee — selected creative work.">
 <link rel="canonical" href="https://colecalfee.com/">
-<link rel="stylesheet" href="/assets/css/site.css?v=9">
+<link rel="stylesheet" href="/assets/css/site.css?v=10">
 <script src="/assets/js/site.js?v=8"></script>
 <style>
 /* Freeman V5 landing geometry: source-matched values. */
@@ -122,6 +122,23 @@ html body.landing .landing-ident{font-family:var(--mono);text-transform:uppercas
 @media(max-width:720px){
  html body.landing .seven{font-size:18px;row-gap:20px}
 }
+
+/* Colour chooser: permanent bordered 18px squares; never an outer selection box. */
+html body.landing .landing-paper button[data-paper-tone]{
+  appearance:none;-webkit-appearance:none;border:0!important;outline:0!important;
+  box-shadow:none!important;background:transparent!important;
+  position:relative;touch-action:manipulation;cursor:inherit;
+}
+html body.landing .landing-paper button[data-paper-tone]::after,
+html body.landing .landing-paper button[data-paper-tone][aria-pressed="true"]::after{
+  content:""!important;display:block!important;position:absolute!important;
+  width:18px!important;height:18px!important;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  border:1px solid #777!important;outline:0!important;box-shadow:none!important;
+  box-sizing:border-box!important;
+}
+html body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff!important}
+html body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628!important}
 </style>
 </head>
 <body class="landing">
