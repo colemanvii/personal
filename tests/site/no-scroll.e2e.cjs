@@ -68,6 +68,37 @@ for(const client of ["list",...clients]){
   await page.mouse.wheel(0,-700);
  }
 }
+
+for(const route of ["/","/paintings/","/info/"]){
+  try{
+    await page.goto(BASE+route,{waitUntil:"domcontentloaded"});
+    await page.waitForTimeout(100);
+    const first=await page.evaluate(()=>({
+      documentScroll:document.documentElement.scrollHeight-document.documentElement.clientHeight,
+      overflow:getComputedStyle(document.documentElement).overflowY,
+      bodyOverflow:getComputedStyle(document.body).overflowY,
+      shellScroll:document.querySelector(".shell")?.scrollHeight-document.querySelector(".shell")?.clientHeight
+    }));
+    await page.mouse.wheel(0,600);await page.waitForTimeout(100);
+    const after=await page.evaluate(()=>({window:scrollY,document:document.documentElement.scrollTop,body:document.body.scrollTop,shell:document.querySelector(".shell")?.scrollTop||0}));
+    assert.ok(Object.values(after).every(v=>v<3),JSON.stringify({first,after}));
+    console.log("PASS",size.name,route,"no document scrolling");
+  }catch(e){failures++;console.log("FAIL",size.name,route,String(e.message).slice(0,1200));}
+}
+if(size.mobile){
+ try{
+   await page.goto(BASE+"/paintings/",{waitUntil:"domcontentloaded"});
+   await page.locator("#red-sea .image-button").click();
+   await page.waitForTimeout(150);
+   const detail=await page.evaluate(()=>{
+     const els=["#painting-detail .full","#painting-detail .label","#painting-detail .full-art"];
+     return els.map(q=>{const e=document.querySelector(q);return {q,scroll:e.scrollHeight-e.clientHeight,overflow:getComputedStyle(e).overflowY};});
+   });
+   const candidates=detail.filter(x=>x.scroll>4&&["auto","scroll"].includes(x.overflow));
+   assert.equal(candidates.length,0,JSON.stringify(detail));
+   console.log("PASS",size.name,"painting detail no scrolling");
+ }catch(e){failures++;console.log("FAIL",size.name,"painting-detail",String(e.message).slice(0,1200));}
+}
 await context.close();
 }
 await browser.close();
