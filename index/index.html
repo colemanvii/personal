@@ -739,34 +739,36 @@
  const caption=document.getElementById('viewer-caption');
  const count=document.getElementById('viewer-count');
  const close=dialog.querySelector('.viewer-close');
- let gallery=[],position=0,trigger=null;
+ let gallery=[],position=0,trigger=null,sourcePanel=null;
  function render(){
-  const img=gallery[position];
-  if(!img)return;
-  enlarged.src=img.currentSrc||img.src;
-  enlarged.alt=img.alt||'Selected work photograph';
-  const panel=img.closest('.panel-content');
-  title.textContent=panel?.querySelector('.panel-title')?.textContent || 'SELECTED WORK';
-  caption.textContent=img.alt||'PROJECT PHOTOGRAPH';
+  const frame=gallery[position];
+  if(!frame)return;
+  enlarged.src=frame.currentSrc||frame.src;
+  enlarged.alt=frame.alt||'Selected work photograph';
+  title.textContent=sourcePanel?.querySelector('.panel-title')?.textContent || 'SELECTED WORK';
+  caption.textContent=frame.alt||'PROJECT PHOTOGRAPH';
   dialog.querySelectorAll('.viewer-step').forEach(button=>{button.disabled=gallery.length<2;});
   count.textContent=String(position+1).padStart(2,'0')+' / '+String(gallery.length).padStart(2,'0');
  }
  function open(img){
-  const panel=img.closest('.panel-content');
-  if(panel?.dataset.panel==='kashus' && Array.isArray(window.__kashusSlides)){
-   gallery=window.__kashusSlides.map(slide=>({src:slide.src,alt:slide.alt}));
-   position=Number(img.dataset.slideIndex||0);
+  sourcePanel=img.closest('.panel-content');
+  if(!sourcePanel)return;
+  const key=sourcePanel.dataset.panel;
+  const series=key==='kashus'?window.__kashusSlides:window.__portfolioSeries?.[key];
+  if(Array.isArray(series)&&series.length){
+   gallery=series.map(slide=>({src:slide.src,alt:slide.alt||slide.caption||'Selected work'}));
+   position=Math.max(0,Math.min(gallery.length-1,Number(img.dataset.slideIndex)||0));
   }else{
-   gallery=Array.from(panel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
+   gallery=Array.from(sourcePanel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
    position=gallery.indexOf(img);
   }
   if(position<0)return;
-  trigger=img.closest('.photo-plate');
+  trigger=img.closest('.photo-plate, .paintings-archive-stage');
   render();
   dialog.showModal();
   close.focus();
  }
- document.querySelectorAll('.panel-content .photo-plate').forEach(figure=>{
+ document.querySelectorAll('.panel-content .photo-plate, .panel-content .paintings-archive-stage').forEach(figure=>{
   const img=figure.querySelector('img');
   if(!img)return;
   figure.tabIndex=0;
@@ -778,11 +780,15 @@
   });
  });
  dialog.querySelectorAll('.viewer-step').forEach(button=>button.addEventListener('click',()=>{
-  position=(position+Number(button.dataset.step)+gallery.length)%gallery.length;render();
+  if(gallery.length>1){position=(position+Number(button.dataset.step)+gallery.length)%gallery.length;render();}
  }));
  close.addEventListener('click',()=>dialog.close());
  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
- dialog.addEventListener('close',()=>{enlarged.removeAttribute('src');if(trigger?.isConnected)trigger.focus();});
+ dialog.addEventListener('close',()=>{
+  enlarged.removeAttribute('src');
+  if(trigger?.isConnected)trigger.focus();
+  sourcePanel=null;
+ });
  dialog.addEventListener('keydown',event=>{
   if(event.key==='ArrowRight'||event.key==='ArrowLeft'){
    event.preventDefault();
@@ -804,6 +810,8 @@
   ]}
  ];
  galleries.forEach(({name,slides})=>{
+  window.__portfolioSeries=window.__portfolioSeries||{};
+  window.__portfolioSeries[name==='ronnie'?'ronnie-photo':'teton-photo']=slides.map(([src,alt])=>({src,alt}));
   const gallery=document.querySelector('.'+name+'-gallery');
   const image=document.getElementById(name+'-active-image');
   const count=document.getElementById(name+'-count');
@@ -819,6 +827,7 @@
       position=target;
       image.src=slides[target][0];
       image.alt=slides[target][1];
+      image.dataset.slideIndex=String(target);
       count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
     };
     candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -932,6 +941,8 @@
   {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
   {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
  ];
+ window.__portfolioSeries=window.__portfolioSeries||{};
+ window.__portfolioSeries.cowboyer=slides;
  // Include the sibling navigation controls in the gallery event scope.
  const gallery=document.querySelector('[data-panel="cowboyer"]');
  const count=document.getElementById('cowboyer-count');
@@ -950,7 +961,7 @@
    const slide=slides[position];
    canvas.dataset.cover=slide.cover;
    canvas.classList.toggle('is-composite',slide.composite);
-   image.src=slide.src;image.alt=slide.alt;
+   image.src=slide.src;image.alt=slide.alt;image.dataset.slideIndex=String(position);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
   };
   candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -966,6 +977,8 @@
 </script><script>
 (function(){
  const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
+ window.__portfolioSeries=window.__portfolioSeries||{};
+ window.__portfolioSeries.drawings=slides;
  const gallery=document.querySelector('.drawings-gallery');
  const image=document.getElementById('drawings-active-image');
  const count=document.getElementById('drawings-count');
@@ -975,7 +988,7 @@
  function show(index){
    position=(index+slides.length)%slides.length;
    const slide=slides[position];
-   image.src=slide.src;image.alt=slide.caption;
+   image.src=slide.src;image.alt=slide.caption;image.dataset.slideIndex=String(position);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
  }
