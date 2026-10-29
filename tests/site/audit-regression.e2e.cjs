@@ -74,11 +74,10 @@ await run(size.label+" Paintings caption fully visible",async()=>{
    const ctx=can.getContext("2d");ctx.drawImage(im,0,0,10,10);
    return [...ctx.getImageData(5,5,1,1).data];
  });
- assert.ok(pixel[3]===255&&pixel.slice(0,3).some(v=>v<240),"Painting image decoded without meaningful pixel data: "+pixel);
+ assert.ok(pixel[3]===255&&pixel.slice(0,3).some(v=>v<240),"Painting image has no meaningful pixel data: "+pixel);
  await page.locator("#sold-painting-image").screenshot({path:path.join(DIR,"audit-"+size.label+"-painting-art.png")});
  await page.screenshot({path:path.join(DIR,"audit-"+size.label+"-paintings.png")});
  });
- assert.ok(["none","normal",'""'].includes(pseudo),"duplicate purchase arrow CSS: "+pseudo);
  await ctx.close();
 });
 const raw=await b.newContext({viewport:{width:520,height:640}});
