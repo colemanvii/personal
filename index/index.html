@@ -648,7 +648,12 @@
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
   const indexTable=document.getElementById('work-index-table');
   const tbody=indexTable.tBodies[0];
-  const rows=Array.from(tbody.rows).sort((a,b)=>Number(a.cells[0].textContent)-Number(b.cells[0].textContent));
+  const firstPageOrder=[1,2,3,4,16,18,20,5,7,8,10,11];
+  const pagePriority=new Map(firstPageOrder.map((number,index)=>[number,index]));
+  const rows=Array.from(tbody.rows).sort((a,b)=>{
+    const an=Number(a.cells[0].textContent),bn=Number(b.cells[0].textContent);
+    return (pagePriority.get(an)??(firstPageOrder.length+an))-(pagePriority.get(bn)??(firstPageOrder.length+bn));
+  });
   rows.forEach(row=>tbody.appendChild(row));
   const pagination=document.getElementById('index-pagination');
   const pageCount=pagination.querySelector('.index-page-count');
