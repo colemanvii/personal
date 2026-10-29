@@ -47,6 +47,11 @@ await run(size.label+" Paintings caption fully visible",async()=>{
    const img=document.querySelector("#sold-painting-image");
    return img&&img.complete&&img.naturalWidth>0&&img.naturalHeight>0;
  },null,{timeout:10000});
+ await page.locator("#sold-painting-image").evaluate(async img=>{
+   if(img.decode)await img.decode();
+ });
+ await page.waitForTimeout(250);
+
 
  const state=await page.evaluate(()=>{
   const caption=document.querySelector(".paintings-archive-caption");
