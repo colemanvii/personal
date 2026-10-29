@@ -458,13 +458,9 @@
 <main class="section">
   <div class="section-head">
     <h1 class="section-title">INDEX</h1>
-    <div class="index-tools" role="group" aria-label="Index view">
-      <button class="index-view is-active" data-index-view="selected" type="button" aria-pressed="true" aria-controls="work-index-table">SELECTED <span>13</span></button>
-      <span class="index-view-divider" aria-hidden="true">/</span>
-      <button class="index-view" data-index-view="all" type="button" aria-pressed="false" aria-controls="work-index-table">ALL <span>23</span></button>
-    </div>
+    <span class="index-count" aria-label="23 works">23 WORKS</span>
   </div>
-  <div class="index-layout"><div class="index-scroll"><table class="index-table" id="work-index-table" aria-label="Selected work">
+  <div class="index-layout"><div class="index-scroll"><table class="index-table" id="work-index-table" aria-label="Complete work index">
     <colgroup><col><col><col><col></colgroup>
     <thead><tr><th scope="col">No.</th><th scope="col">Project / Client</th><th scope="col">Role / Work</th><th scope="col">Year</th></tr></thead>
     <tbody>
@@ -493,7 +489,7 @@
       <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
     </tbody>
   </table>
-  <nav id="index-pagination" class="index-pagination" aria-label="All work pages" hidden>
+  <nav id="index-pagination" class="index-pagination" aria-label="Work index pages" hidden>
    <button data-index-page="-1" type="button" aria-label="Previous page of work">←</button>
    <span class="index-page-count" aria-live="polite" aria-atomic="true">01 / 02</span>
    <button data-index-page="1" type="button" aria-label="Next page of work">→</button>
@@ -644,51 +640,28 @@
 </div><script src="../assets/js/site.js?v=5"></script><script>
 (function(){
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
-  const featured=new Set(['paintings','freeman','kashus','scout','cowboyer','drawings','ramsey-hill','ernest','pbr','corey','joseph','ronnie','teton']);
-  const viewButtons=Array.from(document.querySelectorAll('[data-index-view]'));
   const rows=Array.from(document.querySelectorAll('.index-table tbody tr'));
-  let showAll=false;
-  let currentPage=0;
-  const pagination=document.getElementById('index-pagination');
-  const pageCount=pagination.querySelector('.index-page-count');
-  const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
-  const indexTable=document.getElementById('work-index-table');
-  const PAGE_SIZE=12;
-  function updateIndex(){
-    const collection=rows.filter(row=>{
-      const client=row.querySelector('[data-client]')?.dataset.client;
-      return showAll||featured.has(client);
-    });
-    const pageSize=showAll?PAGE_SIZE:collection.length;
-    const numberOfPages=Math.max(1,Math.ceil(collection.length/pageSize));
-    currentPage=Math.min(currentPage,numberOfPages-1);
-    const visible=new Set(collection.slice(currentPage*pageSize,(currentPage+1)*pageSize));
-    rows.forEach(row=>{row.hidden=!visible.has(row);});
-    const paged=showAll&&numberOfPages>1;
-    pagination.hidden=!paged;
-    pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(numberOfPages).padStart(2,'0');
-    pageButtons.forEach(button=>{
-      button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===numberOfPages-1;
-    });
-    indexTable.setAttribute('aria-label',paged?'All work, page '+(currentPage+1)+' of '+numberOfPages:'Selected work');
-    viewButtons.forEach(button=>{
-      const selected=(button.dataset.indexView==='all')===showAll;
-      button.setAttribute('aria-pressed',String(selected));
-      button.classList.toggle('is-active',selected);
-    });
-  }
-  pageButtons.forEach(button=>button.addEventListener('click',()=>{
-    if(button.disabled)return;
-    currentPage+=Number(button.dataset.indexPage);
-    updateIndex();
-  }));
-  viewButtons.forEach(button=>button.addEventListener('click',()=>{
-    const nextAll=button.dataset.indexView==='all';
-    if(nextAll!==showAll)currentPage=0;
-    showAll=nextAll;
-    updateIndex();
-  }));
-  updateIndex();
+ let currentPage=0;
+ const pagination=document.getElementById('index-pagination');
+ const pageCount=pagination.querySelector('.index-page-count');
+ const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
+ const indexTable=document.getElementById('work-index-table');
+ const PAGE_SIZE=12;
+ function updateIndex(){
+   const numberOfPages=Math.ceil(rows.length/PAGE_SIZE);
+   currentPage=Math.max(0,Math.min(currentPage,numberOfPages-1));
+   rows.forEach((row,i)=>{row.hidden=i<currentPage*PAGE_SIZE||i>=(currentPage+1)*PAGE_SIZE;});
+   pagination.hidden=numberOfPages<2;
+   pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(numberOfPages).padStart(2,'0');
+   pageButtons.forEach(button=>{button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===numberOfPages-1;});
+   indexTable.setAttribute('aria-label','Work index, page '+(currentPage+1)+' of '+numberOfPages);
+ }
+ pageButtons.forEach(button=>button.addEventListener('click',()=>{
+   if(button.disabled)return;
+   currentPage+=Number(button.dataset.indexPage);
+   updateIndex();
+ }));
+ updateIndex();
   const panel=document.getElementById('selected-work-panel');
   if(!panel||!buttons.length)return;
   const contents=Array.from(panel.querySelectorAll('.panel-content[data-panel]'));
