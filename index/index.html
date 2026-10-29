@@ -620,6 +620,48 @@ body.work-index{height:100dvh;max-height:100dvh}
  }
 }
 
+
+/* Release corrections: stable two-column Index, no layout jump between sheets. */
+@media(min-width:1180px){
+ .work-index .index-layout:has(.work-panel.is-open){
+  grid-template-columns:minmax(0,1.65fr) minmax(250px,.85fr);
+ }
+ .work-index .index-layout:has(.work-panel.is-open) .index-table{table-layout:fixed}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table :is(th,td):nth-child(n+3){display:table-cell}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(2){width:49%}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(3){width:auto}
+ .work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(4){width:62px}
+}
+/* Explicit artwork height and label space for mobile identity studies. */
+@media(max-width:850px){
+ .work-index .work-panel.is-open .ramsey-marks{
+  min-height:0;grid-template-rows:minmax(0,1fr);
+ }
+ .work-index .work-panel.is-open .ramsey-marks figure{
+  height:100%;min-height:0;min-width:0;display:flex;flex-direction:column;
+ }
+ .work-index .work-panel.is-open .ramsey-marks img{
+  display:block;flex:1 1 0;height:0;min-height:0;width:100%;max-height:none;object-fit:contain;
+ }
+ .work-index .work-panel.is-open .ramsey-marks figcaption{flex:none;min-height:16px}
+ .work-index :is(.ronnie-navigation,.teton-navigation,.drawings-controls,.paintings-archive-nav) button:focus-visible{
+  outline-offset:-3px
+ }
+}
+/* Paintings gallery owns the available panel height, captions never sit beneath footer. */
+.work-index .work-panel:has(.paintings-panel:not([hidden])){
+ display:flex;flex-direction:column;min-height:0;overflow:hidden;
+}
+.work-index .panel-content.paintings-panel:not([hidden]){
+ flex:1 1 0;height:auto;min-height:0;max-height:100%;overflow:hidden;
+}
+.work-index .paintings-panel .panel-top{flex:none;gap:16px;min-height:34px;margin-bottom:8px}
+.work-index .paintings-archive-caption{
+ flex:none;min-height:64px;align-items:flex-start;gap:12px;overflow:visible
+}
+.work-index .paintings-archive-stage{min-height:0;flex:1 1 0}
+.work-index .freeman-site-live .freeman-preview-nav{font-size:clamp(10px,1.2vw,14px)}
+
 </style><script src="/index/paintings-archive.js" defer></script></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -724,7 +766,7 @@ body.work-index{height:100dvh;max-height:100dvh}
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
       <a class="freeman-site-preview freeman-site-live" href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer" aria-label="Open the live Freeman General Contracting website in a new tab">
-        <iframe class="freeman-live-frame" src="https://www.freemangc.com/" title="Live view of Freeman General Contracting website" tabindex="-1" aria-hidden="true" loading="lazy"></iframe>
+        <span class="freeman-preview-nav" aria-hidden="true"><strong>FREEMAN</strong><span class="freeman-preview-slash">/</span><span>GENERAL CONTRACTING</span></span>
         <span class="freeman-site-visit" aria-hidden="true">VISIT WEBSITE ↗︎</span>
       </a>
       <p class="archive-plate-caption freeman-site-label"><a href="https://www.freemangc.com/" target="_blank" rel="noopener noreferrer">LIVE WEBSITE ↗︎</a> / CREATIVE DIRECTION / 2026—</p>
@@ -847,6 +889,7 @@ body.work-index{height:100dvh;max-height:100dvh}
     const next=currentPage+delta;
     if(next<0||next>=Math.ceil(rows.length/pageSize()))return;
     currentPage=next;
+    show(null);
     updateIndex();
   }
   pageButtons.forEach(button=>button.addEventListener('click',()=>turnPage(Number(button.dataset.indexPage))));
@@ -908,13 +951,31 @@ body.work-index{height:100dvh;max-height:100dvh}
   // Desktop may show the first reading pane; mobile must open on the index list.
   // Otherwise the full-screen mobile pane hides every row on first arrival.
   const hashTarget=decodeURIComponent(location.hash.slice(1));
-  show(buttons.some(button=>button.dataset.client===hashTarget) ? hashTarget : (mobile.matches ? null : 'freeman'));
+  show(buttons.some(button=>button.dataset.client===hashTarget) ? hashTarget : null);
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
     const origin=buttons.find(item=>item.dataset.client===prior);
     if(origin)origin.focus();
   }));
   document.addEventListener('keydown',event=>{
+    if(!event.defaultPrevented && active && (event.key==='ArrowRight'||event.key==='ArrowLeft')
+       && !document.getElementById('work-image-dialog').open
+       && !(event.target instanceof HTMLInputElement)){
+      const forward=event.key==='ArrowRight';
+      const selector={
+        kashus:'.kashus-gallery [data-kashus-step]',
+        ronnie:'.ronnie-gallery [data-photo-step]',
+        teton:'.teton-gallery [data-photo-step]',
+        drawings:'.drawings-gallery [data-drawings-step]',
+        cowboyer:'.cowboyer-navigation [data-cowboyer-step]',
+        joseph:'.joseph-navigation [data-joseph-step]',
+        paintings:'.paintings-archive-nav button',
+        scout:'.paired-mobile-nav[data-pair-nav="scout"] [data-pair-step]',
+        pbr:'.paired-mobile-nav[data-pair-nav="pbr"] [data-pair-step]'
+      }[active];
+      const controls=selector?[...panel.querySelectorAll(selector)].filter(b=>getComputedStyle(b).display!=='none'):null;
+      if(controls?.length>=2){event.preventDefault();controls[forward?1:0].click();}
+    }
     if(event.key==='Escape'&&active&&!document.getElementById('work-image-dialog').open){
       const prior=active;show(null);
       const origin=buttons.find(item=>item.dataset.client===prior);
@@ -937,7 +998,7 @@ body.work-index{height:100dvh;max-height:100dvh}
   if(!img)return;
   enlarged.src=img.currentSrc||img.src;
   enlarged.alt=img.alt||'Selected work photograph';
-  const panel=img.closest('.panel-content');
+  const panel=trigger?.closest('.panel-content');
   title.textContent=panel?.querySelector('.panel-title')?.textContent || 'WORK';
   caption.textContent=img.alt||'PROJECT PHOTOGRAPH';
   dialog.querySelectorAll('.viewer-step').forEach(button=>{button.disabled=gallery.length<2;});
@@ -948,8 +1009,12 @@ body.work-index{height:100dvh;max-height:100dvh}
   if(panel?.dataset.panel==='kashus' && Array.isArray(window.__kashusSlides)){
    gallery=window.__kashusSlides.map(slide=>({src:slide.src,alt:slide.alt}));
    position=Number(img.dataset.slideIndex||0);
+  }else if(window.__workSlides?.[panel?.dataset.panel]){
+   gallery=window.__workSlides[panel.dataset.panel];
+   position=Math.max(0,gallery.findIndex(slide=>new URL(slide.src,document.baseURI).href===img.src));
   }else{
-   gallery=Array.from(panel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
+   gallery=Array.from(panel.querySelectorAll('.photo-plate img'))
+     .filter(el=>!el.hidden&&!el.closest('figure[hidden]')&&!!el.getAttribute('src'));
    position=gallery.indexOf(img);
   }
   if(position<0)return;
@@ -995,7 +1060,9 @@ body.work-index{height:100dvh;max-height:100dvh}
     ['../assets/8F38731E-2435-4C66-ACA2-AB5677516F30.jpg','Pickup truck crossing a vast ranch landscape']
   ]}
  ];
+ window.__workSlides=window.__workSlides||{};
  galleries.forEach(({name,slides})=>{
+  window.__workSlides[name+'-photo']=slides.map(([src,alt])=>({src,alt}));
   const gallery=document.querySelector('.'+name+'-gallery');
   const image=document.getElementById(name+'-active-image');
   const count=document.getElementById(name+'-count');
@@ -1158,6 +1225,8 @@ body.work-index{height:100dvh;max-height:100dvh}
 </script><script>
 (function(){
  const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
+ window.__workSlides=window.__workSlides||{};
+ window.__workSlides.drawings=slides.map(slide=>({src:slide.src,alt:slide.caption}));
  const gallery=document.querySelector('.drawings-gallery');
  const image=document.getElementById('drawings-active-image');
  const count=document.getElementById('drawings-count');
