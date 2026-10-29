@@ -30,6 +30,7 @@ await run(size.label+" closing detail restores list",async()=>{
 });
 await run(size.label+" page change resets open panel",async()=>{
  await page.locator('[data-client="joseph"]').click();
+ if(size.mobile)await page.locator('[data-panel="joseph"] .panel-close').click();
  const before=await page.locator(".index-layout").evaluate(e=>getComputedStyle(e).gridTemplateColumns);
  await page.locator('[data-index-page="1"]').click();
  const panel=page.locator(".work-panel");
