@@ -361,3 +361,8 @@ body:not(.landing) .section-title,body:not(.landing) .section-note,
 body:not(.landing) .index-row{font-family:var(--sans);letter-spacing:-.02em;text-transform:none}
 body:not(.landing) .brand{font-size:15px}
 body:not(.landing) .nav{font-size:14px}
+
+/* Retire rust/red paper colourway. The rust accent remains reserved for small editorial cues. */
+html[data-tone="red-earth"]{--paper:#ffffff;--ink:#111111;--muted:#626262;--rule:#d9d9d9;--accent:#a43f33}
+.landing-paper button[data-paper-tone="red-earth"]{display:none!important}
+.cart-toggle,dialog.cart-panel{display:none!important}
