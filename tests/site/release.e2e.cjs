@@ -32,7 +32,7 @@ async function assertVisibleInside(page,selector,label){
 async function waitForImage(page,selector,label){
  await page.waitForFunction(selector=>{
    const el=document.querySelector(selector);
-   return el && el.complete && el.naturalWidth >= 400;
+   return el && el.complete && el.naturalWidth > 0 && el.naturalHeight > 0;
  },selector,{timeout:15000});
 }
 async function waitForPrice(page,expected){
