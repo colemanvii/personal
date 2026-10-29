@@ -464,6 +464,7 @@
     <colgroup><col><col><col><col></colgroup>
     <thead><tr><th scope="col">No.</th><th scope="col">Project / Client</th><th scope="col">Role / Work</th><th scope="col">Year</th></tr></thead>
     <tbody>
+      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
       <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="freeman" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Freeman General Contracting</button></td><td>Creative direction / Identity / Web</td><td>2026—</td></tr>
       <tr><td>003</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2024—</td></tr>
       <tr><td>004</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="scout" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Scout Motors</button></td><td>Illustration</td><td>2026</td></tr>
@@ -485,7 +486,6 @@
       <tr><td>021</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
       <tr><td>022</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗︎</a></td><td>Illustration</td><td>2025</td></tr>
       <tr><td>023</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗︎</a></td><td>Photography</td><td>2025</td></tr>
-      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
       <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
     </tbody>
   </table>
@@ -660,6 +660,8 @@
    if(button.disabled)return;
    currentPage+=Number(button.dataset.indexPage);
    updateIndex();
+   const selectedRow=buttons.find(item=>item.dataset.client===active)?.closest('tr');
+   if(selectedRow?.hidden)show(null);
  }));
  updateIndex();
   const panel=document.getElementById('selected-work-panel');
@@ -702,11 +704,19 @@
       if(close)close.focus();
     }
   }
-  buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
-  // Desktop may show the first reading pane; mobile must open on the index list.
-  // Otherwise the full-screen mobile pane hides every row on first arrival.
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+    const next=active===button.dataset.client?null:button.dataset.client;
+    show(next);
+    history.replaceState(null,'',next?'#'+encodeURIComponent(next):location.pathname+location.search);
+  }));
+  // Direct links to a project reveal its row before opening its reading pane.
   const hashTarget=decodeURIComponent(location.hash.slice(1));
-  show(buttons.some(button=>button.dataset.client===hashTarget) ? hashTarget : (mobile.matches ? null : 'paintings'));
+  const hashButton=buttons.find(button=>button.dataset.client===hashTarget);
+  if(hashButton){
+    const rowIndex=rows.indexOf(hashButton.closest('tr'));
+    if(rowIndex>=0 && hashButton.closest('tr').hidden){currentPage=Math.floor(rowIndex/PAGE_SIZE);updateIndex();}
+  }
+  show(hashButton ? hashTarget : (mobile.matches ? null : 'paintings'));
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
     const origin=buttons.find(item=>item.dataset.client===prior);
