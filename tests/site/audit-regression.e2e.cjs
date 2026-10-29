@@ -11,7 +11,7 @@ const run=async(name,fn)=>{try{await fn();console.log("PASS",name);passed++;}cat
 const b=await chromium.launch({headless:true});
 for(const size of [{label:"375",width:375,height:667,mobile:true},{label:"390",width:390,height:844,mobile:true},{label:"1280",width:1280,height:800,mobile:false}]){
 const ctx=await b.newContext({viewport:{width:size.width,height:size.height},isMobile:size.mobile,hasTouch:size.mobile});
-const page=await ctx.newPage();
+const page=await ctx.newPage();page.setDefaultTimeout(7000);
 await page.goto(BASE+"/index/",{waitUntil:"load"});
 await run(size.label+" Ramsey images visible and nonzero",async()=>{
  const btn=page.locator('[data-client="ramsey-hill"]');await btn.click();
@@ -19,7 +19,7 @@ await run(size.label+" Ramsey images visible and nonzero",async()=>{
  await page.waitForFunction(()=>{
  const es=[...document.querySelectorAll('[data-panel="ramsey-hill"] .ramsey-marks img')];
  return es.length===2&&es.every(el=>el.complete&&el.naturalWidth>0);
- },{timeout:12000});
+ },null,{timeout:8000});
  const metrics=await imgs.evaluateAll(imgs=>imgs.map(el=>{const b=el.getBoundingClientRect();return {h:b.height,w:b.width,naturalWidth:el.naturalWidth}}));
  assert.ok(metrics.every(m=>m.h>=70&&m.w>=50),JSON.stringify(metrics));
  await page.screenshot({path:path.join(DIR,"audit-"+size.label+"-ramsey.png")});
