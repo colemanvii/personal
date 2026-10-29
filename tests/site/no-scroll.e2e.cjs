@@ -33,7 +33,7 @@ for(const client of ["list",...clients]){
    const sels=["html","body",".shell",".section",".index-layout",".index-scroll",".work-panel.is-open",".work-panel.is-open .panel-content:not([hidden])"];
    const els=sels.map(q=>({q,el:document.querySelector(q)})).filter(({el})=>!!el);
    const rows=els.map(({q,el})=>{const c=getComputedStyle(el),b=el.getBoundingClientRect();return {
-     q,scroll:el.scrollHeight-clientHeight,client:el.clientHeight,overflow:c.overflowY,
+     q,scroll:el.scrollHeight-el.clientHeight,client:el.clientHeight,overflow:c.overflowY,
      top:Math.round(b.top),bottom:Math.round(b.bottom),viewport:innerHeight};
    });
    const panel=document.querySelector(".work-panel.is-open .panel-content:not([hidden])");
