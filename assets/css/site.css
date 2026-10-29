@@ -390,3 +390,18 @@ body.landing .landing-paper button[aria-pressed="true"]::after{
 html[data-tone="graphite"] body.landing .landing-paper button[aria-pressed="true"]::after{
  outline-color:#f1f1ef!important;
 }
+
+/* Two unframed colour swatches. No selected box, ring, or outline. */
+body.landing .landing-paper button,
+body.landing .landing-paper button[aria-pressed="true"],
+body.landing .landing-paper button:focus,
+body.landing .landing-paper button:focus-visible{
+ border:0!important;outline:0!important;box-shadow:none!important;
+}
+body.landing .landing-paper button::after,
+body.landing .landing-paper button[aria-pressed="true"]::after,
+html[data-tone="graphite"] body.landing .landing-paper button[aria-pressed="true"]::after{
+ border:0!important;outline:0!important;box-shadow:none!important;
+}
+body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#f1f1f1!important}
+body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628!important}
