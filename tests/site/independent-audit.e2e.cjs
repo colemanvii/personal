@@ -1,3 +1,7 @@
+const fs=require("node:fs");
+const path=require("node:path");
+const SHOTS=process.env.SCREENSHOTS||"release-screenshots";
+fs.mkdirSync(SHOTS,{recursive:true});
 const {chromium}=require("playwright");
 const assert=require("node:assert/strict");
 const BASE=(process.env.BASE_URL||"http://127.0.0.1:4173").replace(/\/$/,"");
@@ -24,6 +28,7 @@ async function test(name,cb){
    assert.equal(await page.locator('[data-panel="freeman"]').isVisible(),true);
    assert.equal(await page.locator('[data-client="freeman"]').getAttribute("aria-expanded"),"true");
    assert.equal(await page.locator('[data-panel="freeman"] iframe').count(),0);
+   await page.screenshot({path:path.join(SHOTS,"audit-"+view.name+"-freeman.png")});
    await page.locator('[data-panel="freeman"] .panel-close').click();
   });
   if(view.mobile){
@@ -37,6 +42,7 @@ async function test(name,cb){
     v.forEach(x=>assert.ok(x.natural>0&&x.height>=40&&x.bottom<=view.height+1,JSON.stringify(v)));
     const cap=page.locator('[data-panel="ramsey-hill"] .archive-plate-caption').last();
     assert.ok((await cap.boundingBox()).y+(await cap.boundingBox()).height <view.height);
+    await page.screenshot({path:path.join(SHOTS,"audit-"+view.name+"-ramsey.png")});
     await page.locator('[data-panel="ramsey-hill"] .panel-close').click();
    });
   }else{
@@ -80,6 +86,7 @@ async function test(name,cb){
       return {capTop:cap.top,capBottom:cap.bottom,footerTop:footer.top,stageHeight:stage.height};
     });
     assert.ok(state.capBottom+3<state.footerTop&&state.stageHeight>=60,JSON.stringify(state));
+    await page.screenshot({path:path.join(SHOTS,"audit-"+view.name+"-sold-paintings.png")});
     await page.locator('[data-panel="paintings"] .panel-close').click();
    });
   }
