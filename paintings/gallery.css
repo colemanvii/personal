@@ -126,7 +126,8 @@
 #detail-action{margin-left:auto}
 #detail-action[hidden]{display:none}
 #painting-detail .buy-add{display:inline-flex;align-items:center;gap:6px;width:auto;min-height:48px;padding:0;border:0;background:none;color:var(--ink);font:400 15px/1 var(--sans);letter-spacing:-.01em;white-space:nowrap}
-#painting-detail .buy-add:not(:disabled)::after{content:"→"}
+/* Button label already contains a single outbound arrow. */
+#painting-detail .buy-add:not(:disabled)::after{content:none}
 #painting-detail .buy-add:disabled{background:none;color:var(--muted)}
 #painting-detail .buy-add:not(:disabled):active{background:none;color:var(--accent)}
 @media(hover:hover){#painting-detail .buy-add:not(:disabled):hover{background:none;color:var(--accent)}}
