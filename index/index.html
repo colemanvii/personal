@@ -29,8 +29,11 @@
 .work-index .index-table a:focus-visible,.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
 @media(max-width:850px){
  /* Narrow touch layouts must never retain phantom mouse hover on a row. */
- .work-index .index-table a:hover:not(:focus-visible),
- .work-index .expand-button:hover:not(:focus-visible){background:transparent;color:inherit}
+ html body.work-index .index-table a:hover:not(:focus-visible),
+ html body.work-index .expand-button:hover:not(:focus-visible){
+  /* Override the global non-landing accent hover, which uses !important. */
+  background:transparent!important;color:inherit!important;box-shadow:none!important
+ }
 }
 .work-index .index-table td:nth-child(2){overflow-wrap:anywhere}
 .work-index .expand-button,.work-index .panel-close{font:inherit;color:inherit;background:transparent;border:0;padding:0;text-align:left;cursor:pointer}
