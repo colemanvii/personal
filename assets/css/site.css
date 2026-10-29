@@ -374,3 +374,10 @@ html[data-tone="graphite"] body:not(.landing){--muted:#b7babc}
 .landing-paper button[data-paper-tone="field-notes"]{display:none!important}
 html[data-tone="graphite"] .landing-paper button[aria-pressed="true"]::after{outline-color:#f1f1ef}
 html[data-tone="graphite"] body:not(.landing) .sold-mark{color:#e79b91!important}
+
+/* Ensure the two visitor palette controls stay visible on either canvas. */
+body.landing .landing-paper{display:flex!important;visibility:visible!important;opacity:1!important;z-index:20}
+body.landing .landing-paper button[data-paper-tone="off-white"],
+body.landing .landing-paper button[data-paper-tone="graphite"]{display:block!important;visibility:visible!important;opacity:1!important}
+body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff;border:1px solid #888}
+body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628;border:1px solid #888}
