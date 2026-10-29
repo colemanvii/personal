@@ -55,6 +55,7 @@ jobs:
         run: |
           node tests/site/release.e2e.cjs
           node tests/site/no-scroll.e2e.cjs
+          node tests/site/independent-audit.e2e.cjs
       - name: Save screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
