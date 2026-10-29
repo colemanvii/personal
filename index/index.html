@@ -532,7 +532,7 @@
     <div class="panel-content" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <div class="kashus-gallery" id="kashus-full-gallery" aria-label="Kashus artwork and photography">
-        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="eager"></figure>
+        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="lazy" decoding="async"></figure>
         <div class="kashus-gallery-controls" role="group" aria-label="Browse Kashus images"><button type="button" data-kashus-step="-1" aria-label="Previous image" aria-controls="kashus-main-image">←</button><span class="kashus-image-count" id="kashus-image-count">01 / 10</span><button type="button" data-kashus-step="1" aria-label="Next image" aria-controls="kashus-main-image">→</button></div><span class="gallery-status" id="kashus-gallery-status" role="status" aria-live="polite" aria-atomic="true"></span>
         <p class="archive-plate-caption" id="kashus-image-caption">POUR ME OUT</p>
       </div>
@@ -594,7 +594,7 @@
       <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
         <figure class="archive-plate photo-plate cowboyer-stage">
           <div class="cowboyer-canvas" id="cowboyer-canvas" data-cover="01">
-            <img id="cowboyer-active-image" loading="eager" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
+            <img id="cowboyer-active-image" loading="lazy" decoding="async" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
           </div>
         </figure>
       </div>
@@ -716,7 +716,9 @@
   buttons.forEach(button=>button.addEventListener('click',()=>{
     const next=active===button.dataset.client?null:button.dataset.client;
     show(next);
-    history.replaceState(null,'',next?'#'+encodeURIComponent(next):location.pathname+location.search);
+    const fragment=decodeURIComponent(location.hash.slice(1));
+    const preserveSoldLink=next==='paintings' && window.__portfolioSeries?.paintings?.some(work=>work.id===fragment);
+    if(!preserveSoldLink)history.replaceState(null,'',next?'#'+encodeURIComponent(next):location.pathname+location.search);
   }));
   // Direct links to a project reveal its row before opening its reading pane.
   const hashTarget=decodeURIComponent(location.hash.slice(1));
@@ -837,6 +839,7 @@
       image.src=slides[target][0];
       image.alt=slides[target][1];
       image.dataset.slideIndex=String(target);
+      image.closest('.photo-plate')?.setAttribute('aria-label','Enlarge: '+image.alt);
       count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
     };
     candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -887,6 +890,7 @@
    image.src=slides[target].src;
    image.alt=slides[target].alt;
    image.dataset.slideIndex=String(target);
+   plate.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slides[target].alt.toUpperCase();
    status.textContent='Image '+(target+1)+' of '+slides.length+': '+slides[target].alt;
@@ -971,6 +975,7 @@
    canvas.dataset.cover=slide.cover;
    canvas.classList.toggle('is-composite',slide.composite);
    image.src=slide.src;image.alt=slide.alt;image.dataset.slideIndex=String(position);
+   gallery.querySelector('.cowboyer-stage')?.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
   };
   candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -998,6 +1003,7 @@
    position=(index+slides.length)%slides.length;
    const slide=slides[position];
    image.src=slide.src;image.alt=slide.caption;image.dataset.slideIndex=String(position);
+   gallery.querySelector('.drawings-stage')?.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
  }
