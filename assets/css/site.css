@@ -381,3 +381,12 @@ body.landing .landing-paper button[data-paper-tone="off-white"],
 body.landing .landing-paper button[data-paper-tone="graphite"]{display:block!important;visibility:visible!important;opacity:1!important}
 body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff;border:1px solid #888}
 body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628;border:1px solid #888}
+
+/* Strong, legible selection marker on the two homepage palette swatches. */
+body.landing .landing-paper button[aria-pressed="true"]::after{
+ outline:2px solid var(--ink)!important;
+ outline-offset:4px!important;
+}
+html[data-tone="graphite"] body.landing .landing-paper button[aria-pressed="true"]::after{
+ outline-color:#f1f1ef!important;
+}
