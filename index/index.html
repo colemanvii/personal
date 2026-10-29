@@ -27,6 +27,11 @@
  .work-index .index-table a:hover,.work-index .expand-button:hover{background:var(--ink);color:var(--paper);outline-offset:3px}
 }
 .work-index .index-table a:focus-visible,.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
+@media(max-width:850px){
+ /* Narrow touch layouts must never retain phantom mouse hover on a row. */
+ .work-index .index-table a:hover:not(:focus-visible),
+ .work-index .expand-button:hover:not(:focus-visible){background:transparent;color:inherit}
+}
 .work-index .index-table td:nth-child(2){overflow-wrap:anywhere}
 .work-index .expand-button,.work-index .panel-close{font:inherit;color:inherit;background:transparent;border:0;padding:0;text-align:left;cursor:pointer}
 .work-index .expand-button .indicator{display:inline-block;min-width:18px;color:var(--accent)}
