@@ -34,7 +34,7 @@ async function test(name,cb){
     await page.locator('[data-panel="ramsey-hill"] img').first().evaluate(e=>e.decode());
     const v=await page.locator('[data-panel="ramsey-hill"] img').evaluateAll(imgs=>imgs.map(e=>({height:e.getBoundingClientRect().height,natural:e.naturalWidth,bottom:e.getBoundingClientRect().bottom})));
     assert.equal(v.length,2);
-    v.forEach(x=>assert.ok(x.natural>0&&x.height>=40&&x.bottom<=innerHeight+1,JSON.stringify(v)));
+    v.forEach(x=>assert.ok(x.natural>0&&x.height>=40&&x.bottom<=view.height+1,JSON.stringify(v)));
     const cap=page.locator('[data-panel="ramsey-hill"] .archive-plate-caption').last();
     assert.ok((await cap.boundingBox()).y+(await cap.boundingBox()).height <view.height);
     await page.locator('[data-panel="ramsey-hill"] .panel-close').click();
