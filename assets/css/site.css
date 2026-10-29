@@ -405,3 +405,14 @@ html[data-tone="graphite"] body.landing .landing-paper button[aria-pressed="true
 }
 body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#f1f1f1!important}
 body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628!important}
+
+/* Final swatch treatment: one quiet hairline border on each square, never a selection ring. */
+body.landing .landing-paper button::after,
+body.landing .landing-paper button[aria-pressed="true"]::after,
+html[data-tone="graphite"] body.landing .landing-paper button[aria-pressed="true"]::after{
+ border:1px solid #777!important;
+ outline:none!important;
+ box-shadow:none!important;
+}
+body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff!important}
+body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#242628!important}
