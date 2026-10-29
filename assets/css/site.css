@@ -366,3 +366,11 @@ body:not(.landing) .nav{font-size:14px}
 html[data-tone="red-earth"]{--paper:#ffffff;--ink:#111111;--muted:#626262;--rule:#d9d9d9;--accent:#a43f33}
 .landing-paper button[data-paper-tone="red-earth"]{display:none!important}
 .cart-toggle,dialog.cart-panel{display:none!important}
+
+/* Dual palette: Cyber White and Graphite. */
+html[data-tone="graphite"]{--paper:#242628;--ink:#f1f1ef;--muted:#b7babc;--rule:#505457;--accent:#f1f1ef}
+html[data-tone="graphite"] body:not(.landing){--muted:#b7babc}
+.landing-paper button[data-paper-tone="graphite"]::after{background:#242628;border-color:#777b7e}
+.landing-paper button[data-paper-tone="field-notes"]{display:none!important}
+html[data-tone="graphite"] .landing-paper button[aria-pressed="true"]::after{outline-color:#f1f1ef}
+html[data-tone="graphite"] body:not(.landing) .sold-mark{color:#e79b91!important}
