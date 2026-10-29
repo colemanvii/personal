@@ -58,12 +58,12 @@ await run(size.label+" Paintings caption fully visible",async()=>{
   const panel=document.querySelector(".panel-content.paintings-panel");
   const footer=document.querySelector(".footer");
   const image=document.querySelector("#sold-painting-image");
-  const rect=el=>{const x=el.getBoundingClientRect();return {top:x.top,bottom:x.bottom,h:x.height}};
+  const rect=el=>{const x=el.getBoundingClientRect();return {top:x.top,bottom:x.bottom,left:x.left,right:x.right,h:x.height,w:x.width}};
   const elements=[...caption.querySelectorAll("#sold-title,#sold-detail,.sold-mark")].map(rect);
-  return {caption:rect(caption),panel:rect(panel),footer:rect(footer),elements,image:rect(image),stage:rect(document.querySelector(".paintings-archive-stage")),style:{display:getComputedStyle(image).display,visibility:getComputedStyle(image).visibility,opacity:getComputedStyle(image).opacity},vh:innerHeight,captionText:caption.innerText};
+  return {caption:rect(caption),panel:rect(panel),footer:rect(footer),elements,image:rect(image),stage:rect(document.querySelector(".paintings-archive-stage")),style:{display:getComputedStyle(image).display,visibility:getComputedStyle(image).visibility,opacity:getComputedStyle(image).opacity,clipPath:getComputedStyle(image).clipPath,transform:getComputedStyle(image).transform},src:image.currentSrc,hit:(()=>{const b=image.getBoundingClientRect(),e=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);return e?.tagName+"."+e?.className})(),vh:innerHeight,captionText:caption.innerText};
  });
  console.log("PAINT METRICS",size.label,JSON.stringify(state));
- assert.ok(state.image.h>=120&&state.image.bottom>state.image.top,"painting image has no painted stage "+JSON.stringify(state));
+ assert.ok(state.image.w>=160&&state.image.h>=120&&state.image.bottom>state.image.top,"painting image has no painted stage "+JSON.stringify(state));
  assert.ok(state.caption.h>=45,"caption collapsed "+JSON.stringify(state));
  assert.ok(state.caption.bottom<=state.panel.bottom+2,"caption clipped within its panel "+JSON.stringify(state));
  assert.ok(state.caption.bottom<=state.footer.top-1,"caption overlaps footer "+JSON.stringify(state));
