@@ -11,6 +11,7 @@ on:
       - "assets/css/**"
       - "assets/js/**"
       - "tests/site/release.e2e.cjs"
+      - "tests/site/audit-regression.e2e.cjs"
       - ".github/workflows/release-qa.yml"
   pull_request:
     branches: [main]
@@ -22,6 +23,7 @@ on:
       - "assets/css/**"
       - "assets/js/**"
       - "tests/site/release.e2e.cjs"
+      - "tests/site/audit-regression.e2e.cjs"
       - ".github/workflows/release-qa.yml"
   workflow_dispatch:
 
@@ -55,6 +57,7 @@ jobs:
         run: |
           node tests/site/release.e2e.cjs
           node tests/site/no-scroll.e2e.cjs
+          node tests/site/audit-regression.e2e.cjs
       - name: Save screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
