@@ -43,6 +43,11 @@ await run(size.label+" page change resets open panel",async()=>{
 });
 await run(size.label+" Paintings caption fully visible",async()=>{
  const button=page.locator('[data-client="paintings"]');await button.click();
+ await page.waitForFunction(()=>{
+   const img=document.querySelector("#sold-painting-image");
+   return img&&img.complete&&img.naturalWidth>0&&img.naturalHeight>0;
+ },null,{timeout:10000});
+
  const state=await page.evaluate(()=>{
   const caption=document.querySelector(".paintings-archive-caption");
   const panel=document.querySelector(".panel-content.paintings-panel");
