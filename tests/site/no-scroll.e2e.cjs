@@ -56,6 +56,15 @@ for(const client of ["list",...clients]){
  if(over.length||clipping.length||beyond.length||Object.values(scrolled).some(x=>x>2)){
    throw Error(JSON.stringify({over,clipping,beyond,scrolled,metrics}).slice(0,1900));
  }
+ if(size.mobile&&["scout","pbr"].includes(client)){
+   const nav=page.locator('[data-pair-nav="'+client+'"]');
+   await nav.locator('[data-pair-step="1"]').click();
+   assert.equal(await nav.locator('[data-pair-count]').innerText(),"02 / 02");
+   const figs=page.locator('[data-panel="'+client+'"] .photo-pair .photo-plate');
+   assert.equal(await figs.nth(0).isVisible(),false);
+   assert.equal(await figs.nth(1).isVisible(),true);
+   await page.screenshot({path:path.join(DIR,"mobile-fitted-"+size.name+"-"+client+".png")});
+ }
  console.log("PASS",size.name,client);
  }catch(e){
    failures++;
