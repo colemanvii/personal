@@ -32,9 +32,13 @@ jobs:
         run: npm install --no-save --no-package-lock playwright@1.56.1
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Run live production release checks
+      - name: Serve the exact checked-out source
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/colecalfee-release-server.log 2>&1 &
+          sleep 2
+      - name: Run source-matched browser release checks
         env:
-          BASE_URL: https://colecalfee.com
+          BASE_URL: http://127.0.0.1:4173
           SCREENSHOTS: release-screenshots
         run: node tests/site/release.e2e.cjs
       - name: Save screenshots and results
