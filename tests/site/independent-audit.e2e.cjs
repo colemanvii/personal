@@ -79,6 +79,9 @@ async function test(name,cb){
    await test(view.name+" paintings captions clear of footer",async()=>{
     await page.locator('[data-index-page="1"]').click();
     await page.locator('[data-client="paintings"]').click();
+    await page.locator("#sold-painting-image").evaluate(img=>img.decode());
+    const dimensions=await page.locator("#sold-painting-image").evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,visible:img.getBoundingClientRect().height}));
+    assert.ok(dimensions.width>=200 && dimensions.height>=200 && dimensions.visible>=60,JSON.stringify(dimensions));
     const state=await page.evaluate(()=>{
       const cap=document.querySelector(".paintings-archive-caption").getBoundingClientRect();
       const footer=document.querySelector(".footer").getBoundingClientRect();
