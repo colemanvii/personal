@@ -670,7 +670,7 @@
    currentPage+=Number(button.dataset.indexPage);
    updateIndex();
    const selectedRow=buttons.find(item=>item.dataset.client===active)?.closest('tr');
-   if(selectedRow?.hidden)show(null);
+   if(selectedRow?.hidden){show(null);history.replaceState(null,'',location.pathname+location.search);}
  }));
  updateIndex();
   const panel=document.getElementById('selected-work-panel');
@@ -720,22 +720,32 @@
     const preserveSoldLink=next==='paintings' && window.__portfolioSeries?.paintings?.some(work=>work.id===fragment);
     if(!preserveSoldLink)history.replaceState(null,'',next?'#'+encodeURIComponent(next):location.pathname+location.search);
   }));
-  // Direct links to a project reveal its row before opening its reading pane.
-  const hashTarget=decodeURIComponent(location.hash.slice(1));
-  const hashButton=buttons.find(button=>button.dataset.client===hashTarget);
-  if(hashButton){
-    const rowIndex=rows.indexOf(hashButton.closest('tr'));
-    if(rowIndex>=0 && hashButton.closest('tr').hidden){currentPage=Math.floor(rowIndex/PAGE_SIZE);updateIndex();}
+  // A URL fragment works on first load AND on same-document hash navigation.
+  function openProjectHash(){
+    let slug;
+    try{slug=decodeURIComponent(location.hash.slice(1));}catch(e){return false;}
+    const button=buttons.find(item=>item.dataset.client===slug);
+    if(!button)return false;
+    const rowIndex=rows.indexOf(button.closest('tr'));
+    if(rowIndex>=0){
+      currentPage=Math.floor(rowIndex/PAGE_SIZE);
+      updateIndex();
+    }
+    show(slug);
+    return true;
   }
-  show(hashButton ? hashTarget : (mobile.matches ? null : 'paintings'));
+  if(!openProjectHash())show(mobile.matches ? null : 'paintings');
+  window.addEventListener('hashchange',openProjectHash);
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
+    history.replaceState(null,'',location.pathname+location.search);
     const origin=buttons.find(item=>item.dataset.client===prior);
     if(origin)origin.focus();
   }));
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&active&&!document.getElementById('work-image-dialog').open){
       const prior=active;show(null);
+      history.replaceState(null,'',location.pathname+location.search);
       const origin=buttons.find(item=>item.dataset.client===prior);
       if(origin)origin.focus();
     }
