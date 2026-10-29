@@ -92,6 +92,13 @@ async function waitForPage(page,path){
      });
      assert.ok(fit.gap>=-3 && fit.gap<=28,"Index leaves dead space or overlaps pagination: "+JSON.stringify(fit));
      assert.ok(fit.scrollOverflow<=3,"Index contains invisible vertical overflow: "+JSON.stringify(fit));
+     if(size.mobile){
+       const lastLink=visible.last().locator("a").first();
+       if(await lastLink.count()){
+         const background=await lastLink.evaluate(el=>getComputedStyle(el).backgroundColor);
+         assert.equal(background,"rgba(0, 0, 0, 0)","touch devices must not retain a desktop hover highlight");
+       }
+     }
      await screenshot(page,size.name+"-index-01");
      await page.locator('[data-index-page="1"]').click();
      assert.equal(await rows.filter({visible:true}).count(),23-pageOneSize,"remaining work count on page two");
