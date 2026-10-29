@@ -6,6 +6,11 @@ on:
     paths:
       - "tests/site/release.e2e.cjs"
       - ".github/workflows/release-qa.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "tests/site/release.e2e.cjs"
+      - ".github/workflows/release-qa.yml"
   workflow_dispatch:
 
 permissions:
