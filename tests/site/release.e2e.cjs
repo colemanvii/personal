@@ -29,6 +29,15 @@ async function assertVisibleInside(page,selector,label){
  });
  assert.ok(v.width>0&&v.height>0&&v.x>=-2&&v.right<=v.vw+2&&v.y>=-2&&v.bottom<=v.vh+2,label+": clipped "+JSON.stringify(v));
 }
+async function waitForImage(page,selector,label){
+ await page.waitForFunction(selector=>{
+   const el=document.querySelector(selector);
+   return el && el.complete && el.naturalWidth >= 400;
+ },selector,{timeout:15000});
+}
+async function waitForPrice(page,expected){
+ await page.waitForFunction(expected=>document.querySelector("#detail-price")?.textContent?.includes(expected),expected,{timeout:20000});
+}
 async function waitForPage(page,path){
  await page.goto(BASE+path,{waitUntil:"domcontentloaded",timeout:30000});
  await page.waitForLoadState("load",{timeout:20000}).catch(()=>{});
@@ -78,12 +87,15 @@ async function waitForPage(page,path){
      assert.equal(await page.locator(".index-page-count").innerText(),"01 / 02");
      await page.locator('[data-client="ronnie"]').click();
      assert.equal(await page.locator(".work-panel").evaluate(e=>e.classList.contains("is-open")),true);
+     await waitForImage(page,'[data-panel="ronnie-photo"] img', "Ronnie image");
      await screenshot(page,size.name+"-ronnie");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();
      await page.locator('[data-client="teton"]').click();
+     await waitForImage(page,'[data-panel="teton-photo"] img', "Teton image");
      await screenshot(page,size.name+"-teton");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();
      await page.locator('[data-client="drawings"]').click();
+     await waitForImage(page,"#drawings-active-image","Drawings image");
      await screenshot(page,size.name+"-drawings");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();
    });
@@ -98,9 +110,13 @@ async function waitForPage(page,path){
      assert.equal(await page.locator("#painting-detail").evaluate(e=>e.open),true);
      assert.equal(await page.locator("#detail-name").innerText(),"Red Sea");
      await assertVisibleInside(page,"#detail-close","Painting close");
+     await waitForImage(page,"#detail-image","Red Sea viewer image");
+     await waitForPrice(page,"$2,250");
      await screenshot(page,size.name+"-red-sea");
      await page.locator("#detail-next").click();
      assert.equal(await page.locator("#detail-name").innerText(),"Flowers in McCarty Vase");
+     await waitForImage(page,"#detail-image","Flowers viewer image");
+     await waitForPrice(page,"$1,650");
      await screenshot(page,size.name+"-flowers");
      await page.locator("#detail-close").click();
      assert.equal(await page.locator("#painting-detail").evaluate(e=>e.open),false);
