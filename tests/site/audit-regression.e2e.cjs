@@ -69,6 +69,19 @@ await run(size.label+" Paintings caption fully visible",async()=>{
  assert.ok(state.caption.bottom<=state.footer.top-1,"caption overlaps footer "+JSON.stringify(state));
  assert.ok(state.elements.every(e=>e.h>=13&&e.bottom<=state.caption.bottom+2),"sold title/detail clipped "+JSON.stringify(state));
  await page.screenshot({path:path.join(DIR,"audit-"+size.label+"-paintings.png")});
+ if(size.label==="1280"){
+   await page.locator("#sold-painting-image").screenshot({path:path.join(DIR,"audit-image-element.png")});
+   const pixel=await page.evaluate(()=>{
+     const im=document.querySelector("#sold-painting-image");
+     const can=document.createElement("canvas");can.width=10;can.height=10;
+     const ctx=can.getContext("2d");ctx.drawImage(im,0,0,10,10);
+     return [...ctx.getImageData(5,5,1,1).data];
+   });
+   console.log("PAINT CENTER PIXEL",JSON.stringify(pixel));
+   await page.addStyleTag({content:'#sold-painting-image{position:fixed!important;top:0!important;left:0!important;width:300px!important;height:300px!important;z-index:99999!important;object-fit:contain!important;}'});
+   await page.screenshot({path:path.join(DIR,"audit-image-forced.png")});
+ }
+
 });
 await ctx.close();
 }
