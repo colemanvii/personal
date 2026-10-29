@@ -594,6 +594,32 @@ body.work-index{height:100dvh;max-height:100dvh}
  }
 }
 
+
+/* One full-size artwork at a time in two-image mobile collections. */
+.work-index .paired-mobile-nav{display:none}
+@media(max-width:850px){
+ .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery){
+  display:flex;align-items:center;justify-content:center;min-height:0
+ }
+ .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate:not([hidden]){
+  display:flex;align-items:center;justify-content:center;
+  flex:1 1 0;width:100%;min-height:0;height:100%;border:0
+ }
+ .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate[hidden]{display:none!important}
+ .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate img{
+  width:100%;height:100%;max-height:100%;object-fit:contain
+ }
+ .work-index .work-panel.is-open .paired-mobile-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  flex:none;min-height:44px;font:11px/1.4 var(--mono);color:var(--muted)
+ }
+ .work-index .paired-mobile-nav button{
+  display:flex;align-items:center;justify-content:center;min-width:48px;
+  min-height:44px;padding:0;background:none;border:0;
+  color:var(--ink);font:20px/1 var(--mono);cursor:inherit
+ }
+}
+
 </style><script src="/index/paintings-archive.js" defer></script></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -658,9 +684,14 @@ body.work-index{height:100dvh;max-height:100dvh}
     </div>
     <div class="panel-content" data-panel="scout" hidden>
       <div class="panel-top"><h2 class="panel-title">Scout Motors</h2><button class="panel-close" type="button" aria-label="Close Scout Motors artwork">CLOSE ×</button></div>
-      <div class="photo-pair scout-gallery">
+      <div class="photo-pair scout-gallery" aria-label="Scout Motors artwork">
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s1.jpeg" width="6762" height="8452" alt="Framed Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s2.jpeg" width="7101" height="8876" alt="Framed Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      </div>
+      <div class="paired-mobile-nav" data-pair-nav="scout" aria-label="Browse Scout Motors artwork">
+        <button type="button" data-pair-step="-1" aria-label="Previous Scout artwork">←</button>
+        <span data-pair-count>01 / 02</span>
+        <button type="button" data-pair-step="1" aria-label="Next Scout artwork">→</button>
       </div>
       <p class="archive-plate-caption">01—02 / SCOUT MOTORS / ILLUSTRATION / 2026</p>
     </div>
@@ -745,7 +776,12 @@ body.work-index{height:100dvh;max-height:100dvh}
     </div>
     <div class="panel-content" data-panel="pbr" hidden>
       <div class="panel-top"><h2 class="panel-title">PBR</h2><button class="panel-close" type="button" aria-label="Close PBR">CLOSE ×</button></div>
-      <div class="photo-pair"><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure></div>
+      <div class="photo-pair pbr-gallery" aria-label="PBR photographs"><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure></div>
+      <div class="paired-mobile-nav" data-pair-nav="pbr" aria-label="Browse PBR photographs">
+        <button type="button" data-pair-step="-1" aria-label="Previous PBR photograph">←</button>
+        <span data-pair-count>01 / 02</span>
+        <button type="button" data-pair-step="1" aria-label="Next PBR photograph">→</button>
+      </div>
       <p class="archive-plate-caption">01—02 / PBR / 2025</p>
     </div>
     <div class="panel-content" data-panel="ronnie-photo" hidden>
@@ -1141,5 +1177,38 @@ body.work-index{height:100dvh;max-height:100dvh}
      event.preventDefault();show(position+(event.key==='ArrowRight'?1:-1));
    }
  });
+})();
+</script>
+<script>
+/* Mobile doublets: a page, not a scrolling stack. */
+(function(){
+ const mobile=matchMedia('(max-width:850px)');
+ for(const client of ['scout','pbr']){
+  const panel=document.querySelector('[data-panel="'+client+'"]');
+  if(!panel)continue;
+  const gallery=panel.querySelector('.photo-pair');
+  const figures=[...gallery.querySelectorAll('.photo-plate')];
+  const nav=panel.querySelector('[data-pair-nav="'+client+'"]');
+  if(!gallery||!nav||figures.length!==2)continue;
+  let position=0,origin=null;
+  for(const figure of figures){const image=figure.querySelector('img');if(image)image.loading='eager';}
+  function render(){
+   figures.forEach((fig,i)=>{fig.hidden=mobile.matches&&i!==position;});
+   nav.querySelector('[data-pair-count]').textContent=String(position+1).padStart(2,'0')+' / 02';
+  }
+  function move(delta){position=(position+delta+2)%2;render();}
+  nav.querySelectorAll('[data-pair-step]').forEach(b=>b.addEventListener('click',()=>move(Number(b.dataset.pairStep))));
+  mobile.addEventListener('change',render);
+  gallery.addEventListener('touchstart',event=>{
+   origin=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
+  },{passive:true});
+  gallery.addEventListener('touchend',event=>{
+   if(!origin||event.changedTouches.length!==1)return;
+   const dx=event.changedTouches[0].clientX-origin.x,dy=event.changedTouches[0].clientY-origin.y;
+   origin=null;
+   if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.4)move(dx<0?1:-1);
+  },{passive:true});
+  render();
+ }
 })();
 </script></body></html>
