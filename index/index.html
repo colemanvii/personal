@@ -431,8 +431,8 @@
 .work-index .index-pagination button[disabled]{opacity:.24;cursor:default}
 .work-index .index-pagination button:focus-visible{outline:1px solid var(--accent);outline-offset:-2px}
 @media(max-width:850px){
- .work-index .index-layout:not(:has(.work-panel.is-open)){overflow:hidden}
- .work-index .index-layout:not(:has(.work-panel.is-open)) .index-scroll{min-height:0;overflow:hidden}
+ .work-index .index-layout:not(:has(.work-panel.is-open)){display:flex;flex-direction:column;overflow:hidden}
+ .work-index .index-layout:not(:has(.work-panel.is-open)) .index-scroll{flex:1;min-height:0;width:100%;overflow:hidden}
  .work-index .index-pagination{font-size:11px;min-height:48px}
  .work-index .index-table thead th{font-size:10px}
  .work-index .panel-id,.work-index .archive-plate-caption,.work-index #sold-detail,
