@@ -49,10 +49,7 @@ document.documentElement.classList.add('js');
     });
   }
 
-  function bind(){
-    if(document.body.classList.contains('landing')){
-      try{sessionStorage.removeItem(toneKey);sessionStorage.removeItem(optionsKey);}catch(e){}
-    }
+  // Restore the selected palette before the page paints where possible.\n  apply(getVisitState().tone);\n\n  function bind(){
     var state=getVisitState();
     var tone=state.tone;
 
