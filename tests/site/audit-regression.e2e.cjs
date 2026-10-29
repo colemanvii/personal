@@ -55,8 +55,10 @@ await run(size.label+" Paintings caption fully visible",async()=>{
   const image=document.querySelector("#sold-painting-image");
   const rect=el=>{const x=el.getBoundingClientRect();return {top:x.top,bottom:x.bottom,h:x.height}};
   const elements=[...caption.querySelectorAll("#sold-title,#sold-detail,.sold-mark")].map(rect);
-  return {caption:rect(caption),panel:rect(panel),footer:rect(footer),elements,image:rect(image),vh:innerHeight,captionText:caption.innerText};
+  return {caption:rect(caption),panel:rect(panel),footer:rect(footer),elements,image:rect(image),stage:rect(document.querySelector(".paintings-archive-stage")),style:{display:getComputedStyle(image).display,visibility:getComputedStyle(image).visibility,opacity:getComputedStyle(image).opacity},vh:innerHeight,captionText:caption.innerText};
  });
+ console.log("PAINT METRICS",size.label,JSON.stringify(state));
+ assert.ok(state.image.h>=120&&state.image.bottom>state.image.top,"painting image has no painted stage "+JSON.stringify(state));
  assert.ok(state.caption.h>=45,"caption collapsed "+JSON.stringify(state));
  assert.ok(state.caption.bottom<=state.panel.bottom+2,"caption clipped within its panel "+JSON.stringify(state));
  assert.ok(state.caption.bottom<=state.footer.top-1,"caption overlaps footer "+JSON.stringify(state));
