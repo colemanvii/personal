@@ -22,7 +22,11 @@
 .work-index .index-table col:nth-child(4){width:62px}
 .work-index .index-table td:first-child,.work-index .index-table td:nth-child(3),.work-index .index-table td:last-child{color:var(--muted)}
 .work-index .index-table th:last-child,.work-index .index-table td:last-child{text-align:right;padding-right:0}
-.work-index .index-table a:hover,.work-index .index-table a:focus-visible,.work-index .expand-button:hover,.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
+/* Don't leave a sticky hover highlight behind on iPhones. */
+@media(hover:hover){
+ .work-index .index-table a:hover,.work-index .expand-button:hover{background:var(--ink);color:var(--paper);outline-offset:3px}
+}
+.work-index .index-table a:focus-visible,.work-index .expand-button:focus-visible{background:var(--ink);color:var(--paper);outline-offset:3px}
 .work-index .index-table td:nth-child(2){overflow-wrap:anywhere}
 .work-index .expand-button,.work-index .panel-close{font:inherit;color:inherit;background:transparent;border:0;padding:0;text-align:left;cursor:pointer}
 .work-index .expand-button .indicator{display:inline-block;min-width:18px;color:var(--accent)}
