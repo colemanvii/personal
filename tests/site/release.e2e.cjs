@@ -67,6 +67,9 @@ async function waitForPage(page,path){
      await waitForPage(page,"/index/");
      const rows=page.locator("#work-index-table tbody tr");
      assert.equal(await rows.count(),23);
+     assert.deepEqual(await rows.locator("td:first-child").allInnerTexts(),
+       Array.from({length:23},(_,i)=>String(i+1).padStart(3,"0")),
+       "Index catalogue numbering must be continuous and ordered");
      assert.equal(await page.locator(".index-count").innerText(),"23 WORKS");
      assert.equal(await page.getByText("Selected", {exact:true}).count(),0,"obsolete Selected toggle");
      const visible=rows.filter({visible:true});
