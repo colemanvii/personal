@@ -49,7 +49,10 @@ document.documentElement.classList.add('js');
     });
   }
 
-  // Restore the selected palette before the page paints where possible.\n  apply(getVisitState().tone);\n\n  function bind(){
+  // Restore the selected palette before the page paints where possible.
+  apply(getVisitState().tone);
+
+  function bind(){
     var state=getVisitState();
     var tone=state.tone;
 
