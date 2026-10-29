@@ -4,6 +4,15 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>Index — Cole Calfee</title>
 <meta name="description" content="Selected artwork, photography, identities, and digital experiences by Cole Calfee.">
+<link rel="canonical" href="https://colecalfee.com/index/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cole Calfee">
+<meta property="og:title" content="Index — Cole Calfee">
+<meta property="og:description" content="Selected artwork, photography, identities, and digital experiences by Cole Calfee.">
+<meta property="og:url" content="https://colecalfee.com/index/">
+<meta property="og:image" content="https://colecalfee.com/assets/images/about-studio-motion.jpg">
+<meta property="og:image:alt" content="Cole Calfee in the studio among original paintings">
+<meta name="twitter:card" content="summary_large_image">
 <script>try{const t=sessionStorage.getItem('cole-paper-tone-session-v5');document.documentElement.dataset.tone=['off-white','graphite'].includes(t)?t:'off-white';}catch(e){document.documentElement.dataset.tone='off-white';}</script>
 <link rel="stylesheet" href="../assets/css/site.css?v=8">
 <style>
@@ -464,6 +473,7 @@
     <colgroup><col><col><col><col></colgroup>
     <thead><tr><th scope="col">No.</th><th scope="col">Project / Client</th><th scope="col">Role / Work</th><th scope="col">Year</th></tr></thead>
     <tbody>
+      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
       <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="freeman" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Freeman General Contracting</button></td><td>Creative direction / Identity / Web</td><td>2026—</td></tr>
       <tr><td>003</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2024—</td></tr>
       <tr><td>004</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="scout" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Scout Motors</button></td><td>Illustration</td><td>2026</td></tr>
@@ -485,7 +495,6 @@
       <tr><td>021</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
       <tr><td>022</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗︎</a></td><td>Illustration</td><td>2025</td></tr>
       <tr><td>023</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗︎</a></td><td>Photography</td><td>2025</td></tr>
-      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
       <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
     </tbody>
   </table>
@@ -523,7 +532,7 @@
     <div class="panel-content" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <div class="kashus-gallery" id="kashus-full-gallery" aria-label="Kashus artwork and photography">
-        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="eager"></figure>
+        <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="lazy" decoding="async"></figure>
         <div class="kashus-gallery-controls" role="group" aria-label="Browse Kashus images"><button type="button" data-kashus-step="-1" aria-label="Previous image" aria-controls="kashus-main-image">←</button><span class="kashus-image-count" id="kashus-image-count">01 / 10</span><button type="button" data-kashus-step="1" aria-label="Next image" aria-controls="kashus-main-image">→</button></div><span class="gallery-status" id="kashus-gallery-status" role="status" aria-live="polite" aria-atomic="true"></span>
         <p class="archive-plate-caption" id="kashus-image-caption">POUR ME OUT</p>
       </div>
@@ -585,7 +594,7 @@
       <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
         <figure class="archive-plate photo-plate cowboyer-stage">
           <div class="cowboyer-canvas" id="cowboyer-canvas" data-cover="01">
-            <img id="cowboyer-active-image" loading="eager" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
+            <img id="cowboyer-active-image" loading="lazy" decoding="async" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
           </div>
         </figure>
       </div>
@@ -660,6 +669,8 @@
    if(button.disabled)return;
    currentPage+=Number(button.dataset.indexPage);
    updateIndex();
+   const selectedRow=buttons.find(item=>item.dataset.client===active)?.closest('tr');
+   if(selectedRow?.hidden){show(null);history.replaceState(null,'',location.pathname+location.search);}
  }));
  updateIndex();
   const panel=document.getElementById('selected-work-panel');
@@ -702,19 +713,39 @@
       if(close)close.focus();
     }
   }
-  buttons.forEach(button=>button.addEventListener('click',()=>show(active===button.dataset.client?null:button.dataset.client)));
-  // Desktop may show the first reading pane; mobile must open on the index list.
-  // Otherwise the full-screen mobile pane hides every row on first arrival.
-  const hashTarget=decodeURIComponent(location.hash.slice(1));
-  show(buttons.some(button=>button.dataset.client===hashTarget) ? hashTarget : (mobile.matches ? null : 'paintings'));
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+    const next=active===button.dataset.client?null:button.dataset.client;
+    show(next);
+    const fragment=decodeURIComponent(location.hash.slice(1));
+    const preserveSoldLink=next==='paintings' && window.__portfolioSeries?.paintings?.some(work=>work.id===fragment);
+    if(!preserveSoldLink)history.replaceState(null,'',next?'#'+encodeURIComponent(next):location.pathname+location.search);
+  }));
+  // A URL fragment works on first load AND on same-document hash navigation.
+  function openProjectHash(){
+    let slug;
+    try{slug=decodeURIComponent(location.hash.slice(1));}catch(e){return false;}
+    const button=buttons.find(item=>item.dataset.client===slug);
+    if(!button)return false;
+    const rowIndex=rows.indexOf(button.closest('tr'));
+    if(rowIndex>=0){
+      currentPage=Math.floor(rowIndex/PAGE_SIZE);
+      updateIndex();
+    }
+    show(slug);
+    return true;
+  }
+  if(!openProjectHash())show(mobile.matches ? null : 'paintings');
+  window.addEventListener('hashchange',openProjectHash);
   panel.querySelectorAll('.panel-close').forEach(button=>button.addEventListener('click',()=>{
     const prior=active;show(null);
+    history.replaceState(null,'',location.pathname+location.search);
     const origin=buttons.find(item=>item.dataset.client===prior);
     if(origin)origin.focus();
   }));
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&active&&!document.getElementById('work-image-dialog').open){
       const prior=active;show(null);
+      history.replaceState(null,'',location.pathname+location.search);
       const origin=buttons.find(item=>item.dataset.client===prior);
       if(origin)origin.focus();
     }
@@ -729,34 +760,36 @@
  const caption=document.getElementById('viewer-caption');
  const count=document.getElementById('viewer-count');
  const close=dialog.querySelector('.viewer-close');
- let gallery=[],position=0,trigger=null;
+ let gallery=[],position=0,trigger=null,sourcePanel=null;
  function render(){
-  const img=gallery[position];
-  if(!img)return;
-  enlarged.src=img.currentSrc||img.src;
-  enlarged.alt=img.alt||'Selected work photograph';
-  const panel=img.closest('.panel-content');
-  title.textContent=panel?.querySelector('.panel-title')?.textContent || 'SELECTED WORK';
-  caption.textContent=img.alt||'PROJECT PHOTOGRAPH';
+  const frame=gallery[position];
+  if(!frame)return;
+  enlarged.src=frame.currentSrc||frame.src;
+  enlarged.alt=frame.alt||'Selected work photograph';
+  title.textContent=sourcePanel?.querySelector('.panel-title')?.textContent || 'SELECTED WORK';
+  caption.textContent=frame.alt||'PROJECT PHOTOGRAPH';
   dialog.querySelectorAll('.viewer-step').forEach(button=>{button.disabled=gallery.length<2;});
   count.textContent=String(position+1).padStart(2,'0')+' / '+String(gallery.length).padStart(2,'0');
  }
  function open(img){
-  const panel=img.closest('.panel-content');
-  if(panel?.dataset.panel==='kashus' && Array.isArray(window.__kashusSlides)){
-   gallery=window.__kashusSlides.map(slide=>({src:slide.src,alt:slide.alt}));
-   position=Number(img.dataset.slideIndex||0);
+  sourcePanel=img.closest('.panel-content');
+  if(!sourcePanel)return;
+  const key=sourcePanel.dataset.panel;
+  const series=key==='kashus'?window.__kashusSlides:window.__portfolioSeries?.[key];
+  if(Array.isArray(series)&&series.length){
+   gallery=series.map(slide=>({src:slide.src,alt:slide.alt||slide.caption||'Selected work'}));
+   position=Math.max(0,Math.min(gallery.length-1,Number(img.dataset.slideIndex)||0));
   }else{
-   gallery=Array.from(panel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
+   gallery=Array.from(sourcePanel.querySelectorAll('.photo-plate img')).filter(el=>!el.hidden&&el.complete&&el.naturalWidth>0);
    position=gallery.indexOf(img);
   }
   if(position<0)return;
-  trigger=img.closest('.photo-plate');
+  trigger=img.closest('.photo-plate, .paintings-archive-stage');
   render();
   dialog.showModal();
   close.focus();
  }
- document.querySelectorAll('.panel-content .photo-plate').forEach(figure=>{
+ document.querySelectorAll('.panel-content .photo-plate, .panel-content .paintings-archive-stage').forEach(figure=>{
   const img=figure.querySelector('img');
   if(!img)return;
   figure.tabIndex=0;
@@ -768,11 +801,15 @@
   });
  });
  dialog.querySelectorAll('.viewer-step').forEach(button=>button.addEventListener('click',()=>{
-  position=(position+Number(button.dataset.step)+gallery.length)%gallery.length;render();
+  if(gallery.length>1){position=(position+Number(button.dataset.step)+gallery.length)%gallery.length;render();}
  }));
  close.addEventListener('click',()=>dialog.close());
  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
- dialog.addEventListener('close',()=>{enlarged.removeAttribute('src');if(trigger?.isConnected)trigger.focus();});
+ dialog.addEventListener('close',()=>{
+  enlarged.removeAttribute('src');
+  if(trigger?.isConnected)trigger.focus();
+  sourcePanel=null;
+ });
  dialog.addEventListener('keydown',event=>{
   if(event.key==='ArrowRight'||event.key==='ArrowLeft'){
    event.preventDefault();
@@ -794,6 +831,8 @@
   ]}
  ];
  galleries.forEach(({name,slides})=>{
+  window.__portfolioSeries=window.__portfolioSeries||{};
+  window.__portfolioSeries[name==='ronnie'?'ronnie-photo':'teton-photo']=slides.map(([src,alt])=>({src,alt}));
   const gallery=document.querySelector('.'+name+'-gallery');
   const image=document.getElementById(name+'-active-image');
   const count=document.getElementById(name+'-count');
@@ -809,6 +848,8 @@
       position=target;
       image.src=slides[target][0];
       image.alt=slides[target][1];
+      image.dataset.slideIndex=String(target);
+      image.closest('.photo-plate')?.setAttribute('aria-label','Enlarge: '+image.alt);
       count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
     };
     candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -859,6 +900,7 @@
    image.src=slides[target].src;
    image.alt=slides[target].alt;
    image.dataset.slideIndex=String(target);
+   plate.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(target+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slides[target].alt.toUpperCase();
    status.textContent='Image '+(target+1)+' of '+slides.length+': '+slides[target].alt;
@@ -922,6 +964,8 @@
   {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
   {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
  ];
+ window.__portfolioSeries=window.__portfolioSeries||{};
+ window.__portfolioSeries.cowboyer=slides;
  // Include the sibling navigation controls in the gallery event scope.
  const gallery=document.querySelector('[data-panel="cowboyer"]');
  const count=document.getElementById('cowboyer-count');
@@ -940,7 +984,8 @@
    const slide=slides[position];
    canvas.dataset.cover=slide.cover;
    canvas.classList.toggle('is-composite',slide.composite);
-   image.src=slide.src;image.alt=slide.alt;
+   image.src=slide.src;image.alt=slide.alt;image.dataset.slideIndex=String(position);
+   gallery.querySelector('.cowboyer-stage')?.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
   };
   candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
@@ -956,6 +1001,8 @@
 </script><script>
 (function(){
  const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
+ window.__portfolioSeries=window.__portfolioSeries||{};
+ window.__portfolioSeries.drawings=slides;
  const gallery=document.querySelector('.drawings-gallery');
  const image=document.getElementById('drawings-active-image');
  const count=document.getElementById('drawings-count');
@@ -965,7 +1012,8 @@
  function show(index){
    position=(index+slides.length)%slides.length;
    const slide=slides[position];
-   image.src=slide.src;image.alt=slide.caption;
+   image.src=slide.src;image.alt=slide.caption;image.dataset.slideIndex=String(position);
+   gallery.querySelector('.drawings-stage')?.setAttribute('aria-label','Enlarge: '+image.alt);
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
    caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
  }
