@@ -411,6 +411,38 @@
  .work-index #sold-title{font-size:18px}
 }
 @media(max-height:620px){.work-index .paintings-archive-nav{min-height:36px;margin:2px 0}.work-index .paintings-archive-nav button{height:36px}}
+
+/* The complete index is read in pages, never a hidden scrolling column. */
+.work-index .index-pagination[hidden]{display:none!important}
+.work-index .index-scroll:has(.index-pagination:not([hidden])){
+ display:flex;flex-direction:column;min-height:0;overflow:hidden
+}
+.work-index .index-scroll:has(.index-pagination:not([hidden])) .index-table{height:auto;flex:none}
+.work-index .index-pagination{
+ display:flex;align-items:center;justify-content:space-between;flex:none;
+ border-top:1px solid var(--rule);padding:8px 0 0;margin-top:auto;
+ font:11px/1.4 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums
+}
+.work-index .index-pagination button{
+ display:inline-flex;align-items:center;justify-content:center;
+ width:46px;height:44px;background:none;border:0;padding:0;
+ color:var(--ink);font:20px/1 var(--mono);cursor:pointer
+}
+.work-index .index-pagination button[disabled]{opacity:.24;cursor:default}
+.work-index .index-pagination button:focus-visible{outline:1px solid var(--accent);outline-offset:-2px}
+@media(max-width:850px){
+ .work-index .index-layout:not(:has(.work-panel.is-open)){overflow:hidden}
+ .work-index .index-layout:not(:has(.work-panel.is-open)) .index-scroll{min-height:0;overflow:hidden}
+ .work-index .index-pagination{font-size:11px;min-height:48px}
+ .work-index .index-table thead th{font-size:10px}
+ .work-index .panel-id,.work-index .archive-plate-caption,.work-index #sold-detail,
+ .work-index .sold-mark{font-size:11px;line-height:1.5}
+ .work-index .paintings-archive-nav{font-size:11px}
+}
+@media(max-width:390px) and (max-height:700px){
+ .work-index .index-pagination{min-height:40px;padding-top:3px}
+ .work-index .index-pagination button{height:39px}
+}
 </style><script src="/index/paintings-archive.js" defer></script></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -453,7 +485,12 @@
       <tr><td>022</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗︎</a></td><td>Illustration</td><td>2025</td></tr>
       <tr><td>023</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗︎</a></td><td>Photography</td><td>2025</td></tr>
     </tbody>
-  </table></div>
+  </table>
+  <nav id="index-pagination" class="index-pagination" aria-label="All work pages" hidden>
+   <button data-index-page="-1" type="button" aria-label="Previous page of work">←</button>
+   <span class="index-page-count" aria-live="polite" aria-atomic="true">01 / 02</span>
+   <button data-index-page="1" type="button" aria-label="Next page of work">→</button>
+  </nav></div>
   <aside class="work-panel" id="selected-work-panel" aria-label="Selected client releases">
     <p class="panel-id">SELECTED WORK</p>
     <p class="panel-placeholder">SELECT A PROJECT<br>TO VIEW THE WORK.</p>
@@ -604,19 +641,44 @@
   const viewButtons=Array.from(document.querySelectorAll('[data-index-view]'));
   const rows=Array.from(document.querySelectorAll('.index-table tbody tr'));
   let showAll=false;
+  let currentPage=0;
+  const pagination=document.getElementById('index-pagination');
+  const pageCount=pagination.querySelector('.index-page-count');
+  const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
+  const indexTable=document.getElementById('work-index-table');
+  const PAGE_SIZE=12;
   function updateIndex(){
-    rows.forEach(row=>{
+    const collection=rows.filter(row=>{
       const client=row.querySelector('[data-client]')?.dataset.client;
-      row.hidden=!showAll&&!featured.has(client);
+      return showAll||featured.has(client);
     });
+    const pageSize=showAll?PAGE_SIZE:collection.length;
+    const numberOfPages=Math.max(1,Math.ceil(collection.length/pageSize));
+    currentPage=Math.min(currentPage,numberOfPages-1);
+    const visible=new Set(collection.slice(currentPage*pageSize,(currentPage+1)*pageSize));
+    rows.forEach(row=>{row.hidden=!visible.has(row);});
+    const paged=showAll&&numberOfPages>1;
+    pagination.hidden=!paged;
+    pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(numberOfPages).padStart(2,'0');
+    pageButtons.forEach(button=>{
+      button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===numberOfPages-1;
+    });
+    indexTable.setAttribute('aria-label',paged?'All work, page '+(currentPage+1)+' of '+numberOfPages:'Selected work');
     viewButtons.forEach(button=>{
       const selected=(button.dataset.indexView==='all')===showAll;
       button.setAttribute('aria-pressed',String(selected));
       button.classList.toggle('is-active',selected);
     });
   }
+  pageButtons.forEach(button=>button.addEventListener('click',()=>{
+    if(button.disabled)return;
+    currentPage+=Number(button.dataset.indexPage);
+    updateIndex();
+  }));
   viewButtons.forEach(button=>button.addEventListener('click',()=>{
-    showAll=button.dataset.indexView==='all';
+    const nextAll=button.dataset.indexView==='all';
+    if(nextAll!==showAll)currentPage=0;
+    showAll=nextAll;
     updateIndex();
   }));
   updateIndex();
