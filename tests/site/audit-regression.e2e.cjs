@@ -79,11 +79,18 @@ await run(size.label+" Paintings caption fully visible",async()=>{
  await page.screenshot({path:path.join(DIR,"audit-"+size.label+"-paintings.png")});
  });
  await ctx.close();
+}
+await run("Purchase arrow is single icon",async()=>{
+ const ctx=await b.newContext({viewport:{width:1280,height:800}});
+ const p=await ctx.newPage();
+ await p.goto(BASE+"/paintings/",{waitUntil:"load"});
+ const pseudo=await p.evaluate(()=>{
+   const e=document.createElement("button");e.className="buy-add";e.textContent="Purchase ↗";
+   document.querySelector("#detail-action")?.append(e);
+   const c=getComputedStyle(e,"::after").content;e.remove();return c;
+ });
+ assert.ok(["none","normal",'""'].includes(pseudo),"duplicate purchase arrow CSS: "+pseudo);
+ await ctx.close();
 });
-const raw=await b.newContext({viewport:{width:520,height:640}});
-const imagePage=await raw.newPage();
-await imagePage.goto(BASE+"/assets/paintings/originals/harvest-1.jpg",{waitUntil:"load"});
-await imagePage.screenshot({path:path.join(DIR,"audit-asset-direct-harvest.png")});
-await raw.close();
 await b.close();console.log(passed+" passed; "+failed+" failed");process.exitCode=failed?1:0;
 })().catch(e=>{console.error(e);process.exitCode=1});
