@@ -73,17 +73,28 @@ async function waitForPage(page,path){
      assert.equal(await page.locator(".index-count").innerText(),"23 WORKS");
      assert.equal(await page.getByText("Selected", {exact:true}).count(),0,"obsolete Selected toggle");
      const visible=rows.filter({visible:true});
-     assert.equal(await visible.count(),12,"page one should have 12 works");
+     const pageOneSize=size.mobile?(size.height>=780?16:size.height>=720?14:12):12;
+     assert.equal(await visible.count(),pageOneSize,"page one must use the full intended screen capacity");
      const names=await visible.locator("td:nth-child(2)").allInnerTexts();
      for(const required of ["Ronnie Hodges","Teton Valley Ranch","Drawings"]){
        assert.ok(names.some(n=>n.includes(required)),required+" missing from page one");
      }
-     assert.match(names[0],/Paintings/);
+     assert.match(names[0],/Freeman General Contracting/);
+     assert.equal(names.some(n=>/Paintings/.test(n)),false,"Paintings belongs in the archive, not at the top");
      await assertNoHorizontalOverflow(page,"Index");
      await assertVisibleInside(page,"#index-pagination","Index pagination");
+     const fit=await page.evaluate(()=>{
+       const rows=[...document.querySelectorAll("#work-index-table tbody tr")].filter(r=>!r.hidden);
+       const last=rows.at(-1).getBoundingClientRect();
+       const nav=document.querySelector("#index-pagination").getBoundingClientRect();
+       const scroll=document.querySelector(".index-scroll");
+       return {lastBottom:last.bottom,navTop:nav.top,gap:nav.top-last.bottom,scrollOverflow:scroll.scrollHeight-scroll.clientHeight};
+     });
+     assert.ok(fit.gap>=-3 && fit.gap<=28,"Index leaves dead space or overlaps pagination: "+JSON.stringify(fit));
+     assert.ok(fit.scrollOverflow<=3,"Index contains invisible vertical overflow: "+JSON.stringify(fit));
      await screenshot(page,size.name+"-index-01");
      await page.locator('[data-index-page="1"]').click();
-     assert.equal(await rows.filter({visible:true}).count(),11,"page two must have 11");
+     assert.equal(await rows.filter({visible:true}).count(),23-pageOneSize,"remaining work count on page two");
      assert.equal(await page.locator(".index-page-count").innerText(),"02 / 02");
      await screenshot(page,size.name+"-index-02");
      await page.locator('[data-index-page="-1"]').click();
