@@ -444,6 +444,12 @@
  .work-index .index-pagination button{height:39px}
 }
 .work-index .sold-mark, .work-index [data-state="sold"] { color:var(--accent)!important; }
+/* Mobile selected work fills the available screen without an empty lower field. */
+@media(max-width:850px) and (min-height:701px){
+ .work-index .index-scroll:has(.index-pagination[hidden]){display:flex;flex-direction:column;height:100%}
+ .work-index .index-scroll:has(.index-pagination[hidden]) .index-table{height:100%;flex:1}
+ .work-index .index-scroll:has(.index-pagination[hidden]) .index-table tbody tr:not([hidden]){height:auto}
+}
 </style><script src="/index/paintings-archive.js" defer></script></head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -462,9 +468,8 @@
     <colgroup><col><col><col><col></colgroup>
     <thead><tr><th scope="col">No.</th><th scope="col">Project / Client</th><th scope="col">Role / Work</th><th scope="col">Year</th></tr></thead>
     <tbody>
-      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
       <tr><td>002</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="freeman" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Freeman General Contracting</button></td><td>Creative direction / Identity / Web</td><td>2026—</td></tr>
-      <tr><td>003</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2026</td></tr>
+      <tr><td>003</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="kashus" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Kashus Culpepper</button></td><td>Artwork / 7 releases</td><td>2024—</td></tr>
       <tr><td>004</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="scout" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Scout Motors</button></td><td>Illustration</td><td>2026</td></tr>
       <tr><td>005</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="ramsey-hill" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Ramsey Hill Contracting</button></td><td>Logo</td><td>2026</td></tr>
       <tr><td>006</td><td><a href="https://jeffweiroilworks.com/" target="_blank" rel="noopener noreferrer">Jeff Weir Oilworks ↗︎</a></td><td>Apprentice</td><td>2025</td></tr>
@@ -481,10 +486,11 @@
       <tr><td>017</td><td><a href="https://www.imdb.com/title/tt5836316/" target="_blank" rel="noopener noreferrer">The Last Movie Star ↗︎</a></td><td>Production Intern</td><td>2016</td></tr>
       <tr><td>018</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="teton" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Teton Valley Ranch</button></td><td>Photography</td><td>2015</td></tr>
       <tr><td>019</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="cowboyer" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>The Cowboyer</button></td><td>Cover studies</td><td>2026</td></tr>
-      <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
       <tr><td>021</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="mags" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Mags Duval</button></td><td>Photography</td><td>2024</td></tr>
       <tr><td>022</td><td><a href="https://www.museebath.com/collections/musee-for-men" target="_blank" rel="noopener noreferrer">Musee for Men ↗︎</a></td><td>Illustration</td><td>2025</td></tr>
       <tr><td>023</td><td><a href="https://open.spotify.com/artist/6G76uCD9fXivb3G4OnnVG8" target="_blank" rel="noopener noreferrer" aria-label="Listen to verygently on Spotify">verygently ↗︎</a></td><td>Photography</td><td>2025</td></tr>
+      <tr><td>001</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="paintings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Paintings</button></td><td>Original works / Sold archive</td><td>Ongoing</td></tr>
+      <tr><td>020</td><td><button class="expand-button" type="button" aria-expanded="false" data-client="drawings" aria-controls="selected-work-panel"><span class="indicator" aria-hidden="true">+</span>Drawings</button></td><td>Independent work</td><td>Ongoing</td></tr>
     </tbody>
   </table>
   <nav id="index-pagination" class="index-pagination" aria-label="All work pages" hidden>
