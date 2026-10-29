@@ -19,7 +19,7 @@ permissions:
 jobs:
   visual-and-interaction:
     name: Real-browser desktop and iPhone QA
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
