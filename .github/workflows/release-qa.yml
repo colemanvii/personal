@@ -148,6 +148,10 @@ jobs:
         env:
           BASE_URL: ${{ steps.pages.outputs.url }}
           ROUTES_TABLE: "1"
+          # Cloudflare's edge can serve a removed file for a few minutes after a deploy.
+          # Bounded retries (10 × 30s per URL) wait for that; the final assertions are unchanged.
+          ROUTES_ATTEMPTS: "10"
+          ROUTES_RETRY_MS: "30000"
         run: |
           for i in $(seq 1 12); do curl -fs -o /dev/null "$BASE_URL/robots.txt" && break; sleep 10; done
           node tests/site/routes.e2e.cjs

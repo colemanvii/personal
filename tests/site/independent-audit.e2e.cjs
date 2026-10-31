@@ -36,7 +36,12 @@ async function test(name,cb){
     const row=page.locator('[data-client="ramsey-hill"]');
     if(!await row.isVisible())await page.locator('[data-index-page="1"]').click();
     await row.click();
-    await page.locator('[data-panel="ramsey-hill"] img').first().evaluate(e=>e.decode());
+    // Wait until every mark has finished loading or failed (bounded), then judge them strictly:
+    // a slow network must not fail the test, but a broken or missing image still does.
+    const settled=await page.locator('[data-panel="ramsey-hill"] img').evaluateAll(imgs=>Promise.all(imgs.map(img=>
+     Promise.race([img.decode().then(()=>"loaded",()=>"failed"),new Promise(r=>setTimeout(()=>r("timed out"),20000))])
+      .then(state=>({src:img.currentSrc||img.src,state})))));
+    settled.forEach(s=>assert.equal(s.state,"loaded",`Ramsey mark did not load: ${s.src} (${s.state})`));
     const v=await page.locator('[data-panel="ramsey-hill"] img').evaluateAll(imgs=>imgs.map(e=>({height:e.getBoundingClientRect().height,natural:e.naturalWidth,bottom:e.getBoundingClientRect().bottom})));
     assert.equal(v.length,2);
     v.forEach(x=>assert.ok(x.natural>0&&x.height>=40&&x.bottom<=view.height+1,JSON.stringify(v)));

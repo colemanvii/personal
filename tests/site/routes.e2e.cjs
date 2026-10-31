@@ -5,7 +5,13 @@
  *   npx wrangler@3.114.0 pages dev site --port 8788 &
  *   BASE_URL=http://127.0.0.1:8788 node tests/site/routes.e2e.cjs
  * BASE_URL=https://colecalfee.com (or a *.pages.dev preview) checks a deployment.
- * Redirects are not followed: the exact status and Location are asserted. */
+ * Redirects are not followed: the exact status and Location are asserted.
+ *
+ * Right after a deployment, Cloudflare's edge can briefly keep serving a
+ * cached copy of a file the deployment removed. ROUTES_ATTEMPTS (default 1)
+ * and ROUTES_RETRY_MS (default 20000) let a check be repeated, bounded, while
+ * that clears. The assertions are unchanged: a check passes only when the
+ * response is exactly right, and every retry is reported by name. */
 const assert = require("node:assert/strict");
 
 const BASE = (process.env.BASE_URL || "http://127.0.0.1:8788").replace(/\/$/, "");
@@ -38,13 +44,34 @@ const NOT_FOUND = [
   "/this-does-not-exist", "/index/zzz", "/paintings/zzz/", "/assets/nope.png",
 ];
 
+const results = [];
+const ATTEMPTS = Math.max(1, Math.min(10, Number(process.env.ROUTES_ATTEMPTS || 1)));
+const RETRY_MS = Math.max(0, Math.min(60000, Number(process.env.ROUTES_RETRY_MS || 20000)));
 let failed = 0, passed = 0;
+const retried = [];
 async function check(name, fn) {
-  try { await fn(); passed++; console.log(`ok   ${name}`); }
-  catch (error) { failed++; console.log(`FAIL ${name}\n     ${String(error.message || error).split("\n").slice(0, 6).join("\n     ")}`); }
+  for (let attempt = 1; ; attempt++) {
+    const mark = results.length;
+    try {
+      await fn();
+      passed++;
+      if (attempt > 1) retried.push(`${name} (passed on attempt ${attempt} of ${ATTEMPTS})`);
+      console.log(`ok   ${name}${attempt > 1 ? `  [after ${attempt - 1} retr${attempt === 2 ? "y" : "ies"}]` : ""}`);
+      return;
+    } catch (error) {
+      if (attempt < ATTEMPTS) {
+        results.length = mark; // keep only the final attempt's row in the table
+        console.log(`wait ${name}: ${String(error.message || error).split("\n")[0]} (attempt ${attempt} of ${ATTEMPTS}; retrying in ${RETRY_MS / 1000}s)`);
+        await new Promise(r => setTimeout(r, RETRY_MS));
+        continue;
+      }
+      failed++;
+      console.log(`FAIL ${name}${ATTEMPTS > 1 ? ` (after ${ATTEMPTS} attempts)` : ""}\n     ${String(error.message || error).split("\n").slice(0, 6).join("\n     ")}`);
+      return;
+    }
+  }
 }
 const get = path => fetch(BASE + path, {redirect: "manual", headers: {"User-Agent": "colecalfee-route-check"}});
-const results = [];
 
 (async () => {
   for (const [path, title] of Object.entries(PAGES)) {
@@ -110,6 +137,7 @@ const results = [];
     console.log("\n| URL | Status | Location |\n|---|---|---|");
     for (const [path, status, location] of results) console.log(`| \`${path}\` | ${status} | ${location ? "`" + location + "`" : ""} |`);
   }
-  console.log(`\n${passed} passed, ${failed} failed against ${BASE}`);
+  if (retried.length) console.log(`\nNeeded retries while the deployment propagated (${retried.length}):\n  ${retried.join("\n  ")}`);
+  console.log(`\n${passed} passed, ${failed} failed against ${BASE}${retried.length ? `; ${retried.length} passed only after retrying` : ""}`);
   process.exit(failed ? 1 : 0);
 })();
