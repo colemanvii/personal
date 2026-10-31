@@ -1,0 +1,40 @@
+name: Live checkout smoke test
+
+# MANUAL ONLY. Creates one real Shopify checkout per viewport and stops the
+# browser before the checkout page loads: no payment or order is possible.
+# Recurring CI (release-qa.yml) uses mocked checkouts and never runs this.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Site to test"
+        default: "https://colecalfee.com"
+        required: true
+      viewports:
+        description: "Comma-separated: desktop, iphone-390"
+        default: "desktop"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  live-checkout:
+    name: Purchase hands off to a real Shopify checkout (stopped before payment)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-save --no-package-lock playwright@1.56.1 && npx playwright install --with-deps chromium
+      - name: Live checkout smoke test
+        env:
+          CONFIRM_LIVE_CHECKOUT: "yes"
+          BASE_URL: ${{ inputs.base_url }}
+          VIEWPORTS: ${{ inputs.viewports }}
+        run: node tests/commerce/live-checkout.smoke.cjs

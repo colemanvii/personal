@@ -1,48 +1,71 @@
 /* Browser tests for Available (/paintings/) and its direct Shopify checkout.
+ * Safe to run on every change: no checkout is ever created on Shopify.
  *
  * Run from the repository root with the site served from site/:
  *   python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
  *   node tests/commerce/e2e.cjs
  * BASE_URL=https://colecalfee.com checks a deployment the same way.
  *
- * "live" tests read the real Shopify Storefront API. The purchase test lets the
- * page create a real Shopify cart, then stops the browser at the handoff to
- * Shopify checkout: checkout never loads and no order is placed.
- * "mocked" tests alter Shopify's answers to produce states the live catalog
- * cannot (Shopify unreachable, a work sold, checkout refused). */
+ * Product reads use the real, read-only Storefront API ("live" tests), so the
+ * wall labels and prices are checked against Shopify as it is right now.
+ * Every Shopify mutation (cartCreate) is answered inside the browser by a mock
+ * and never leaves it; a tripwire fails the run if one ever reaches Shopify.
+ * "mocked" tests also alter Shopify's answers to produce states the live
+ * catalog cannot (unreachable, sold, checkout refused).
+ *
+ * The real checkout, stopped before payment, is a separate manual smoke test:
+ * tests/commerce/live-checkout.smoke.cjs (workflow "Live checkout smoke test"). */
 const {chromium} = require("playwright");
 const assert = require("node:assert/strict");
 
 const BASE = (process.env.BASE_URL || "http://127.0.0.1:4173").replace(/\/$/, "");
 const API = "**/api/*/graphql.json";
 const SHOP = "https://241880-3.myshopify.com/api/2026-10/graphql.json";
+const MOCK_CHECKOUT = "https://241880-3.myshopify.com/cart/c/mock-checkout-from-tests?key=regression";
+const MOCK_HEADER = "x-colecalfee-test-mock";
 const VIEWPORTS = {
   desktop: {viewport: {width: 1440, height: 900}},
   "iphone-390": {viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true, deviceScaleFactor: 3},
   "iphone-375": {viewport: {width: 375, height: 667}, isMobile: true, hasTouch: true, deviceScaleFactor: 2},
 };
 const HANDLES = ["red-sea", "flowers-in-mccarty-vase"];
+const isMutation = request => request.method() === "POST" && /\bmutation\b|cartCreate|cartLines|checkout/i.test(request.postData() || "");
 
 let browser, failed = 0, passed = 0;
+const leaked = [];
 async function test(name, fn) {
   try { await fn(); passed++; console.log(`ok   ${name}`); }
   catch (error) { failed++; console.log(`FAIL ${name}\n     ${String(error.stack || error).split("\n").slice(0, 4).join("\n     ")}`); }
 }
+
+/* Each test gets a context in which no Shopify mutation can reach Shopify. */
 async function withPage(viewport, fn, setup) {
   const context = await browser.newContext(VIEWPORTS[viewport]);
+  const mutations = [];
+  // Lowest-priority handler: any mutation a test did not answer itself gets the mock checkout.
+  await context.route(API, async route => {
+    if (!isMutation(route.request())) return route.continue();
+    mutations.push(JSON.parse(route.request().postData()));
+    return route.fulfill({headers: {[MOCK_HEADER]: "1"}, json: {data: {cartCreate: {cart: {checkoutUrl: MOCK_CHECKOUT}, userErrors: []}}}});
+  });
+  // Tripwire: a mutation answered without the mock header came from Shopify itself.
+  context.on("response", response => {
+    if (response.url().includes("/graphql.json") && isMutation(response.request()) && !response.headers()[MOCK_HEADER]) leaked.push(response.url());
+  });
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", e => errors.push(e.message));
   try {
     if (setup) await setup(page);
     await page.goto(`${BASE}/paintings/`, {waitUntil: "domcontentloaded"});
-    await fn(page);
+    await fn(page, mutations);
     assert.deepEqual(errors, [], "uncaught page errors");
+    assert.deepEqual(leaked, [], "a checkout request reached Shopify");
   } finally { await context.close(); }
 }
 const settled = page => page.waitForFunction(() => !document.querySelector('.sale[data-live="pending"]') && document.querySelectorAll(".sale[data-state]").length === 2, null, {timeout: 20000});
 
-/* What Shopify itself says right now, independent of the page. */
+/* What Shopify itself says right now, independent of the page (read-only). */
 async function shopifyTruth() {
   const fields = HANDLES.map((h, i) => `w${i}: product(handle: "${h}") { availableForSale }`).join(" ");
   const response = await fetch(SHOP, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({query: `{ ${fields} }`})});
@@ -50,14 +73,36 @@ async function shopifyTruth() {
   return Object.fromEntries(HANDLES.map((h, i) => [h, data[`w${i}`]?.availableForSale ? "available" : "sold"]));
 }
 
-/* Pass Shopify's real answer through, changed by `edit`. */
+/* Pass Shopify's real product answer through, changed by `edit`. Mutations are never fetched here. */
 function alterShopify(edit) {
   return page => page.route(API, async route => {
-    const body = JSON.parse(route.request().postData() || "{}");
+    if (isMutation(route.request())) return route.fallback();
     const response = await route.fetch();
     const json = await response.json();
-    await route.fulfill({response, json: edit(json, body) || json});
+    await route.fulfill({response, json: edit(json) || json});
   });
+}
+const forceAvailable = alterShopify(json => {
+  if (json?.data?.w0) { json.data.w0.availableForSale = true; json.data.w0.variants.nodes.forEach(v => { v.availableForSale = true; }); }
+});
+
+/* Stop the browser at the handoff and report where it was sent. */
+async function catchHandoff(page) {
+  const seen = {url: null};
+  await page.route("**/*", route => {
+    const r = route.request();
+    if (r.isNavigationRequest() && r.frame() === page.mainFrame() && !r.url().startsWith(BASE)) { seen.url = r.url(); return route.abort(); }
+    return route.fallback();
+  });
+  return seen;
+}
+async function assertCheckout(page, mutations, seen) {
+  for (let i = 0; i < 100 && !seen.url; i++) await page.waitForTimeout(100);
+  assert.equal(mutations.length, 1, `${mutations.length} checkout requests`);
+  const {query, variables} = mutations[0];
+  assert.match(query, /cartCreate\(input: \{lines: \[\{merchandiseId: \$id, quantity: 1\}\]\}\)/, "not a one-work checkout");
+  assert.match(variables.id, /^gid:\/\/shopify\/ProductVariant\/\d+$/, `variant id ${variables.id}`);
+  assert.equal(seen.url, MOCK_CHECKOUT, "the page did not hand off to the checkout Shopify returned");
 }
 
 (async () => {
@@ -86,7 +131,6 @@ function alterShopify(edit) {
       await page.locator('[data-open="0"]').click();
       await page.waitForFunction(() => document.getElementById("detail-name").textContent.trim() === "Red Sea");
       const read = () => page.evaluate(() => ({
-        name: document.getElementById("detail-name").textContent.trim(),
         state: document.getElementById("detail-state").dataset.state,
         price: document.getElementById("detail-price").textContent.trim(),
         action: document.querySelector("#detail-action .buy-add")?.textContent.trim(),
@@ -109,30 +153,24 @@ function alterShopify(edit) {
       await page.locator("#detail-close").click();
       assert.equal(await page.locator("#painting-detail").evaluate(d => d.open), false);
     }));
+
+    await test(`mocked/${viewport}: Purchase on the wall label requests one work's checkout and hands off to it`, () => withPage(viewport, async (page, mutations) => {
+      const seen = await catchHandoff(page);
+      await settled(page);
+      const button = page.locator("#red-sea .sale-open");
+      await button.click();
+      await assertCheckout(page, mutations, seen);
+    }, forceAvailable));
   }
 
-  for (const viewport of ["desktop", "iphone-390"]) {
-    await test(`live/${viewport}: Purchase creates a Shopify checkout and hands off to it (stopped before checkout loads)`, () => withPage(viewport, async page => {
-      const forSale = HANDLES.find(h => truth[h] === "available");
-      if (!forSale) { console.log("     (skipped: nothing is for sale on Shopify right now)"); return; }
-      let handoff = null, mutation = false;
-      await page.route("**/*", route => {
-        const r = route.request();
-        if (r.url().includes("/graphql.json") && /cartCreate/.test(r.postData() || "")) mutation = true;
-        if (r.isNavigationRequest() && r.frame() === page.mainFrame() && !r.url().startsWith(BASE)) { handoff = r.url(); return route.abort(); }
-        return route.continue();
-      });
-      await settled(page);
-      await page.locator(`#${forSale} .sale-open`).click();
-      for (let i = 0; i < 100 && !handoff; i++) await page.waitForTimeout(150);
-      assert.ok(mutation, "no cartCreate request was sent to Shopify");
-      assert.ok(handoff, "the page did not hand off to checkout");
-      const url = new URL(handoff);
-      assert.equal(url.protocol, "https:");
-      assert.match(url.hostname, /(myshopify\.com|shopify\.com|colecalfee\.com)$/, `handoff went to ${url.hostname}`);
-      assert.match(url.pathname, /\/(cart\/c|checkouts?)\//, `handoff path ${url.pathname}`);
-    }));
-  }
+  await test("mocked/iphone-375: Purchase in the viewer requests one work's checkout and hands off to it", () => withPage("iphone-375", async (page, mutations) => {
+    const seen = await catchHandoff(page);
+    await settled(page);
+    await page.locator('[data-open="0"]').click();
+    await page.waitForFunction(() => document.querySelector("#detail-action .buy-add")?.textContent.trim() === "Purchase ↗");
+    await page.locator("#detail-action .buy-add").click();
+    await assertCheckout(page, mutations, seen);
+  }, forceAvailable));
 
   await test("mocked/iphone-375: Shopify unreachable keeps the composition and offers nothing for sale", () => withPage("iphone-375", async page => {
     // Wait for the page to give up on Shopify before judging what it offers.
@@ -161,21 +199,20 @@ function alterShopify(edit) {
     let left = false;
     page.on("framenavigated", f => { if (f === page.mainFrame() && !f.url().startsWith(BASE)) left = true; });
     await settled(page);
-    const button = page.locator(".sale-open").first();
+    const button = page.locator("#red-sea .sale-open");
     await button.click();
     await page.waitForFunction(() => document.querySelector(".buy-status")?.textContent.includes("Please try again"));
     assert.equal(left, false, "the page left for checkout");
     assert.equal(await button.isEnabled(), true, "the button stays disabled");
     assert.equal((await button.textContent()).trim(), "Purchase ↗");
   }, async page => {
-    await alterShopify(json => json)(page);
-    await page.route(API, async route => {
-      if (/cartCreate/.test(route.request().postData() || "")) return route.fulfill({json: {data: {cartCreate: {cart: null, userErrors: [{message: "This work is no longer available."}]}}}});
-      return route.fallback();
-    });
+    await forceAvailable(page);
+    await page.route(API, route => isMutation(route.request())
+      ? route.fulfill({headers: {[MOCK_HEADER]: "1"}, json: {data: {cartCreate: {cart: null, userErrors: [{message: "This work is no longer available."}]}}}})
+      : route.fallback());
   }));
 
   await browser.close();
-  console.log(`\n${passed} passed, ${failed} failed`);
-  process.exit(failed ? 1 : 0);
+  console.log(`\n${passed} passed, ${failed} failed; checkout requests that reached Shopify: ${leaked.length}`);
+  process.exit(failed || leaked.length ? 1 : 0);
 })();

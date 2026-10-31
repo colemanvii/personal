@@ -133,3 +133,15 @@ test("Index deep links used by redirects exist", () => {
     assert.match(index, new RegExp(`data-client="${id}"`), `${r.to} does not open an Index entry`);
   }
 });
+
+test("recurring CI never creates a live Shopify checkout; the live smoke test is manual only", () => {
+  const ci = readFileSync(".github/workflows/release-qa.yml", "utf8");
+  assert.doesNotMatch(ci, /live-checkout|CONFIRM_LIVE_CHECKOUT/, "release-qa.yml runs the live checkout");
+  const smoke = readFileSync(".github/workflows/live-checkout-smoke.yml", "utf8");
+  const on = smoke.match(/^on:\n((?:[ \t]+.*\n)+)/m)?.[1] || "";
+  assert.match(on, /^\s+workflow_dispatch:/m);
+  assert.doesNotMatch(on, /^\s+(push|pull_request|schedule|workflow_run|release):/m, "live smoke test runs automatically");
+  const e2e = readFileSync("tests/commerce/e2e.cjs", "utf8");
+  assert.match(e2e, /context\.route\(API/, "the regression suite lost its checkout guard");
+  assert.match(readFileSync("tests/commerce/live-checkout.smoke.cjs", "utf8"), /CONFIRM_LIVE_CHECKOUT !== "yes"/);
+});

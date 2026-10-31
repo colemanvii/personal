@@ -81,7 +81,7 @@ node tests/site/no-scroll.e2e.cjs
 node tests/site/independent-audit.e2e.cjs
 node tests/site/about.e2e.cjs
 node tests/site/artwork.e2e.cjs     # opens every Index entry and gallery; every image loads, nothing hotlinked
-node tests/commerce/e2e.cjs         # live Shopify; creates a checkout but never loads it, so no order is placed
+node tests/commerce/e2e.cjs         # live Shopify product reads; checkout is mocked, so nothing is created on Shopify
 
 # HTTP contract: public pages 200, retired routes 301, internal files and unknown URLs 404
 BASE_URL=http://127.0.0.1:8788 node tests/site/routes.e2e.cjs     # against wrangler pages dev
@@ -89,6 +89,12 @@ BASE_URL=https://colecalfee.com node tests/site/routes.e2e.cjs     # against pro
 ```
 
 CI's last job waits for Cloudflare to deploy the commit, then runs the HTTP contract against the real pull-request preview, or against colecalfee.com after a merge.
+
+The real checkout is a separate, manual smoke test. Recurring CI never runs it. It clicks Purchase, lets Shopify create one real checkout, and stops the browser before the checkout page loads, so no payment or order is possible. Each run leaves one empty, abandoned checkout in Shopify. Run it on purpose from GitHub Actions → **Live checkout smoke test** → Run workflow, or locally:
+
+```sh
+CONFIRM_LIVE_CHECKOUT=yes BASE_URL=https://colecalfee.com node tests/commerce/live-checkout.smoke.cjs
+```
 
 Site rules the tests hold: arrows such as ↗ and ↔ carry U+FE0E so iOS draws them as type, never emoji; email links are wrapped in `<!--email_off-->` so Cloudflare does not obfuscate them; the four pages and the 404 page never scroll.
 
