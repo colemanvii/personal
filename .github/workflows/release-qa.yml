@@ -1,38 +1,56 @@
 name: Final website release QA
 
+# Only site/ is deployed (wrangler.toml). Every change to it, to the tests or to
+# the deployment configuration runs the full regression suite. The last job
+# checks the real Cloudflare deployment: the pull request's preview, or
+# colecalfee.com itself after a merge to main.
+
 on:
   push:
-    branches: [main, release/final-qa-20261029]
+    branches: [main]
     paths:
-      - "index.html"
-      - "index/**"
-      - "paintings/**"
-      - "info/**"
-      - "assets/css/**"
-      - "assets/js/**"
-      - "tests/site/release.e2e.cjs"
+      - "site/**"
+      - "tests/**"
+      - "wrangler.toml"
+      - "vercel.json"
       - ".github/workflows/release-qa.yml"
   pull_request:
     branches: [main]
     paths:
-      - "index.html"
-      - "index/**"
-      - "paintings/**"
-      - "info/**"
-      - "assets/css/**"
-      - "assets/js/**"
-      - "tests/site/release.e2e.cjs"
+      - "site/**"
+      - "tests/**"
+      - "wrangler.toml"
+      - "vercel.json"
       - ".github/workflows/release-qa.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+  checks: read
+
+env:
+  PLAYWRIGHT: playwright@1.56.1
+  WRANGLER: wrangler@3.114.0
+  PAGES_SUBDOMAIN: personal-7jh.pages.dev
 
 jobs:
-  visual-and-interaction:
-    name: Real-browser desktop and iPhone QA
+  source:
+    name: Source and deployment contract
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/site/deploy.test.mjs tests/site/arrows.test.mjs tests/commerce/unit.test.mjs
+
+  browser:
+    name: Real-browser desktop, 390 × 844 and 375 × 667 QA
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,14 +59,14 @@ jobs:
         with:
           node-version: "22"
       - name: Install browser test runner
-        run: npm install --no-save --no-package-lock playwright@1.56.1
+        run: npm install --no-save --no-package-lock "$PLAYWRIGHT"
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Serve the exact checked-out source
+      - name: Serve site/, exactly as checked out
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/colecalfee-release-server.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory site > /tmp/colecalfee-release-server.log 2>&1 &
           sleep 2
-      - name: Run source-matched browser release checks
+      - name: Layout, no-scroll, galleries, About, artwork inventory and Shopify purchase
         env:
           BASE_URL: http://127.0.0.1:4173
           SCREENSHOTS: release-screenshots
@@ -56,10 +74,80 @@ jobs:
           node tests/site/release.e2e.cjs
           node tests/site/no-scroll.e2e.cjs
           node tests/site/independent-audit.e2e.cjs
-      - name: Save screenshots and results
+          node tests/site/about.e2e.cjs
+          node tests/site/artwork.e2e.cjs
+          node tests/commerce/e2e.cjs
+      - name: Save screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: release-screenshots
           path: release-screenshots/
           if-no-files-found: ignore
+
+  routing:
+    name: Routing under Cloudflare's Pages server
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Serve with wrangler pages dev (reads wrangler.toml, _redirects, _headers, 404.html)
+        run: |
+          npm install --no-save --no-package-lock "$WRANGLER"
+          CI=1 npx wrangler pages dev --port 8788 --ip 127.0.0.1 > /tmp/wrangler.log 2>&1 &
+          for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:8788/ && break; sleep 1; done
+          grep -E "Parsed|valid|rror" /tmp/wrangler.log || true
+      - name: Every public, retired, internal and unknown URL
+        env:
+          BASE_URL: http://127.0.0.1:8788
+          ROUTES_TABLE: "1"
+        run: node tests/site/routes.e2e.cjs
+
+  deployed:
+    name: Routing on the real Cloudflare deployment
+    needs: [source, browser, routing]
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Wait for Cloudflare Pages to deploy this commit
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          for i in $(seq 1 90); do
+            run=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/check-runs?check_name=Cloudflare%20Pages" \
+              --jq '.check_runs | sort_by(.started_at) | last | [.status, (.conclusion // ""), (.details_url // "")] | @tsv' || true)
+            status=$(cut -f1 <<<"$run"); conclusion=$(cut -f2 <<<"$run"); details=$(cut -f3 <<<"$run")
+            if [ "$status" = "completed" ]; then
+              echo "Cloudflare Pages: $conclusion ($details)"
+              [ "$conclusion" = "success" ] || { echo "::error::Cloudflare Pages did not deploy this commit ($conclusion)."; exit 1; }
+              if [ "${{ github.event_name }}" = "pull_request" ]; then
+                id=$(basename "$details"); echo "url=https://${id:0:8}.${PAGES_SUBDOMAIN}" >> "$GITHUB_OUTPUT"
+              else
+                echo "url=https://colecalfee.com" >> "$GITHUB_OUTPUT"
+              fi
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Timed out waiting for the Cloudflare Pages deployment."; exit 1
+      - name: Every public, retired, internal and unknown URL on ${{ steps.pages.outputs.url }}
+        env:
+          BASE_URL: ${{ steps.pages.outputs.url }}
+          ROUTES_TABLE: "1"
+        run: |
+          for i in $(seq 1 12); do curl -fs -o /dev/null "$BASE_URL/robots.txt" && break; sleep 10; done
+          node tests/site/routes.e2e.cjs

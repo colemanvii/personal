@@ -1,7 +1,7 @@
 // Run: node --test tests/commerce/unit.test.mjs
 import test from "node:test";
 import assert from "node:assert/strict";
-import {formatMoney, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, sizedImage} from "../../assets/js/storefront.js";
+import {formatMoney, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, sizedImage} from "../../site/assets/js/storefront.js";
 
 const usd = amount => ({amount, currencyCode: "USD"});
 const variant = (id, options, price, availableForSale = true) => ({

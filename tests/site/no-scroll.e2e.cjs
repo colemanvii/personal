@@ -78,7 +78,7 @@ for(const client of ["list",...clients]){
  }
 }
 
-for(const route of ["/","/paintings/","/info/"]){
+for(const route of ["/","/paintings/","/info/","/404.html"]){
   try{
     await page.goto(BASE+route,{waitUntil:"domcontentloaded"});
     await page.waitForTimeout(100);

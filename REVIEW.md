@@ -32,14 +32,14 @@ Key references / principles:
 - no generic luxury/creative-agency portfolio language
 
 ## Site structure
-- /
-- /art/
-- /design/
-- /photos/
-- /index/
-- /info/
+The approved public site is four pages, and nothing else:
+- / (Home)
+- /index/ (Index)
+- /paintings/ (Available)
+- /info/ (About)
 
-There is also an older /work/ route that may be removed or redirected.
+Older routes (/art/, /design/, /photos/, /work/, /shop/, /projects/) redirect
+to the page that now holds their work. Their source is preserved in retired/.
 
 ## Core concept
 The site is a record of an eye.

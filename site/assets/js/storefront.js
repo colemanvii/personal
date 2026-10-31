@@ -1,18 +1,16 @@
-/* Shopify Storefront API client and cart store.
+/* Shopify Storefront API client.
  *
  * colecalfee.com is the storefront; Shopify is only the commerce backend.
  * This uses Shopify's tokenless Storefront API access, which answers product
- * and cart operations without credentials. Never place an Admin API token or
+ * and checkout operations without credentials. Never place an Admin API token or
  * any other secret in this file: it is served to every visitor.
  *
  * Shopify stays authoritative for price and availability. Nothing here
- * caches stock beyond a page view, and every cart change is confirmed by
- * Shopify before the interface shows it. */
+ * caches stock beyond a page view. */
 
 export const SHOP_DOMAIN = "241880-3.myshopify.com";
 export const API_VERSION = "2026-10";
 const ENDPOINT = `https://${SHOP_DOMAIN}/api/${API_VERSION}/graphql.json`;
-const CART_KEY = "cc-shopify-cart";
 
 export class StorefrontError extends Error {}
 
@@ -120,114 +118,4 @@ export function sizedImage(url, width) {
   } catch (_) {
     return url;
   }
-}
-
-/* ---------- Cart ---------- */
-
-const CART_FIELDS = `
-  id checkoutUrl totalQuantity
-  cost { subtotalAmount { ${MONEY} } }
-  lines(first: 50) { nodes {
-    id quantity
-    cost { totalAmount { ${MONEY} } }
-    merchandise { ... on ProductVariant {
-      id title availableForSale
-      price { ${MONEY} }
-      image { ${IMAGE} }
-      product { handle title tags productType featuredImage { ${IMAGE} } }
-    } }
-  } }`;
-const RESULT = `cart { ${CART_FIELDS} } userErrors { field message code } warnings { code message }`;
-
-let currentCart = null;
-const events = new EventTarget();
-
-export const cartStore = {
-  get cart() { return currentCart; },
-  subscribe(listener) {
-    const handler = () => listener(currentCart);
-    events.addEventListener("change", handler);
-    return () => events.removeEventListener("change", handler);
-  }
-};
-
-function storedCartId() {
-  try { return localStorage.getItem(CART_KEY); } catch (_) { return null; }
-}
-
-function setCart(cart) {
-  currentCart = cart;
-  try {
-    if (cart) localStorage.setItem(CART_KEY, cart.id);
-    else localStorage.removeItem(CART_KEY);
-  } catch (_) {}
-  events.dispatchEvent(new Event("change"));
-}
-
-/* A cart that has been checked out or has expired reads back as null. */
-export async function loadCart() {
-  const id = storedCartId();
-  if (!id) {
-    setCart(null);
-    return null;
-  }
-  const data = await storefront(`query Cart($id: ID!) { cart(id: $id) { ${CART_FIELDS} } }`, {id});
-  setCart(data.cart);
-  return data.cart;
-}
-
-class StaleCartError extends Error {}
-
-async function mutate(name, query, variables) {
-  const data = await storefront(query, variables);
-  const result = data[name];
-  if (!result) throw new StorefrontError("The shop could not update the cart.");
-  if (result.userErrors?.length) {
-    if (result.userErrors.some(e => (e.field || []).includes("cartId"))) throw new StaleCartError();
-    throw new StorefrontError(result.userErrors[0].message);
-  }
-  setCart(result.cart);
-  return {cart: result.cart, warnings: result.warnings || []};
-}
-
-function createCart(lines) {
-  return mutate("cartCreate", `mutation Create($lines: [CartLineInput!]) { cartCreate(input: {lines: $lines}) { ${RESULT} } }`, {lines});
-}
-
-export async function addToCart(merchandiseId, quantity = 1) {
-  const lines = [{merchandiseId, quantity}];
-  const cartId = currentCart?.id || storedCartId();
-  if (!cartId) return createCart(lines);
-  try {
-    return await mutate("cartLinesAdd", `mutation Add($cartId: ID!, $lines: [CartLineInput!]!) { cartLinesAdd(cartId: $cartId, lines: $lines) { ${RESULT} } }`, {cartId, lines});
-  } catch (error) {
-    if (!(error instanceof StaleCartError)) throw error;
-    setCart(null);
-    return createCart(lines);
-  }
-}
-
-export async function updateLine(lineId, quantity) {
-  if (!currentCart) throw new StorefrontError("The cart is no longer available.");
-  return mutate("cartLinesUpdate", `mutation Update($cartId: ID!, $lines: [CartLineUpdateInput!]!) { cartLinesUpdate(cartId: $cartId, lines: $lines) { ${RESULT} } }`, {cartId: currentCart.id, lines: [{id: lineId, quantity}]});
-}
-
-export async function removeLine(lineId) {
-  if (!currentCart) throw new StorefrontError("The cart is no longer available.");
-  return mutate("cartLinesRemove", `mutation Remove($cartId: ID!, $lineIds: [ID!]!) { cartLinesRemove(cartId: $cartId, lineIds: $lineIds) { ${RESULT} } }`, {cartId: currentCart.id, lineIds: [lineId]});
-}
-
-/* Re-read the cart from Shopify immediately before handing off to checkout. */
-export async function prepareCheckout() {
-  const cart = await loadCart();
-  if (!cart || !cart.totalQuantity) throw new StorefrontError("Your cart is empty.");
-  const unavailable = cart.lines.nodes.filter(line => !line.merchandise.availableForSale);
-  return {cart, unavailable};
-}
-
-/* Keep tabs in step: another tab may create, change or check out the cart. */
-if (typeof window !== "undefined") {
-  window.addEventListener("storage", event => {
-    if (event.key === CART_KEY) loadCart().catch(() => {});
-  });
 }

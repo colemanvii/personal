@@ -217,12 +217,11 @@ if (currentPiece()) showPiece(currentPiece()); // opened from a shared link befo
 dialog.addEventListener("close", () => { current = null; });
 
 /* ---------- Curation and commerce ----------
-   The page's HTML decides where every work hangs: Available Works or the
-   Selected Archive, its order and its number. Shopify never moves a work.
-   It decides only each work's live state: the wall label, price, and
-   whether it can be added to the cart. A work that sells shows SOLD where
-   it hangs until the page is deliberately republished with it in the
-   archive. If Shopify cannot be reached, the composition is unchanged and
+   The page's HTML decides where every work hangs, its order and its
+   number. Shopify never moves a work. It decides only each work's live
+   state: the wall label, price, and whether it can be purchased. A work
+   that sells shows SOLD where it hangs until the page is deliberately
+   republished with it in the Index archive. If Shopify cannot be reached, the composition is unchanged and
    nothing is offered for sale. */
 
 /* ---------- Wall labels: a quiet state, never a price ---------- */
@@ -285,7 +284,7 @@ async function refresh(handle) {
       }
     }
   } catch (_) {
-    // Keep the last known state; Shopify still validates at cart and checkout.
+    // Keep the last known state; Shopify still validates at checkout.
   }
 }
 
