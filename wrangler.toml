@@ -1,0 +1,6 @@
+# Cloudflare Pages configuration (source of truth for the "personal" Pages project).
+# Only site/ is deployed. Everything else in this repository (tests, notes,
+# retired pages, tooling) stays in Git and is never served.
+name = "personal"
+compatibility_date = "2026-10-01"
+pages_build_output_dir = "site"

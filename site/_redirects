@@ -1,0 +1,25 @@
+# Retired public routes. The approved site is Home, Index, Available and About.
+# Each old page goes to the surviving page that now holds its work; anything
+# else that is not in this directory answers 404 (see 404.html).
+# /gabe/, /studies/ and /archive/ are intentionally absent: they 404.
+# Static rules first, then splats; within splats, specific before general.
+
+/projects/the-cowboyer        /index/#cowboyer  301
+/projects/kashus-culpepper    /index/#kashus    301
+/projects/scout-motors        /index/#scout     301
+/projects                     /index/           301
+/art                          /index/           301
+/design                       /index/           301
+/photos                       /index/           301
+/work                         /index/           301
+/shop                         /paintings/       301
+
+/projects/the-cowboyer/*      /index/#cowboyer  301
+/projects/kashus-culpepper/*  /index/#kashus    301
+/projects/scout-motors/*      /index/#scout     301
+/projects/*                   /index/           301
+/art/*                        /index/           301
+/design/*                     /index/           301
+/photos/*                     /index/           301
+/work/*                       /index/           301
+/shop/*                       /paintings/       301

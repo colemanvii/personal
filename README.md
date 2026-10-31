@@ -4,62 +4,100 @@ Personal portfolio: art, design, and photography.
 
 [colecalfee.com](https://colecalfee.com)
 
+## The public site
+
+The approved public site is four pages, and nothing else:
+
+| Page | URL | Source |
+|---|---|---|
+| Home | `/` | `site/index.html` |
+| Index | `/index/` | `site/index/` |
+| Available | `/paintings/` | `site/paintings/` |
+| About | `/info/` | `site/info/` |
+
+`site/` is the only directory that is deployed. It holds the four pages, their
+assets (`site/assets/`) and the platform files:
+
+- `site/_redirects` — retired routes, each sent (301) to the page that now holds its work
+- `site/_headers` — `noindex` on `*.pages.dev` preview deployments
+- `site/404.html` — served with status 404 for every unknown path
+- `site/robots.txt`, `site/sitemap.xml`
+- `site/assets/images/share.jpg` — the social sharing preview (a crop of the About photograph)
+
+Everything else in the repository (tests, notes, retired pages, tooling) stays
+in Git and is never served. `retired/` preserves older pages and source
+material; see `retired/README.md`.
+
 ## Work here
 
-`main` holds the current static site. There is no build step or package installation.
+There is no build step or package installation.
 
 ```sh
-python3 -m http.server 4173 --bind 127.0.0.1
+python3 -m http.server 4173 --bind 127.0.0.1 --directory site
 ```
 
-Open `http://127.0.0.1:4173`.
+Open `http://127.0.0.1:4173`. A plain file server does not apply `_redirects`
+or `404.html`; for those, run Cloudflare's own Pages server:
 
-## Source map
+```sh
+npx wrangler@3.114.0 pages dev --port 8788    # reads wrangler.toml → site/
+```
 
-- `index.html` — home
-- `art/`, `design/`, `photos/` — work by discipline
-- `info/` — personal information and contact
-- `index/`, `work/` — existing supporting routes
-- `assets/css/site.css` — shared visual system
-- `assets/js/site.js` — shared script
-- `assets/` — published artwork
-- `archive/` — preserved older work
-- `CNAME` — custom domain; preserve when publishing
-- `REVIEW.md` — design direction and review brief
+## Deployment
+
+Production is Cloudflare Pages (project `personal`), built from `main` with no
+build command. `wrangler.toml` sets `pages_build_output_dir = "site"`, so only
+`site/` is published. Every pull request gets a preview deployment at
+`<id>.personal-7jh.pages.dev`; previews answer `X-Robots-Tag: noindex`.
+
+`vercel.json` points the separate Vercel project at `site/` as well, so it can
+never publish the repository root. Production does not use Vercel.
+
+`CNAME` names the custom domain; keep it.
 
 ## Purchasing
 
-colecalfee.com is the whole storefront; Shopify (`241880-3.myshopify.com`) is only the commerce backend and secure checkout. The paintings page reads live price, images and availability from Shopify's tokenless Storefront API, and keeps the cart in Shopify. No credentials are used or needed — never add an Admin API token to the site.
+colecalfee.com is the whole storefront; Shopify (`241880-3.myshopify.com`) is only the commerce backend and secure checkout. Available reads live price, images and availability from Shopify's tokenless Storefront API. **Purchase** creates a fresh Shopify checkout for that one work and hands the visitor to it; there is no on-site cart. No credentials are used or needed — never add an Admin API token to the site.
 
-- `assets/js/storefront.js` — Storefront API client and cart store
-- `assets/js/cart.js` — cart drawer and navigation count
-- `assets/css/commerce.css` — purchase panel and cart styles
-- `paintings/purchase.js` — live captions and the purchase panel in the enlarged view
+- `site/assets/js/storefront.js` — Storefront API client
+- `site/assets/css/commerce.css` — purchase styles
+- `site/paintings/purchase.js` — live wall labels, the viewer's sale line and the checkout handoff
 
-The paintings page has two sections: Available Works and the Selected Archive. The exhibition is curated; the transaction is dynamic. `paintings/index.html` alone decides where each work hangs, in what order, and its catalogue number (`data-number` on its caption); Shopify never moves a work. Shopify decides only each work's live state: its wall label (Available or Sold), price, and whether it can be added to the cart. When a painting sells it shows SOLD in place, with no purchase action, until its `<article>` is deliberately moved into the archive section and the page republished. If Shopify cannot be reached, the composition is unchanged and nothing is offered for sale.
+`site/paintings/index.html` alone decides where each work hangs, in what order, and its catalogue number (`data-number` on its caption); Shopify never moves a work. Shopify decides only each work's live state: Available or Sold, price, and whether it can be purchased. When a painting sells it shows SOLD in place, with no purchase action, until the page is deliberately republished. If Shopify cannot be reached, the composition is unchanged, each work keeps its INQUIRE email link, and nothing is offered for sale. Sold paintings are archived in the Index (Paintings).
 
-Each gallery work names its Shopify product with `data-handle`. Shopify decides what is for sale. Tag a product `edition` (or give it a product type containing "print") to sell it in quantity with variant options; anything else is treated as a one-of-a-kind original.
+Each work names its Shopify product with `data-handle`. Tag a product `edition` (or give it a product type containing "print") to sell it in quantity with variant options; anything else is treated as a one-of-a-kind original.
 
-```sh
-node --test tests/commerce/unit.test.mjs
-node tests/commerce/e2e.cjs   # needs the local server above and Playwright; creates and empties a real cart, never places an order
-```
+## Tests
 
-## Contact form
-
-The note form on About posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.js`) on the same domain. It sends each note to colecalfee@gmail.com through Resend, from `contact@colecalfee.com`, with the visitor's address as Reply-To. The Resend key lives only in Cloudflare: Pages project → Settings → Variables and Secrets → `RESEND_API_KEY` (encrypted), set for both Production and Preview. Without it the endpoint answers 503 and the page says the note could not be sent; it never reports success unless Resend accepted the note. Spam protection is server-side: a hidden honeypot field, a minimum time on the page, a same-site Origin check, and size limits.
+All of these run in CI on every change to `site/`, `tests/` or the deployment configuration (`.github/workflows/release-qa.yml`).
 
 ```sh
-node --test tests/site/contact.test.mjs   # the endpoint, with Resend stubbed
+# Source and deployment contract (no network)
+node --test tests/site/deploy.test.mjs tests/site/arrows.test.mjs tests/commerce/unit.test.mjs
+
+# Browser QA at desktop, 390 × 844 and 375 × 667 (needs the file server above and Playwright)
+node tests/site/release.e2e.cjs
+node tests/site/no-scroll.e2e.cjs
+node tests/site/independent-audit.e2e.cjs
+node tests/site/about.e2e.cjs
+node tests/site/artwork.e2e.cjs     # opens every Index entry and gallery; every image loads, nothing hotlinked
+node tests/commerce/e2e.cjs         # live Shopify product reads; checkout is mocked, so nothing is created on Shopify
+
+# HTTP contract: public pages 200, retired routes 301, internal files and unknown URLs 404
+BASE_URL=http://127.0.0.1:8788 node tests/site/routes.e2e.cjs     # against wrangler pages dev
+BASE_URL=https://colecalfee.com node tests/site/routes.e2e.cjs     # against production
 ```
 
-Site checks: arrows such as ↗ and ↔ always carry U+FE0E so iOS draws them as type, never emoji, and the About page keeps its email and Instagram links and a working note form.
+CI's last job waits for Cloudflare to deploy the commit, then runs the HTTP contract against the real pull-request preview, or against colecalfee.com after a merge.
+
+The real checkout is a separate, manual smoke test. Recurring CI never runs it. It clicks Purchase, lets Shopify create one real checkout, and stops the browser before the checkout page loads, so no payment or order is possible. Each run leaves one empty, abandoned checkout in Shopify. Run it on purpose from GitHub Actions → **Live checkout smoke test** → Run workflow, or locally:
 
 ```sh
-node --test tests/site/arrows.test.mjs
-node tests/site/about.e2e.cjs   # needs the local server above and Playwright; BASE_URL=https://colecalfee.com checks production
+CONFIRM_LIVE_CHECKOUT=yes BASE_URL=https://colecalfee.com node tests/commerce/live-checkout.smoke.cjs
 ```
 
-Keep the presentation simple, personable, and static. Add real work before adding more interface. Check home and all discipline routes on desktop and mobile before publishing.
+Site rules the tests hold: arrows such as ↗ and ↔ carry U+FE0E so iOS draws them as type, never emoji; email links are wrapped in `<!--email_off-->` so Cloudflare does not obfuscate them; the four pages and the 404 page never scroll.
+
+Keep the presentation simple, personable, and static. Add real work before adding more interface. Check every page on desktop and iPhone before publishing.
 
 This is the current portfolio repository. Older site experiments belong in `colemanvii/colemanvii`.

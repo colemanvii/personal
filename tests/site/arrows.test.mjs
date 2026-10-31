@@ -1,8 +1,8 @@
 /* Arrows are type, never emoji.
  *
  * iOS draws some arrows (↗, ↔ and their kin) as blue emoji unless the text
- * presentation selector U+FE0E follows them. Every page on the active site
- * must carry it; archive/ holds preserved older work and is left as it was.
+ * presentation selector U+FE0E follows them. Every page in site/ (the only
+ * deployed directory) must carry it; retired/ is preserved as it was.
  *
  *   node --test tests/site/arrows.test.mjs */
 import {test} from "node:test";
@@ -12,7 +12,9 @@ import {readFileSync} from "node:fs";
 
 const EMOJI_ARROWS = /[↔-↙↩↪➡⤴⤵⬅-⬇]|&#x(?:219[4-9]|21A[9A]|27A1|293[45]|2B0[5-7]);/gi;
 const TEXT = /^(?:︎|&#xFE0E;)/i;
-const pages = execSync("git ls-files '*.html'", {encoding: "utf8"}).split("\n").filter(f => f && !f.startsWith("archive/") && !f.startsWith("tests/"));
+const pages = execSync("git ls-files 'site/*.html'", {encoding: "utf8"}).split("\n").filter(Boolean);
+
+test("the site has pages to check", () => assert.ok(pages.length >= 5, pages.join(" ")));
 
 test("every emoji-capable arrow on the active site asks for text presentation", () => {
   const bare = [];
@@ -28,5 +30,5 @@ test("every emoji-capable arrow on the active site asks for text presentation", 
 });
 
 test("the shared stylesheet asks for text presentation", () => {
-  assert.match(readFileSync("assets/css/site.css", "utf8"), /html\{[^}]*font-variant-emoji:text/);
+  assert.match(readFileSync("site/assets/css/site.css", "utf8"), /html\{[^}]*font-variant-emoji:text/);
 });
