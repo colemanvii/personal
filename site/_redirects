@@ -1,7 +1,7 @@
 # Retired public routes. The approved site is Home, Index, Available and About.
 # Each old page goes to the surviving page that now holds its work; anything
 # else that is not in this directory answers 404 (see 404.html).
-# /gabe/, /studies/ and /archive/ never redirect: they answer 404 (rules below).
+# /gabe/, /studies/ and /archive/ never redirect: they answer 404 (functions/[[path]].js).
 # Static rules first, then splats; within splats, specific before general.
 
 /projects/the-cowboyer        /index/#cowboyer  301
@@ -23,44 +23,3 @@
 /photos/*                     /index/           301
 /work/*                       /index/           301
 /shop/*                       /paintings/       301
-
-# Removed files. Cloudflare can keep serving a cached copy of a deleted file for
-# days at some locations; a rewrite to a path that has never existed makes Pages
-# answer 404 (with 404.html) before any cached copy is consulted. Never list a
-# path that exists in site/ (tests/site/deploy.test.mjs enforces this).
-
-/.github                                              /__gone  200
-/archive                                              /__gone  200
-/gabe                                                 /__gone  200
-/studies                                              /__gone  200
-/tests                                                /__gone  200
-/CNAME                                                /__gone  200
-/README.md                                            /__gone  200
-/REVIEW.md                                            /__gone  200
-/assets/D68D863A-E8DF-4D5C-978A-9D968EB72AD2.jpg      /__gone  200
-/assets/cowboyer.webp                                 /__gone  200
-/assets/js/cart.js                                    /__gone  200
-/assets/kashus-after.webp                             /__gone  200
-/assets/kashus-character.webp                         /__gone  200
-/assets/paintings/flowers-in-a-jug-1200.webp          /__gone  200
-/assets/paintings/flowers-in-a-jug-400.webp           /__gone  200
-/assets/paintings/flowers-in-a-jug-800.webp           /__gone  200
-/assets/paintings/harvest-1-400.webp                  /__gone  200
-/assets/paintings/harvest-1-800.webp                  /__gone  200
-/assets/paintings/peace-of-wild-things-1200.webp      /__gone  200
-/assets/paintings/peace-of-wild-things-400.webp       /__gone  200
-/assets/paintings/peace-of-wild-things-800.webp       /__gone  200
-/assets/paintings/target-1200.webp                    /__gone  200
-/assets/paintings/target-400.webp                     /__gone  200
-/assets/paintings/target-800.webp                     /__gone  200
-/assets/rh.png                                        /__gone  200
-/assets/ronnie-hodges-02.webp                         /__gone  200
-/assets/ronnie-hodges-03.webp                         /__gone  200
-/assets/scout.webp                                    /__gone  200
-/paintings/archive.js                                 /__gone  200
-
-/.github/*                                            /__gone  200
-/archive/*                                            /__gone  200
-/gabe/*                                               /__gone  200
-/studies/*                                            /__gone  200
-/tests/*                                              /__gone  200
