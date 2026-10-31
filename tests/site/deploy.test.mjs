@@ -109,8 +109,58 @@ export function redirects() {
   });
 }
 
+/* Every file production served before the site moved into site/ (main at 94809cc)
+   that is neither in site/ now nor under a retired route that redirects. */
+const REMOVED = [
+  "/.github/workflows/release-qa.yml",
+  "/CNAME",
+  "/README.md",
+  "/REVIEW.md",
+  "/archive/333-westover/README.md",
+  "/archive/333-westover/index.html",
+  "/assets/D68D863A-E8DF-4D5C-978A-9D968EB72AD2.jpg",
+  "/assets/cowboyer.webp",
+  "/assets/js/cart.js",
+  "/assets/kashus-after.webp",
+  "/assets/kashus-character.webp",
+  "/assets/paintings/flowers-in-a-jug-1200.webp",
+  "/assets/paintings/flowers-in-a-jug-400.webp",
+  "/assets/paintings/flowers-in-a-jug-800.webp",
+  "/assets/paintings/harvest-1-400.webp",
+  "/assets/paintings/harvest-1-800.webp",
+  "/assets/paintings/peace-of-wild-things-1200.webp",
+  "/assets/paintings/peace-of-wild-things-400.webp",
+  "/assets/paintings/peace-of-wild-things-800.webp",
+  "/assets/paintings/target-1200.webp",
+  "/assets/paintings/target-400.webp",
+  "/assets/paintings/target-800.webp",
+  "/assets/rh.png",
+  "/assets/ronnie-hodges-02.webp",
+  "/assets/ronnie-hodges-03.webp",
+  "/assets/scout.webp",
+  "/gabe/index.html",
+  "/paintings/archive.js",
+  "/studies/painting-crops/README.md",
+  "/studies/painting-crops/apply.py",
+  "/studies/painting-crops/approved.json",
+  "/studies/painting-crops/canvases.json",
+  "/studies/painting-crops/crops.json",
+  "/studies/painting-crops/plan.py",
+  "/tests/commerce/HARNESS.md",
+  "/tests/commerce/e2e.cjs",
+  "/tests/commerce/unit.test.mjs",
+  "/tests/site/about.e2e.cjs",
+  "/tests/site/arrows.test.mjs",
+  "/tests/site/contact.test.mjs",
+  "/tests/site/independent-audit.e2e.cjs",
+  "/tests/site/no-scroll.e2e.cjs",
+  "/tests/site/release.e2e.cjs",
+];
+const GONE = "/__gone";
+const covers = (rule, path) => rule.from.endsWith("/*") ? path.startsWith(rule.from.slice(0, -1)) || path === rule.from.slice(0, -2) : path === rule.from;
+
 test("_redirects: every retired route is permanent and lands on a surviving page", () => {
-  const rules = redirects();
+  const rules = redirects().filter(r => r.status !== 200);
   assert.ok(rules.length > 0);
   for (const r of rules) {
     assert.equal(r.status, 301, `${r.from} is not permanent`);
@@ -123,6 +173,21 @@ test("_redirects: every retired route is permanent and lands on a surviving page
   }
   for (const gone of ["/gabe", "/studies", "/archive"]) {
     assert.ok(!rules.some(r => r.from.startsWith(gone)), `${gone} must 404, not redirect`);
+  }
+});
+
+test("_redirects: every removed file answers 404 even where Cloudflare still caches it", () => {
+  const rewrites = redirects().filter(r => r.status === 200);
+  for (const r of rewrites) assert.equal(r.to, GONE, `${r.from} rewrites to ${r.to}, not ${GONE}`);
+  assert.ok(!existsSync(join(SITE, GONE.slice(1))) && !existsSync(join(SITE, GONE.slice(1), "index.html")), `${GONE} must never exist`);
+  // Safety: a removal rule must never shadow a file the site still serves.
+  const shadowed = files.filter(f => rewrites.some(r => covers(r, "/" + f)));
+  assert.deepEqual(shadowed, [], "removal rules hide live files");
+  // Completeness: every formerly deployed, now removed, file is covered.
+  const uncovered = REMOVED.filter(path => !rewrites.some(r => covers(r, path)));
+  assert.deepEqual(uncovered, [], "removed files without a 404 rule");
+  for (const dir of ["/gabe", "/studies", "/archive", "/tests", "/.github"]) {
+    assert.ok(rewrites.some(r => r.from === dir) && rewrites.some(r => r.from === dir + "/*"), `${dir} is not fully covered`);
   }
 });
 

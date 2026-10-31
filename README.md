@@ -18,7 +18,7 @@ The approved public site is four pages, and nothing else:
 `site/` is the only directory that is deployed. It holds the four pages, their
 assets (`site/assets/`) and the platform files:
 
-- `site/_redirects` — retired routes, each sent (301) to the page that now holds its work
+- `site/_redirects` — retired routes, each sent (301) to the page that now holds its work; and every removed file rewritten to a path that never exists, so it answers 404 even where Cloudflare still caches an old copy
 - `site/_headers` — `noindex` on `*.pages.dev` preview deployments
 - `site/404.html` — served with status 404 for every unknown path
 - `site/robots.txt`, `site/sitemap.xml`
