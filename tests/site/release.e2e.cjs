@@ -10,7 +10,7 @@ const path = require("node:path");
 const BASE = (process.env.BASE_URL || "https://colecalfee.com").replace(/\/$/, "");
 const DIR = process.env.SCREENSHOTS || "release-screenshots";
 fs.mkdirSync(DIR, {recursive:true});
-const sizes = [{name:"iphone-se",width:375,height:667,mobile:true},{name:"iphone-mid",width:390,height:740,mobile:true},{name:"iphone",width:390,height:844,mobile:true},{name:"desktop",width:1440,height:900,mobile:false}];
+const sizes = [{name:"iphone-se",width:375,height:667,mobile:true},{name:"iphone-mid",width:390,height:740,mobile:true},{name:"iphone",width:390,height:844,mobile:true},{name:"desktop-1280",width:1280,height:800,mobile:false},{name:"desktop",width:1440,height:900,mobile:false}];
 let failed = 0;
 const results = [];
 const run = async (name, fn) => {
@@ -165,6 +165,13 @@ async function waitForPage(page,path){
      await waitForImage(page,"#detail-image","Red Sea viewer image");
      await waitForPrice(page,"$2,250");
      await screenshot(page,size.name+"-red-sea");
+     const neighbor=await page.locator("#detail-next").evaluate(button=>({
+       title:button.textContent.trim(),width:button.clientWidth,scroll:button.scrollWidth
+     }));
+     assert.equal(neighbor.title,"Flowers in McCarty Vase →","Viewer must present the complete neighbouring title");
+     assert.ok(neighbor.scroll<=neighbor.width+2,"Neighbour title clips: "+JSON.stringify(neighbor));
+     const stepMargin=await page.locator(".viewer-steps").evaluate(el=>innerHeight-el.getBoundingClientRect().bottom);
+     assert.ok(stepMargin>=20,"Painting steps need a safe bottom margin: "+stepMargin);
      await page.locator("#detail-next").click();
      assert.equal(await page.locator("#detail-name").innerText(),"Flowers in McCarty Vase");
      await waitForImage(page,"#detail-image","Flowers viewer image");
@@ -180,6 +187,23 @@ async function waitForPage(page,path){
      assert.ok(await page.locator('a[href="https://www.instagram.com/colecalfee/"]').count());
      await assertNoHorizontalOverflow(page,"About");
      await screenshot(page,size.name+"-about");
+   });
+   await run(size.name+" shared Index / Available / About header",async()=>{
+     const headers=[];
+     for(const route of ["/index/","/paintings/","/info/"]){
+       await waitForPage(page,route);
+       headers.push(await page.evaluate(()=>{
+         const mast=document.querySelector(".site-head").getBoundingClientRect();
+         const brand=document.querySelector(".site-head .brand").getBoundingClientRect();
+         const nav=document.querySelector(".site-head .nav").getBoundingClientRect();
+         return {left:mast.left,top:mast.top,bottom:mast.bottom,
+           brandX:brand.x,brandY:brand.y,navRight:nav.right,navY:nav.y};
+       }));
+     }
+     for(const metric of Object.keys(headers[0])){
+       const range=Math.max(...headers.map(h=>h[metric]))-Math.min(...headers.map(h=>h[metric]));
+       assert.ok(range<=2,"Header "+metric+" differs across routes: "+JSON.stringify(headers));
+     }
    });
    await run(size.name+" no uncaught browser errors",async()=>{assert.deepEqual(errors,[])});
    await context.close();
