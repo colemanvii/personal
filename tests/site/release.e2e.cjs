@@ -76,11 +76,14 @@ async function waitForPage(page,path){
      const pageOneSize=size.mobile?(size.height>=780?16:size.height>=720?14:12):12;
      assert.equal(await visible.count(),pageOneSize,"page one must use the full intended screen capacity");
      const names=await visible.locator("td:nth-child(2)").allInnerTexts();
-     for(const required of ["Ronnie Hodges","Teton Valley Ranch","Drawings"]){
+     for(const required of ["Ronnie Hodges","Teton Valley Ranch","Ramsey Hill"]){
        assert.ok(names.some(n=>n.includes(required)),required+" missing from page one");
      }
      assert.match(names[0],/Freeman General Contracting/);
-     assert.equal(names.some(n=>/Paintings/.test(n)),false,"Paintings belongs in the archive, not at the top");
+     assert.equal(names.some(n=>/Paintings|Drawings/.test(n)),false,"Independent art archives belong on the final page");
+     const archiveNames=await rows.locator("td:nth-child(2)").allInnerTexts();
+     assert.match(archiveNames.at(-2),/Paintings/,"Paintings must be penultimate");
+     assert.match(archiveNames.at(-1),/Drawings/,"Drawings must close the complete index");
      await assertNoHorizontalOverflow(page,"Index");
      await assertVisibleInside(page,"#index-pagination","Index pagination");
      const fit=await page.evaluate(()=>{
@@ -115,7 +118,9 @@ async function waitForPage(page,path){
      await waitForImage(page,'[data-panel="teton-photo"] img', "Teton image");
      await screenshot(page,size.name+"-teton");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();
-     await page.locator('[data-client="drawings"]').click();
+     const drawingsRow=page.locator('[data-client="drawings"]');
+     if(!await drawingsRow.isVisible())await page.locator('[data-index-page="1"]').click();
+     await drawingsRow.click();
      await waitForImage(page,"#drawings-active-image","Drawings image");
      await screenshot(page,size.name+"-drawings");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();

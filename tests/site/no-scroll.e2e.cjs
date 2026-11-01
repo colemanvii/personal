@@ -11,7 +11,7 @@ fs.mkdirSync(DIR,{recursive:true});
 const sizes=[{name:"iphone-se",width:375,height:667,mobile:true},
  {name:"iphone",width:390,height:844,mobile:true},
  {name:"desktop",width:1440,height:900,mobile:false}];
-const clients=["freeman","kashus","scout","ronnie","teton","drawings","ramsey-hill","ernest","habitat","corey","joseph","pbr","cowboyer","mags","paintings"];
+const clients=["freeman","kashus","scout","ronnie","teton","ramsey-hill","ernest","habitat","corey","joseph","pbr","cowboyer","mags","paintings","drawings"];
 let failures=0;
 (async()=>{
 const browser=await chromium.launch({headless:true});
