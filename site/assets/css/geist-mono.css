@@ -1,0 +1,20 @@
+/* Site-wide type study adopted for production, 2026-11-01.
+   Geist Mono is open source (OFL). Hosted via Google Fonts so mobile
+   visitors receive the same font without installing it locally.
+   Typography only: preserve existing sizes, weights, spacing and layout. */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap");
+
+:root {
+  --mono: "Geist Mono", Monaco, Menlo, monospace;
+  --sans: "Geist Mono", Monaco, Menlo, monospace;
+  --serif: "Geist Mono", Monaco, Menlo, monospace;
+  --display: "Geist Mono", Monaco, Menlo, monospace;
+}
+
+/* Some pages retain older inline Monaco/Helvetica declarations.
+   Override only the font family, including form controls and dialogs.
+   Do not override icons or vector artwork. */
+html body,
+html body *:not(svg):not(svg *) {
+  font-family: "Geist Mono", Monaco, Menlo, monospace !important;
+}
