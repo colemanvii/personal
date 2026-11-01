@@ -20,6 +20,15 @@
 .sale-open:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(hover:hover){.sale-open:hover{color:var(--accent)}}
 
+/* Give the Purchase action an unmistakable warm-color hover on both themes.
+   Keep the resting state unchanged; keyboard focus receives the same color. */
+html body.paintings{--purchase-hover-color:#a43f33}
+html[data-tone="graphite"] body.paintings{--purchase-hover-color:#ff846b}
+.paintings .gallery-available .sale-open:focus-visible{color:var(--purchase-hover-color)}
+@media(hover:hover){
+  .paintings .gallery-available .sale-open:hover{color:var(--purchase-hover-color)}
+}
+
 /* ---------- iPhone: header and the two-column collection ---------- */
 @media(max-width:700px){
   body.paintings,.paintings .shell{height:auto;overflow:visible}
