@@ -10,7 +10,7 @@ const path = require("node:path");
 const BASE = (process.env.BASE_URL || "https://colecalfee.com").replace(/\/$/, "");
 const DIR = process.env.SCREENSHOTS || "release-screenshots";
 fs.mkdirSync(DIR, {recursive:true});
-const sizes = [{name:"iphone-se",width:375,height:667,mobile:true},{name:"iphone",width:390,height:844,mobile:true},{name:"desktop",width:1440,height:900,mobile:false}];
+const sizes = [{name:"iphone-se",width:375,height:667,mobile:true},{name:"iphone-mid",width:390,height:740,mobile:true},{name:"iphone",width:390,height:844,mobile:true},{name:"desktop",width:1440,height:900,mobile:false}];
 let failed = 0;
 const results = [];
 const run = async (name, fn) => {
