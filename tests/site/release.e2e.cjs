@@ -132,6 +132,25 @@ async function waitForPage(page,path){
      assert.equal(await page.locator("#flowers-in-mccarty-vase .caption h3").innerText(),"Flowers in McCarty Vase");
      await assertNoHorizontalOverflow(page,"Available");
      await screenshot(page,size.name+"-available");
+     // Purchase must look neutral at rest and visibly change on hover.
+     // This was broken when static.css painted the entire sale label red.
+     const purchase=page.locator("#red-sea .sale-open");
+     await purchase.waitFor({state:"visible",timeout:20000});
+     const rest=await purchase.evaluate(e=>getComputedStyle(e).color);
+     if(!size.mobile){
+       await purchase.hover();
+       const hover=await purchase.evaluate(e=>getComputedStyle(e).color);
+       assert.notEqual(rest,hover,"Purchase must change color on mouse hover");
+       assert.equal(hover,"rgb(164, 63, 51)","Light-theme Purchase hover should use rust red");
+       await page.evaluate(()=>{document.documentElement.dataset.tone="graphite";});
+       await page.locator("#red-sea .caption h3").hover();
+       const graphiteRest=await purchase.evaluate(e=>getComputedStyle(e).color);
+       await purchase.hover();
+       const graphiteHover=await purchase.evaluate(e=>getComputedStyle(e).color);
+       assert.notEqual(graphiteRest,graphiteHover,"Graphite Purchase must change on hover");
+       assert.equal(graphiteHover,"rgb(255, 132, 107)","Graphite hover should be coral");
+       await page.evaluate(()=>{document.documentElement.dataset.tone="off-white";});
+     }
      await page.locator("#red-sea .image-button").click();
      assert.equal(await page.locator("#painting-detail").evaluate(e=>e.open),true);
      assert.equal(await page.locator("#detail-name").innerText(),"Red Sea");

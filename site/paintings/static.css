@@ -19,6 +19,10 @@ body.paintings,.paintings .shell{height:100dvh;min-height:0;overflow:hidden}
 .paintings .gallery-available .caption h3{font:400 clamp(15px,1.25vw,19px)/1.2 var(--sans);letter-spacing:-.02em;margin:0}
 .paintings .gallery-available .caption p{display:block;margin:6px 0 0;font:10px/1.45 var(--mono);color:var(--muted)}
 .paintings .gallery-available .sale{font:10px/1.35 var(--mono);text-transform:uppercase;margin:2px 0 0;color:var(--accent)}
+/* Only the interactive Purchase label rests in neutral ink.
+   The original broad .sale rule made it red before hover, erasing the visual change.
+   Sold-state editorial markers still use the accent. */
+.paintings .gallery-available .sale[data-state="available"]{color:var(--ink)}
 .paintings .gallery-available .sale-open{font:inherit}
 .paintings .available-navigation{display:none}
 .paintings .footer{margin-top:0}
