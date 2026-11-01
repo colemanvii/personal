@@ -663,9 +663,43 @@ body.work-index{height:100dvh;max-height:100dvh}
 .work-index .paintings-archive-stage{min-height:0;flex:1 1 0}
 .work-index .freeman-site-live .freeman-preview-nav{font-size:clamp(10px,1.2vw,14px)}
 
+
+/* 2026-11-01 audit: 12/11 catalogue, identical numbering and row rhythm at
+   every viewport. The empty field above pagination is intentional white space,
+   never a table row stretched to fill it. */
+.work-index .index-scroll:has(.index-pagination:not([hidden])) .index-table{
+ height:auto!important;min-height:0;align-self:start
+}
+.work-index .index-table tbody tr:not([hidden]){height:36px}
+.work-index .index-table tbody td{
+ height:36px;padding-top:3px!important;padding-bottom:3px!important
+}
+/* Inset focus indications keep right-hand gallery arrows visible inside
+   the clipping boundary of the fixed-size reading pane. */
+.work-index :is(
+ .joseph-navigation,.cowboyer-navigation,.drawings-controls,
+ .ronnie-navigation,.teton-navigation,.kashus-gallery-controls,
+ .paired-mobile-nav,.paintings-archive-nav
+) button:focus-visible,
+.work-image-dialog .viewer-step:focus-visible{
+ outline:2px solid var(--accent);outline-offset:-3px
+}
+/* Reserve air between the sold-work wall label and the fixed footer.
+   The painting stage yields height rather than making the page scroll. */
+.work-index .panel-content.paintings-panel:not([hidden]){
+ padding-bottom:clamp(16px,2.3dvh,24px)
+}
+@media(max-width:850px){
+ .work-index .index-table{font-size:12px;line-height:15px}
+ .work-index .index-table td:nth-child(2){line-height:15px}
+ .work-index .index-table td:nth-child(2)>:is(button,a){
+  min-height:30px;padding:3px 0;line-height:15px
+ }
+}
 </style><script src="/index/paintings-archive.js" defer></script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/assets/css/geist-mono.css?v=1">
+<link rel="stylesheet" href="/assets/css/interior-header.css?v=1">
 </head><body class="work-index"><div class="shell">
 <header class="site-head">
   <div><a class="brand" aria-label="Cole Calfee" href="../">Cole Calfee</a></div>
@@ -868,41 +902,18 @@ body.work-index{height:100dvh;max-height:100dvh}
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
   const indexTable=document.getElementById('work-index-table');
   const tbody=indexTable.tBodies[0];
-  // The independent archives close page 01, not the entire catalogue.
-  // Mobile fits 12, 14, or 16 entries; move the *existing* DOM rows instead
-  // of duplicating them, preserving event handlers, content, and accessibility.
-  const sourceRows=Array.from(tbody.rows);
-  const archiveRows=['paintings','drawings'].map(client=>
-    sourceRows.find(row=>row.querySelector('[data-client="'+client+'"]'))
-  ).filter(Boolean);
-  const projectRows=sourceRows.filter(row=>!archiveRows.includes(row));
-  let rows=sourceRows;
-  let arrangedPageSize=null;
-  function arrangeRows(size){
-    const cutoff=Math.max(0,size-archiveRows.length);
-    rows=[...projectRows.slice(0,cutoff),...archiveRows,...projectRows.slice(cutoff)];
-    const fragment=document.createDocumentFragment();
-    rows.forEach((row,i)=>{
-      row.cells[0].textContent=String(i+1).padStart(3,'0');
-      fragment.appendChild(row);
-    });
-    tbody.appendChild(fragment);
-  }
+  // The catalogue is fixed, not fitted to viewport height: Paintings
+  // and Drawings are always entries 011 and 012 on the first sheet.
+  // Never reorder or renumber these authored records on resize.
+  const rows=Array.from(tbody.rows);
+  const PAGE_SIZE=12;
   const pagination=document.getElementById('index-pagination');
   const pageCount=pagination.querySelector('.index-page-count');
   const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
   const scroll=document.querySelector('.index-scroll');
-  // Fill the screen with projects while respecting shorter phones.
-  const pageSize=()=>matchMedia('(max-width:850px)').matches
-    ? (window.innerHeight>=780?16:window.innerHeight>=720?14:12)
-    : 12;
   let currentPage=0;
   function updateIndex(){
-    const size=pageSize();
-    if(size!==arrangedPageSize){
-      arrangeRows(size);
-      arrangedPageSize=size;
-    }
+    const size=PAGE_SIZE;
     const numberOfPages=Math.ceil(rows.length/size);
     currentPage=Math.max(0,Math.min(currentPage,numberOfPages-1));
     rows.forEach((row,i)=>{row.hidden=i<currentPage*size||i>=(currentPage+1)*size;});
@@ -914,7 +925,7 @@ body.work-index{height:100dvh;max-height:100dvh}
   }
   function turnPage(delta){
     const next=currentPage+delta;
-    if(next<0||next>=Math.ceil(rows.length/pageSize()))return;
+    if(next<0||next>=Math.ceil(rows.length/PAGE_SIZE))return;
     currentPage=next;
     show(null);
     updateIndex();
