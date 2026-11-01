@@ -82,7 +82,7 @@ async function test(name,cb){
     await page.locator('[data-panel="teton-photo"] .panel-close').click();
    });
    await test(view.name+" paintings captions clear of footer",async()=>{
-    await page.locator('[data-index-page="1"]').click();
+    assert.equal(await page.locator('[data-client="paintings"]').isVisible(),true,"Paintings should close page 01");
     await page.locator('[data-client="paintings"]').click();
     await page.locator("#sold-painting-image").evaluate(img=>img.decode());
     const dimensions=await page.locator("#sold-painting-image").evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,visible:img.getBoundingClientRect().height}));
