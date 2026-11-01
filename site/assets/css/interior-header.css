@@ -1,0 +1,34 @@
+/* Shared site header — Index, Available and About.
+ * All three interior routes use the same gutters, masthead geometry,
+ * navigation scale and active-state rule. This file loads after page CSS. */
+body:is(.work-index,.paintings,.about) .shell{
+ width:calc(100% - 60px);max-width:1600px
+}
+body:is(.work-index,.paintings,.about) .site-head{
+ display:grid;grid-template-columns:1fr auto;align-items:baseline;
+ gap:24px;padding:24px 0 18px;border-bottom:1px solid var(--rule)
+}
+body:is(.work-index,.paintings,.about) .site-head .brand{
+ font:400 15px/1.45 var(--sans);letter-spacing:-.02em;text-transform:none
+}
+body:is(.work-index,.paintings,.about) .site-head .nav{
+ display:flex;align-items:baseline;gap:18px;
+ font:400 14px/1.45 var(--sans);letter-spacing:-.02em;
+ text-transform:none;white-space:nowrap
+}
+body:is(.work-index,.paintings,.about) .site-head .nav a{padding:0 0 3px}
+body:is(.work-index,.paintings,.about) .site-head .nav a[aria-current="page"]{
+ color:var(--accent);border-bottom:1px solid currentColor
+}
+@media(max-width:700px){
+ body:is(.work-index,.paintings,.about) .shell{width:calc(100% - 36px)}
+ body:is(.work-index,.paintings,.about) .site-head{
+  grid-template-columns:auto minmax(0,1fr);align-items:baseline;
+  column-gap:12px;padding:13px 0 12px
+ }
+ body:is(.work-index,.paintings,.about) .site-head .brand,
+ body:is(.work-index,.paintings,.about) .site-head .nav{font-size:13px}
+ body:is(.work-index,.paintings,.about) .site-head .nav{
+  justify-content:flex-end;flex-wrap:nowrap;gap:12px;white-space:nowrap
+ }
+}
