@@ -80,10 +80,8 @@ async function waitForPage(page,path){
        assert.ok(names.some(n=>n.includes(required)),required+" missing from page one");
      }
      assert.match(names[0],/Freeman General Contracting/);
-     assert.equal(names.some(n=>/Paintings|Drawings/.test(n)),false,"Independent art archives belong on the final page");
-     const archiveNames=await rows.locator("td:nth-child(2)").allInnerTexts();
-     assert.match(archiveNames.at(-2),/Paintings/,"Paintings must be penultimate");
-     assert.match(archiveNames.at(-1),/Drawings/,"Drawings must close the complete index");
+     assert.match(names.at(-2),/Paintings/,"Paintings must be the penultimate entry on the FIRST page");
+     assert.match(names.at(-1),/Drawings/,"Drawings must be the final entry on the FIRST page");
      await assertNoHorizontalOverflow(page,"Index");
      await assertVisibleInside(page,"#index-pagination","Index pagination");
      const fit=await page.evaluate(()=>{
@@ -106,6 +104,8 @@ async function waitForPage(page,path){
      await page.locator('[data-index-page="1"]').click();
      assert.equal(await rows.filter({visible:true}).count(),23-pageOneSize,"remaining work count on page two");
      assert.equal(await page.locator(".index-page-count").innerText(),"02 / 02");
+     const secondPageNames=await rows.filter({visible:true}).locator("td:nth-child(2)").allInnerTexts();
+     assert.ok(!secondPageNames.some(n=>/Paintings|Drawings/.test(n)),"Independent archives must not be hidden on page 02");
      await screenshot(page,size.name+"-index-02");
      await page.locator('[data-index-page="-1"]').click();
      assert.equal(await page.locator(".index-page-count").innerText(),"01 / 02");
@@ -119,7 +119,7 @@ async function waitForPage(page,path){
      await screenshot(page,size.name+"-teton");
      await page.locator(".work-panel .panel-content:not([hidden]) .panel-close").click();
      const drawingsRow=page.locator('[data-client="drawings"]');
-     if(!await drawingsRow.isVisible())await page.locator('[data-index-page="1"]').click();
+     assert.equal(await drawingsRow.isVisible(),true,"Drawings should be accessible on the FIRST page");
      await drawingsRow.click();
      await waitForImage(page,"#drawings-active-image","Drawings image");
      await screenshot(page,size.name+"-drawings");
