@@ -73,7 +73,7 @@ async function waitForPage(page,path){
      assert.equal(await page.locator(".index-count").innerText(),"23 WORKS");
      assert.equal(await page.getByText("Selected", {exact:true}).count(),0,"obsolete Selected toggle");
      const visible=rows.filter({visible:true});
-     const pageOneSize=size.mobile?(size.height>=780?16:size.height>=720?14:12):12;
+     const pageOneSize=12;
      assert.equal(await visible.count(),pageOneSize,"page one must use the full intended screen capacity");
      const names=await visible.locator("td:nth-child(2)").allInnerTexts();
      for(const required of ["Ronnie Hodges","Teton Valley Ranch","Ramsey Hill"]){
@@ -91,8 +91,15 @@ async function waitForPage(page,path){
        const scroll=document.querySelector(".index-scroll");
        return {lastBottom:last.bottom,navTop:nav.top,gap:nav.top-last.bottom,scrollOverflow:scroll.scrollHeight-scroll.clientHeight};
      });
-     assert.ok(fit.gap>=-3 && fit.gap<=28,"Index leaves dead space or overlaps pagination: "+JSON.stringify(fit));
+     // Rows are fixed-height. Spare vertical room belongs above bottom pagination.
+     assert.ok(fit.gap>=-3,"Index rows overlap pagination: "+JSON.stringify(fit));
      assert.ok(fit.scrollOverflow<=3,"Index contains invisible vertical overflow: "+JSON.stringify(fit));
+     const rhythm=await page.evaluate(()=>[...document.querySelectorAll("#work-index-table tbody tr")]
+       .filter(row=>!row.hidden).map(row=>row.getBoundingClientRect().height));
+     assert.ok(rhythm.every(height=>height>=35&&height<=39),
+       "Index rows must stay a consistent 36px: "+JSON.stringify(rhythm));
+     assert.match(await rows.nth(10).locator("td:nth-child(2)").textContent(),/Paintings/,"Paintings is always 011");
+     assert.match(await rows.nth(11).locator("td:nth-child(2)").textContent(),/Drawings/,"Drawings is always 012");
      if(size.mobile){
        const lastLink=visible.last().locator("a").first();
        if(await lastLink.count()){
