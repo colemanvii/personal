@@ -154,7 +154,7 @@ html[data-tone="graphite"] body.paintings{--purchase-hover-color:#ff846b}
 #painting-detail .buy-views{margin:0 0 28px;gap:10px}
 #painting-detail .buy-views button{width:44px}
 .viewer-steps{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--rule)}
-.paintings dialog .viewer-steps button{min-height:44px;max-width:48%;padding:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 13px/1 var(--sans);letter-spacing:-.01em;color:var(--muted);text-align:left}
+.paintings dialog .viewer-steps button{min-height:44px;max-width:100%;padding:7px 0;overflow:visible;text-overflow:clip;white-space:normal;font:400 13px/1.35 var(--sans);letter-spacing:-.01em;color:var(--muted);text-align:left}
 .paintings dialog .viewer-steps #detail-next{margin-left:auto;text-align:right}
 .paintings dialog .viewer-steps button[hidden]{display:none}
 @media(hover:hover){.paintings dialog .viewer-steps button:hover{color:var(--ink)}}
