@@ -1,4 +1,4 @@
-/* Browser tests for About (/info/) on desktop, 390 × 844 and 375 × 667.
+/* Browser tests for Contact (/info/) on desktop, 390 × 844 and 375 × 667.
  *
  * Run from the repository root:
  *   python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
@@ -38,8 +38,8 @@ async function test(name, fn) {
       assert.equal((await page.locator("h1").textContent()).trim(), "Cole Calfee");
       assert.equal((await page.locator(".location").textContent()).trim(), "Nashville, Tennessee / North Georgia");
       assert.deepEqual(await page.$$eval(".site-head a", as => as.map(a => [a.textContent.trim(), a.getAttribute("href")])),
-        [["Cole Calfee", "/"], ["Index", "/index/"], ["Available", "/paintings/"], ["About", "/info/"]]);
-      assert.equal((await page.locator('.nav a[aria-current="page"]').textContent()).trim(), "About");
+        [["Cole Calfee", "/"], ["Index", "/index/"], ["Available", "/paintings/"], ["Contact", "/info/"]]);
+      assert.equal((await page.locator('.nav a[aria-current="page"]').textContent()).trim(), "Contact");
       const plate = await page.locator(".image-plate img").evaluate(i => ({ok: i.complete && i.naturalWidth > 0, alt: i.alt}));
       assert.ok(plate.ok, "the studio photograph did not load");
       assert.ok(plate.alt.length > 10, "the studio photograph has no description");
