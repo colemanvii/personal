@@ -180,15 +180,15 @@ async function waitForPage(page,path){
      await page.locator("#detail-close").click();
      assert.equal(await page.locator("#painting-detail").evaluate(e=>e.open),false);
    });
-   await run(size.name+" About / contact / layout",async()=>{
+   await run(size.name+" Contact / layout",async()=>{
      await waitForPage(page,"/info/");
      assert.equal(await page.locator("h1").innerText(),"Cole Calfee");
      assert.ok(await page.locator('a[href="mailto:colecalfee@gmail.com"]').count());
      assert.ok(await page.locator('a[href="https://www.instagram.com/colecalfee/"]').count());
-     await assertNoHorizontalOverflow(page,"About");
+     await assertNoHorizontalOverflow(page,"Contact");
      await screenshot(page,size.name+"-about");
    });
-   await run(size.name+" shared Index / Available / About header",async()=>{
+   await run(size.name+" shared Index / Available / Contact header",async()=>{
      const headers=[];
      for(const route of ["/index/","/paintings/","/info/"]){
        await waitForPage(page,route);
