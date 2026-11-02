@@ -6,8 +6,19 @@
  * the viewer's sale line: availability and price, and for available works one
  * quiet action. Shopify decides what is for sale; the page decides where each
  * work hangs. */
-import {fetchProducts, storefront, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage} from "/assets/js/storefront.js";
+import {SHOP_DOMAIN, fetchProducts, storefront, choiceOptions, findVariant, initialSelection, valueAvailable, isEdition, priceLabel, formatMoney, sizedImage} from "/assets/js/storefront.js";
 import {setImage, hasOwnPhoto, titleOf, detailsOf, numberOf, currentPiece} from "/paintings/gallery.js";
+
+const instagram = /Instagram/i.test(navigator.userAgent);
+function instagramPurchaseLink(variant, className) {
+  const id = variant?.availableForSale && /^gid:\/\/shopify\/ProductVariant\/(\d+)$/.exec(variant.id)?.[1];
+  if (!instagram || !id) return null;
+  const link = document.createElement("a");
+  link.href = `https://${SHOP_DOMAIN}/cart/${id}:1`;
+  link.className = className;
+  link.textContent = "Purchase ↗";
+  return link;
+}
 
 const FRESH_FOR = 60 * 1000;
 const pieces = [...document.querySelectorAll(".gallery .piece[data-handle]")];
@@ -88,7 +99,17 @@ async function checkoutVariant(variant, button) {
     checkoutBusy = false;
     button.disabled = false;
     button.textContent = old;
-    say((error.message || "Checkout unavailable.") + " Please try again.");
+    const message = (error.message || "Checkout unavailable.") + " Please try again.";
+    if (dialog.open) say(message);
+    else {
+      let notice = button.parentElement.querySelector('[role="status"]');
+      if (!notice) {
+        notice = document.createElement("span");
+        notice.setAttribute("role", "status");
+        button.after(notice);
+      }
+      notice.textContent = message;
+    }
   }
 }
 
@@ -165,6 +186,7 @@ function renderViews(product, variant) {
 
 function renderPanel() {
   const {product} = current;
+  action.replaceChildren(addButton);
   addButton.onclick = null;
 
   if (!product) {
@@ -192,7 +214,9 @@ function renderPanel() {
   } else {
     addButton.disabled = false;
     addButton.textContent = "Purchase ↗";
-    addButton.onclick = () => checkoutVariant(variant, addButton);
+    const link = instagramPurchaseLink(variant, addButton.className);
+    if (link) action.replaceChildren(link);
+    else addButton.onclick = () => checkoutVariant(variant, addButton);
   }
 }
 
@@ -242,7 +266,9 @@ function renderCaption(piece) {
     open.textContent = "Purchase ↗";
     open.setAttribute("aria-label", `Purchase ${title} through Shopify checkout`);
     open.onclick = () => { const variant = findVariant(product, initialSelection(product)); if (variant?.availableForSale) checkoutVariant(variant, open); };
-    sale.append(open);
+    const link = instagramPurchaseLink(findVariant(product, initialSelection(product)), open.className);
+    if (link) link.setAttribute("aria-label", open.getAttribute("aria-label"));
+    sale.append(link || open);
     imageButton.setAttribute("aria-label", `View ${title}, available`);
   } else {
     sale.dataset.state = "sold";
