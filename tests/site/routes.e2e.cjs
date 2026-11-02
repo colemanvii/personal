@@ -17,7 +17,7 @@ const assert = require("node:assert/strict");
 const BASE = (process.env.BASE_URL || "http://127.0.0.1:8788").replace(/\/$/, "");
 const PREVIEW = /\.pages\.dev$/.test(new URL(BASE).hostname);
 
-const PAGES = {"/": "Cole Calfee", "/index/": "Index — Cole Calfee", "/paintings/": "Available — Cole Calfee", "/info/": "About — Cole Calfee"};
+const PAGES = {"/": "Cole Calfee", "/index/": "Index — Cole Calfee", "/paintings/": "Available — Cole Calfee", "/info/": "Contact — Cole Calfee"};
 const REDIRECTS = {
   "/art": "/index/", "/art/": "/index/", "/art/index.html": "/index/",
   "/design": "/index/", "/design/": "/index/",
