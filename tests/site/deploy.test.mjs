@@ -1,7 +1,7 @@
 /* The deployment contract, checked from the source with no network.
  *
  * Only site/ is published (wrangler.toml: pages_build_output_dir). The public
- * site is Home, Index, Available and About; everything else in the repository
+ * site is Home, Index, Available and Contact; everything else in the repository
  * stays in Git and is never served.
  *
  *   node --test tests/site/deploy.test.mjs */
