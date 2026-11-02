@@ -13,7 +13,7 @@ The approved public site is four pages, and nothing else:
 | Home | `/` | `site/index.html` |
 | Index | `/index/` | `site/index/` |
 | Available | `/paintings/` | `site/paintings/` |
-| About | `/info/` | `site/info/` |
+| Contact | `/info/` | `site/info/` |
 
 `site/` is the only directory that is deployed. It holds the four pages, their
 assets (`site/assets/`) and the platform files:
@@ -23,7 +23,7 @@ assets (`site/assets/`) and the platform files:
 - `site/_headers` — `noindex` on `*.pages.dev` preview deployments
 - `site/404.html` — served with status 404 for every unknown path
 - `site/robots.txt`, `site/sitemap.xml`
-- `site/assets/images/share.jpg` — the social sharing preview (a crop of the About photograph)
+- `site/assets/images/share.jpg` — the social sharing preview (a crop of the Contact photograph)
 
 Everything else in the repository (tests, notes, retired pages, tooling) stays
 in Git and is never served. `retired/` preserves older pages and source
