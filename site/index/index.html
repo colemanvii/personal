@@ -748,6 +748,15 @@ body.work-index{height:100dvh;max-height:100dvh}
  .work-index .work-panel.is-open .series > .photo-plate img{width:100%;height:100%;max-height:100%;object-fit:contain}
  .work-index .work-panel.is-open .series-nav{flex:none;min-height:44px}
 }
+
+/* Phones: every project name holds one line, so each row keeps the 36px rhythm.
+   The numbers need 28px and "Ongoing" 54px; the name column takes the rest,
+   set with the same -.015em tracking the desktop Index uses. */
+@media(max-width:850px){
+ .work-index .index-table{letter-spacing:-.015em}
+ .work-index .index-table col:nth-child(1){width:28px}
+ .work-index .index-table col:nth-child(4){width:54px}
+}
 </style><script src="/index/paintings-archive.js" defer></script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/assets/css/geist-mono.css?v=1">
@@ -817,17 +826,15 @@ body.work-index{height:100dvh;max-height:100dvh}
     <div class="panel-content plate" data-panel="scout" hidden>
       <div class="panel-top"><h2 class="panel-title">Scout Motors</h2><button class="panel-close" type="button" aria-label="Close Scout Motors artwork">CLOSE ×</button></div>
       <div class="series" data-series="scout" aria-label="Scout Motors artwork">
-        <figure class="archive-plate photo-plate" data-caption="I / DESERT / ARTWORK"><img loading="lazy" src="../assets/scout-desert.jpg" width="1717" height="2200" alt="Scout illustration: a vehicle and a coyote raising dust across a wide desert, Scout script below" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="II / RIDERS / ARTWORK" hidden><img loading="lazy" src="../assets/scout-riders.jpg" width="1718" height="2200" alt="Scout illustration: a vehicle alongside two horseback riders under a pale sky, Scout script above" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="I / DESERT / FRAMED PRINT" hidden><img loading="lazy" src="../assets/scout-desert-framed.jpg" width="1409" height="1600" alt="The desert Scout illustration as a framed print" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="II / RIDERS / FRAMED PRINT" hidden><img loading="lazy" src="../assets/scout-riders-framed.jpg" width="1413" height="1600" alt="The riders Scout illustration as a framed print" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/scout-desert.jpg" width="1717" height="2200" alt="Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/scout-riders.jpg" width="1718" height="2200" alt="Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="series-nav" data-pair-nav="scout" role="group" aria-label="Browse Scout Motors artwork">
         <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
-        <span data-pair-count>01 / 04</span>
+        <span data-pair-count>01 / 02</span>
         <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption" data-series-caption>I / DESERT / ARTWORK</p>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
     <div class="panel-content plate" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
@@ -841,23 +848,23 @@ body.work-index{height:100dvh;max-height:100dvh}
     <div class="panel-content plate" data-panel="corey" hidden>
       <div class="panel-top"><h2 class="panel-title">Corey Kent</h2><button class="panel-close" type="button" aria-label="Close Corey Kent releases">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate corey-artwork"><img loading="lazy" src="../assets/ck.jpg" width="4000" height="4000" alt="Corey Kent Poster Child EP artwork in blue on cream" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption"><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">POSTER CHILD EP ↗︎</a> / COVER ARTWORK / 2025</p>
+      <p class="archive-plate-caption"><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">POSTER CHILD EP ↗︎</a> / COVER ARTWORK</p>
     </div>
 
         <div class="panel-content plate" data-panel="joseph" hidden>
       <div class="panel-top"><h2 class="panel-title">Joseph Martin</h2><button class="panel-close" type="button" aria-label="Close Joseph Martin">CLOSE ×</button></div>
       <div class="series" data-series="joseph" aria-label="Joseph Martin artwork">
-        <figure class="archive-plate photo-plate" data-caption="HATMAKER / DOUBLE DECKER ARTS FESTIVAL POSTER"><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="MARTIN SURVIVES / EVENT POSTER" hidden><img loading="lazy" src="../assets/joseph-martin-survives.webp" width="605" height="758" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="DON'T CALL IT LUCK / EVENT POSTER" hidden><img loading="lazy" src="../assets/joseph-martin-luck.webp" width="605" height="759" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="COWBOY / INK DRAWING" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="POSTER / DOUBLE DECKER ARTS FESTIVAL, OXFORD"><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="EVENT POSTER / COLLAGE STUDIO, JACKSON" hidden><img loading="lazy" src="../assets/joseph-martin-survives.webp" width="498" height="640" alt="Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="EVENT POSTER / COLLAGE STUDIO, JACKSON" hidden><img loading="lazy" src="../assets/joseph-martin-luck.webp" width="498" height="640" alt="Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="ILLUSTRATION" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="series-nav" data-pair-nav="joseph" role="group" aria-label="Browse Joseph Martin artwork">
         <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
         <span data-pair-count>01 / 04</span>
         <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption" data-series-caption>HATMAKER / DOUBLE DECKER ARTS FESTIVAL POSTER</p>
+      <p class="archive-plate-caption" data-series-caption>POSTER / DOUBLE DECKER ARTS FESTIVAL, OXFORD</p>
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
@@ -877,8 +884,8 @@ body.work-index{height:100dvh;max-height:100dvh}
     </div>
     <div class="panel-content plate" data-panel="ernest" hidden>
       <div class="panel-top"><h2 class="panel-title">ERNEST</h2><button class="panel-close" type="button" aria-label="Close ERNEST">CLOSE ×</button></div>
-      <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/ernest-second-harvest.webp" width="612" height="698" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">STARS FOR SECOND HARVEST / EVENT POSTER / 2025</p>
+      <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/ernest-second-harvest.webp" width="460" height="584" alt="Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <p class="archive-plate-caption">EVENT POSTER / STARS FOR SECOND HARVEST</p>
     </div>
     <div class="panel-content plate" data-panel="drawings" hidden>
       <div class="panel-top"><h2 class="panel-title">Drawings</h2><button class="panel-close" type="button" aria-label="Close Drawings">CLOSE ×</button></div>
@@ -890,40 +897,40 @@ body.work-index{height:100dvh;max-height:100dvh}
           <button type="button" data-drawings-step="1" aria-label="Next drawing">→</button>
         </div>
       </div>
-      <p class="archive-plate-caption" id="drawings-caption">BISON STUDY / INDEPENDENT WORK</p>
+      <p class="archive-plate-caption" id="drawings-caption">BISON STUDY</p>
     </div>
     <div class="panel-content plate" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
       <div class="series" data-series="cowboyer" aria-label="The Cowboyer cover studies">
-        <figure class="archive-plate photo-plate" data-caption="BISON / COVER STUDY"><img loading="lazy" src="../assets/cowboyer-bison.webp" width="517" height="661" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="ORANGE RIDER / COVER STUDY" hidden><img loading="lazy" src="../assets/cowboyer-orange-rider.webp" width="546" height="695" alt="The Cowboyer magazine cover in orange with a small horse and rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="RED LASSO / COVER STUDY" hidden><img loading="lazy" src="../assets/Group%20394.png" width="2580" height="3323" alt="The Cowboyer cover: a small cowboy swinging a red lasso" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="DESERT / COVER STUDY" hidden><img loading="lazy" src="../assets/Group%20393.png" width="2557" height="3323" alt="The Cowboyer cover: a cowboy watching a tall cloud rise over the desert" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/cowboyer-bison.webp" width="421" height="547" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/cowboyer-orange-rider.webp" width="440" height="574" alt="The Cowboyer magazine cover in orange with a horse and rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/Group%20394.png" width="2580" height="3323" alt="The Cowboyer cover with a red line drawing of a cowboy and lasso" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/Group%20393.png" width="2557" height="3323" alt="The Cowboyer cover with a cowboy facing a desert sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="series-nav" data-pair-nav="cowboyer" role="group" aria-label="Browse The Cowboyer covers">
         <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
         <span data-pair-count>01 / 04</span>
         <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption" data-series-caption>BISON / COVER STUDY</p>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
     <div class="panel-content plate" data-panel="habitat" hidden>
       <div class="panel-top"><h2 class="panel-title">Habitat Ranch</h2><button class="panel-close" type="button" aria-label="Close Habitat Ranch">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/habitat-ranch.webp" width="750" height="600" alt="Habitat Ranch cap and denim portrait" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">01 / HABITAT RANCH / 2025</p>
+      <p class="archive-plate-caption"></p>
     </div>
     <div class="panel-content plate" data-panel="pbr" hidden>
       <div class="panel-top"><h2 class="panel-title">PBR</h2><button class="panel-close" type="button" aria-label="Close PBR">CLOSE ×</button></div>
       <div class="series" data-series="pbr" aria-label="PBR photographs">
-        <figure class="archive-plate photo-plate" data-caption="BACKSTAGE / PHOTOGRAPHY"><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="THE CHUTE / PHOTOGRAPHY" hidden><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="series-nav" data-pair-nav="pbr" role="group" aria-label="Browse PBR photographs">
         <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
         <span data-pair-count>01 / 02</span>
         <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption" data-series-caption>BACKSTAGE / PHOTOGRAPHY</p>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
     <div class="panel-content plate" data-panel="ronnie-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Ronnie Hodges Performance Horses</h2><button class="panel-close" type="button" aria-label="Close Ronnie Hodges photographs">CLOSE ×</button></div>
@@ -931,7 +938,7 @@ body.work-index{height:100dvh;max-height:100dvh}
         <figure class="archive-plate photo-plate"><img id="ronnie-active-image" loading="lazy" src="../assets/ronnie-hodges-01.webp" width="750" height="749" alt="Ronnie Hodges speaking while seated on horseback"></figure>
         <div class="ronnie-navigation" role="group" aria-label="Browse Ronnie Hodges photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="ronnie-count">01 / 02</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
-      <p class="archive-plate-caption">01—02 / RONNIE HODGES / PHOTOGRAPHY / 2022</p>
+      <p class="archive-plate-caption"></p>
     </div>
     <div class="panel-content plate" data-panel="teton-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Teton Valley Ranch</h2><button class="panel-close" type="button" aria-label="Close Teton Valley Ranch">CLOSE ×</button></div>
@@ -939,12 +946,12 @@ body.work-index{height:100dvh;max-height:100dvh}
         <figure class="archive-plate photo-plate"><img id="teton-active-image" loading="lazy" src="../assets/teton-valley-ranch.webp" alt="Lone horseback rider on a ridge at Teton Valley Ranch"></figure>
         <div class="teton-navigation" role="group" aria-label="Browse Teton Valley Ranch photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="teton-count">01 / 03</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
-      <p class="archive-plate-caption">01—03 / TETON VALLEY RANCH / PHOTOGRAPHY / 2015</p>
+      <p class="archive-plate-caption"></p>
     </div>
     <div class="panel-content plate" data-panel="mags" hidden>
       <div class="panel-top"><h2 class="panel-title">Mags Duval</h2><button class="panel-close" type="button" aria-label="Close Mags Duval">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate mags-photo"><img loading="lazy" src="../assets/M2.jpeg" width="3601" height="3601" alt="Portrait of Mags Duval holding a red rose" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">01 / MAGS DUVAL / PHOTOGRAPHY / 2024</p>
+      <p class="archive-plate-caption"></p>
     </div>
   </aside></div>
   
@@ -1281,7 +1288,7 @@ body.work-index{height:100dvh;max-height:100dvh}
    const slide=slides[position];
    image.src=slide.src;image.alt=slide.caption;
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
-   caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
+   caption.textContent=slide.caption.toUpperCase();
  }
  gallery.querySelectorAll('[data-drawings-step]').forEach(button=>button.addEventListener('click',()=>show(position+Number(button.dataset.drawingsStep))));
  gallery.addEventListener('keydown',event=>{
