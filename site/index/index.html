@@ -43,6 +43,7 @@
 .work-index .work-panel{position:relative;border-left:1px solid var(--rule);padding:0 0 0 clamp(18px,2.3vw,34px);min-width:0}
 .work-index .panel-id{font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin:1px 0 22px}
 .work-index .panel-placeholder{font-size:11px;line-height:1.6;color:var(--muted)}
+.work-index .work-panel:not(.is-open) .panel-id{display:none}
 .work-index .panel-content[hidden],.work-index .panel-placeholder[hidden]{display:none}
 .work-index .panel-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 26px}
 .work-index .panel-title{font:inherit;font-size:clamp(16px,1.7vw,24px);letter-spacing:-.04em;margin:0}
@@ -759,7 +760,7 @@ body.work-index{height:100dvh;max-height:100dvh}
   </nav></div>
   <aside class="work-panel" id="selected-work-panel" aria-label="Project detail">
     <p class="panel-id">WORK</p>
-    <p class="panel-placeholder">SELECT A PROJECT<br>TO VIEW THE WORK.</p>
+    <p class="panel-placeholder">SELECT A PROJECT</p>
     <div class="panel-content paintings-panel" data-panel="paintings" hidden>
 <div class="panel-top"><h2 class="panel-title">Paintings</h2><button class="panel-close" type="button" aria-label="Close paintings archive">CLOSE ×</button></div>
 <div class="paintings-archive" aria-label="Sold paintings archive">
