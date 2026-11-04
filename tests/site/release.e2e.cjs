@@ -114,6 +114,14 @@ async function waitForPage(page,path){
        }
      }
      await screenshot(page,size.name+"-index-01");
+     // Freeman must show the actual homepage, not the previous fake text block.
+     await page.locator('[data-client="freeman"]').click();
+     await waitForImage(page,'[data-panel="freeman"] .freeman-homepage-image',"Freeman homepage preview");
+     const freemanPreview=page.locator('[data-panel="freeman"] .freeman-site-live');
+     assert.equal(await freemanPreview.getAttribute("href"),"https://www.freemangc.com/");
+     assert.equal(await freemanPreview.locator(".freeman-preview-nav").count(),0,
+       "Freeman preview must not revert to fake wordmark text");
+     await page.locator('[data-panel="freeman"] .panel-close').click();
      await page.locator('[data-index-page="1"]').click();
      assert.equal(await rows.filter({visible:true}).count(),23-pageOneSize,"remaining work count on page two");
      assert.equal(await page.locator(".index-page-count").innerText(),"02 / 02");
