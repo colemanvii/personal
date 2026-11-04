@@ -71,6 +71,14 @@ async function waitForPage(page,path){
        Array.from({length:23},(_,i)=>String(i+1).padStart(3,"0")),
        "Index catalogue numbering must be continuous and ordered");
      assert.equal(await page.locator(".index-count").innerText(),"23 WORKS");
+     const prompt=page.locator(".work-panel .panel-placeholder");
+     assert.equal((await prompt.textContent()).trim(),"SELECT A PROJECT",
+       "Empty work panel should use only the approved prompt");
+     if(!size.mobile){
+       assert.equal(await prompt.isVisible(),true,"Desktop prompt should be visible");
+       assert.equal(await page.locator(".work-panel .panel-id").isVisible(),false,
+         "Empty panel should not display the WORK label");
+     }
      assert.equal(await page.getByText("Selected", {exact:true}).count(),0,"obsolete Selected toggle");
      const visible=rows.filter({visible:true});
      const pageOneSize=12;
