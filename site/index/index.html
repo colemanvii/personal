@@ -664,15 +664,22 @@ body.work-index{height:100dvh;max-height:100dvh}
 .work-index .freeman-site-live .freeman-preview-nav{font-size:clamp(10px,1.2vw,14px)}
 
 
-/* 2026-11-01 audit: 12/11 catalogue, identical numbering and row rhythm at
-   every viewport. The empty field above pagination is intentional white space,
-   never a table row stretched to fill it. */
+/* Keep the audited 12/11 catalogue split and compact mobile rhythm. */
 .work-index .index-scroll:has(.index-pagination:not([hidden])) .index-table{
  height:auto!important;min-height:0;align-self:start
 }
 .work-index .index-table tbody tr:not([hidden]){height:36px}
 .work-index .index-table tbody td{
  height:36px;padding-top:3px!important;padding-bottom:3px!important
+}
+/* Desktop: distribute the visible rows across the available table area rather
+   than leaving a large blank field above the fixed pagination controls. */
+@media(min-width:851px) and (min-height:750px){
+ .work-index .index-scroll:has(.index-pagination:not([hidden])) .index-table{
+  height:100%!important;align-self:stretch
+ }
+ .work-index .index-table tbody tr:not([hidden]),
+ .work-index .index-table tbody td{height:auto}
 }
 /* Inset focus indications keep right-hand gallery arrows visible inside
    the clipping boundary of the fixed-size reading pane. */
