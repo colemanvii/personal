@@ -91,13 +91,19 @@ async function waitForPage(page,path){
        const scroll=document.querySelector(".index-scroll");
        return {lastBottom:last.bottom,navTop:nav.top,gap:nav.top-last.bottom,scrollOverflow:scroll.scrollHeight-scroll.clientHeight};
      });
-     // Rows are fixed-height. Spare vertical room belongs above bottom pagination.
      assert.ok(fit.gap>=-3,"Index rows overlap pagination: "+JSON.stringify(fit));
      assert.ok(fit.scrollOverflow<=3,"Index contains invisible vertical overflow: "+JSON.stringify(fit));
      const rhythm=await page.evaluate(()=>[...document.querySelectorAll("#work-index-table tbody tr")]
        .filter(row=>!row.hidden).map(row=>row.getBoundingClientRect().height));
-     assert.ok(rhythm.every(height=>height>=35&&height<=39),
-       "Index rows must stay a consistent 36px: "+JSON.stringify(rhythm));
+     const expandedDesktop=!size.mobile&&size.width>=851&&size.height>=750;
+     if(expandedDesktop){
+       assert.ok(fit.gap<=12,"Desktop rows should fill the table area above pagination: "+JSON.stringify(fit));
+       assert.ok(Math.min(...rhythm)>=39&&Math.max(...rhythm)-Math.min(...rhythm)<2,
+         "Desktop rows should expand evenly: "+JSON.stringify(rhythm));
+     }else{
+       assert.ok(rhythm.every(height=>height>=35&&height<=39),
+         "Mobile and short-viewport rows must stay a consistent 36px: "+JSON.stringify(rhythm));
+     }
      assert.match(await rows.nth(10).locator("td:nth-child(2)").textContent(),/Paintings/,"Paintings is always 011");
      assert.match(await rows.nth(11).locator("td:nth-child(2)").textContent(),/Drawings/,"Drawings is always 012");
      if(size.mobile){
@@ -111,6 +117,15 @@ async function waitForPage(page,path){
      await page.locator('[data-index-page="1"]').click();
      assert.equal(await rows.filter({visible:true}).count(),23-pageOneSize,"remaining work count on page two");
      assert.equal(await page.locator(".index-page-count").innerText(),"02 / 02");
+     if(expandedDesktop){
+       const secondPageGap=await page.evaluate(()=>{
+         const visibleRows=[...document.querySelectorAll("#work-index-table tbody tr")].filter(row=>!row.hidden);
+         return document.querySelector("#index-pagination").getBoundingClientRect().top-
+           visibleRows.at(-1).getBoundingClientRect().bottom;
+       });
+       assert.ok(secondPageGap>=-3&&secondPageGap<=12,
+         "Desktop second-page rows should fill to pagination: "+secondPageGap);
+     }
      const secondPageNames=await rows.filter({visible:true}).locator("td:nth-child(2)").allInnerTexts();
      assert.ok(!secondPageNames.some(n=>/Paintings|Drawings/.test(n)),"Independent archives must not be hidden on page 02");
      await screenshot(page,size.name+"-index-02");
