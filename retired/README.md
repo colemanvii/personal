@@ -19,7 +19,7 @@ These pages still reference `/assets/…` as they did when they were public, so
 they will not render fully from here. `studies/painting-crops/apply.py` was
 written for the old layout; its target is now `site/paintings/index.html`.
 
-`assets/s1.jpeg`, `s2.jpeg` (Scout Motors), `ernest.webp`, `cowboyer-cover-01.webp` and
+`assets/s1.jpeg`, `s2.jpeg` (Scout Motors), `cowboyer-cover-01.webp` and
 `cowboyer-cover-02.webp` are the original framed and wall mockups, kept at full
 resolution. The Index now shows the artwork cropped from them
-(`site/assets/scout-*.jpg`, `ernest-second-harvest.webp`, `cowboyer-bison.webp`, `cowboyer-orange-rider.webp`).
+(`site/assets/scout-*.jpg`, `cowboyer-bison.webp`, `cowboyer-orange-rider.webp`).

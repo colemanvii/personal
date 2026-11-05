@@ -142,7 +142,6 @@ const REMOVED = [
   "/gabe/index.html",
   "/assets/s1.jpeg",
   "/assets/s2.jpeg",
-  "/assets/ernest.webp",
   "/assets/cowboyer-cover-01.webp",
   "/assets/cowboyer-cover-02.webp",
   "/paintings/archive.js",
