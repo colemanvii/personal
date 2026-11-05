@@ -199,33 +199,9 @@
 /* Twelve selected entries still fit the intended fixed-height work index. */
 @media(min-width:851px){.work-index .index-table td{padding-top:clamp(3px,.62vh,7px);padding-bottom:clamp(3px,.62vh,7px)}}
 /* Cowboyer: one fixed-size render surface for every cover. */
-.work-index .cowboyer-gallery{width:100%;height:clamp(210px,50dvh,490px);margin:0 0 10px}
-.work-index .cowboyer-stage{display:flex;align-items:center;justify-content:center;width:100%;height:100%;margin:0;border:0;background:transparent;overflow:hidden}
-.work-index .cowboyer-canvas{position:relative;height:100%;width:auto;max-width:100%;aspect-ratio:696/882;background-position:center;background-size:100% 100%;background-repeat:no-repeat;overflow:hidden;isolation:isolate}
-.work-index .cowboyer-canvas img{display:block;width:100%;height:100%;object-fit:contain}
-.work-index .cowboyer-canvas.is-composite[data-cover="03"]{background-image:url("../assets/cowboyer-cover-02.webp")}
-.work-index .cowboyer-canvas.is-composite[data-cover="04"]{background-image:url("../assets/cowboyer-cover-01.webp")}
-.work-index .cowboyer-canvas.is-composite img{position:absolute;top:29.4%;left:30.1%;width:41.2%;height:42.1%;object-fit:fill}
-.work-index .cowboyer-navigation{display:flex;align-items:center;justify-content:space-between;margin:6px 0 8px;font:10px/1.4 var(--mono);color:var(--muted)}
-.work-index .cowboyer-navigation button{background:none;border:0;color:var(--ink);font:18px/1 var(--mono);min-width:44px;min-height:44px;padding:0;cursor:inherit}
-.work-index .cowboyer-navigation button:hover{color:var(--accent)}
-.work-index .cowboyer-navigation button:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
-@media(max-height:700px){.work-index .cowboyer-gallery{height:clamp(175px,43dvh,360px)}}
 /* Joseph Martin: real pieces in the established static reading pane. */
-.work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-.work-index .joseph-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
-.work-index .joseph-gallery .photo-plate img{display:block;width:100%;height:auto;object-fit:contain}
-.work-index .joseph-gallery .photo-plate[hidden]{display:none!important}
-.work-index .joseph-gallery .photo-plate img{max-height:min(39vh,340px);object-fit:contain}
 /* Keep the independent cowboy illustration inside its printed plate. */
-.work-index .joseph-gallery .cowboy-george-plate{overflow:hidden;isolation:isolate;background:var(--paper)}
-.work-index .joseph-gallery .cowboy-george-plate img{clip-path:inset(4%);object-fit:contain;max-width:100%}
-.work-index .joseph-navigation{display:flex;align-items:center;justify-content:space-between;margin:7px 0 10px;font:10px/1.4 var(--mono);color:var(--muted)}
-.work-index .joseph-navigation button{background:none;border:0;color:var(--ink);font:18px/1 var(--mono);min-width:44px;min-height:44px;padding:0;cursor:inherit}
-.work-index .joseph-navigation button:hover{color:var(--accent)}
-.work-index .joseph-navigation button:focus-visible{outline:1px solid var(--accent)}
 
-@media(max-width:480px){.work-index .joseph-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 .work-index .corey-artwork{aspect-ratio:auto;max-height:min(50vh,520px);border:0;background:transparent}
 .work-index .corey-artwork img{width:100%;height:100%;max-height:min(50vh,520px);object-fit:contain}
 
@@ -272,8 +248,6 @@
  .work-index .index-table td:nth-child(2) > :is(button,a){min-height:36px}
 }
 /* Scout Motors: preserve both framed works in their original portrait proportions. */
-.work-index .scout-gallery .photo-plate{aspect-ratio:auto;min-width:0;background:transparent}
-.work-index .scout-gallery .photo-plate img{display:block;width:100%;height:auto;object-fit:contain}
 .work-index .kashus-role{margin:-12px 0 18px;font:10px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted)}
 @media(max-width:850px){.work-index .kashus-role{margin:0 0 16px}}
 /* Teton: one full-size photograph at a time, never crop. */
@@ -367,7 +341,6 @@
 /* Phones: paired images read one above the other at full width. */
 @media(max-width:600px){
  .work-index .photo-pair,.work-index .joseph-gallery{grid-template-columns:minmax(0,1fr)}
- .work-index .joseph-gallery .photo-plate img{max-height:calc(100dvh - 250px)}
 }
 /* Touch screens have no zoom cursor, so say once that images enlarge. */
 @media(hover:none) and (pointer:coarse){
@@ -398,7 +371,6 @@
  .work-index .work-panel .archive-plate.photo-plate:is(.whole-plate,.mags-photo) img{width:auto;max-width:100%;height:var(--stage);max-height:none;object-fit:contain}
  /* Galleries use the same stage, less their arrow row; Kashus also gives room to its release links. */
  .work-index .work-panel :is(.drawings-stage,.ronnie-gallery .photo-plate,.teton-gallery .photo-plate){height:calc(var(--stage) - 56px)}
- .work-index .work-panel .cowboyer-gallery{height:calc(var(--stage) - 56px)}
  .work-index .work-panel .corey-artwork,.work-index .work-panel .corey-artwork img{max-height:var(--stage)}
  .work-index .work-panel .kashus-main-plate{height:clamp(180px,calc(100dvh - 488px),480px)}
  .work-index .work-panel .kashus-release-links{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -520,7 +492,7 @@ body.work-index{height:100dvh;max-height:100dvh}
   flex:none;margin:7px 0 0;font-size:10px;line-height:1.3
  }
  .work-index .work-panel.is-open .panel-content > :is(
-  .photo-pair,.archive-plate.photo-plate,.drawings-gallery,.ronnie-gallery,
+  .photo-pair,.archive-plate.photo-plate,.series,.drawings-gallery,.ronnie-gallery,
   .teton-gallery,.cowboyer-gallery,.kashus-gallery,.ramsey-marks,.archive-notice
  ){
   flex:1 1 0;min-height:0;max-height:100%;overflow:hidden;margin-bottom:0
@@ -558,13 +530,6 @@ body.work-index{height:100dvh;max-height:100dvh}
  .work-index .work-panel.is-open :is(
   .drawings-controls,.ronnie-navigation,.teton-navigation,.kashus-gallery-controls
  ){flex:none;min-height:40px;margin:1px 0}
- .work-index .work-panel.is-open .cowboyer-gallery{
-  flex:1 1 0;min-height:0;height:auto;margin:0
- }
- .work-index .work-panel.is-open .cowboyer-stage{height:100%;width:100%}
- .work-index .work-panel.is-open .cowboyer-canvas{max-height:100%}
- .work-index .work-panel.is-open .cowboyer-navigation{flex:none;min-height:40px}
- .work-index .work-panel.is-open .joseph-navigation{flex:none;min-height:40px}
  .work-index .work-panel.is-open .kashus-release-links{
   flex:none;grid-template-columns:repeat(2,minmax(0,1fr));
   margin:4px 0 0;gap:0 12px;font-size:9px;line-height:1.15
@@ -599,32 +564,6 @@ body.work-index{height:100dvh;max-height:100dvh}
  }
  .work-index .work-panel.is-open .paintings-archive{
   flex:1 1 0;min-height:0
- }
-}
-
-
-/* One full-size artwork at a time in two-image mobile collections. */
-.work-index .paired-mobile-nav{display:none}
-@media(max-width:850px){
- .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery){
-  display:flex;align-items:center;justify-content:center;min-height:0
- }
- .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate:not([hidden]){
-  display:flex;align-items:center;justify-content:center;
-  flex:1 1 0;width:100%;min-height:0;height:100%;border:0
- }
- .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate[hidden]{display:none!important}
- .work-index .work-panel.is-open :is(.scout-gallery,.pbr-gallery) .photo-plate img{
-  width:100%;height:100%;max-height:100%;object-fit:contain
- }
- .work-index .work-panel.is-open .paired-mobile-nav{
-  display:flex;align-items:center;justify-content:space-between;
-  flex:none;min-height:44px;font:11px/1.4 var(--mono);color:var(--muted)
- }
- .work-index .paired-mobile-nav button{
-  display:flex;align-items:center;justify-content:center;min-width:48px;
-  min-height:44px;padding:0;background:none;border:0;
-  color:var(--ink);font:20px/1 var(--mono);cursor:inherit
  }
 }
 
@@ -710,6 +649,138 @@ body.work-index{height:100dvh;max-height:100dvh}
   min-height:30px;padding:3px 0;line-height:15px
  }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Plates, November 2026. When a project is open the work takes the stage.
+   - The Index steps back to No. / Project / Year at a fixed width (never a
+     content-measured one, so nothing shifts between projects or sheets);
+     Role / Work moves into the pane under the title.
+   - The pane is one plate: title, role, a single whole artwork as large as
+     the screen allows, then one ruled line holding caption and arrows.
+   - Artwork is never cropped, stretched or upscaled past the stage box:
+     object-fit: contain on the image's own proportions.
+   ───────────────────────────────────────────────────────────────────────── */
+.work-index .series{position:relative;min-width:0}
+.work-index .series > .photo-plate[hidden]{display:none!important}
+.work-index .series-nav[hidden]{display:none!important}
+.work-index .series-nav{display:flex;align-items:center;justify-content:space-between;font:11px/1.4 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.work-index .series-nav button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;background:none;border:0;color:var(--ink);font:18px/1 var(--mono);cursor:inherit;touch-action:manipulation}
+.work-index .series-nav button:is(:hover,:focus-visible){color:var(--accent)}
+.work-index .series-nav button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+
+@media(min-width:851px){
+ /* Index column: fixed, quiet. */
+ body.work-index .index-layout:has(.work-panel.is-open){
+  grid-template-columns:clamp(300px,29vw,420px) minmax(0,1fr);
+  gap:clamp(24px,2.6vw,44px)
+ }
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table{table-layout:fixed}
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table :is(th,td):nth-child(3){display:none}
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(2){width:auto}
+ /* With the third cell hidden, Year falls into the third column: size it there. */
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(3){width:64px}
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table col:nth-child(4){width:0}
+ body.work-index .index-layout:has(.work-panel.is-open) .index-table td:nth-child(2){overflow-wrap:normal}
+
+ /* The pane: label, then the plate fills every remaining pixel. */
+ body.work-index .work-panel.is-open{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding-left:clamp(24px,2.6vw,44px)}
+ /* The open title already names the work; the WORK label gives its line to the stage. */
+ body.work-index .work-panel.is-open .panel-id{display:none}
+ body.work-index .work-panel.is-open .panel-content:not([hidden]) .panel-top{margin-top:-4px}
+ body.work-index .work-panel.is-open .panel-content.plate:not([hidden]){
+  flex:1 1 0;min-height:0;height:auto;max-height:100%;max-width:none;width:100%;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto minmax(0,1fr) auto auto;
+  grid-template-areas:"top top" "role role" "stage stage" "cap nav" "more more";
+  overflow:hidden
+ }
+ body.work-index .work-panel.is-open .plate .panel-top{grid-area:top;margin:0 0 6px}
+ body.work-index .work-panel.is-open .plate .panel-role{grid-area:role;display:block;margin:0 0 18px;font:10px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+ /* Gallery wrappers dissolve so their image and arrows join the plate grid. */
+ body.work-index .work-panel.is-open .plate :is(.kashus-gallery,.ronnie-gallery,.teton-gallery,.drawings-gallery){display:contents}
+
+ /* Stage: one box, the image contained inside it on its own proportions. */
+ body.work-index .work-panel.is-open .plate :is(
+  .series,.kashus-main-plate,.ronnie-gallery > .photo-plate,.teton-gallery > .photo-plate,
+  .drawings-stage,.plate > .photo-plate
+ ){
+  grid-area:stage;position:relative;display:block;width:100%;height:auto;min-height:0;max-height:none;
+  aspect-ratio:auto;margin:0 0 14px;padding:0;border:0;background:transparent;overflow:hidden
+ }
+ body.work-index .work-panel.is-open .plate .series > .photo-plate{position:absolute;inset:0;margin:0;border:0;background:transparent;aspect-ratio:auto;overflow:hidden}
+ body.work-index .work-panel.is-open .plate :is(
+  .series > .photo-plate,.kashus-main-plate,.ronnie-gallery > .photo-plate,.teton-gallery > .photo-plate,
+  .drawings-stage,.plate > .photo-plate
+ ) img{
+  position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;
+  object-fit:contain;object-position:left bottom;clip-path:none
+ }
+ body.work-index .work-panel.is-open .plate .photo-plate:focus-visible{outline:none}
+ body.work-index .work-panel.is-open .plate .photo-plate:focus-visible img{outline:none}
+ body.work-index .work-panel.is-open .plate .photo-plate:focus-visible::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:2px;background:var(--accent)}
+
+ /* One ruled line under the work: caption left, arrows and count right. */
+ body.work-index .work-panel.is-open .plate .archive-plate-caption{
+  grid-area:cap;align-self:stretch;display:flex;align-items:center;min-height:44px;margin:0;padding:0 16px 0 0;
+  border-top:1px solid var(--rule);font:10px/1.4 var(--mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase
+ }
+ body.work-index .work-panel.is-open .plate :is(.series-nav,.kashus-gallery-controls,.ronnie-navigation,.teton-navigation,.drawings-controls){
+  grid-area:nav;display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:44px;margin:0;padding:0;
+  border-top:1px solid var(--rule);font:10px/1.4 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums
+ }
+ body.work-index .work-panel.is-open .plate :is(.series-nav,.kashus-gallery-controls,.ronnie-navigation,.teton-navigation,.drawings-controls) > span{order:-1;margin-right:14px}
+ body.work-index .work-panel.is-open .plate :is(.series-nav,.kashus-gallery-controls,.ronnie-navigation,.teton-navigation,.drawings-controls) button{min-width:40px;min-height:44px;padding:0;font-size:17px}
+ body.work-index .work-panel.is-open .plate .series-nav[hidden]{display:none!important}
+ body.work-index .work-panel.is-open .plate #kashus-image-caption{min-height:44px}
+ body.work-index .work-panel.is-open .plate .kashus-release-links{grid-area:more;grid-template-columns:repeat(4,minmax(0,1fr));margin:4px 0 0}
+}
+
+/* Phones and tablets: the same series, centred in the full-screen sheet. */
+@media(max-width:850px){
+ .work-index .work-panel.is-open .panel-content > .series{
+  flex:1 1 0;min-height:0;max-height:100%;margin:0;display:flex;overflow:hidden
+ }
+ .work-index .work-panel.is-open .series > .photo-plate:not([hidden]){
+  flex:1 1 0;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:0;margin:0;border:0;aspect-ratio:auto;background:transparent
+ }
+ .work-index .work-panel.is-open .series > .photo-plate img{width:100%;height:100%;max-height:100%;object-fit:contain}
+ .work-index .work-panel.is-open .series-nav{flex:none;min-height:44px}
+}
+
+/* Phones: every project name holds one line, so each row keeps the 36px rhythm.
+   The numbers need 28px and "Ongoing" 54px; the name column takes the rest,
+   set with the same -.015em tracking the desktop Index uses. */
+@media(max-width:850px){
+ .work-index .index-table{letter-spacing:-.015em}
+ .work-index .index-table col:nth-child(1){width:28px}
+ .work-index .index-table col:nth-child(4){width:54px}
+}
+
+/* Pairs: works that belong together (the Joseph Martin posters) share the
+   stage side by side, each whole, standing on the caption rule. */
+@media(min-width:851px){
+ body.work-index .work-panel.is-open .plate .series.is-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.4vw,22px)}
+ body.work-index .work-panel.is-open .plate .series.is-pair > .photo-plate:not([hidden]){position:relative;inset:auto;min-width:0;min-height:0}
+ body.work-index .work-panel.is-open .plate .series.is-pair > .photo-plate img{object-position:center bottom}
+}
+@media(max-width:850px){
+ .work-index .work-panel.is-open .panel-content > .series.is-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:9px;align-items:stretch}
+ .work-index .work-panel.is-open .series.is-pair > .photo-plate:not([hidden]){height:100%;min-width:0;align-items:flex-end}
+ /* A single plate is the image alone, as on desktop: no box drawn around it. */
+ .work-index .work-panel.is-open .plate > .archive-plate.photo-plate{border:0;background:transparent}
+}
+
+/* ERNEST: the original photograph, uncropped and never enlarged past its
+   own size. The thin gallery rule is drawn on the photograph itself, so it
+   follows the image's edges rather than the stage around it. */
+body.work-index .work-panel.is-open .plate > .photo-plate.hug-plate{display:flex;align-items:flex-end;justify-content:flex-start;border:0;background:transparent}
+body.work-index .work-panel.is-open .plate > .photo-plate.hug-plate img{
+ position:static;inset:auto;display:block;width:auto;height:auto;max-width:100%;max-height:100%;
+ object-fit:contain;border:1px solid var(--rule);box-sizing:border-box
+}
+@media(max-width:850px){
+ body.work-index .work-panel.is-open .plate > .photo-plate.hug-plate{align-items:center;justify-content:center}
+}
 </style><script src="/index/paintings-archive.js" defer></script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/assets/css/geist-mono.css?v=1">
@@ -776,20 +847,20 @@ body.work-index{height:100dvh;max-height:100dvh}
         <p class="archive-subtext">WORK BEING CATALOGUED.</p>
       </div>
     </div>
-    <div class="panel-content" data-panel="scout" hidden>
+    <div class="panel-content plate" data-panel="scout" hidden>
       <div class="panel-top"><h2 class="panel-title">Scout Motors</h2><button class="panel-close" type="button" aria-label="Close Scout Motors artwork">CLOSE ×</button></div>
-      <div class="photo-pair scout-gallery" aria-label="Scout Motors artwork">
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s1.jpeg" width="6762" height="8452" alt="Framed Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/s2.jpeg" width="7101" height="8876" alt="Framed Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <div class="series" data-series="scout" aria-label="Scout Motors artwork">
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/scout-desert.jpg" width="1717" height="2200" alt="Scout illustration of a vehicle crossing a wide desert landscape" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/scout-riders.jpg" width="1718" height="2200" alt="Scout illustration of a vehicle alongside horseback riders" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
-      <div class="paired-mobile-nav" data-pair-nav="scout" aria-label="Browse Scout Motors artwork">
-        <button type="button" data-pair-step="-1" aria-label="Previous Scout artwork">←</button>
+      <div class="series-nav" data-pair-nav="scout" role="group" aria-label="Browse Scout Motors artwork">
+        <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
         <span data-pair-count>01 / 02</span>
-        <button type="button" data-pair-step="1" aria-label="Next Scout artwork">→</button>
+        <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption">01—02 / SCOUT MOTORS / ILLUSTRATION / 2026</p>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
-    <div class="panel-content" data-panel="kashus" hidden>
+    <div class="panel-content plate" data-panel="kashus" hidden>
       <div class="panel-top"><h2 class="panel-title">Kashus Culpepper</h2><button class="panel-close" type="button" aria-label="Close Kashus releases">CLOSE ×</button></div>
       <div class="kashus-gallery" id="kashus-full-gallery" aria-label="Kashus artwork and photography">
         <figure class="archive-plate photo-plate kashus-main-plate"><img id="kashus-main-image" src="../assets/pmo.jpg" alt="Pour Me Out" data-slide-index="0" loading="eager"></figure>
@@ -798,22 +869,26 @@ body.work-index{height:100dvh;max-height:100dvh}
       </div>
       <nav class="kashus-release-links" aria-label="Listen to Kashus Culpepper releases"><a href="https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM" target="_blank" rel="noopener noreferrer">Pour Me Out ↗︎</a><a href="https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD" target="_blank" rel="noopener noreferrer">Act I: Summer Nights ↗︎</a><a href="https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP" target="_blank" rel="noopener noreferrer">After Me? ↗︎</a><a href="https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8" target="_blank" rel="noopener noreferrer">Out of My Mind ↗︎</a><a href="https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc" target="_blank" rel="noopener noreferrer">Jenni ↗︎</a><a href="https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm" target="_blank" rel="noopener noreferrer">Who Hurt You ↗︎</a><a href="https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855" target="_blank" rel="noopener noreferrer">Talk With Me ↗︎</a></nav>
     </div>
-    <div class="panel-content" data-panel="corey" hidden>
+    <div class="panel-content plate" data-panel="corey" hidden>
       <div class="panel-top"><h2 class="panel-title">Corey Kent</h2><button class="panel-close" type="button" aria-label="Close Corey Kent releases">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate corey-artwork"><img loading="lazy" src="../assets/ck.jpg" width="4000" height="4000" alt="Corey Kent Poster Child EP artwork in blue on cream" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption"><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">POSTER CHILD EP ↗︎</a> / COVER ARTWORK / 2025</p>
+      <p class="archive-plate-caption"><a href="https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz" target="_blank" rel="noopener noreferrer">POSTER CHILD EP ↗︎</a> / COVER ARTWORK</p>
     </div>
 
-        <div class="panel-content" data-panel="joseph" hidden>
+        <div class="panel-content plate" data-panel="joseph" hidden>
       <div class="panel-top"><h2 class="panel-title">Joseph Martin</h2><button class="panel-close" type="button" aria-label="Close Joseph Martin">CLOSE ×</button></div>
-      <div class="photo-pair joseph-gallery">
-        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-01.webp" width="1100" height="1375" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <div class="series is-pair" data-series="joseph" data-per-page="2" aria-label="Joseph Martin artwork">
+        <figure class="archive-plate photo-plate" data-caption="EVENT POSTERS / COLLAGE STUDIO, JACKSON"><img loading="lazy" src="../assets/joseph-martin-01.webp" width="1100" height="1375" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-02.webp" width="1100" height="1375" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate cowboy-george-plate" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="ILLUSTRATION / POSTER, DOUBLE DECKER ARTS FESTIVAL, OXFORD" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
         <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
-      <div class="joseph-navigation" role="group" aria-label="Joseph Martin artwork pages"><button type="button" data-joseph-step="-1" aria-label="Previous pair">←</button><span id="joseph-count">01—02 / 04</span><button type="button" data-joseph-step="1" aria-label="Next pair">→</button></div>
-      <p class="archive-plate-caption">JOSEPH MARTIN / ILLUSTRATION / 2024</p>
+      <div class="series-nav" data-pair-nav="joseph" role="group" aria-label="Browse Joseph Martin artwork">
+        <button type="button" data-pair-step="-1" aria-label="Previous pair">←</button>
+        <span data-pair-count>01—02 / 04</span>
+        <button type="button" data-pair-step="1" aria-label="Next pair">→</button>
+      </div>
+      <p class="archive-plate-caption" data-series-caption>EVENT POSTERS / COLLAGE STUDIO, JACKSON</p>
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
@@ -831,10 +906,10 @@ body.work-index{height:100dvh;max-height:100dvh}
       <div class="ramsey-marks" aria-label="Ramsey Hill identity marks"><figure><img loading="lazy" src="../assets/rh2%201%20%28Traced%29%20%28Traced%29.png" alt="Ramsey Hill rust-colored RH monogram"><figcaption class="archive-plate-caption">01 / MONOGRAM</figcaption></figure><figure><img loading="lazy" src="../assets/RH1%201%20%28Traced%29%20%28Traced%29.png" alt="Ramsey Hill rust-colored arrowhead mark"><figcaption class="archive-plate-caption">02 / ARROWHEAD</figcaption></figure></div>
       <p class="archive-plate-caption">RAMSEY HILL CONTRACTING / IDENTITY / 2026</p>
     </div>
-    <div class="panel-content" data-panel="ernest" hidden>
+    <div class="panel-content plate" data-panel="ernest" hidden>
       <div class="panel-top"><h2 class="panel-title">ERNEST</h2><button class="panel-close" type="button" aria-label="Close ERNEST">CLOSE ×</button></div>
-      <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/ernest.webp" width="1120" height="1400" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">ERNEST / 2025</p>
+      <figure class="archive-plate photo-plate whole-plate hug-plate"><img loading="lazy" src="../assets/ernest.webp" width="1120" height="1400" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <p class="archive-plate-caption">EVENT POSTER / STARS FOR SECOND HARVEST</p>
     </div>
     <div class="panel-content" data-panel="drawings" hidden>
       <div class="panel-top"><h2 class="panel-title">Drawings</h2><button class="panel-close" type="button" aria-label="Close Drawings">CLOSE ×</button></div>
@@ -848,55 +923,59 @@ body.work-index{height:100dvh;max-height:100dvh}
       </div>
       <p class="archive-plate-caption" id="drawings-caption">BISON STUDY / INDEPENDENT WORK</p>
     </div>
-    <div class="panel-content" data-panel="cowboyer" hidden>
+    <div class="panel-content plate" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
-      <div class="cowboyer-gallery" aria-label="The Cowboyer cover studies">
-        <figure class="archive-plate photo-plate cowboyer-stage">
-          <div class="cowboyer-canvas" id="cowboyer-canvas" data-cover="01">
-            <img id="cowboyer-active-image" loading="eager" src="../assets/cowboyer-cover-01.webp" alt="The Cowboyer magazine cover with bison under colored western sky">
-          </div>
-        </figure>
+      <div class="series" data-series="cowboyer" aria-label="The Cowboyer cover studies">
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/cowboyer-bison.webp" width="421" height="547" alt="The Cowboyer magazine cover with bison under colored western sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/cowboyer-orange-rider.webp" width="440" height="574" alt="The Cowboyer magazine cover in orange with a horse and rider" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/Group%20394.png" width="2580" height="3323" alt="The Cowboyer cover with a red line drawing of a cowboy and lasso" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/Group%20393.png" width="2557" height="3323" alt="The Cowboyer cover with a cowboy facing a desert sky" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
-      <div class="cowboyer-navigation" role="group" aria-label="Browse The Cowboyer covers">
-        <button type="button" data-cowboyer-step="-1" aria-label="Previous cover">←</button><span id="cowboyer-count">01 / 04</span><button type="button" data-cowboyer-step="1" aria-label="Next cover">→</button>
+      <div class="series-nav" data-pair-nav="cowboyer" role="group" aria-label="Browse The Cowboyer covers">
+        <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
+        <span data-pair-count>01 / 04</span>
+        <button type="button" data-pair-step="1" aria-label="Next image">→</button>
       </div>
-      <p class="archive-plate-caption">THE COWBOYER / COVER STUDIES / 2026</p>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
-    <div class="panel-content" data-panel="habitat" hidden>
+    <div class="panel-content plate" data-panel="habitat" hidden>
       <div class="panel-top"><h2 class="panel-title">Habitat Ranch</h2><button class="panel-close" type="button" aria-label="Close Habitat Ranch">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/habitat-ranch.webp" width="750" height="600" alt="Habitat Ranch cap and denim portrait" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">01 / HABITAT RANCH / 2025</p>
+      <p class="archive-plate-caption"></p>
     </div>
-    <div class="panel-content" data-panel="pbr" hidden>
+    <div class="panel-content plate" data-panel="pbr" hidden>
       <div class="panel-top"><h2 class="panel-title">PBR</h2><button class="panel-close" type="button" aria-label="Close PBR">CLOSE ×</button></div>
-      <div class="photo-pair pbr-gallery" aria-label="PBR photographs"><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure><figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure></div>
-      <div class="paired-mobile-nav" data-pair-nav="pbr" aria-label="Browse PBR photographs">
-        <button type="button" data-pair-step="-1" aria-label="Previous PBR photograph">←</button>
-        <span data-pair-count>01 / 02</span>
-        <button type="button" data-pair-step="1" aria-label="Next PBR photograph">→</button>
+      <div class="series" data-series="pbr" aria-label="PBR photographs">
+        <figure class="archive-plate photo-plate" data-caption=""><img loading="lazy" src="../assets/pbr-portrait.webp" width="750" height="938" alt="Rodeo participant backstage" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="" hidden><img loading="lazy" src="../assets/pbr-bull.webp" width="750" height="938" alt="Bull waiting in a rodeo chute" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
-      <p class="archive-plate-caption">01—02 / PBR / 2025</p>
+      <div class="series-nav" data-pair-nav="pbr" role="group" aria-label="Browse PBR photographs">
+        <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
+        <span data-pair-count>01 / 02</span>
+        <button type="button" data-pair-step="1" aria-label="Next image">→</button>
+      </div>
+      <p class="archive-plate-caption" data-series-caption></p>
     </div>
-    <div class="panel-content" data-panel="ronnie-photo" hidden>
+    <div class="panel-content plate" data-panel="ronnie-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Ronnie Hodges Performance Horses</h2><button class="panel-close" type="button" aria-label="Close Ronnie Hodges photographs">CLOSE ×</button></div>
       <div class="ronnie-gallery" aria-label="Ronnie Hodges photographic series">
         <figure class="archive-plate photo-plate"><img id="ronnie-active-image" loading="lazy" src="../assets/ronnie-hodges-01.webp" width="750" height="749" alt="Ronnie Hodges speaking while seated on horseback"></figure>
         <div class="ronnie-navigation" role="group" aria-label="Browse Ronnie Hodges photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="ronnie-count">01 / 02</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
-      <p class="archive-plate-caption">01—02 / RONNIE HODGES / PHOTOGRAPHY / 2022</p>
+      <p class="archive-plate-caption"></p>
     </div>
-    <div class="panel-content" data-panel="teton-photo" hidden>
+    <div class="panel-content plate" data-panel="teton-photo" hidden>
       <div class="panel-top"><h2 class="panel-title">Teton Valley Ranch</h2><button class="panel-close" type="button" aria-label="Close Teton Valley Ranch">CLOSE ×</button></div>
       <div class="teton-gallery" aria-label="Teton Valley Ranch photographs">
         <figure class="archive-plate photo-plate"><img id="teton-active-image" loading="lazy" src="../assets/teton-valley-ranch.webp" alt="Lone horseback rider on a ridge at Teton Valley Ranch"></figure>
         <div class="teton-navigation" role="group" aria-label="Browse Teton Valley Ranch photographs"><button type="button" data-photo-step="-1" aria-label="Previous photograph">←</button><span id="teton-count">01 / 03</span><button type="button" data-photo-step="1" aria-label="Next photograph">→</button></div>
       </div>
-      <p class="archive-plate-caption">01—03 / TETON VALLEY RANCH / PHOTOGRAPHY / 2015</p>
+      <p class="archive-plate-caption"></p>
     </div>
-    <div class="panel-content" data-panel="mags" hidden>
+    <div class="panel-content plate" data-panel="mags" hidden>
       <div class="panel-top"><h2 class="panel-title">Mags Duval</h2><button class="panel-close" type="button" aria-label="Close Mags Duval">CLOSE ×</button></div>
       <figure class="archive-plate photo-plate mags-photo"><img loading="lazy" src="../assets/M2.jpeg" width="3601" height="3601" alt="Portrait of Mags Duval holding a red rose" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-      <p class="archive-plate-caption">01 / MAGS DUVAL / PHOTOGRAPHY / 2024</p>
+      <p class="archive-plate-caption"></p>
     </div>
   </aside></div>
   
@@ -1018,11 +1097,11 @@ body.work-index{height:100dvh;max-height:100dvh}
         ronnie:'.ronnie-gallery [data-photo-step]',
         teton:'.teton-gallery [data-photo-step]',
         drawings:'.drawings-gallery [data-drawings-step]',
-        cowboyer:'.cowboyer-navigation [data-cowboyer-step]',
-        joseph:'.joseph-navigation [data-joseph-step]',
+        cowboyer:'[data-pair-nav="cowboyer"] [data-pair-step]',
+        joseph:'[data-pair-nav="joseph"] [data-pair-step]',
         paintings:'.paintings-archive-nav button',
-        scout:'.paired-mobile-nav[data-pair-nav="scout"] [data-pair-step]',
-        pbr:'.paired-mobile-nav[data-pair-nav="pbr"] [data-pair-step]'
+        scout:'[data-pair-nav="scout"] [data-pair-step]',
+        pbr:'[data-pair-nav="pbr"] [data-pair-step]'
       }[active];
       const controls=selector?[...panel.querySelectorAll(selector)].filter(b=>getComputedStyle(b).display!=='none'):null;
       if(controls?.length>=2){event.preventDefault();controls[forward?1:0].click();}
@@ -1219,62 +1298,6 @@ body.work-index{height:100dvh;max-height:100dvh}
 })();
 </script><script>
 (function(){
- const gallery=document.querySelector('.joseph-gallery');
- const count=document.getElementById('joseph-count');
- if(!gallery||!count)return;
- const figures=Array.from(gallery.querySelectorAll('figure'));
- let page=0;
- function render(){
-  figures.forEach((figure,i)=>{figure.hidden=Math.floor(i/2)!==page;});
-  count.textContent=page===0?'01—02 / 04':'03—04 / 04';
- }
- document.querySelectorAll('[data-joseph-step]').forEach(button=>button.addEventListener('click',()=>{
-  page=(page+1)%2;
-  render();
- }));
- render();
-})();
-</script><script>
-(function(){
- const slides=[
-  {src:'../assets/cowboyer-cover-01.webp',alt:'The Cowboyer / Bison',cover:'01',composite:false},
-  {src:'../assets/cowboyer-cover-02.webp',alt:'The Cowboyer / Orange Rider',cover:'02',composite:false},
-  {src:'../assets/Group%20394.png',alt:'The Cowboyer / Red Lasso',cover:'03',composite:true},
-  {src:'../assets/Group%20393.png',alt:'The Cowboyer / Desert',cover:'04',composite:true}
- ];
- // Include the sibling navigation controls in the gallery event scope.
- const gallery=document.querySelector('[data-panel="cowboyer"]');
- const count=document.getElementById('cowboyer-count');
- const canvas=document.getElementById('cowboyer-canvas');
- const image=document.getElementById('cowboyer-active-image');
- if(!gallery||!canvas||!image||!count)return;
- let position=0,request=0;
- slides.forEach(slide=>{const asset=new Image();asset.src=slide.src;});
- function move(step){
-  const target=(position+step+slides.length)%slides.length;
-  const ticket=++request;
-  const candidate=new Image();
-  candidate.onload=()=>{
-   if(ticket!==request)return;
-   position=target;
-   const slide=slides[position];
-   canvas.dataset.cover=slide.cover;
-   canvas.classList.toggle('is-composite',slide.composite);
-   image.src=slide.src;image.alt=slide.alt;
-   count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
-  };
-  candidate.onerror=()=>{if(ticket===request)gallery.setAttribute('data-load-error','true');};
-  gallery.removeAttribute('data-load-error');
-  candidate.src=slides[target].src;
- }
- gallery.querySelectorAll('[data-cowboyer-step]').forEach(button=>button.addEventListener('click',()=>move(Number(button.dataset.cowboyerStep))));
- gallery.addEventListener('keydown',event=>{
-  if(document.getElementById('work-image-dialog')?.open)return;
-  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();move(event.key==='ArrowRight'?1:-1);}
- });
-})();
-</script><script>
-(function(){
  const slides=[{"src":"../assets/2%202%201.png","caption":"Bison study"},{"src":"../assets/2%20611.png","caption":"Portrait study"},{"src":"../assets/11724%201%203%201.png","caption":"Lakeside Club"},{"src":"../assets/11724%2010%201.png","caption":"Broadcast portrait"},{"src":"../assets/11724%2011%201.png","caption":"Lewis Grizzard"},{"src":"../assets/Ivory-Paper-Texture%206%201.png","caption":"Western sketchbook I"},{"src":"../assets/Ivory-Paper-Texture%208%201.png","caption":"Western sketchbook II"},{"src":"../assets/Jeauxben_%26_George%201.png","caption":"Dog studies"},{"src":"../assets/RD_tattoo%201%201.png","caption":"Sketchbook III"},{"src":"../assets/RD_tattoo%202%201.png","caption":"Sketchbook IV"},{"src":"../assets/RD_tattoo%203.png","caption":"Sketchbook V"}];
  window.__workSlides=window.__workSlides||{};
  window.__workSlides.drawings=slides.map(slide=>({src:slide.src,alt:slide.caption}));
@@ -1300,35 +1323,46 @@ body.work-index{height:100dvh;max-height:100dvh}
 })();
 </script>
 <script>
-/* Mobile doublets: a page, not a scrolling stack. */
+/* Series: each project shows its work a page at a time, one artwork by
+   default or a pair where the pieces belong together (data-per-page="2").
+   The figures stay in the markup, each image keeps its own file and
+   proportions; arrows, swipe and the row's arrow keys turn the page, and
+   the enlarged viewer steps through every image. */
 (function(){
- const mobile=matchMedia('(max-width:850px)');
- for(const client of ['scout','pbr']){
-  const panel=document.querySelector('[data-panel="'+client+'"]');
-  if(!panel)continue;
-  const gallery=panel.querySelector('.photo-pair');
-  const figures=[...gallery.querySelectorAll('.photo-plate')];
-  const nav=panel.querySelector('[data-pair-nav="'+client+'"]');
-  if(!gallery||!nav||figures.length!==2)continue;
-  let position=0,origin=null;
-  for(const figure of figures){const image=figure.querySelector('img');if(image)image.loading='eager';}
+ window.__workSlides=window.__workSlides||{};
+ const pad=n=>String(n).padStart(2,'0');
+ document.querySelectorAll('.series[data-series]').forEach(series=>{
+  const name=series.dataset.series;
+  const panel=series.closest('.panel-content');
+  const figures=[...series.querySelectorAll('.photo-plate')];
+  const nav=panel.querySelector('[data-pair-nav="'+name+'"]');
+  const caption=panel.querySelector('[data-series-caption]');
+  if(!figures.length||!nav)return;
+  const per=Math.max(1,Number(series.dataset.perPage)||1);
+  const pages=Math.ceil(figures.length/per);
+  window.__workSlides[panel.dataset.panel]=figures.map(f=>{const i=f.querySelector('img');return {src:i.getAttribute('src'),alt:i.alt};});
+  let page=0,origin=null;
+  function warm(p){const q=(p+pages)%pages;figures.slice(q*per,q*per+per).forEach(f=>{const img=f.querySelector('img');if(img)img.loading='eager';});}
   function render(){
-   figures.forEach((fig,i)=>{fig.hidden=mobile.matches&&i!==position;});
-   nav.querySelector('[data-pair-count]').textContent=String(position+1).padStart(2,'0')+' / 02';
+   const first=page*per,last=Math.min(first+per,figures.length);
+   figures.forEach((fig,i)=>{fig.hidden=i<first||i>=last;});
+   nav.querySelector('[data-pair-count]').textContent=(last-first>1?pad(first+1)+'—'+pad(last):pad(first+1))+' / '+pad(figures.length);
+   if(caption)caption.textContent=figures[first].dataset.caption||'';
+   warm(page);warm(page+1);warm(page-1);
   }
-  function move(delta){position=(position+delta+2)%2;render();}
+  function move(delta){page=(page+delta+pages)%pages;render();}
+  nav.hidden=pages<2;
   nav.querySelectorAll('[data-pair-step]').forEach(b=>b.addEventListener('click',()=>move(Number(b.dataset.pairStep))));
-  mobile.addEventListener('change',render);
-  gallery.addEventListener('touchstart',event=>{
+  series.addEventListener('touchstart',event=>{
    origin=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
   },{passive:true});
-  gallery.addEventListener('touchend',event=>{
+  series.addEventListener('touchend',event=>{
    if(!origin||event.changedTouches.length!==1)return;
    const dx=event.changedTouches[0].clientX-origin.x,dy=event.changedTouches[0].clientY-origin.y;
    origin=null;
    if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.4)move(dx<0?1:-1);
   },{passive:true});
   render();
- }
+ });
 })();
 </script></body></html>

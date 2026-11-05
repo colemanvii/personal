@@ -13,8 +13,13 @@ colecalfee.com.
 | `projects/scout-motors/` | `/projects/scout-motors/` | 301 → `/index/#scout` |
 | `archive/333-westover/` | `/archive/333-westover/` | 404 |
 | `studies/painting-crops/` | `/studies/painting-crops/` | 404 (crop-planning tooling) |
-| `assets/` | `/assets/…` | 404: images no longer shown on the site (earlier crops and sizes) |
+| `assets/` | `/assets/…` | 404: images no longer shown on the site (earlier crops and sizes, and the original mockups the Index artwork is cropped from) |
 
 These pages still reference `/assets/…` as they did when they were public, so
 they will not render fully from here. `studies/painting-crops/apply.py` was
 written for the old layout; its target is now `site/paintings/index.html`.
+
+`assets/s1.jpeg`, `s2.jpeg` (Scout Motors), `cowboyer-cover-01.webp` and
+`cowboyer-cover-02.webp` are the original framed and wall mockups, kept at full
+resolution. The Index now shows the artwork cropped from them
+(`site/assets/scout-*.jpg`, `cowboyer-bison.webp`, `cowboyer-orange-rider.webp`).
