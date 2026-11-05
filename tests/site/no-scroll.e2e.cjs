@@ -60,11 +60,13 @@ for(const client of ["list",...clients]){
  if(["scout","pbr","joseph","cowboyer"].includes(client)){
    const nav=page.locator('[data-pair-nav="'+client+'"]');
    const figs=page.locator('[data-panel="'+client+'"] .series .photo-plate');
-   const total=String(await figs.count()).padStart(2,"0");
+   const n=await figs.count(),total=String(n).padStart(2,"0");
+   const per=Number(await page.locator('[data-panel="'+client+'"] .series').getAttribute("data-per-page")||1);
    await nav.locator('[data-pair-step="1"]').click();
-   assert.equal(await nav.locator('[data-pair-count]').innerText(),"02 / "+total);
-   assert.equal(await figs.nth(0).isVisible(),false);
-   assert.equal(await figs.nth(1).isVisible(),true);
+   const pad=i=>String(i).padStart(2,"0");
+   assert.equal(await nav.locator('[data-pair-count]').innerText(),
+     (per>1?pad(per+1)+"—"+pad(Math.min(2*per,n)):pad(2))+" / "+total);
+   for(let i=0;i<n;i++)assert.equal(await figs.nth(i).isVisible(),i>=per&&i<2*per,"figure "+i);
    await nav.locator('[data-pair-step="-1"]').click();
    await page.screenshot({path:path.join(DIR,"mobile-fitted-"+size.name+"-"+client+".png")});
  }

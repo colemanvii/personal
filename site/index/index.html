@@ -732,8 +732,6 @@ body.work-index{height:100dvh;max-height:100dvh}
  body.work-index .work-panel.is-open .plate :is(.series-nav,.kashus-gallery-controls,.ronnie-navigation,.teton-navigation,.drawings-controls) button{min-width:40px;min-height:44px;padding:0;font-size:17px}
  body.work-index .work-panel.is-open .plate .series-nav[hidden]{display:none!important}
  body.work-index .work-panel.is-open .plate #kashus-image-caption{min-height:44px}
- body.work-index .paintings-archive-stage{justify-content:flex-start}
- body.work-index .paintings-archive-stage img{object-position:left bottom}
  body.work-index .work-panel.is-open .plate .kashus-release-links{grid-area:more;grid-template-columns:repeat(4,minmax(0,1fr));margin:4px 0 0}
 }
 
@@ -756,6 +754,20 @@ body.work-index{height:100dvh;max-height:100dvh}
  .work-index .index-table{letter-spacing:-.015em}
  .work-index .index-table col:nth-child(1){width:28px}
  .work-index .index-table col:nth-child(4){width:54px}
+}
+
+/* Pairs: works that belong together (the Joseph Martin posters) share the
+   stage side by side, each whole, standing on the caption rule. */
+@media(min-width:851px){
+ body.work-index .work-panel.is-open .plate .series.is-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.4vw,22px)}
+ body.work-index .work-panel.is-open .plate .series.is-pair > .photo-plate:not([hidden]){position:relative;inset:auto;min-width:0;min-height:0}
+ body.work-index .work-panel.is-open .plate .series.is-pair > .photo-plate img{object-position:center bottom}
+}
+@media(max-width:850px){
+ .work-index .work-panel.is-open .panel-content > .series.is-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:9px;align-items:stretch}
+ .work-index .work-panel.is-open .series.is-pair > .photo-plate:not([hidden]){height:100%;min-width:0;align-items:flex-end}
+ /* A single plate is the image alone, as on desktop: no box drawn around it. */
+ .work-index .work-panel.is-open .plate > .archive-plate.photo-plate{border:0;background:transparent}
 }
 </style><script src="/index/paintings-archive.js" defer></script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -853,18 +865,18 @@ body.work-index{height:100dvh;max-height:100dvh}
 
         <div class="panel-content plate" data-panel="joseph" hidden>
       <div class="panel-top"><h2 class="panel-title">Joseph Martin</h2><button class="panel-close" type="button" aria-label="Close Joseph Martin">CLOSE ×</button></div>
-      <div class="series" data-series="joseph" aria-label="Joseph Martin artwork">
-        <figure class="archive-plate photo-plate" data-caption="POSTER / DOUBLE DECKER ARTS FESTIVAL, OXFORD"><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="EVENT POSTER / COLLAGE STUDIO, JACKSON" hidden><img loading="lazy" src="../assets/joseph-martin-survives.webp" width="532" height="672" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="EVENT POSTER / COLLAGE STUDIO, JACKSON" hidden><img loading="lazy" src="../assets/joseph-martin-luck.webp" width="532" height="672" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
-        <figure class="archive-plate photo-plate" data-caption="ILLUSTRATION" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <div class="series is-pair" data-series="joseph" data-per-page="2" aria-label="Joseph Martin artwork">
+        <figure class="archive-plate photo-plate" data-caption="EVENT POSTERS / COLLAGE STUDIO, JACKSON"><img loading="lazy" src="../assets/joseph-martin-01.webp" width="1100" height="1375" alt="Framed Martin Survives event poster, western illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate"><img loading="lazy" src="../assets/joseph-martin-02.webp" width="1100" height="1375" alt="Framed Don't Call It Luck event poster, cowboy illustration in red" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" data-caption="ILLUSTRATION / POSTER, DOUBLE DECKER ARTS FESTIVAL, OXFORD" hidden><img loading="lazy" src="../assets/cg.png" width="19872" height="19872" alt="Red ink illustration of a cowboy in a wide-brimmed hat, for Joseph Martin" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+        <figure class="archive-plate photo-plate" hidden><img loading="lazy" src="../assets/jm3.png" width="1339" height="1841" alt="Joseph Martin Hatmaker Double Decker Arts Festival poster in purple with cowboy on horseback" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       </div>
       <div class="series-nav" data-pair-nav="joseph" role="group" aria-label="Browse Joseph Martin artwork">
-        <button type="button" data-pair-step="-1" aria-label="Previous image">←</button>
-        <span data-pair-count>01 / 04</span>
-        <button type="button" data-pair-step="1" aria-label="Next image">→</button>
+        <button type="button" data-pair-step="-1" aria-label="Previous pair">←</button>
+        <span data-pair-count>01—02 / 04</span>
+        <button type="button" data-pair-step="1" aria-label="Next pair">→</button>
       </div>
-      <p class="archive-plate-caption" data-series-caption>POSTER / DOUBLE DECKER ARTS FESTIVAL, OXFORD</p>
+      <p class="archive-plate-caption" data-series-caption>EVENT POSTERS / COLLAGE STUDIO, JACKSON</p>
     </div>
     <div class="panel-content" data-panel="freeman" hidden>
       <div class="panel-top"><h2 class="panel-title">Freeman General Contracting</h2><button class="panel-close" type="button" aria-label="Close Freeman General Contracting">CLOSE ×</button></div>
@@ -884,10 +896,10 @@ body.work-index{height:100dvh;max-height:100dvh}
     </div>
     <div class="panel-content plate" data-panel="ernest" hidden>
       <div class="panel-top"><h2 class="panel-title">ERNEST</h2><button class="panel-close" type="button" aria-label="Close ERNEST">CLOSE ×</button></div>
-      <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/ernest-second-harvest.webp" width="460" height="584" alt="Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
+      <figure class="archive-plate photo-plate whole-plate"><img loading="lazy" src="../assets/ernest-second-harvest.webp" width="519" height="637" alt="Framed Stars for Second Harvest event poster designed for ERNEST" onerror="this.parentElement.classList.add('is-pending');this.hidden=true"></figure>
       <p class="archive-plate-caption">EVENT POSTER / STARS FOR SECOND HARVEST</p>
     </div>
-    <div class="panel-content plate" data-panel="drawings" hidden>
+    <div class="panel-content" data-panel="drawings" hidden>
       <div class="panel-top"><h2 class="panel-title">Drawings</h2><button class="panel-close" type="button" aria-label="Close Drawings">CLOSE ×</button></div>
       <div class="drawings-gallery" aria-label="Independent drawings">
         <figure class="archive-plate photo-plate drawings-stage"><img id="drawings-active-image" loading="lazy" src="../assets/2%202%201.png" alt="Bison study"></figure>
@@ -897,7 +909,7 @@ body.work-index{height:100dvh;max-height:100dvh}
           <button type="button" data-drawings-step="1" aria-label="Next drawing">→</button>
         </div>
       </div>
-      <p class="archive-plate-caption" id="drawings-caption">BISON STUDY</p>
+      <p class="archive-plate-caption" id="drawings-caption">BISON STUDY / INDEPENDENT WORK</p>
     </div>
     <div class="panel-content plate" data-panel="cowboyer" hidden>
       <div class="panel-top"><h2 class="panel-title">The Cowboyer</h2><button class="panel-close" type="button" aria-label="Close The Cowboyer">CLOSE ×</button></div>
@@ -1288,7 +1300,7 @@ body.work-index{height:100dvh;max-height:100dvh}
    const slide=slides[position];
    image.src=slide.src;image.alt=slide.caption;
    count.textContent=String(position+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
-   caption.textContent=slide.caption.toUpperCase();
+   caption.textContent=slide.caption.toUpperCase()+' / INDEPENDENT WORK';
  }
  gallery.querySelectorAll('[data-drawings-step]').forEach(button=>button.addEventListener('click',()=>show(position+Number(button.dataset.drawingsStep))));
  gallery.addEventListener('keydown',event=>{
@@ -1299,11 +1311,14 @@ body.work-index{height:100dvh;max-height:100dvh}
 })();
 </script>
 <script>
-/* Series: one whole artwork at a time, at every width. The figures stay in the
-   markup (each image keeps its own file and proportions); arrows, swipe and the
-   row's arrow keys step through them, and the enlarged viewer sees them all. */
+/* Series: each project shows its work a page at a time, one artwork by
+   default or a pair where the pieces belong together (data-per-page="2").
+   The figures stay in the markup, each image keeps its own file and
+   proportions; arrows, swipe and the row's arrow keys turn the page, and
+   the enlarged viewer steps through every image. */
 (function(){
  window.__workSlides=window.__workSlides||{};
+ const pad=n=>String(n).padStart(2,'0');
  document.querySelectorAll('.series[data-series]').forEach(series=>{
   const name=series.dataset.series;
   const panel=series.closest('.panel-content');
@@ -1311,18 +1326,20 @@ body.work-index{height:100dvh;max-height:100dvh}
   const nav=panel.querySelector('[data-pair-nav="'+name+'"]');
   const caption=panel.querySelector('[data-series-caption]');
   if(!figures.length||!nav)return;
-  const total=String(figures.length).padStart(2,'0');
+  const per=Math.max(1,Number(series.dataset.perPage)||1);
+  const pages=Math.ceil(figures.length/per);
   window.__workSlides[panel.dataset.panel]=figures.map(f=>{const i=f.querySelector('img');return {src:i.getAttribute('src'),alt:i.alt};});
-  let position=0,origin=null;
-  function warm(i){const img=figures[(i+figures.length)%figures.length].querySelector('img');if(img)img.loading='eager';}
+  let page=0,origin=null;
+  function warm(p){const q=(p+pages)%pages;figures.slice(q*per,q*per+per).forEach(f=>{const img=f.querySelector('img');if(img)img.loading='eager';});}
   function render(){
-   figures.forEach((fig,i)=>{fig.hidden=i!==position;});
-   nav.querySelector('[data-pair-count]').textContent=String(position+1).padStart(2,'0')+' / '+total;
-   if(caption)caption.textContent=figures[position].dataset.caption||'';
-   warm(position+1);warm(position-1);
+   const first=page*per,last=Math.min(first+per,figures.length);
+   figures.forEach((fig,i)=>{fig.hidden=i<first||i>=last;});
+   nav.querySelector('[data-pair-count]').textContent=(last-first>1?pad(first+1)+'—'+pad(last):pad(first+1))+' / '+pad(figures.length);
+   if(caption)caption.textContent=figures[first].dataset.caption||'';
+   warm(page);warm(page+1);warm(page-1);
   }
-  function move(delta){position=(position+delta+figures.length)%figures.length;render();}
-  nav.hidden=figures.length<2;
+  function move(delta){page=(page+delta+pages)%pages;render();}
+  nav.hidden=pages<2;
   nav.querySelectorAll('[data-pair-step]').forEach(b=>b.addEventListener('click',()=>move(Number(b.dataset.pairStep))));
   series.addEventListener('touchstart',event=>{
    origin=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null;
