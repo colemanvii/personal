@@ -710,6 +710,19 @@ body.work-index{height:100dvh;max-height:100dvh}
   min-height:30px;padding:3px 0;line-height:15px
  }
 }
+
+/* Mobile sheet 01 fits fifteen works in a fixed viewport, with Paintings and
+   Drawings still closing the sheet; page 02 uses the same capped row rhythm. */
+@media(max-width:850px){
+ .work-index .index-table tbody tr:not([hidden]),
+ .work-index .index-table tbody td{height:var(--index-mobile-row-height,36px)}
+ .work-index .index-table tbody td{padding-top:0!important;padding-bottom:0!important}
+ .work-index .index-table td:nth-child(2)>:is(button,a){
+   display:flex;align-items:center;min-height:0;
+   height:calc(var(--index-mobile-row-height,36px) - 1px);
+   padding-top:0;padding-bottom:0;box-sizing:border-box
+ }
+}
 </style><script src="/index/paintings-archive.js" defer></script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/assets/css/geist-mono.css?v=1">
@@ -915,30 +928,68 @@ body.work-index{height:100dvh;max-height:100dvh}
   const buttons=Array.from(document.querySelectorAll('.expand-button[data-client]'));
   const indexTable=document.getElementById('work-index-table');
   const tbody=indexTable.tBodies[0];
-  // The catalogue is fixed, not fitted to viewport height: Paintings
-  // and Drawings are always entries 011 and 012 on the first sheet.
-  // Never reorder or renumber these authored records on resize.
-  const rows=Array.from(tbody.rows);
-  const PAGE_SIZE=12;
+  // Mobile foregrounds three more client projects while reserving the last
+  // two rows of sheet one for the independent Painting and Drawing archives.
+  // Desktop preserves the authored 12-row catalogue and its original order.
+  const authoredRows=Array.from(tbody.rows);
+  const mobileIndex=matchMedia('(max-width:850px)');
+  const featuredRows=[
+    authoredRows.find(row=>row.querySelector('[data-client="pbr"]')),
+    authoredRows.find(row=>row.querySelector('a[href="https://www.hotelperle.com/"]')),
+    authoredRows.find(row=>row.querySelector('a[href="https://thebygone.co/"]'))
+  ];
+  if(featuredRows.some(row=>!row))throw new Error('Mobile featured index row missing');
+  const mobileFirstPage=[...authoredRows.slice(0,10),...featuredRows,...authoredRows.slice(10,12)];
+  const mobileRows=[...mobileFirstPage,...authoredRows.filter(row=>!mobileFirstPage.includes(row))];
+  let rows=authoredRows;
   const pagination=document.getElementById('index-pagination');
   const pageCount=pagination.querySelector('.index-page-count');
   const pageButtons=Array.from(pagination.querySelectorAll('[data-index-page]'));
   const scroll=document.querySelector('.index-scroll');
   let currentPage=0;
+  function syncRowOrder(){
+    const desired=mobileIndex.matches?mobileRows:authoredRows;
+    if(rows!==desired){
+      desired.forEach(row=>tbody.appendChild(row));
+      rows=desired;
+      currentPage=0;
+    }
+    rows.forEach((row,i)=>{row.cells[0].textContent=String(i+1).padStart(3,'0');});
+  }
+  function pageRanges(){
+    const size=mobileIndex.matches?mobileFirstPage.length:12;
+    const ranges=[];
+    for(let start=0;start<rows.length;start+=size){
+      ranges.push([start,Math.min(start+size,rows.length)]);
+    }
+    return ranges;
+  }
+  function fitMobileRows(count){
+    if(!mobileIndex.matches){
+      scroll.style.removeProperty('--index-mobile-row-height');
+      return;
+    }
+    const available=scroll.clientHeight-pagination.getBoundingClientRect().height-
+      indexTable.tHead.getBoundingClientRect().height-4;
+    const height=Math.max(18,Math.min(36,Math.floor(available/count)));
+    scroll.style.setProperty('--index-mobile-row-height',height+'px');
+  }
   function updateIndex(){
-    const size=PAGE_SIZE;
-    const numberOfPages=Math.ceil(rows.length/size);
-    currentPage=Math.max(0,Math.min(currentPage,numberOfPages-1));
-    rows.forEach((row,i)=>{row.hidden=i<currentPage*size||i>=(currentPage+1)*size;});
-    pagination.hidden=numberOfPages<=1;
-    pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(numberOfPages).padStart(2,'0');
-    pageButtons.forEach(button=>{button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===numberOfPages-1;});
-    indexTable.setAttribute('aria-label','Complete work index, page '+(currentPage+1)+' of '+numberOfPages);
+    syncRowOrder();
+    const ranges=pageRanges();
+    currentPage=Math.max(0,Math.min(currentPage,ranges.length-1));
+    const [start,end]=ranges[currentPage];
+    rows.forEach((row,i)=>{row.hidden=i<start||i>=end;});
+    pagination.hidden=ranges.length<=1;
+    pageCount.textContent=String(currentPage+1).padStart(2,'0')+' / '+String(ranges.length).padStart(2,'0');
+    pageButtons.forEach(button=>{button.disabled=Number(button.dataset.indexPage)<0?currentPage===0:currentPage===ranges.length-1;});
+    indexTable.setAttribute('aria-label','Complete work index, page '+(currentPage+1)+' of '+ranges.length);
+    fitMobileRows(end-start);
     scroll.scrollTop=0;
   }
   function turnPage(delta){
     const next=currentPage+delta;
-    if(next<0||next>=Math.ceil(rows.length/PAGE_SIZE))return;
+    if(next<0||next>=pageRanges().length)return;
     currentPage=next;
     show(null);
     updateIndex();
