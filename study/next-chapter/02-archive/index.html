@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>02 — The Living Archive · Cole Calfee</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist+Mono:wght@300..500&display=swap">
+<style>
+/* 02 — THE LIVING ARCHIVE
+   Layout: a monograph turned one spread at a time. Each spread is exactly one viewport;
+   artworks are never cropped (contain), photographs may bleed (cover).
+   A running head and folio sit on every spread like a printed book. */
+:root{
+  --paper:#ffffff;
+  --ink:#121110;
+  --mid:#6f6c66;
+  --faint:#b1aea7;
+  --rule:#e7e5e0;
+  --red:#a3352a;
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --m:clamp(16px,2.4vw,36px);      /* page margin */
+  --head:44px;                       /* running head */
+  --foot:46px;                       /* folio line */
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);overflow:hidden}
+body{font:400 17px/1.45 var(--serif);-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--red);outline-offset:3px}
+.mono,.cap,.run,.folio{font:400 10.5px/1.4 var(--mono);letter-spacing:.02em;text-transform:uppercase}
+
+/* the book */
+.book{position:fixed;inset:0;padding:env(safe-area-inset-top) max(var(--m),env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--m),env(safe-area-inset-left));display:grid;grid-template-rows:var(--head) minmax(0,1fr) var(--foot)}
+.run{display:flex;justify-content:space-between;align-items:center;color:var(--mid);border-bottom:1px solid var(--rule)}
+.run b{font-weight:400;color:var(--ink)}
+.run nav{display:flex;gap:18px}
+.run nav a{text-decoration:none}
+.run nav a:hover{color:var(--red)}
+.pages{position:relative;min-height:0}
+.spread{position:absolute;inset:0;display:grid;gap:var(--m);padding:clamp(16px,3vh,34px) 0;opacity:0;visibility:hidden;transform:translateX(18px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.7,.2,1),visibility 0s .55s}
+.spread.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s ease .05s,transform .55s cubic-bezier(.2,.7,.2,1),visibility 0s}
+.spread.off-l{transform:translateX(-18px)}
+.folio{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-top:1px solid var(--rule);color:var(--mid)}
+.folio .prev{justify-self:start;padding:12px 0}
+.folio .next{justify-self:end;padding:12px 0}
+.folio button:hover{color:var(--red)}
+.folio button:disabled{color:var(--rule);cursor:default}
+.ticks{display:flex;gap:4px;align-items:center}
+.ticks button{width:14px;height:20px;position:relative}
+.ticks button::after{content:"";position:absolute;left:3px;right:3px;top:9px;height:1px;background:var(--faint)}
+.ticks button[aria-current=true]::after{background:var(--red);height:3px;top:8px}
+.ticks button.ch::after{top:6px;height:7px;width:1px;left:6.5px}
+.ticks button.ch[aria-current=true]::after{width:3px;left:5.5px;height:9px;top:5px}
+.count{margin-left:12px;font-variant-numeric:tabular-nums}
+
+/* figures */
+figure{margin:0;min-height:0;min-width:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:8px}
+figure .im{position:relative;min-height:0}
+figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:var(--pos,50% 50%)}
+figure.bleed img{object-fit:cover}
+figure.left img{object-position:0 50%}
+figure.bottom img{object-position:50% 100%}
+.cap{color:var(--mid);display:flex;justify-content:space-between;gap:12px;min-width:0}
+.cap span:first-child{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap span:last-child{white-space:nowrap}
+
+/* type */
+.kicker{font:400 10.5px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--red)}
+h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
+.display{font-size:clamp(54px,9.4vw,152px);line-height:.86;font-weight:300;letter-spacing:-.045em}
+.display i{font-style:italic;font-weight:300}
+.h{font-size:clamp(30px,3.6vw,56px);line-height:.98;font-weight:300;letter-spacing:-.03em}
+.lede{font-size:clamp(17px,1.45vw,22px);line-height:1.38;max-width:30ch;font-weight:350;text-wrap:pretty}
+.body{font-size:clamp(15px,1.12vw,17px);line-height:1.5;max-width:42ch;color:#2d2b28;text-wrap:pretty}
+.col{display:flex;flex-direction:column;justify-content:space-between;min-height:0;min-width:0;gap:20px}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.list li{display:grid;grid-template-columns:3.2em minmax(0,1fr) auto;gap:10px;align-items:baseline;border-bottom:1px solid var(--rule);padding:7px 0;font-size:clamp(14px,1.05vw,16px)}
+.list li .n{font:400 10px/1 var(--mono);color:var(--faint)}
+.list li .r{font:400 10px/1 var(--mono);color:var(--mid);text-transform:uppercase;text-align:right}
+.list a{text-decoration:none}
+.list a:hover{color:var(--red)}
+.note{font:italic 300 clamp(15px,1.15vw,18px)/1.45 var(--serif);color:var(--mid);max-width:40ch}
+
+/* spread layouts */
+.s-cover{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+.s-cover .title{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.s-contents{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+.s-contents ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink);align-self:end}
+.s-contents li button{width:100%;display:grid;grid-template-columns:3em minmax(0,1fr) auto;align-items:baseline;gap:12px;padding:clamp(6px,1.4vh,13px) 0;border-bottom:1px solid var(--rule);text-align:left;font-size:clamp(20px,2.3vw,34px);font-weight:300;letter-spacing:-.02em;line-height:1.05}
+.s-contents li button:hover{color:var(--red)}
+.s-contents li .n{font:400 10.5px/1 var(--mono);color:var(--red)}
+.s-contents li .p{font:400 10.5px/1 var(--mono);color:var(--mid)}
+.s-opener{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.s-opener.flip{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.s-grid{grid-template-rows:auto minmax(0,1fr)}
+.g{display:grid;gap:clamp(10px,1.4vw,20px);min-height:0}
+.s-motif{grid-template-rows:auto minmax(0,1fr) auto}
+.row4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.s-two{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+.s-text{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.headline{display:flex;justify-content:space-between;align-items:end;gap:20px;border-bottom:1px solid var(--ink);padding-bottom:10px}
+.headline .h{font-size:clamp(26px,2.6vw,40px)}
+
+/* phone: one column; spreads become pages */
+@media (max-width:760px){
+  :root{--head:42px;--foot:48px}
+  body{font-size:16px}
+  .run nav{display:none}
+  .spread{gap:14px;padding:14px 0}
+  .s-cover,.s-contents,.s-opener,.s-opener.flip,.s-two,.s-text{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+  .s-cover{grid-template-rows:minmax(0,1.2fr) auto}
+  .s-contents{grid-template-rows:auto minmax(0,1fr)}
+  .s-contents .cv{display:none}
+  .s-contents li button{font-size:21px;padding:9px 0}
+  .s-opener .lede{font-size:16px}
+  .hide-s{display:none!important}
+  .s-opener>.col,.s-text>.col:first-child,.s-two>.col{order:2}
+  .s-opener>.col .lede,.s-text .body{font-size:15px}
+  .s-text>.col:first-child .note{display:none}
+  #checklist li:nth-child(n+6),#discography li:nth-child(n+5){display:none}
+  .s-text#built-for-generations>.col:first-child .body{display:none}
+  .s-text#elsewhere,.s-text#colophon{grid-template-rows:auto minmax(0,1fr)}
+  .s-text#elsewhere>.col:first-child,.s-text#colophon>.col:first-child{order:0}
+  .display{font-size:clamp(46px,15vw,74px)}
+  .row4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ticks{display:none}
+  .folio{grid-template-columns:auto 1fr auto}
+  .folio .mid{justify-self:center}
+  .list li{padding:6px 0;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){.spread{transition:none!important;transform:none!important}}
+.study{position:fixed;right:max(var(--m),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 11px);z-index:9;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--red);padding:6px 7px;text-decoration:none}
+.run{padding-right:118px}
+</style>
+</head>
+<body>
+<div class="book">
+  <header class="run">
+    <span><b>Cole Calfee</b> &nbsp;·&nbsp; <span id="runhead">A living archive</span></span>
+    <nav aria-label="Primary"><a href="#contents">Contents</a><a href="https://colecalfee.com/paintings/">Available</a><a href="#colophon">Contact</a></nav>
+  </header>
+
+  <main class="pages" id="pages">
+
+  <!-- 0 COVER -->
+  <section class="spread s-cover" id="cover" data-run="A living archive">
+    <figure class="bleed"><div class="im"><img data-w="studio"></div><figcaption class="cap"><span>The studio</span><span>Photograph</span></figcaption></figure>
+    <div class="title">
+      <div class="kicker">Volume I · 2015 — 2026</div>
+      <h1 class="display">Cole<br><i>Calfee</i></h1>
+      <div>
+        <p class="lede">Paintings, drawings, photographs, record sleeves, posters and identities, kept in one place and added to as they are made.</p>
+        <p class="mono" style="color:var(--mid);margin:18px 0 0">Nashville, Tennessee / North Georgia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 CONTENTS -->
+  <section class="spread s-contents" id="contents" data-run="Contents">
+    <div class="col">
+      <h2 class="display" style="font-size:clamp(46px,6vw,96px)"><i>Contents</i></h2>
+      <figure class="cv" style="flex:1"><div class="im"><img data-w="western-sketchbook-1"></div><figcaption class="cap"><span>Western sketchbook I</span><span>012.06</span></figcaption></figure>
+    </div>
+    <ol id="toc"></ol>
+  </section>
+
+  <!-- 2 I. RED INK -->
+  <section class="spread s-opener" id="red-ink" data-run="I · Red Ink" data-chapter="I" data-name="Red Ink">
+    <div class="col">
+      <div class="kicker">Chapter I</div>
+      <h2 class="display"><i>Red</i><br>Ink</h2>
+      <div>
+        <p class="lede">Eleven drawings, all in the same red on ivory paper. Portraits, a bison, dogs, riders, a Lakeside Club, whole sketchbook pages with handwriting running through them.</p>
+      </div>
+    </div>
+    <figure><div class="im"><img data-w="lewis-grizzard"></div><figcaption class="cap" data-c="lewis-grizzard"></figcaption></figure>
+  </section>
+
+  <!-- 3 RED INK PLATES -->
+  <section class="spread s-grid" id="drawings" data-run="I · Red Ink" data-name="Drawings">
+    <div class="headline"><h2 class="h">Drawings</h2><span class="mono" style="color:var(--mid)">012 · Independent work · 11 sheets</span></div>
+    <div class="g" style="grid-template-columns:repeat(var(--c,6),minmax(0,1fr));grid-template-rows:repeat(var(--r,2),minmax(0,1fr))" data-fill="bison-study portrait-study lakeside-club broadcast-portrait lewis-grizzard dog-studies western-sketchbook-1 western-sketchbook-2 sketchbook-3 sketchbook-4 sketchbook-5" data-c="6" data-r="2" data-cs="3" data-rs="4" data-tail="Eleven sheets. Red ink on ivory, catalogued 012.01 — 012.11."></div>
+  </section>
+
+  <!-- 4 MOTIF: BISON -->
+  <section class="spread s-motif" id="bison" data-run="Recurring · The bison" data-name="Recurring: the bison">
+    <div class="headline"><h2 class="h"><span class="kicker" style="display:block;margin-bottom:8px">Recurring</span>The bison</h2><p class="note hide-s" style="margin:0">Ink, oil, a magazine cover, the studio wall.<br>The same animal, four ways.</p></div>
+    <div class="g row4">
+      <figure><div class="im"><img data-w="bison-study"></div><figcaption class="cap" data-c="bison-study"></figcaption></figure>
+      <figure><div class="im"><img data-w="zen-buffalo"></div><figcaption class="cap" data-c="zen-buffalo"></figcaption></figure>
+      <figure><div class="im"><img data-w="cowboyer-1"></div><figcaption class="cap" data-c="cowboyer-1"></figcaption></figure>
+      <figure class="bleed"><div class="im"><img data-w="studio" style="--pos:52% 50%"></div><figcaption class="cap"><span>Studio, bison at centre</span><span>000.01</span></figcaption></figure>
+    </div>
+    <p class="mono" style="color:var(--mid);margin:0">The archive cross-references itself. Each motif page is assembled from works already in the index.</p>
+  </section>
+
+  <!-- 5 II. PAINT -->
+  <section class="spread s-opener flip" id="paint" data-run="II · Paint" data-chapter="II" data-name="Paint">
+    <figure><div class="im"><img data-w="red-sea"></div><figcaption class="cap" data-c="red-sea"></figcaption></figure>
+    <div class="col">
+      <div>
+        <div class="kicker">Chapter II</div>
+        <h2 class="display" style="margin-top:10px">Paint</h2>
+      </div>
+      <ul class="list" id="checklist"></ul>
+    </div>
+  </section>
+
+  <!-- 6 PAINT PLATES -->
+  <section class="spread s-grid" id="collection" data-run="II · Paint" data-name="In collections">
+    <div class="headline"><h2 class="h">In collections</h2><span class="mono" style="color:var(--mid)">Twelve paintings, photographed where they were made</span></div>
+    <div class="g" data-fill="harvest-1 peace-of-wild-things porter-study flowers-in-a-jug nine-ball little-window zen-buffalo fj40 scout-painting target purple-haze peach-circuit" data-c="6" data-r="2" data-cs="4" data-rs="3"></div>
+  </section>
+
+  <!-- 7 MOTIF: RED -->
+  <section class="spread s-motif" id="red" data-run="Recurring · Red" data-name="Recurring: red">
+    <div class="headline"><h2 class="h"><span class="kicker" style="display:block;margin-bottom:8px">Recurring</span>Red</h2><p class="note hide-s" style="margin:0">A canvas, a record sleeve, a logo, a lipstick mark.<br>A colour that keeps coming back.</p></div>
+    <div class="g row4">
+      <figure><div class="im"><img data-w="flowers-mccarty"></div><figcaption class="cap" data-c="flowers-mccarty"></figcaption></figure>
+      <figure><div class="im"><img data-w="pour-me-out"></div><figcaption class="cap" data-c="pour-me-out"></figcaption></figure>
+      <figure><div class="im"><img data-w="ramsey-arrowhead"></div><figcaption class="cap" data-c="ramsey-arrowhead"></figcaption></figure>
+      <figure><div class="im"><img data-w="jenni"></div><figcaption class="cap" data-c="jenni"></figcaption></figure>
+    </div>
+    <p class="mono" style="color:var(--mid);margin:0">Assembled by colour from the index. The site can find these on its own.</p>
+  </section>
+
+  <!-- 8 III. ARENA -->
+  <section class="spread s-two" id="arena" data-run="III · Ranch & Arena" data-chapter="III" data-name="Ranch &amp; Arena">
+    <figure class="bleed"><div class="im"><img data-w="ronnie-1"></div><figcaption class="cap" data-c="ronnie-1"></figcaption></figure>
+    <div class="col">
+      <div>
+        <div class="kicker">Chapter III</div>
+        <h2 class="display" style="font-size:clamp(46px,6.6vw,108px)">Ranch <i>&amp;</i><br>Arena</h2>
+      </div>
+      <div class="g hide-s" style="grid-template-columns:1fr 1fr;flex:1;min-height:0">
+        <figure class="bleed"><div class="im"><img data-w="pbr-portrait"></div><figcaption class="cap" data-c="pbr-portrait"></figcaption></figure>
+        <figure class="bleed"><div class="im"><img data-w="pbr-bull"></div><figcaption class="cap" data-c="pbr-bull"></figcaption></figure>
+      </div>
+      <p class="body" style="margin:0">Photographs from Ronnie Hodges Performance Horses, Teton Valley Ranch, Habitat Ranch and the PBR, 2015 to 2025.</p>
+    </div>
+  </section>
+
+  <!-- 9 PHOTO CONTACT -->
+  <section class="spread s-grid" id="photographs" data-run="III · Ranch & Arena" data-name="Photographs">
+    <div class="headline"><h2 class="h">Photographs</h2><span class="mono" style="color:var(--mid)">004 · 005 · 008 · 014 · 021</span></div>
+    <div class="g" data-fill="teton-1 teton-2 teton-3 ronnie-2 ronnie-3 ronnie-4 habitat mags" data-c="4" data-r="2" data-cs="2" data-rs="4" data-bleed="1"></div>
+  </section>
+
+  <!-- 10 IV. RECORDS -->
+  <section class="spread s-opener" id="records" data-run="IV · Records" data-chapter="IV" data-name="Records">
+    <div class="col">
+      <div>
+        <div class="kicker">Chapter IV</div>
+        <h2 class="display" style="margin-top:10px">Rec<i>ords</i></h2>
+      </div>
+      <ul class="list" id="discography"></ul>
+    </div>
+    <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))">
+      <figure><div class="im"><img data-w="pour-me-out"></div><figcaption class="cap" data-c="pour-me-out"></figcaption></figure>
+      <figure><div class="im"><img data-w="after-me"></div><figcaption class="cap" data-c="after-me"></figcaption></figure>
+      <figure><div class="im"><img data-w="who-hurt-you"></div><figcaption class="cap" data-c="who-hurt-you"></figcaption></figure>
+      <figure><div class="im"><img data-w="act-1"></div><figcaption class="cap" data-c="act-1"></figcaption></figure>
+      <figure><div class="im"><img data-w="out-of-my-mind"></div><figcaption class="cap" data-c="out-of-my-mind"></figcaption></figure>
+      <figure><div class="im"><img data-w="poster-child"></div><figcaption class="cap" data-c="poster-child"></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 11 KASHUS ON STAGE -->
+  <section class="spread s-two" id="kashus" data-run="IV · Records" data-name="Kashus Culpepper">
+    <figure class="bleed"><div class="im"><img data-w="kc-portrait-2"></div><figcaption class="cap" data-c="kc-portrait-2"></figcaption></figure>
+    <div class="g" style="grid-template-columns:1fr 1fr">
+      <figure><div class="im"><img data-w="harvest-moon"></div><figcaption class="cap" data-c="harvest-moon"></figcaption></figure>
+      <div class="col">
+        <figure class="bleed" style="flex:1"><div class="im"><img data-w="kc-portrait-1"></div><figcaption class="cap" data-c="kc-portrait-1"></figcaption></figure>
+        <p class="note" style="margin:0">Kashus Culpepper, 2026. Seven releases, a tour poster and the photographs around them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 V. COMMISSIONS -->
+  <section class="spread s-grid" id="commissions" data-run="V · Posters & Covers" data-chapter="V" data-name="Posters &amp; Covers">
+    <div class="headline"><h2 class="h"><span class="kicker" style="display:block;margin-bottom:8px">Chapter V</span>Posters &amp; Covers</h2><span class="mono hide-s" style="color:var(--mid)">Scout Motors · Joseph Martin · ERNEST · The Cowboyer</span></div>
+    <div class="g" data-fill="scout-1 scout-2 martin-survives dont-call-it-luck hatmaker ernest cowboyer-3 cowboyer-4" data-c="4" data-r="2" data-cs="4" data-rs="2"></div>
+  </section>
+
+  <!-- 13 VI. BUILT FOR GENERATIONS -->
+  <section class="spread s-text" id="built-for-generations" data-run="VI · Built for Generations" data-chapter="VI" data-name="Built for Generations">
+    <div class="col">
+      <div>
+        <div class="kicker">Chapter VI · A long project</div>
+        <h2 class="display" style="font-size:clamp(44px,6.4vw,104px);margin-top:10px">Built for <i>Generations</i></h2>
+      </div>
+      <div>
+        <p class="lede" style="max-width:34ch">Creative direction, identity and web for Freeman General Contracting.</p>
+        <p class="body">Shown here as one body of work inside the archive, with the client named on every page. The practice belongs to Cole; this chapter belongs to the collaboration.</p>
+        <p class="mono" style="color:var(--mid);margin:14px 0 0">001 · 2023 — 2026 · <a href="https://www.freemangc.com/" target="_blank" rel="noopener" style="color:var(--ink)">freemangc.com ↗︎</a></p>
+      </div>
+    </div>
+    <div class="g" style="grid-template-rows:minmax(0,1fr) minmax(0,1fr)">
+      <figure><div class="im"><img data-w="freeman-eagle" style="padding:0 8%"></div><figcaption class="cap" data-c="freeman-eagle"></figcaption></figure>
+      <figure><div class="im" style="border:1px solid var(--rule)"><img data-w="freeman-web"></div><figcaption class="cap" data-c="freeman-web"></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 14 ELSEWHERE -->
+  <section class="spread s-text" id="elsewhere" data-run="Elsewhere" data-name="Elsewhere">
+    <div class="col">
+      <div>
+        <div class="kicker">Film, music, apprenticeships</div>
+        <h2 class="display" style="font-size:clamp(46px,7vw,112px);margin-top:10px"><i>Else</i>where</h2>
+      </div>
+      <p class="note hide-s">Work that lives on other people's sites, records and screens. Listed so it can be found from here.</p>
+    </div>
+    <ul class="list" id="elsewhere-list" style="align-self:end"></ul>
+  </section>
+
+  <!-- 15 FIELD NOTES / COLOPHON -->
+  <section class="spread s-text" id="colophon" data-run="Field notes & Colophon" data-name="Field notes">
+    <div class="col">
+      <div>
+        <div class="kicker">Field notes</div>
+        <h2 class="h" style="margin-top:12px;max-width:14ch">Writing goes here, in Cole's words.</h2>
+      </div>
+      <p class="body" style="color:var(--mid)">A place reserved for short texts: a paragraph about a painting, notes from a shoot, a list from the studio whiteboard. Nothing is written on Cole's behalf.</p>
+    </div>
+    <div class="col" style="justify-content:flex-end">
+      <ul class="list">
+        <li><span class="n">@</span><span>colecalfee@gmail.com</span><span class="r">Email</span></li>
+        <li><span class="n">IG</span><a href="https://www.instagram.com/colecalfee/" target="_blank" rel="noopener">@colecalfee ↗︎</a><span class="r">Instagram</span></li>
+        <li><span class="n">→</span><a href="https://colecalfee.com/paintings/">Available paintings</a><span class="r">Shop</span></li>
+        <li><span class="n">©</span><span>Cole Calfee, 2026</span><span class="r">Newsreader &amp; Geist Mono</span></li>
+      </ul>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="folio">
+    <button type="button" class="prev mono" id="prev">← Prev</button>
+    <div class="mid" style="display:flex;align-items:center"><div class="ticks" id="ticks"></div><span class="count mono" id="count">01 / 16</span></div>
+    <button type="button" class="next mono" id="next">Next →</button>
+  </footer>
+</div>
+<a class="study" href="../">Study 02 / 03 ↩</a>
+
+<script src="../media/catalogue.js"></script>
+<script>
+(()=>{
+const C=window.CATALOGUE,W=Object.fromEntries(C.works.map(w=>[w.id,w])),P=Object.fromEntries(C.projects.map(p=>[p.id,p]));
+const cnt={};C.works.forEach(w=>{const n=P[w.project]?P[w.project].n:'000';cnt[n]=(cnt[n]||0)+1;w.no=n+'.'+String(cnt[n]).padStart(2,'0')});
+const src=(w,s)=>'../media/'+(w.src||s+'/'+w.id+'.webp');
+const narrow=()=>innerWidth<=760;
+function img(el){const w=W[el.dataset.w];if(!w)return;el.alt=w.alt;el.dataset.src=src(w,'l');el.decoding='async'}
+function cap(id){const w=W[id];return `<span>${w.title}</span><span>${w.no}</span>`}
+document.querySelectorAll('img[data-w]').forEach(img);
+document.querySelectorAll('[data-c]').forEach(c=>{if(c.tagName==='FIGCAPTION')c.innerHTML=cap(c.dataset.c)});
+
+// grids filled from the catalogue
+function fill(){
+  document.querySelectorAll('[data-fill]').forEach(g=>{
+    const ids=g.dataset.fill.split(' '),c=narrow()?+g.dataset.cs:+g.dataset.c,r=narrow()?+g.dataset.rs:+g.dataset.r;
+    g.style.gridTemplateColumns=`repeat(${c},minmax(0,1fr))`;g.style.gridTemplateRows=`repeat(${r},minmax(0,1fr))`;
+    const show=ids.slice(0,c*r);
+    g.innerHTML=show.map(id=>`<figure class="${g.dataset.bleed?'bleed':''}"><div class="im"><img data-w="${id}"></div><figcaption class="cap">${cap(id)}</figcaption></figure>`).join('');
+    if(g.dataset.tail&&show.length<c*r)g.insertAdjacentHTML('beforeend',`<p class="note" style="align-self:end;margin:0">${g.dataset.tail}</p>`);
+    g.querySelectorAll('img').forEach(img);
+  });
+}
+fill();
+
+// painting checklist, exhibition style
+const paint=['red-sea','flowers-mccarty','harvest-1','peace-of-wild-things','porter-study','flowers-in-a-jug','nine-ball','little-window','zen-buffalo','fj40','scout-painting','target','purple-haze','peach-circuit'];
+document.getElementById('checklist').innerHTML=paint.map((id,i)=>{const w=W[id];return `<li><span class="n">${String(i+1).padStart(2,'0')}</span><span>${w.title} <span style="color:var(--mid);font-size:.82em">${w.detail.replace('Oil on canvas · ','').replace(' in.','″').replace(/ × /,'×')}</span></span><span class="r">${w.state==='available'?'<span style="color:var(--red)">Available</span>':'Sold'}</span></li>`}).join('');
+
+// discography from the index
+const disc=[['Pour Me Out','Kashus Culpepper','https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM'],['Act I: Summer Nights','Kashus Culpepper','https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD'],['After Me?','Kashus Culpepper','https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP'],['Out of My Mind','Kashus Culpepper','https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8'],['Jenni','Kashus Culpepper','https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc'],['Who Hurt You','Kashus Culpepper','https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm'],['Talk With Me','Kashus Culpepper','https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855'],['Poster Child EP','Corey Kent','https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz'],['Tree Birds','Dylan Gossett','https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz']];
+document.getElementById('discography').innerHTML=disc.map((d,i)=>`<li class="${i>5?'hide-s':''}"><span class="n">${String(i+1).padStart(2,'0')}</span><a href="${d[2]}" target="_blank" rel="noopener">${d[0]} ↗︎</a><span class="r">${d[1]}</span></li>`).join('');
+
+// elsewhere: index entries without images, kept as links
+const els=['lastmovie','callahan','weir','perle','bygone','musee','verygently','gossett'].map(id=>P[id]);
+document.getElementById('elsewhere-list').innerHTML=els.map(p=>`<li><span class="n">${p.n}</span><a href="${p.link}" target="_blank" rel="noopener">${p.title} ↗︎</a><span class="r">${p.role} · ${p.year}</span></li>`).join('');
+
+// pagination
+const spreads=[...document.querySelectorAll('.spread')];
+const toc=document.getElementById('toc');
+toc.innerHTML=spreads.map((s,i)=>s.dataset.chapter?`<li><button type="button" data-go="${i}"><span class="n">${s.dataset.chapter}</span><span>${s.dataset.name}</span><span class="p">${String(i+1).padStart(2,'0')}</span></button></li>`:'').join('')+
+  `<li><button type="button" data-go="${spreads.findIndex(s=>s.id==='elsewhere')}"><span class="n">—</span><span>Elsewhere &amp; field notes</span><span class="p">15</span></button></li>`;
+const ticks=document.getElementById('ticks');
+ticks.innerHTML=spreads.map((s,i)=>`<button type="button" data-go="${i}" class="${s.dataset.chapter?'ch':''}" aria-label="${s.dataset.name||s.dataset.run}"></button>`).join('');
+let cur=-1;
+function load(s){s.querySelectorAll('img[data-src]').forEach(i=>{i.src=i.dataset.src;i.removeAttribute('data-src')})}
+function go(i,fromHash){
+  i=Math.max(0,Math.min(spreads.length-1,i));if(i===cur)return;
+  spreads.forEach((s,j)=>{s.classList.toggle('on',j===i);s.classList.toggle('off-l',j<i);s.setAttribute('aria-hidden',j!==i);s.inert=j!==i});
+  load(spreads[i]);if(spreads[i+1])load(spreads[i+1]);
+  cur=i;document.getElementById('runhead').textContent=spreads[i].dataset.run;
+  document.getElementById('count').textContent=String(i+1).padStart(2,'0')+' / '+String(spreads.length).padStart(2,'0');
+  ticks.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-current',j===i));
+  document.getElementById('prev').disabled=i===0;document.getElementById('next').disabled=i===spreads.length-1;
+  if(!fromHash){try{history.replaceState(null,'','#'+spreads[i].id)}catch(e){}}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(+b.dataset.go)});
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(spreads.findIndex(s=>s.id===a.getAttribute('href').slice(1)))}));
+document.getElementById('prev').onclick=()=>go(cur-1);document.getElementById('next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1)}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}if(e.key==='Home')go(0);if(e.key==='End')go(spreads.length-1)});
+let tx=null;const pg=document.getElementById('pages');
+pg.addEventListener('touchstart',e=>{tx=e.touches.length===1?[e.touches[0].clientX,e.touches[0].clientY]:null},{passive:true});
+pg.addEventListener('touchend',e=>{if(!tx)return;const dx=e.changedTouches[0].clientX-tx[0],dy=e.changedTouches[0].clientY-tx[1];tx=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4)go(cur+(dx<0?1:-1))},{passive:true});
+// wheel turns the page too, with a cooldown so one gesture is one page
+let lock=0;addEventListener('wheel',e=>{const d=Math.abs(e.deltaY)>Math.abs(e.deltaX)?e.deltaY:e.deltaX;if(Math.abs(d)<24||Date.now()<lock)return;lock=Date.now()+700;go(cur+(d>0?1:-1))},{passive:true});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{fill();const s=spreads[cur];if(s)load(s)},150)});
+addEventListener('hashchange',()=>{const i=spreads.findIndex(s=>s.id===location.hash.slice(1));if(i>=0)go(i,true)});
+const start=spreads.findIndex(s=>s.id===location.hash.slice(1));go(start>=0?start:0,true);
+})();
+</script>
+</body>
+</html>

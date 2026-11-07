@@ -1,0 +1,406 @@
+<meta charset="utf-8">
+<title>The Next Chapter</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist+Mono:wght@300..500&display=swap">
+<style>
+/* Layout: a study document set like a monograph's front matter. A 12-column field,
+   wide image plates, narrow text measure, mono metadata. White on purpose: the brief asks for it. */
+:root{
+  color-scheme:light;
+  --paper:#ffffff;
+  --ink:#121110;
+  --mid:#6e6b65;
+  --faint:#aeaba4;
+  --rule:#e6e4df;
+  --plate:#f5f5f3;
+  --red:#a3352a;
+  --serif:"Newsreader","Iowan Old Style",Palatino,Georgia,serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.5 var(--serif);-webkit-font-smoothing:antialiased;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:var(--faint)}
+a:hover{color:var(--red);text-decoration-color:var(--red)}
+:focus-visible{outline:1px solid var(--red);outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto}
+.mono,.lab,.cap,th{font:400 11px/1.45 var(--mono);letter-spacing:.03em;text-transform:uppercase}
+.lab{color:var(--red)}
+.cap{color:var(--mid)}
+h1,h2,h3{font-weight:300;letter-spacing:-.03em;margin:0;text-wrap:balance}
+h1{font-size:clamp(52px,9vw,148px);line-height:.86;letter-spacing:-.05em}
+h1 i,h2 i{font-weight:300}
+h2{font-size:clamp(34px,4.6vw,68px);line-height:.95}
+h3{font-size:clamp(22px,2vw,28px);line-height:1.1;letter-spacing:-.02em}
+p{margin:0 0 .8em;max-width:62ch;text-wrap:pretty}
+.lede{font-size:clamp(20px,1.9vw,26px);line-height:1.35;font-weight:350;max-width:40ch}
+
+/* top */
+.run{display:flex;justify-content:space-between;gap:16px;padding-block:16px 14px;border-bottom:1px solid var(--ink);flex-wrap:wrap}
+.run span:last-child{color:var(--mid)}
+.cover{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding-block:clamp(36px,7vw,96px) clamp(28px,5vw,64px)}
+.cover h1{grid-column:1/9}
+.cover .side{grid-column:9/13;align-self:end;display:grid;gap:18px}
+.cover .side p{font-size:17px;margin:0}
+
+/* the three, as a contents line */
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.three a{display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;padding:18px 20px 20px 0;text-decoration:none;min-width:0}
+.three a+a{border-left:1px solid var(--rule);padding-left:20px}
+.three .n{font:300 64px/.8 var(--serif);letter-spacing:-.04em;color:var(--red)}
+.three h3{font-size:clamp(22px,2.2vw,30px)}
+.three p{font-size:16px;color:#34322e;margin:0}
+.three .go{font:400 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em}
+.three a:hover .go{color:var(--red)}
+.three img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;display:block;background:var(--plate);border:1px solid var(--rule)}
+
+/* sections */
+section.s{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding-block:clamp(48px,7vw,104px) 0}
+.s>header{grid-column:1/5}
+.s>header .lab{display:block;margin-bottom:14px}
+.s>.body{grid-column:5/13;min-width:0}
+.full{grid-column:1/-1;min-width:0}
+
+figure{margin:0;min-width:0}
+figure img{width:100%;display:block;background:var(--plate);border:1px solid var(--rule)}
+figcaption{margin-top:8px}
+.plates{display:grid;gap:14px}
+.p4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.p3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pdm{grid-template-columns:minmax(0,4.2fr) minmax(0,1fr);align-items:start}
+
+.cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+ul.rules{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+ul.rules li{padding:11px 0 12px;border-bottom:1px solid var(--rule);font-size:16.5px;line-height:1.45}
+ul.rules li b{font-weight:500}
+.plus::before{content:"+ ";color:var(--red);font-family:var(--mono)}
+.minus::before{content:"− ";color:var(--mid);font-family:var(--mono)}
+
+/* principles */
+.princ{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink)}
+.princ div{padding:16px 20px 22px 0;border-bottom:1px solid var(--rule);min-width:0}
+.princ div:not(:nth-child(3n+1)){padding-left:20px;border-left:1px solid var(--rule)}
+.princ h3{font-size:22px;margin:6px 0 8px}
+.princ p{font-size:16px;margin:0 0 8px;color:#34322e}
+.princ .for{font:400 11px/1.5 var(--mono);color:var(--red);text-transform:uppercase;letter-spacing:.02em}
+
+/* direction blocks */
+.dir{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;border-top:1px solid var(--ink);padding-top:22px}
+.dir .meta{grid-column:1/5;display:flex;flex-direction:column;gap:16px}
+.dir .meta .n{font:300 clamp(80px,10vw,150px)/.78 var(--serif);color:var(--red);letter-spacing:-.06em}
+.dir .meta h2{font-size:clamp(34px,4vw,58px)}
+.dir .plates{grid-column:5/13}
+.dir .text{grid-column:5/13;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px}
+.open{display:inline-flex;gap:10px;align-items:center;font:400 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;background:var(--ink);color:var(--paper);padding:12px 14px;text-decoration:none;align-self:flex-start}
+.open:hover{background:var(--red);color:var(--paper)}
+dl{margin:0;display:grid;grid-template-columns:8.5em minmax(0,1fr);border-top:1px solid var(--ink)}
+dt,dd{margin:0;padding:9px 0;border-bottom:1px solid var(--rule);font-size:15.5px;line-height:1.4}
+dt{font:400 10.5px/1.6 var(--mono);text-transform:uppercase;color:var(--mid);letter-spacing:.03em;padding-top:11px}
+
+/* comparison table */
+.tbl{overflow-x:auto;grid-column:1/-1}
+table{width:100%;min-width:760px;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:11px 16px 12px 0;border-bottom:1px solid var(--rule)}
+th{color:var(--mid);font-weight:400;border-bottom:1px solid var(--ink)}
+td{font-size:15.5px;line-height:1.4}
+td:first-child{font:400 10.5px/1.6 var(--mono);text-transform:uppercase;color:var(--mid);letter-spacing:.03em;width:13%}
+
+/* synthesis */
+.syn{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.syn div{padding:20px 22px 24px 0;min-width:0}
+.syn div+div{border-left:1px solid var(--rule);padding-left:22px}
+.syn .role{font:300 clamp(30px,3vw,46px)/1 var(--serif);letter-spacing:-.03em}
+.syn .role i{color:var(--red)}
+.syn p{font-size:16px;color:#34322e}
+.map{grid-column:1/-1;font:400 12.5px/1.75 var(--mono);background:var(--plate);padding:20px 22px;overflow-x:auto;white-space:pre;border:1px solid var(--rule)}
+.map b{font-weight:400;color:var(--red)}
+.num{font:300 clamp(60px,8vw,120px)/.85 var(--serif);letter-spacing:-.05em}
+.note{font-style:italic;color:var(--mid)}
+footer.end{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,120px);padding-block:16px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .cover h1,.cover .side,.s>header,.s>.body,.dir .meta,.dir .plates,.dir .text{grid-column:1/-1}
+  .three,.princ,.syn{grid-template-columns:1fr}
+  .three a+a,.syn div+div{border-left:0;padding-left:0;border-top:1px solid var(--rule)}
+  .princ div:not(:nth-child(3n+1)){border-left:0;padding-left:0}
+  .dir .text,.cols2{grid-template-columns:1fr}
+  .p4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .p3{grid-template-columns:1fr}
+  .dir .meta .n{font-size:88px}
+}
+@media (max-width:520px){
+  body{font-size:17px}
+  .pdm{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
+}
+</style>
+
+<div class="wrap">
+  <header class="run mono"><span>Cole Calfee · The Next Chapter</span><span>Creative direction study · November 2026 · branch claude/gifted-hypatia-3nv2kf</span></header>
+
+  <div class="cover">
+    <h1>The next <i>chapter</i></h1>
+    <div class="side">
+      <p class="lede">Three working prototypes for colecalfee.com as an artist's world, built from the 64 works already in the repository.</p>
+      <p class="cap">Nothing here touches production. The study lives in <code>study/next-chapter/</code>, outside <code>site/</code>, and is never deployed.</p>
+    </div>
+  </div>
+
+  <nav class="three" aria-label="Prototypes">
+    <a href="01-index/index.html"><img src="stills/01-ledger_d.webp" alt="Prototype 01, the catalogue ledger beside a large painting plate"><span class="n">01</span><h3>The Artist's Index</h3><p>A catalogue of every work, numbered by project. Ledger, plates and a seven-year timeline.</p><span class="go">Open prototype →</span></a>
+    <a href="02-archive/index.html"><img src="stills/02-cover_d.webp" alt="Prototype 02, the monograph cover with the studio photograph"><span class="n">02</span><h3>The Living Archive</h3><p>A monograph turned one spread at a time, with chapters, motif pages and a checklist.</p><span class="go">Open prototype →</span></a>
+    <a href="03-playground/index.html"><img src="stills/03-wall_d.webp" alt="Prototype 03, works pinned loosely across a white wall"><span class="n">03</span><h3>The Creative Playground</h3><p>A studio wall. Pin up, pair, scrub by colour, and count 2,557 days.</p><span class="go">Open prototype →</span></a>
+  </nav>
+
+  <!-- AUDIT -->
+  <section class="s" id="audit">
+    <header><span class="lab">1 · Audit</span><h2>The current site</h2></header>
+    <div class="body">
+      <p>colecalfee.com is four pages: a one-line landing, a numbered Index of 23 projects, Available (two paintings on sale through Shopify) and Contact. Every page fits one screen. Type is Geist Mono throughout, the accent is a brick red, and there is a white and graphite paper toggle.</p>
+    </div>
+    <div class="full plates p4">
+      <figure><img src="stills/current-home.webp" alt="Current home page: name and three links centred on white" loading="lazy"><figcaption class="cap">/ · Landing</figcaption></figure>
+      <figure><img src="stills/current-index.webp" alt="Current index: numbered table of projects, empty panel to the right" loading="lazy"><figcaption class="cap">/index/ · 23 entries, 2 pages</figcaption></figure>
+      <figure><img src="stills/current-available.webp" alt="Current Available page: two red paintings photographed in the studio" loading="lazy"><figcaption class="cap">/paintings/ · Shopify-backed</figcaption></figure>
+      <figure><img src="stills/current-contact.webp" alt="Current contact page: motion-blurred studio photograph above contact details" loading="lazy"><figcaption class="cap">/info/ · Contact</figcaption></figure>
+    </div>
+    <div class="full cols2" style="margin-top:28px">
+      <div>
+        <h3 style="margin-bottom:12px">Strongest elements</h3>
+        <ul class="rules">
+          <li class="plus"><b>Restraint.</b> No hero, no tagline, no "about me". The landing line (name, Index / Available / Contact) is confident and already recognisable.</li>
+          <li class="plus"><b>The numbered Index.</b> 001 to 023 reads as a record, not a sales page. This is the seed of a catalogue raisonné.</li>
+          <li class="plus"><b>Single-viewport discipline.</b> Every page is a composed frame. Nothing sprawls.</li>
+          <li class="plus"><b>A real house red.</b> The accent is close to the red of Cole's ink drawings, so the interface and the work already share a colour.</li>
+          <li class="plus"><b>Honest commerce.</b> Prices and sold state come live from Shopify, and checkout is one work at a time, with no cart.</li>
+          <li class="plus"><b>The Contact photograph.</b> A blurred figure walking past a wall of paintings is the best single image of the practice on the site.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:12px">Limitations</h3>
+        <ul class="rules">
+          <li class="minus"><b>Projects, not works.</b> The Index lists clients. 64 individual works sit behind 23 rows, and the first screen shows none of them.</li>
+          <li class="minus"><b>Empty right half.</b> "Select a project" leaves half the Index blank on arrival. The art is one click away on every visit.</li>
+          <li class="minus"><b>Client-first order.</b> Freeman, Kashus, Scout come first. Paintings and Drawings, the work only Cole could make, sit at 011 and 012.</li>
+          <li class="minus"><b>No connective tissue.</b> The bison in oil, in ink, on a Cowboyer cover and on the studio wall is never noticed. Disciplines don't speak to each other.</li>
+          <li class="minus"><b>No reason to come back.</b> There is no sense of time, cadence or what's new. Publishing a work means editing a 100 KB HTML file.</li>
+          <li class="minus"><b>All mono.</b> Geist Mono is precise, but one face at every size flattens hierarchy. Titles of artworks deserve a voice.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="s" id="principles">
+    <header><span class="lab">2 · Reference</span><h2>What Visualize Value teaches</h2></header>
+    <div class="body"><p>Jack Butcher's practice is compelling for its structure more than its look. None of his aesthetic is borrowed here: no black squares, no geometric glyphs, no aphorism cards. These are the principles, and what each one means for Cole.</p></div>
+    <div class="full princ">
+      <div><span class="lab">i</span><h3>One constraint, held for years</h3><p>A narrow visual language repeated until it becomes a signature.</p><span class="for">For Cole: red ink on ivory, oil on square canvas, the American West. The constraint already exists. Name it.</span></div>
+      <div><span class="lab">ii</span><h3>Publishing is the practice</h3><p>Daily output in public builds the body of work and the audience together.</p><span class="for">For Cole: a studio feed where posting a study costs one image and one line.</span></div>
+      <div><span class="lab">iii</span><h3>The archive compounds</h3><p>Thousands of posts, all findable, make the work itself the proof.</p><span class="for">For Cole: one catalogue file that every view reads. Each new work enriches all of them.</span></div>
+      <div><span class="lab">iv</span><h3>Number everything</h3><p>Editions, posts and products are numbered, so the body of work has a shape and a count.</p><span class="for">For Cole: project.work numbers (011.06) and a visible count against seven years.</span></div>
+      <div><span class="lab">v</span><h3>The work explains itself</h3><p>Ideas are reduced until a stranger gets them in a second, with no biography needed.</p><span class="for">For Cole: open on the art. Let motif and colour pages do the writing.</span></div>
+      <div><span class="lab">vi</span><h3>Make once, sell many</h3><p>Prints, editions and products grow naturally out of the archive.</p><span class="for">For Cole: the Shopify edition tag already exists. Drawings and covers are natural print editions.</span></div>
+    </div>
+  </section>
+
+  <!-- DIRECTIONS -->
+  <section class="s" id="directions">
+    <header><span class="lab">3 · Directions</span><h2>Three prototypes</h2></header>
+    <div class="body"><p>All three read the same catalogue: 64 works and 23 projects taken from the repository and Cole's Shopify store, with titles, roles and years copied from the live Index. Each one fits a single screen on desktop and phone and never scrolls. Open them full screen. They respond to the keyboard, swipe and drag.</p></div>
+
+    <article class="dir" id="d01">
+      <div class="meta">
+        <span class="n">01</span>
+        <h2>The Artist's Index</h2>
+        <p class="lede" style="font-size:20px">Thesis: the practice is one catalogue. Every work gets a permanent number, and the number says where it lives.</p>
+        <a class="open" href="01-index/index.html">Open 01 →</a>
+      </div>
+      <div class="plates pdm">
+        <figure><img src="stills/01-years_d.webp" alt="Years view: colour chips stacked by year from 2015, open columns from 2027 to 2033" loading="lazy"><figcaption class="cap">Years · seven open columns, 2027—2033</figcaption></figure>
+        <figure><img src="stills/01-ledger_m.webp" alt="Phone ledger view" loading="lazy"><figcaption class="cap">Phone · ledger</figcaption></figure>
+      </div>
+      <div class="text">
+        <div>
+          <p>The current Index, taken to its conclusion. The ledger lists works rather than clients. <b>011.06</b> means project 011 (Paintings), sixth work. Hover a row and the plate fills instantly with the work, its medium, sale state, project siblings and its own signature colour, sampled from the image.</p>
+          <p><b>Plates</b> turns the whole practice into one contact sheet. <b>Years</b> stacks each work as a colour chip on a timeline from 2015 to 2033. Everything after 2026 is open, ruled and waiting, and that is the part meant to make Cole want to make more.</p>
+        </div>
+        <dl>
+          <dt>Look for</dt><dd>Hover the ledger. ↑ ↓ keys. Filter "Own work". Years view.</dd>
+          <dt>Strength</dt><dd>Closest to the existing site. Scales to 1,000 works without redesign.</dd>
+          <dt>Risk</dt><dd>Can feel like a database. It needs the Archive's warmth on top.</dd>
+          <dt>Built for Gen.</dt><dd>Row 001 is marked "w/ Freeman General Contracting". Its plate names Built for Generations as a long project. The "Own work" filter removes it entirely.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="dir" id="d02" style="margin-top:56px">
+      <div class="meta">
+        <span class="n">02</span>
+        <h2>The Living Archive</h2>
+        <p class="lede" style="font-size:20px">Thesis: an artist is a point of view, and a point of view shows up as patterns. The site should notice them.</p>
+        <a class="open" href="02-archive/index.html">Open 02 →</a>
+      </div>
+      <div class="plates pdm">
+        <figure><img src="stills/02-bison_d.webp" alt="Motif spread: the bison in a drawing, a painting, a magazine cover and the studio photograph" loading="lazy"><figcaption class="cap">Recurring · the bison, four ways</figcaption></figure>
+        <figure><img src="stills/02-redink_m.webp" alt="Phone: Chapter I, Red Ink" loading="lazy"><figcaption class="cap">Phone · Chapter I</figcaption></figure>
+      </div>
+      <div class="text">
+        <div>
+          <p>A monograph in sixteen spreads, each exactly one screen: cover, contents, six chapters (Red Ink, Paint, Ranch &amp; Arena, Records, Posters &amp; Covers, Built for Generations), Elsewhere, and Field notes. It uses a running head and folio like a printed book. Artworks are never cropped. Photographs may bleed.</p>
+          <p>The distinctive move is the <b>motif spread</b>. "The bison" puts an ink study, Zen Buffalo, Cowboyer cover 01 and the studio wall side by side. "Red" does the same for colour. Paint opens with an exhibition checklist showing size and sale state for all fourteen canvases.</p>
+        </div>
+        <dl>
+          <dt>Look for</dt><dd>← → keys, swipe or scroll-wheel turns pages. Contents jumps.</dd>
+          <dt>Strength</dt><dd>Gives the work a voice and a sequence. The most "artist", least "portfolio".</dd>
+          <dt>Risk</dt><dd>Editing a book takes curation. Without new chapters it goes stale.</dd>
+          <dt>Built for Gen.</dt><dd>Chapter VI: one long project inside the book, client named on the page, with an explicit authorship line.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="dir" id="d03" style="margin-top:56px">
+      <div class="meta">
+        <span class="n">03</span>
+        <h2>The Creative Playground</h2>
+        <p class="lede" style="font-size:20px">Thesis: a studio is a place where things are moved around. The site should be one too, and it should be keeping count.</p>
+        <a class="open" href="03-playground/index.html">Open 03 →</a>
+      </div>
+      <div class="plates pdm">
+        <figure><img src="stills/03-scale_d.webp" alt="True scale wall: fourteen paintings hung at their real relative sizes with a 12 inch scale bar" loading="lazy"><figcaption class="cap">Wall · paintings at true relative scale</figcaption></figure>
+        <figure><img src="stills/03-days_m.webp" alt="Phone: 2,557 days grid" loading="lazy"><figcaption class="cap">Phone · 2,557 days</figcaption></figure>
+      </div>
+      <div class="plates p3" style="grid-column:5/13">
+        <figure><img src="stills/03-spectrum_d.webp" alt="Spectrum: works sorted into a colour band, Red Sea enlarged above" loading="lazy"><figcaption class="cap">Spectrum · scrub by colour</figcaption></figure>
+        <figure><img src="stills/03-pairs_d.webp" alt="Pairs: two works from different disciplines side by side" loading="lazy"><figcaption class="cap">Pairs · chance juxtapositions</figcaption></figure>
+        <figure><img src="stills/03-days_d.webp" alt="Days: a grid of 2,557 cells, the first 64 filled with colour" loading="lazy"><figcaption class="cap">2,557 days · seven years</figcaption></figure>
+      </div>
+      <div class="text">
+        <div>
+          <p>Four modes on one white wall. <b>Wall</b> pins up a random selection you can drag around. <b>True scale</b> rehangs all fourteen paintings at their real sizes in inches, so an 8 × 10 in. Zen Buffalo sits beside a 36 × 48 in. Red Sea. <b>Pairs</b> puts two works from different disciplines next to each other. <b>Spectrum</b> sorts the whole archive into a colour band you scrub with a finger.</p>
+          <p><b>2,557 days</b> is seven years, one cell per day. For now the existing 64 works stand in for days already made, and today's cell blinks. It's the site as a promise.</p>
+        </div>
+        <dl>
+          <dt>Look for</dt><dd>Drag on Wall. "True scale". Space on Pairs. Scrub Spectrum.</dd>
+          <dt>Strength</dt><dd>Alive, and it rewards publishing: every post visibly changes the site.</dd>
+          <dt>Risk</dt><dd>Play can read as gimmick. It needs the Index underneath for seriousness.</dd>
+          <dt>Built for Gen.</dt><dd>Deliberately absent. Commissions don't belong on the play wall. It links out to the Index.</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- COMPARE -->
+  <section class="s" id="compare">
+    <header><span class="lab">4 · Comparison</span><h2>Side by side</h2></header>
+    <div class="body"><p>The same 64 works, three ways of being with them.</p></div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th></th><th>01 · Index</th><th>02 · Archive</th><th>03 · Playground</th></tr></thead>
+        <tbody>
+          <tr><td>Unit</td><td>The work, numbered</td><td>The spread, sequenced</td><td>The day, counted</td></tr>
+          <tr><td>First screen</td><td>A ledger and one painting</td><td>A cover: the studio photograph and the name</td><td>A wall of pinned works</td></tr>
+          <tr><td>Navigation</td><td>Filter, page, hover, keys</td><td>Turn the page, contents</td><td>Modes, drag, scrub, chance</td></tr>
+          <tr><td>Typography</td><td>Geist + Geist Mono</td><td>Newsreader + Geist Mono</td><td>Geist light numerals + Geist Mono</td></tr>
+          <tr><td>Publishing cost</td><td>One catalogue entry</td><td>Entry + curation into a chapter</td><td>One image, one line</td></tr>
+          <tr><td>Built for Gen.</td><td>Labelled row, filterable out</td><td>Its own chapter, client named</td><td>Not present</td></tr>
+          <tr><td>Best at</td><td>Range, proof, permanence</td><td>Point of view, meaning</td><td>Momentum, joy, return visits</td></tr>
+          <tr><td>Weak at</td><td>Feeling</td><td>Frequency</td><td>Gravity</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- BFG -->
+  <section class="s" id="bfg">
+    <header><span class="lab">5 · Built for Generations</span><h2>A chapter, not the name</h2></header>
+    <div class="body">
+      <figure style="margin-bottom:24px"><img src="stills/02-bfg_d.webp" alt="Archive spread: Built for Generations, with the Freeman eagle mark and homepage" loading="lazy"><figcaption class="cap">02 · Chapter VI</figcaption></figure>
+      <p>Cole's identity should stay the author of everything, and Freeman General Contracting should be one long, serious collaboration inside it. The prototypes test three degrees of separation, and the recommendation combines them:</p>
+      <ul class="rules">
+        <li><b>Name the collaborator every time.</b> Every Freeman work carries "with Freeman General Contracting" in the ledger, on the plate and in the running head. Cole's name never sits beside Freeman's mark as a lockup.</li>
+        <li><b>Give it the shape of a long project.</b> Built for Generations gets its own chapter at <code>/projects/built-for-generations/</code>, with its own contents, credits and a link to freemangc.com. It's a body of work like The Cowboyer, at a larger scale.</li>
+        <li><b>Keep the practice separable.</b> An "Own work" filter, and the Studio feed, show only work that is Cole's alone. A visitor who only wants the artist never has to pass through the contractor.</li>
+        <li><b>Keep it out of the home page and the masthead.</b> The landing stays name and destinations, exactly as now.</li>
+      </ul>
+      <p class="note" style="margin-top:16px">Open question for Cole: the repository has no copy about Built for Generations, and freemangc.com could not be reached from this environment. The chapter text is deliberately minimal (role, years, link) until Cole supplies the facts.</p>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <section class="s" id="synthesis">
+    <header><span class="lab">6 · Recommendation</span><h2>One catalogue, <i>three rooms</i></h2></header>
+    <div class="body">
+      <p class="lede">Build 01 as the spine, use 02 for chapters and 03 for the daily studio, all from one catalogue file. Each direction covers what the others lack: the Index has no feeling, the Archive has no frequency and the Playground has no gravity.</p>
+    </div>
+    <div class="syn">
+      <div><span class="lab">The spine</span><div class="role">Index <i>01</i></div><p>The home of record. Every work numbered project.work, filterable, with its own URL. The Years view with seven open columns is the site's quiet ambition. It replaces today's Index directly.</p></div>
+      <div><span class="lab">The voice</span><div class="role">Chapters <i>02</i></div><p>Any project or motif opens as a set of spreads: Red Ink, Paint, The Cowboyer, Built for Generations. Motif pages ("the bison", "red") are generated from tags, so the archive keeps noticing patterns as it grows.</p></div>
+      <div><span class="lab">The engine</span><div class="role">Studio <i>03</i></div><p>The daily surface: a wall, pairs, spectrum and the 2,557-day count. Posting a study fills a cell and enters the catalogue at the same moment. Each post shows up as a visible change on the site.</p></div>
+    </div>
+    <pre class="map" aria-label="Proposed site map">colecalfee.com
+├─ /                      Name · Index / Studio / Available / Contact   <b>(unchanged landing, one link added)</b>
+├─ /index/                01 ledger · plates · years                    <b>spine</b>
+│   └─ /index/#011.06     a work's plate, permanently addressable
+├─ /chapters/red-ink/     02 spreads, generated from the catalogue       <b>voice</b>
+├─ /chapters/the-bison/   motif page, assembled by tag
+├─ /projects/built-for-generations/   long project, client named
+├─ /studio/               03 wall · pairs · spectrum · 2,557 days        <b>engine</b>
+├─ /paintings/            Available (current Shopify flow, untouched)
+└─ /info/                 Contact</pre>
+    <div class="full cols2" style="margin-top:28px">
+      <div>
+        <h3 style="margin-bottom:12px">What makes it distinctive</h3>
+        <ul class="rules">
+          <li class="plus">A <b>catalogue raisonné from day one</b>, with numbers that will still mean something in 2033.</li>
+          <li class="plus"><b>Motif pages</b> that find the through-lines (bison, red, riders) across oil, ink, photography and record sleeves.</li>
+          <li class="plus"><b>True relative scale</b> for paintings. No portfolio site does this, and it's exactly what a screen hides.</li>
+          <li class="plus">A <b>public count of seven years</b>, 2,557 cells, so the site visibly asks for the next work.</li>
+          <li class="plus">The <b>signature colour</b> of each work, sampled from the image and used as the only colour in the interface.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:12px">Typography &amp; system</h3>
+        <ul class="rules">
+          <li><b>Keep Geist Mono</b> for metadata, numbers and navigation. It is the current site's voice.</li>
+          <li><b>Add Newsreader</b> for titles of works, chapter heads and Cole's own writing. Art titles get a human face.</li>
+          <li><b>Keep the house red</b> (#a3352a, the red of the ink drawings) for numbers and state only. All other colour comes from the work.</li>
+          <li><b>Luminous white</b>, 1px rules, square corners, no shadows except the faint drop on pinned paper.</li>
+          <li><b>One data file.</b> <code>catalogue.js</code> plus an image folder replaces hand-edited HTML. Publishing means adding one entry.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVIATIONS -->
+  <section class="s" id="deviations">
+    <header><span class="lab">7 · Proposed deviations</span><h2>Where one screen may not be enough</h2></header>
+    <div class="body">
+      <p>The prototypes keep the single-viewport rule. These are proposals only, for Cole to accept or refuse. None is built.</p>
+      <ul class="rules">
+        <li><b>A. Long chapters on phones.</b> Chapters of more than six spreads could scroll vertically on phones only, with spreads snapping one screen at a time. Swiping a 16-page book sideways on a phone is slower than scrolling it.</li>
+        <li><b>B. A Studio log page.</b> A scrolling, reverse-chronological log under <code>/studio/log/</code>, one entry per day. It's the only page meant to be read rather than looked at.</li>
+        <li><b>C. Per-work pages.</b> <code>/work/011-06/</code> as real URLs for sharing and search, each still one screen: plate, entry, siblings.</li>
+        <li><b>D. A Graphite edition.</b> The existing paper toggle, extended to all three rooms. Dark backgrounds suit the PBR and live photographs.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="s" id="notes">
+    <header><span class="lab">8 · Notes</span><h2>Sources &amp; honesty</h2></header>
+    <div class="body">
+      <ul class="rules">
+        <li><b>Every image is Cole's.</b> 54 come from <code>site/assets</code> and <code>retired/assets</code>. Ten paintings were downloaded from Cole's own Shopify CDN, at the crops the live site already uses. No stock and no invented projects.</li>
+        <li><b>Titles.</b> Taken from the live Index and captions. Photographs without titles are numbered (Ronnie Hodges 01–04) rather than given invented names. The Tops Bar-B-Q photograph from <code>retired/assets</code> is marked unfiled.</li>
+        <li><b>Writing.</b> The prototypes write nothing on Cole's behalf. Chapter text is factual (counts, media, years), and the Field notes spread is an explicit placeholder.</li>
+        <li><b>Production.</b> <code>site/</code>, tests and deployment configuration are untouched. <code>study/</code> sits outside Cloudflare's <code>pages_build_output_dir</code>.</li>
+        <li><b>Run locally:</b> <code>python3 -m http.server 4180 --directory study/next-chapter</code>, then open <code>http://127.0.0.1:4180</code>. Media are rebuilt with <code>tools/build_media.py</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="end mono"><span>Cole Calfee · The Next Chapter</span><span class="cap">64 works · 23 projects · 2,557 days</span></footer>
+</div>

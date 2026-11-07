@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>03 — The Creative Playground · Cole Calfee</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300..600&family=Geist:wght@200..600&display=swap">
+<style>
+/* 03 — THE CREATIVE PLAYGROUND
+   Layout: a white studio wall the size of the screen. Four ways to play with the same works:
+   pin them up, pair them, scrub them by colour, and count the days ahead.
+   Chrome is a thin top line and a caption line at the bottom, like a label on a wall. */
+:root{
+  --paper:#ffffff;
+  --ink:#111110;
+  --mid:#71706b;
+  --faint:#b4b3ad;
+  --rule:#e9e8e4;
+  --red:#a3352a;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --g:clamp(16px,2vw,28px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);overflow:hidden;overscroll-behavior:none}
+body{font:400 11px/1.35 var(--mono);letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;letter-spacing:inherit}
+:focus-visible{outline:1px solid var(--red);outline-offset:2px}
+.app{position:fixed;inset:0;display:grid;grid-template-rows:48px minmax(0,1fr) 46px;padding:env(safe-area-inset-top) max(var(--g),env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--g),env(safe-area-inset-left))}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;border-bottom:1px solid var(--rule)}
+.top .name{font:500 14px/1 var(--sans);letter-spacing:-.02em}
+.top .name span{color:var(--red);font:400 11px/1 var(--mono);letter-spacing:.02em;text-transform:uppercase;margin-left:8px}
+.modes{display:flex;gap:2px}
+.modes button{padding:7px 10px;text-transform:uppercase;color:var(--mid);font-size:10.5px;letter-spacing:.05em}
+.modes button:hover{color:var(--ink)}
+.modes button[aria-pressed=true]{color:var(--paper);background:var(--ink)}
+.top nav{justify-self:end;display:flex;gap:18px;font:400 13px/1 var(--sans);padding-right:112px}
+.top nav a:hover{color:var(--red)}
+.field{position:relative;min-height:0;overflow:hidden}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--rule);min-width:0}
+.bar .label{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bar .label b{font:400 13px/1 var(--sans);letter-spacing:-.01em;margin:0 8px}
+.bar .label .no{color:var(--red)}
+.bar .label .d{color:var(--mid)}
+.bar .act{display:flex;gap:16px;flex:none;text-transform:uppercase;letter-spacing:.05em;font-size:10.5px}
+.bar .act button{padding:10px 0;color:var(--ink);border-bottom:1px solid transparent}
+.bar .act button:hover{border-bottom-color:var(--red)}
+.bar .act .hint{color:var(--faint);align-self:center}
+.view{position:absolute;inset:0}
+
+/* WALL */
+.wall{touch-action:none}
+.pin{position:absolute;margin:0;cursor:grab;user-select:none;-webkit-user-select:none;transition:transform .5s cubic-bezier(.2,.7,.2,1),left .6s cubic-bezier(.2,.7,.2,1),top .6s cubic-bezier(.2,.7,.2,1),width .6s cubic-bezier(.2,.7,.2,1),height .6s cubic-bezier(.2,.7,.2,1)}
+.pin img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.08))}
+.pin.dragging{cursor:grabbing;transition:none;z-index:50}
+.pin[aria-current=true]::after{content:"";position:absolute;inset:-5px;border:1px solid var(--red)}
+.pin .tape{position:absolute;left:50%;top:-6px;width:34px;height:12px;transform:translateX(-50%) rotate(var(--r,-3deg));background:rgba(240,238,230,.85)}
+.scale{position:absolute;left:0;bottom:12px;display:flex;align-items:center;gap:8px;color:var(--mid);text-transform:uppercase;font-size:9.5px;letter-spacing:.05em}
+.scale i{display:block;height:5px;border:1px solid var(--ink);border-top:0}
+.floor{position:absolute;left:0;right:0;bottom:34px;border-top:1px solid var(--rule)}
+
+/* PAIRS */
+.pairs{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:stretch;padding:clamp(14px,3vh,34px) 0}
+.pairs figure{margin:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:10px;min-width:0;min-height:0}
+.pairs .im{position:relative;min-height:0}
+.pairs img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
+.pairs img.out{opacity:0;transform:scale(.97)}
+.pairs figcaption{display:flex;justify-content:space-between;gap:10px;color:var(--mid);text-transform:uppercase;font-size:10px;letter-spacing:.04em}
+.pairs figcaption span:first-child{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pairs .x{display:grid;place-items:center;font:200 40px/1 var(--sans);color:var(--red)}
+
+/* SPECTRUM */
+.spectrum{display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:14px;padding-top:clamp(14px,3vh,30px)}
+.spectrum .big{position:relative;min-height:0}
+.spectrum .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.spectrum .big .sw{position:absolute;right:0;top:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-transform:uppercase;font-size:10px;color:var(--mid)}
+.spectrum .big .sw i{width:64px;height:64px;display:block}
+.band{display:flex;height:clamp(56px,10vh,96px);cursor:crosshair;touch-action:none}
+.band button{flex:1;min-width:0;position:relative;transition:flex .25s ease}
+.band button[aria-current=true]{flex:3.2}
+.band button[aria-current=true]::after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:3px;background:var(--ink)}
+.spectrum .legend{display:flex;justify-content:space-between;color:var(--faint);text-transform:uppercase;font-size:9.5px;letter-spacing:.05em;padding-bottom:6px}
+
+/* DAYS */
+.days{display:grid;grid-template-columns:minmax(220px,.36fr) minmax(0,1fr);gap:var(--g);padding-top:clamp(14px,3vh,30px);padding-bottom:12px}
+.days .copy{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.days .num{font:200 clamp(64px,9.5vw,150px)/.82 var(--sans);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.days .num small{display:block;font:400 11px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--mid);margin-top:14px}
+.days p{font:300 clamp(15px,1.25vw,19px)/1.4 var(--sans);letter-spacing:-.01em;max-width:30ch;margin:0;text-wrap:pretty}
+.days .key{display:grid;gap:7px;text-transform:uppercase;font-size:9.5px;color:var(--mid);letter-spacing:.05em}
+.days .key span{display:flex;align-items:center;gap:8px}
+.days .key i{width:9px;height:9px;display:inline-block;border:1px solid var(--rule)}
+.grid{position:relative;min-height:0;display:grid;gap:2px;align-content:start}
+.grid i{display:block;aspect-ratio:1;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule)}
+.grid i.f{box-shadow:none;cursor:pointer}
+.grid i.today{box-shadow:inset 0 0 0 1.5px var(--red);animation:blink 1.6s steps(2) infinite}
+.grid i.yr{box-shadow:inset 0 0 0 1px #cfcdc7}
+@keyframes blink{50%{box-shadow:inset 0 0 0 1.5px transparent}}
+.peek{position:absolute;pointer-events:none;width:140px;background:var(--paper);border:1px solid var(--ink);padding:6px;z-index:5;font-size:9.5px;text-transform:uppercase}
+.peek img{width:100%;height:110px;object-fit:contain;display:block;margin-bottom:5px}
+
+/* focus overlay */
+.focus{position:fixed;inset:0;background:var(--paper);z-index:20;display:grid;grid-template-rows:minmax(0,1fr) auto;padding:calc(env(safe-area-inset-top) + 24px) max(var(--g),env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 12px) max(var(--g),env(safe-area-inset-left));cursor:zoom-out}
+.focus img{width:100%;height:100%;object-fit:contain}
+.focus p{margin:12px 0 0;display:flex;justify-content:space-between;text-transform:uppercase;font-size:10.5px;color:var(--mid)}
+
+@media (max-width:760px){
+  .app{grid-template-rows:auto minmax(0,1fr) 46px}
+  .top{grid-template-columns:1fr auto;grid-template-rows:48px 40px;gap:0}
+  .top nav{display:none}
+  .modes{grid-row:2;grid-column:1/-1;justify-content:space-between;border-bottom:1px solid var(--rule);align-items:center}
+  .modes button{padding:7px 8px;font-size:10px}
+  .bar .act .hint{display:none}
+  .pairs{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 30px minmax(0,1fr)}
+  .pairs .x{font-size:26px}
+  .days{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .days .copy{flex-direction:row;align-items:end;gap:16px}
+  .days .num{font-size:54px}
+  .days p,.days .key{display:none}
+  .spectrum .big .sw i{width:36px;height:36px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.study{position:fixed;right:max(var(--g),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 12px);z-index:30;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--red);padding:6px 7px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <a class="name" href="#">Cole Calfee<span>Studio</span></a>
+    <div class="modes" role="group" aria-label="Mode">
+      <button type="button" data-mode="wall" aria-pressed="true">Wall</button>
+      <button type="button" data-mode="pairs" aria-pressed="false">Pairs</button>
+      <button type="button" data-mode="spectrum" aria-pressed="false">Spectrum</button>
+      <button type="button" data-mode="days" aria-pressed="false">2,557 days</button>
+    </div>
+    <nav aria-label="Primary"><a href="https://colecalfee.com/index/">Index</a><a href="https://colecalfee.com/info/">Contact</a></nav>
+  </header>
+
+  <main class="field" id="field">
+    <section class="view wall" id="wall" aria-label="Wall: drag works to rearrange"></section>
+    <section class="view pairs" id="pairs" hidden aria-label="Pairs" aria-live="polite">
+      <figure><div class="im"><img id="pa" alt=""></div><figcaption id="pac"></figcaption></figure>
+      <div class="x" aria-hidden="true">+</div>
+      <figure><div class="im"><img id="pb" alt=""></div><figcaption id="pbc"></figcaption></figure>
+    </section>
+    <section class="view spectrum" id="spectrum" hidden aria-label="Spectrum">
+      <div class="big"><img id="sb" alt=""><div class="sw"><i id="sw"></i><span id="swh"></span></div></div>
+      <div class="band" id="band" role="group" aria-label="Works sorted by colour"></div>
+      <div class="legend"><span>Red</span><span>Ochre</span><span>Green</span><span>Blue</span><span>Violet</span><span>Paper &amp; grey</span></div>
+    </section>
+    <section class="view days" id="days" hidden aria-label="Seven years, one cell per day">
+      <div class="copy">
+        <div class="num" id="dnum">0064<small>of 2,557 days · 2026 — 2033</small></div>
+        <p>Seven years is 2,557 days. One cell for each. Post a drawing, a photograph, a study, a failed idea, and a cell fills with its colour.</p>
+        <div class="key">
+          <span><i style="background:#c9a77f;border-color:#c9a77f"></i>Existing archive, standing in for days already made</span>
+          <span><i style="border-color:var(--red)"></i>Today</span>
+          <span><i></i>Days still open</span>
+          <span><i style="border-color:#cfcdc7"></i>First day of each year</span>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <footer class="bar">
+    <div class="label" id="label" aria-live="polite"></div>
+    <div class="act" id="act"></div>
+  </footer>
+</div>
+<div class="focus" id="focus" hidden role="dialog" aria-label="Enlarged work"><img id="fimg" alt=""><p><span id="fcap"></span><span>Click to close</span></p></div>
+<a class="study" href="../">Study 03 / 03 ↩</a>
+
+<script src="../media/catalogue.js"></script>
+<script>
+(()=>{
+const C=window.CATALOGUE,P=Object.fromEntries(C.projects.map(p=>[p.id,p]));
+const cnt={};const works=C.works.map(w=>{const n=P[w.project]?P[w.project].n:'000';cnt[n]=(cnt[n]||0)+1;return {...w,no:n+'.'+String(cnt[n]).padStart(2,'0')}});
+const W=Object.fromEntries(works.map(w=>[w.id,w]));
+const src=(w,s='l')=>'../media/'+(w.src||s+'/'+w.id+'.webp');
+const $=s=>document.querySelector(s);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+let mode='wall';
+function label(w,extra=''){ $('#label').innerHTML=w?`<span class="no">${w.no}</span><b>${w.title}</b><span class="d">${w.detail}${w.year?' · '+w.year:''}${extra}</span>`:extra }
+function focus(w){$('#fimg').src=src(w);$('#fimg').alt=w.alt;$('#fcap').textContent=w.no+' · '+w.title+' · '+w.detail;$('#focus').hidden=false}
+$('#focus').onclick=()=>$('#focus').hidden=true;
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#focus').hidden=true});
+
+/* ---------- WALL ---------- */
+const wall=$('#wall');let trueScale=false;
+const inches=w=>{const m=w.detail.match(/(\d+)\s*×\s*(\d+)\s*in/);return m?[+m[1],+m[2]]:null};
+function hang(){
+  wall.innerHTML='';const R=wall.getBoundingClientRect(),Wd=R.width,Ht=R.height;
+  if(trueScale){
+    // the paintings at their real relative sizes, hung on one line like a salon wall
+    const ps=shuffle(works.filter(w=>inches(w)));const totalW=ps.reduce((s,w)=>s+inches(w)[0],0);
+    const gapIn=4;const maxH=Math.max(...ps.map(w=>inches(w)[1]));
+    // two rows if needed
+    const rows=Wd<760?3:2;const per=Math.ceil(ps.length/rows);
+    const rowW=r=>ps.slice(r*per,(r+1)*per).reduce((s,w)=>s+inches(w)[0]+gapIn,-gapIn);
+    const widest=Math.max(...Array.from({length:rows},(_,r)=>rowW(r)));
+    const ppi=Math.min((Wd-8)/widest,(Ht-70)/(rows*maxH+(rows-1)*8));
+    for(let r=0;r<rows;r++){
+      const row=ps.slice(r*per,(r+1)*per);let x=(Wd-rowW(r)*ppi)/2;const base=20+(r+1)*maxH*ppi+r*8*ppi;
+      row.forEach(w=>{const [iw,ih]=inches(w);pin(w,x,base-ih*ppi,iw*ppi,ih*ppi,0,true);x+=(iw+gapIn)*ppi});
+    }
+    const sc=document.createElement('div');sc.className='scale';sc.innerHTML=`<i style="width:${12*ppi}px"></i>12 in. · paintings at true relative scale`;wall.appendChild(sc);
+    return;
+  }
+  // salon pin-up: a random selection placed on a loose grid with jitter, so nothing hides another
+  const n=Wd<760?9:Math.min(20,Math.round(Wd*Ht/52000));
+  const pick=shuffle(works).slice(0,n);
+  const cols=Math.max(3,Math.round(Math.sqrt(n*Wd/Ht)));const rows=Math.ceil(n/cols);
+  const cw=Wd/cols,ch=Ht/rows;
+  pick.forEach((w,i)=>{
+    const c=i%cols,r=Math.floor(i/cols);const s=(.5+Math.random()*.48);
+    let bw=cw*s,bh=bw/w.ratio;if(bh>ch*s){bh=ch*s;bw=bh*w.ratio}
+    const x=c*cw+(cw-bw)/2+(Math.random()-.5)*cw*.34,y=r*ch+(ch-bh)/2+(Math.random()-.5)*ch*.3;
+    pin(w,Math.max(0,Math.min(Wd-bw,x)),Math.max(6,Math.min(Ht-bh,y)),bw,bh,(Math.random()-.5)*3,false);
+  });
+}
+function pin(w,x,y,bw,bh,rot,flat){
+  const f=document.createElement('figure');f.className='pin';f.tabIndex=0;f.dataset.id=w.id;
+  f.style.cssText=`left:${x}px;top:${y}px;width:${bw}px;height:${bh}px;transform:rotate(${rot}deg)`;
+  f.setAttribute('aria-label',w.no+' '+w.title);
+  f.innerHTML=`<img src="${src(w,bw>360?'l':'s')}" alt="${w.alt}" draggable="false">${flat||w.discipline==='Photography'?'':`<span class="tape" style="--r:${(Math.random()-.5)*10}deg"></span>`}`;
+  wall.appendChild(f);
+}
+let drag=null,z=10;
+wall.addEventListener('pointerdown',e=>{const f=e.target.closest('.pin');if(!f)return;f.setPointerCapture(e.pointerId);drag={f,x:e.clientX,y:e.clientY,l:parseFloat(f.style.left),t:parseFloat(f.style.top),moved:false};f.style.zIndex=++z;f.classList.add('dragging');select(f)});
+wall.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;drag.f.style.left=drag.l+dx+'px';drag.f.style.top=drag.t+dy+'px'});
+wall.addEventListener('pointerup',()=>{if(!drag)return;drag.f.classList.remove('dragging');drag=null});
+wall.addEventListener('dblclick',e=>{const f=e.target.closest('.pin');if(f)focus(W[f.dataset.id])});
+wall.addEventListener('keydown',e=>{const f=e.target.closest('.pin');if(f&&e.key==='Enter')focus(W[f.dataset.id])});
+wall.addEventListener('focusin',e=>{const f=e.target.closest('.pin');if(f)select(f)});
+function select(f){wall.querySelectorAll('.pin').forEach(p=>p.setAttribute('aria-current',p===f));label(W[f.dataset.id])}
+
+/* ---------- PAIRS ---------- */
+let pair=[];
+function newPair(){
+  // two works from different disciplines and different projects
+  let a,b;do{a=works[rnd(works.length)];b=works[rnd(works.length)]}while(a.discipline===b.discipline||a.project===b.project);
+  pair=[a,b];
+  [['#pa','#pac',a],['#pb','#pbc',b]].forEach(([i,c,w])=>{const im=$(i);im.classList.add('out');const pre=new Image();pre.onload=()=>{im.src=pre.src;im.alt=w.alt;im.classList.remove('out')};pre.src=src(w);$(c).innerHTML=`<span>${w.title}</span><span>${w.no} · ${w.discipline}</span>`});
+  label(null,`<span class="no">${a.no}</span><b>${a.title}</b><span class="d">×</span><b>${b.title}</b><span class="no">${b.no}</span>`);
+}
+$('#pairs').addEventListener('click',e=>{const f=e.target.closest('figure');if(f)focus(pair[[...$('#pairs').querySelectorAll('figure')].indexOf(f)])});
+
+/* ---------- SPECTRUM ---------- */
+const famOrder=w=>{if(w.sat<.18||(w.light>.86))return 1+w.light;return w.hue<.97?w.hue:w.hue-1};
+const spec=works.slice().sort((a,b)=>famOrder(a)-famOrder(b));
+const band=$('#band');
+band.innerHTML=spec.map((w,i)=>`<button type="button" data-i="${i}" style="background:${w.color}" aria-label="${w.no} ${w.title}, ${w.color}"></button>`).join('');
+let si=-1;
+function spot(i){if(i===si)return;si=i;const w=spec[i];band.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-current',j===i));
+  $('#sb').src=src(w);$('#sb').alt=w.alt;$('#sw').style.background=w.color;$('#swh').textContent=w.color;label(w,` · ${String(i+1).padStart(2,'0')} of ${spec.length} by colour`)}
+const scrub=e=>{const r=band.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;const els=[...band.children];for(let i=0;i<els.length;i++){const b=els[i].getBoundingClientRect();if(e.clientX!==undefined?(e.clientX>=b.left&&e.clientX<=b.right):(x+r.left>=b.left&&x+r.left<=b.right)){spot(i);break}}};
+band.addEventListener('pointermove',scrub);band.addEventListener('pointerdown',e=>{scrub(e);band.setPointerCapture(e.pointerId)});
+band.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){spot(Math.min(spec.length-1,si+1));band.children[si].focus()}if(e.key==='ArrowLeft'){spot(Math.max(0,si-1));band.children[si].focus()}});
+$('#sb').addEventListener('click',()=>focus(spec[si]));
+
+/* ---------- DAYS ---------- */
+const TOTAL=2557;
+function days(){
+  const g=$('#grid');const R=g.getBoundingClientRect();
+  // largest square cell that lets all 2,557 days fit the field without scrolling
+  let best=2;for(let s=2;s<40;s+=.25){const cols=Math.floor((R.width+2)/(s+2));const rows=Math.ceil(TOTAL/cols);if(rows*(s+2)-2<=R.height)best=s;else break}
+  const cols=Math.floor((R.width+2)/(best+2));g.style.gridTemplateColumns=`repeat(${cols},${best}px)`;
+  const made=works.slice().sort((a,b)=>(a.year||'9').localeCompare(b.year||'9'));
+  let h='';for(let d=0;d<TOTAL;d++){
+    if(d<made.length)h+=`<i class="f" data-i="${d}" style="background:${made[d].color}"></i>`;
+    else h+=`<i class="${d===made.length?'today':''}${d%365===0&&d>0?' yr':''}"></i>`;
+  }
+  g.innerHTML=h;$('#dnum').firstChild.nodeValue=String(made.length).padStart(4,'0');
+  const peek=document.createElement('div');peek.className='peek';peek.hidden=true;g.appendChild(peek);
+  g.onmousemove=e=>{const c=e.target.closest('i.f');if(!c){peek.hidden=true;return}const w=made[+c.dataset.i];peek.innerHTML=`<img src="${src(w,'s')}" alt="">${w.no} · ${w.title}`;peek.hidden=false;
+    const gr=g.getBoundingClientRect();let x=e.clientX-gr.left+14,y=e.clientY-gr.top+14;if(x>gr.width-150)x-=170;peek.style.left=x+'px';peek.style.top=y+'px'};
+  g.onmouseleave=()=>peek.hidden=true;
+  g.onclick=e=>{const c=e.target.closest('i.f');if(c)focus(made[+c.dataset.i])};
+  label(null,`<span class="no">Day ${String(made.length+1).padStart(4,'0')}</span><b>Today is open.</b><span class="d">${TOTAL-made.length} days left in the chapter</span>`);
+}
+
+/* ---------- modes ---------- */
+const ACT={
+  wall:()=>`<button type="button" id="rehang">Rehang</button><button type="button" id="scale">${trueScale?'Pin-up':'True scale'}</button><span class="hint">Drag · double-click to enlarge</span>`,
+  pairs:()=>`<button type="button" id="again">Another pair</button><span class="hint">Space for another</span>`,
+  spectrum:()=>`<span class="hint">Scrub the band</span>`,
+  days:()=>`<span class="hint">One cell per day</span>`
+};
+function setMode(m){
+  mode=m;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  ['wall','pairs','spectrum','days'].forEach(v=>$('#'+v).hidden=v!==m);
+  $('#act').innerHTML=ACT[m]();
+  if(m==='wall'){hang();label(null,'<span class="d">'+(trueScale?'Fourteen paintings, hung at their real sizes against each other.':'A wall of whatever is around. Drag things. Rehang.')+'</span>')}
+  if(m==='pairs')newPair();
+  if(m==='spectrum'){si=-1;spot(spec.findIndex(w=>w.id==='red-sea'))}
+  if(m==='days')requestAnimationFrame(days);
+  const r=$('#rehang');if(r)r.onclick=()=>{hang()};
+  const s=$('#scale');if(s)s.onclick=()=>{trueScale=!trueScale;setMode('wall')};
+  const a=$('#again');if(a)a.onclick=newPair;
+  try{history.replaceState(null,'','#'+m)}catch(e){}
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+addEventListener('keydown',e=>{if(mode==='pairs'&&e.key===' '&&!e.target.closest('button')){e.preventDefault();newPair()}});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(mode==='wall')hang();if(mode==='days')days()},160)});
+addEventListener('hashchange',()=>{const m=location.hash.slice(1);if(['wall','pairs','spectrum','days'].includes(m)&&m!==mode)setMode(m)});
+const h=location.hash.slice(1);
+requestAnimationFrame(()=>setMode(['wall','pairs','spectrum','days'].includes(h)?h:'wall'));
+})();
+</script>
+</body>
+</html>
