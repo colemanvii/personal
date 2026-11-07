@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&display=swap");
+@import url("cw-base.css");
+/* A · GALLERY WHITE
+   A wall, a work, a label. Display and navigation in Instrument Sans (a narrow, contemporary
+   grotesque with real optical sizing at 15–40 px); every number, medium and dimension in
+   Geist Mono at 10 px, uppercase, +.06em — the wall-label register.
+   Hierarchy comes from scale contrast and space, never from weight above 500. */
+html[data-cw="a"]{--a-sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;--g:30px}
+html[data-cw="a"] body,html[data-cw="a"] body *:not(svg):not(svg *){font-family:var(--a-sans)!important}
+html[data-cw="a"] body :is(.cwa-label,.cwa-label *,.index-table td:first-child,.index-table td:last-child,.index-table th,
+  .index-count,.panel-id,.panel-close,.archive-plate-caption,.release-label,.kashus-role,.footer,.footer *,.count,.section-count,
+  .section-head h2 span,.caption p,.sale,.sale *,.sale-open,.location,.eyebrow,.viewer-top,.viewer-caption,.available-counter,
+  .pg-count,[class*="navigation"],[class*="controls"],.release-list li,.release-list a,.kashus-release-links a,#detail-number,.label p){
+  font-family:var(--cw-mono)!important}
+
+/* ---------- Entrance: one work on a white wall ---------- */
+html[data-cw="a"] body.landing .seven{
+  top:24px!important;left:var(--g)!important;right:var(--g)!important;transform:none!important;width:auto!important;max-width:none!important;
+  display:flex!important;justify-content:flex-start!important;align-items:baseline!important;gap:0!important;
+  font:400 15px/1.2 var(--a-sans)!important;letter-spacing:-.01em!important}
+html[data-cw="a"] body.landing .seven .slash{display:none!important}
+html[data-cw="a"] body.landing .seven .name{color:var(--ink)!important;font-weight:500!important;margin:0 auto 0 0!important}
+html[data-cw="a"] body.landing .seven a:not(.name){color:var(--muted)!important;margin-left:22px!important;flex:none!important}
+html[data-cw="a"] body.landing .seven a:is(:hover,:focus-visible){background:none!important;box-shadow:none!important;color:var(--ink)!important;text-decoration:none!important}
+html[data-cw="a"] body.landing .seven a:not(.name):is(:hover,:focus-visible){text-decoration:underline!important;text-decoration-thickness:1px!important;text-underline-offset:.3em!important}
+
+html[data-cw="a"] .cwa-hero{position:absolute;left:50%;top:calc(50% + 6px);transform:translate(-50%,-50%);margin:0;
+  height:calc(100dvh - 210px);aspect-ratio:1290/1612;max-width:calc(100vw - 2*var(--g))}
+html[data-cw="a"] .cwa-hero a{display:block;height:100%;outline-offset:6px}
+html[data-cw="a"] .cwa-hero img{display:block;width:100%;height:100%;object-fit:contain;background:var(--surface)}
+html[data-cw="a"] .cwa-label{position:absolute;left:var(--g);bottom:26px;margin:0;display:grid;gap:3px;
+  font:400 10px/1.45 var(--cw-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+html[data-cw="a"] .cwa-label b{font-weight:400;color:var(--ink)}
+html[data-cw="a"] .cwa-label a{color:var(--ink);margin-top:8px;justify-self:start}
+html[data-cw="a"] .cwa-label a:hover{text-decoration:underline;text-underline-offset:.3em}
+html[data-cw="a"] body.landing .landing-paper{left:auto!important;right:calc(var(--g) - 13px)!important;transform:none!important;bottom:14px!important}
+html[data-cw="a"] body.landing .landing-paper button[data-paper-tone]::after{width:10px!important;height:10px!important;border:1px solid #d4d4d4!important}
+html[data-cw="a"] body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#171717!important;border-color:#171717!important}
+@media(max-width:720px){
+  html[data-cw="a"]{--g:18px}
+  html[data-cw="a"] body.landing .seven{display:flex!important;flex-wrap:nowrap!important;white-space:nowrap!important;top:18px!important;font-size:14px!important;text-align:left!important}
+  html[data-cw="a"] body.landing .seven .name{flex:1 1 auto!important;text-align:left!important;margin:0!important}
+  html[data-cw="a"] body.landing .seven a:not(.name){margin-left:14px!important;padding:12px 0!important;margin-block:-12px!important;flex:none!important}
+  html[data-cw="a"] body.landing .seven a::after{display:none!important}
+  html[data-cw="a"] body.landing .landing-frame{display:flex!important;flex-direction:column;justify-content:center;align-items:stretch!important;padding:64px var(--g) 64px!important}
+  html[data-cw="a"] .cwa-hero{position:static;transform:none;height:auto;width:100%;max-width:none;aspect-ratio:1290/1612;max-height:calc(100dvh - 210px)}
+  html[data-cw="a"] .cwa-hero a{display:flex;justify-content:flex-start}
+  html[data-cw="a"] .cwa-hero img{width:auto;max-width:100%;height:100%}
+  html[data-cw="a"] .cwa-label{position:static;margin-top:16px}
+  html[data-cw="a"] body.landing .landing-paper{bottom:10px!important}
+}
+
+/* ---------- Interior chrome ---------- */
+html[data-cw="a"] body:not(.landing) .site-head{border-bottom-color:transparent!important;padding:24px 0 14px!important}
+html[data-cw="a"] body:not(.landing) .site-head .brand{font:500 15px/1.2 var(--a-sans)!important;letter-spacing:-.01em!important}
+html[data-cw="a"] body:not(.landing) .site-head .nav{font:400 15px/1.2 var(--a-sans)!important;letter-spacing:-.01em!important;gap:22px!important}
+html[data-cw="a"] body:not(.landing) .site-head .nav a{color:var(--muted)!important;border:0!important;padding:0!important}
+html[data-cw="a"] body:not(.landing) .site-head .nav a[aria-current="page"]{color:var(--ink)!important}
+html[data-cw="a"] body:not(.landing) .footer{border-top-color:transparent!important;font-size:10px!important;letter-spacing:.06em!important;color:var(--quiet)!important}
+@media(max-width:700px){html[data-cw="a"] body:not(.landing) .site-head :is(.brand,.nav){font-size:14px!important}
+  html[data-cw="a"] body:not(.landing) .site-head .nav{gap:14px!important}}
+
+/* ---------- Index: the list steps back, the plate comes forward ---------- */
+@media(min-width:851px){
+  html[data-cw="a"] .work-index .index-layout{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)!important;gap:clamp(40px,5vw,96px)!important}
+  html[data-cw="a"] .work-index .index-table col:nth-child(2){width:auto!important}
+  html[data-cw="a"] .work-index .index-table col:nth-child(3){visibility:collapse;width:0!important}
+  html[data-cw="a"] .work-index .index-table :is(th,td):nth-child(3){font-size:0!important;padding:0!important}
+  html[data-cw="a"] .work-index .work-panel{border-left:0!important;padding-left:0!important}
+}
+html[data-cw="a"] .work-index .section-title{font:500 15px/1.2 var(--a-sans)!important;letter-spacing:-.01em!important;text-transform:none!important}
+html[data-cw="a"] .work-index .index-table{font-size:14px!important;letter-spacing:-.005em!important}
+html[data-cw="a"] .work-index .index-table td{border-top-color:var(--rule)!important;vertical-align:baseline!important}
+html[data-cw="a"] .work-index .index-table :is(th,td:first-child,td:last-child){font-size:10px!important;letter-spacing:.06em!important;color:var(--quiet)!important}
+html[data-cw="a"] .work-index .index-table th{color:var(--quiet)!important}
+html[data-cw="a"] .work-index .expand-button .indicator{color:transparent!important;min-width:0!important;width:0!important;overflow:hidden}
+html[data-cw="a"] .work-index .expand-button{padding-left:0!important}
+html[data-cw="a"] .work-index .expand-button[aria-expanded=true]{color:var(--ink)!important}
+html[data-cw="a"] .work-index tr:has(.expand-button[aria-expanded=true]) td:first-child{color:var(--accent)!important}
+html[data-cw="a"] .work-index .panel-title{font:400 clamp(26px,2.5vw,38px)/1.18 var(--a-sans)!important;letter-spacing:-.025em!important;padding-bottom:4px}
+html[data-cw="a"] .work-index :is(#sold-detail,#sold-count){font-family:var(--cw-mono)!important;font-size:10px!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important}
+html[data-cw="a"] .work-index #sold-title{font:400 20px/1.2 var(--a-sans)!important;letter-spacing:-.015em!important}
+html[data-cw="a"] .work-index .panel-id{font-size:10px!important;letter-spacing:.06em!important;color:var(--quiet)!important}
+html[data-cw="a"] .work-index .panel-close{font-size:10px!important;letter-spacing:.06em!important;text-transform:uppercase}
+html[data-cw="a"] .work-index .panel-placeholder{font:400 clamp(26px,2.5vw,38px)/1.1 var(--a-sans)!important;letter-spacing:-.025em;color:#d4d4d4!important;max-width:12em;text-transform:lowercase}
+html[data-cw="a"] .work-index .panel-placeholder::first-letter{text-transform:uppercase}
+html[data-cw="a"] .work-index :is(.archive-plate-caption,.kashus-role,.release-label){letter-spacing:.06em!important}
+html[data-cw="a"] .work-index :is(.photo-plate,.archive-plate,.kashus-main-plate,.ronnie-gallery .photo-plate,.teton-gallery .photo-plate){background:transparent!important;border:0!important}
+
+/* ---------- Available: two works, hung, labelled ---------- */
+html[data-cw="a"] body.paintings .intro{border-bottom-color:transparent!important;padding-bottom:0!important}
+html[data-cw="a"] body.paintings .intro h1{font:400 clamp(26px,2.5vw,38px)/1.05 var(--a-sans)!important;letter-spacing:-.025em!important}
+html[data-cw="a"] body.paintings .collection .section-head{display:none!important}
+html[data-cw="a"] body.paintings .gallery.gallery-available{width:min(100%,1120px)!important;gap:clamp(40px,7vw,120px)!important}
+html[data-cw="a"] body.paintings .gallery-available .caption{border-top:0!important;padding-top:0!important;margin-top:18px!important}
+html[data-cw="a"] body.paintings .gallery-available .caption h3{font:400 17px/1.2 var(--a-sans)!important;letter-spacing:-.01em!important}
+html[data-cw="a"] body.paintings .gallery-available .caption p{font-size:10px!important;letter-spacing:.06em!important;text-transform:uppercase}
+html[data-cw="a"] body.paintings .sale{letter-spacing:.06em!important}
+
+/* ---------- Contact: the studio photograph as the page ---------- */
+html[data-cw="a"] body.about .spread{width:min(1180px,100%)!important}
+html[data-cw="a"] body.about .image-plate{background:var(--surface)!important}
+html[data-cw="a"] body.about .identity h1{font:400 clamp(26px,2.5vw,38px)/1.05 var(--a-sans)!important;letter-spacing:-.025em!important}
+html[data-cw="a"] body.about :is(.location,.eyebrow){letter-spacing:.06em!important}
+html[data-cw="a"] body.about .contact a{font:400 16px/1.3 var(--a-sans)!important;border-bottom-color:var(--rule)!important}

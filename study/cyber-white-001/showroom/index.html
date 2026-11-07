@@ -1,0 +1,280 @@
+<meta charset="utf-8">
+<title>Cyber White 001</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400..500&display=swap">
+<style>
+/* Layout: a reviewing table. A thin register of controls, then the two live frames at true
+   proportion, then the same screen in all four versions, then the argument for each direction. */
+:root{
+  --bg:#ffffff;--surface:#fafafa;--ink:#171717;--muted:#666666;--quiet:#a3a3a3;--rule:#e9e9e9;--line:#171717;--mark:#a43f33;
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,Monaco,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111111;--surface:#181818;--ink:#ededed;--muted:#a1a1a1;--quiet:#6e6e6e;--rule:#262626;--line:#ededed;--mark:#e2a49b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111111;--surface:#181818;--ink:#ededed;--muted:#a1a1a1;--quiet:#6e6e6e;--rule:#262626;--line:#ededed;--mark:#e2a49b;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.5 var(--sans);letter-spacing:-.005em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:1680px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+.k{font:400 10px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:baseline;padding:28px 0 20px;border-bottom:1px solid var(--line)}
+header.top h1{margin:0;font:500 15px/1.2 var(--sans);letter-spacing:-.01em}
+header.top p{margin:0}
+.lede{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:18px;padding:48px 0 40px}
+.lede h2{grid-column:1/span 7;margin:0;font:400 clamp(28px,3.2vw,46px)/1.06 var(--sans);letter-spacing:-.032em;text-wrap:balance}
+.lede .facts{grid-column:9/span 4;display:grid;gap:0;align-self:end;border-top:1px solid var(--line)}
+.lede .facts div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);min-width:0}
+.lede .facts div > span:last-child{min-width:0;overflow-wrap:anywhere}
+
+.rec{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;border-top:1px solid var(--line);padding-top:14px;margin-bottom:56px}
+.rec article{min-width:0}
+.rec h3{margin:6px 0 6px;font:500 18px/1.25 var(--sans);letter-spacing:-.015em}
+.rec p{margin:0;color:var(--muted);max-width:60ch}
+
+.sites{display:flex;gap:28px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;padding-top:14px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.sites button{font:500 15px/1.2 var(--sans);letter-spacing:-.01em;color:var(--quiet);padding:0 0 12px;border-bottom:1px solid transparent;margin-bottom:-1px}
+.sites button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.sites button:hover{color:var(--ink)}
+
+.controls{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 24px;padding:18px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.seg{display:flex;flex-wrap:wrap;gap:4px 18px}
+.seg button{font:400 14px/1.6 var(--sans);color:var(--muted)}
+.seg button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.32em}
+.seg button:hover{color:var(--ink)}
+.seg .tag{font:400 10px/1 var(--mono);color:var(--quiet);margin-right:4px}
+
+.stage{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:22px 0 10px}
+.stage.phone{grid-template-columns:repeat(2,auto);justify-content:start;gap:48px}
+.pane{min-width:0}
+.pane header{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:0 0 8px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.pane header b{font-weight:500}
+.pane header a{font:400 10px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.pane header a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:.3em}
+.viewport{position:relative;overflow:hidden;background:var(--surface);outline:1px solid var(--rule);max-width:100%}
+.viewport iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#fff}
+.note{margin:6px 0 0;color:var(--quiet)}
+
+section.grid{padding:44px 0 0}
+section.grid > header,section.dirs > header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap}
+section h4{margin:0;font:500 15px/1.2 var(--sans);letter-spacing:-.01em}
+.shots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.shots.phone{grid-template-columns:repeat(4,minmax(0,220px))}
+.shots figure{margin:0;min-width:0}
+.shots button{display:block;width:100%;outline:1px solid var(--rule)}
+.shots button:hover{outline-color:var(--ink)}
+.shots img{display:block;width:100%;height:auto;max-width:100%}
+.shots figcaption{display:flex;justify-content:space-between;gap:8px;padding-top:8px}
+.ok{color:var(--muted)}
+
+section.dirs{padding:56px 0 0}
+.dir{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:18px;row-gap:14px;padding:22px 0 26px;border-bottom:1px solid var(--rule)}
+.dir .id{grid-column:1/span 3;min-width:0}
+.dir .id h5{margin:4px 0 6px;font:400 26px/1.08 var(--sans);letter-spacing:-.028em}
+.dir .id p{margin:0;color:var(--muted);max-width:30ch}
+.dir .id .open{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:14px}
+.dir .id .open a{font:400 10px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dir .id .open a:hover{color:var(--ink)}
+.dir .col{grid-column:span 4;min-width:0}
+.dir .col:last-child{grid-column:span 5}
+.dir ol{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:i}
+.dir li{display:grid;grid-template-columns:26px minmax(0,1fr);max-width:62ch}
+.dir li::before{counter-increment:i;content:counter(i,decimal-leading-zero);font:400 10px/2.1 var(--mono);color:var(--quiet)}
+.dir .col.loss li::before{color:var(--mark)}
+.dir.current .id h5{color:var(--muted)}
+
+dialog{border:0;padding:0;max-width:none;max-height:none;width:100vw;height:100dvh;background:var(--bg);color:var(--ink)}
+dialog::backdrop{background:var(--bg)}
+dialog .bar{display:flex;justify-content:space-between;gap:16px;padding:16px max(16px,env(safe-area-inset-left,0px)) 12px;border-bottom:1px solid var(--rule)}
+dialog .img{height:calc(100dvh - 52px);display:flex;align-items:center;justify-content:center;padding:16px}
+dialog img{max-width:100%;max-height:100%;object-fit:contain;outline:1px solid var(--rule)}
+
+footer.foot{margin-top:56px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:6px}
+footer.foot p{margin:0;color:var(--muted);max-width:90ch}
+
+@media (max-width:1100px){
+  .lede h2{grid-column:1/-1}.lede .facts{grid-column:1/-1;margin-top:28px}
+  .dir .id{grid-column:1/-1}.dir .col,.dir .col:last-child{grid-column:1/-1}
+  .shots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shots.phone{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .rec{grid-template-columns:1fr}
+  .stage,.stage.phone{grid-template-columns:1fr;gap:28px}
+  .controls{grid-template-columns:1fr;gap:4px}
+  .controls .k{margin-top:8px}
+  .shots.phone{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Cyber White 001</h1>
+    <p class="k">Design study · preview only · nothing deployed</p>
+  </header>
+
+  <section class="lede">
+    <h2>Six directions for two sites, each built as a working overlay on the real production source.</h2>
+    <div class="facts">
+      <div><span class="k">Cole</span><span>colecalfee.com · <span class="n">main</span> (verified byte-identical to live)</span></div>
+      <div><span class="k">Freeman</span><span>freemangc.com · <span class="n">release/approved-v5-2026-10-18</span> @ <span class="n">dc33cd7</span></span></div>
+      <div><span class="k">Method</span><span>One stylesheet (and at most one small script) per direction, switched by <span class="n">?cw=a|b|c</span>. Production files untouched.</span></div>
+      <div><span class="k">Checked</span><span><span class="n">108</span> captures at 1440×900, 390×844, 375×667: none scroll or overflow. Enlarge, Escape, focus, purchase, navigation pass in all versions.</span></div>
+    </div>
+  </section>
+
+  <section class="rec" aria-label="Recommendation">
+    <article>
+      <p class="k">Recommendation · Cole Calfee</p>
+      <h3>B · Digital Catalogue</h3>
+      <p>The Index is the strongest thing on the site. B makes every page speak in its register, adds nothing invented, keeps the no-scroll rule, and grows cleanly as work is added.</p>
+    </article>
+    <article>
+      <p class="k">Recommendation · Freeman GC</p>
+      <h3>B · Hospitality Editorial</h3>
+      <p>The most potential for the audience the direction document names. Its limit is photography: 6 of 15 projects have images. Ship A's optical layer first, since it is safe on its own, and grow B as photographs arrive.</p>
+    </article>
+  </section>
+
+  <nav class="sites" role="tablist" aria-label="Site">
+    <button role="tab" id="tab-cole" aria-selected="true" data-site="cole">Cole Calfee</button>
+    <button role="tab" id="tab-freeman" aria-selected="false" data-site="freeman">Freeman General Contracting</button>
+  </nav>
+
+  <div class="controls">
+    <span class="k">Direction</span><div class="seg" id="seg-dir"></div>
+    <span class="k">Page</span><div class="seg" id="seg-page"></div>
+    <span class="k">Viewport</span><div class="seg" id="seg-view"></div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+  <p class="k note" id="stage-note">Both frames are the live sites. Navigate, hover and open work inside them; each frame keeps its own direction.</p>
+
+  <section class="grid">
+    <header><h4 id="grid-title">Same screen, four versions</h4><span class="k" id="grid-meta"></span></header>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <section class="dirs">
+    <header><h4 id="dirs-title">The directions</h4><span class="k">Why each is optically stronger · what it costs</span></header>
+    <div id="dirs"></div>
+  </section>
+
+  <footer class="foot">
+    <p class="k">Preview notes</p>
+    <p>Purchasing reads live prices from Shopify. This preview host blocks third-party requests, so Available shows its built-in fallback (each work keeps its Inquire link) and the Shopify photographs are copied locally. Served normally, the same pages show Purchase; the captures above were made that way.</p>
+    <p>Source: <span class="n">colemanvii/personal</span> · <span class="n">study/cyber-white-001/</span> and <span class="n">colemanvii/freeman</span> · branch <span class="n">study/cyber-white-001</span>, folder <span class="n">study/cyber-white-001/</span>.</p>
+  </footer>
+</div>
+
+<dialog id="zoom" aria-label="Screenshot">
+  <div class="bar"><span class="k" id="zoom-cap"></span><button type="button" class="k" id="zoom-close">Close ×</button></div>
+  <div class="img"><img id="zoom-img" alt=""></div>
+</dialog>
+
+<script>
+(function(){
+const SITES={
+ cole:{root:'cole/',pages:[['home','Home','index.html'],['index','Index','index/index.html'],['available','Available','paintings/index.html'],['contact','Contact','info/index.html']],
+  dirs:{
+   '0':{name:'Current',line:'colecalfee.com as it is live today.',
+    strong:['Geist Mono for everything, display to caption: one voice, but at 17 px a monospace sets uneven colour and reads typewritten.','Hover fills the word with rust and a 3 px halo. A printed stamp, not a change of light.','Warm surfaces (#faf9f6, #f4f4f1, #e5e0d8) inside a #fff page, two rule greys, #111 ink, a crosshair cursor with a rust dot. Together they say paper.'],
+    loss:['Index panels serve originals up to 13 MB (Group 393.png) and 11.5 MB (cg.png). The bundle for four pages is 85 MB.','Slashes, + markers and rust name compete for the same attention on a screen with almost nothing else.']},
+   a:{name:'Gallery White',line:'A wall, a work, a label. The entrance hangs one catalogued painting.',
+    strong:['The first frame is a work: Flowers in a jug (Index 011) with a wall label in Geist Mono 10 px, linked to its exact record.','Two registers by scale, not weight: Instrument Sans 15 to 38 px for names, Geist Mono 10 px +.06em for every fact.','The Index pane takes 59% of the width and opens on Kashus Culpepper; on desktop the Role column is folded into the pane so the plate can grow.'],
+    loss:['The text-only, single-line entrance, the site\'s quiet signature, is replaced by an image. Which work hangs becomes a standing editorial decision.','The best available photograph is an easel shot with a bucket and floor. A gallery entrance asks for photography the collection does not yet have.','Role disappears from desktop rows (external-link rows lose it entirely). Adds a third typeface.']},
+   b:{name:'Digital Catalogue',line:'The Index register, perfected and extended to every page.',
+    strong:['Twelve columns on 30 px gutters. The entrance is a three-line register built from the site\'s own facts: 23 works, 2015 to 2026, 02 available.','Two rule weights only: ink where a register begins, #e9e9e9 between entries. Names in Geist, every number in tabular Geist Mono.','Hover changes value, never shape: the number turns rust and the rule turns ink on the same frame. Available plates sit on #fafafa mats with their catalogue numbers.'],
+    loss:['The centred one-line entrance becomes a cover with more words on it.','“Art, design and photography” is new copy (from the README) and needs approval.','A Swiss register can read as information design before artist; rust shrinks to a marker.']},
+   c:{name:'Zero Interface',line:'The current entrance with every decision it does not need removed.',
+    strong:['One face, one size, two values of ink. Slashes and the rust name are gone; grouping is done by space alone.','The line sits at 47.5%, the optical centre; at 50% a single line reads low.','Hover subtracts: everything you are not pointing at drops to #c7c7c7 instantly. The same rule runs the Index rows and header.'],
+    loss:['The rust name was the only colour on the entrance; without it there is very little identity beyond the face.','The dimming relies on :has() (Safari 15.4+, Chrome 105+); older browsers get a plain hover.','Smallest change, so the smallest gain on interior pages.']}
+  }},
+ freeman:{root:'freeman/',pages:[['home','Entrance','index.html'],['company','Company','company.html'],['projects','Projects (map)','map.html'],['project','Project','project-the-optimist.html'],['contact','Contact','contact.html']],
+  dirs:{
+   '0':{name:'Current',line:'Approved V5 with American Gothic typography, as released.',
+    strong:['Chalk paper (#fff9f1) with umber ink: a printed stock, warm and deliberate, faintly yellow beside white photographs and the white message field.','Small capitals at 9, 9.5, 10 and 11 px with four trackings; three hard-coded greys and warm hairlines.','Index previews are printed down on purpose (saturate .88, contrast .96).'],
+    loss:['The signature, eagle, map and register are the identity; every direction keeps them.']},
+   a:{name:'Architectural White',line:'V5 executed under light. Same marks, positions and gestures.',
+    strong:['Chalk becomes #fff, umber ink stays. Greys collapse to one secondary (#6b665c, 5.6:1) and one hairline (#e9e9e9), so photographs stop looking tinted.','Every small capital on one register: 10 px, 500, +.08em, replacing four sizes and four trackings.','Photographs at full value; the company statement one optical step lighter (Franklin 300) with a 33em measure.'],
+    loss:['Chalk\'s warmth, the “printed institutional composition” the direction document asks for, moves toward screen.','The changes are subtle; a reviewer may not see enough return for a palette change.','The white swatch now means white rather than chalk.']},
+   b:{name:'Hospitality Editorial',line:'The finished room leads; the signature takes the white field beside it.',
+    strong:['The entrance pairs the signature with one finished room (The Optimist, photography Jared Swafford) bleeding to the top and right edges; its caption sits on the legal line.','Project pages: the name in Franklin 300 at 30 to 42 px, the photograph pushed to the edge and aligned to the bottom of the credits.','Company statement at 34 to 50 px with a 32em measure; contact details at display size.'],
+    loss:['The signature is no longer alone and centred, the most recognisable V5 gesture.','Only 6 of 15 projects have photographs; this direction exposes the gap fastest.','The entrance needs a chosen lead image and its usage cleared. On phones the signature scales to 86%.']},
+   c:{name:'Field Register',line:'One drawing set: the map\'s sheet system becomes every page\'s frame.',
+    strong:['The 10 px frame, A–H and 1–6 references and title block from the map now frame every page.','Register numbers from the records (02 for The Optimist) become the project headline at 72 to 128 px in Franklin 300.','The title block states firm, sheet and register entry; Company sections are numbered; map counts are set large.'],
+    loss:['Frame and title block are permanent chrome on every page, close to the “unnecessary decoration” line.','Register ids have gaps (there is no 08); setting them large invites the question why.','On phones the references and title block drop away, so the system is mainly a desktop idea.']}
+  }}
+};
+const VIEWS={d:[1440,900,'Desktop 1440 × 900'],m:[390,844,'iPhone 390 × 844'],s:[375,667,'iPhone SE 375 × 667']};
+const LETTER={'0':'Current',a:'A',b:'B',c:'C'};
+let site='cole',dir='a',page='home',view='d';
+try{const s=JSON.parse(localStorage.getItem('cw001')||'{}');if(s.view in VIEWS)view=s.view;}catch(e){}
+const $=id=>document.getElementById(id);
+const url=(s,v,p)=>{const S=SITES[s];const pg=S.pages.find(x=>x[0]===p)||S.pages[0];return S.root+pg[2]+'?cw='+v;};
+const shot=(s,p,v,k)=>'shots/'+s+'-'+p+'-'+v+'-'+k+'.jpg';
+
+function seg(el,items,current,on){
+  el.innerHTML='';
+  items.forEach(([k,label,tag])=>{const b=document.createElement('button');b.type='button';
+    b.innerHTML=(tag?'<span class="tag">'+tag+'</span>':'')+label;b.setAttribute('aria-pressed',String(k===current));
+    b.addEventListener('click',()=>on(k));el.appendChild(b);});
+}
+function frame(v){
+  const [w,h]=VIEWS[view];const pane=document.createElement('div');pane.className='pane';
+  const d=SITES[site].dirs[v];
+  pane.innerHTML='<header><b>'+(v==='0'?'Current':LETTER[v]+' · '+d.name)+'</b><a href="'+url(site,v,page)+'" target="_blank" rel="noopener">Open ↗</a></header>';
+  const box=document.createElement('div');box.className='viewport';
+  const f=document.createElement('iframe');f.name='cw:'+(v==='0'?'none':v);f.title=(v==='0'?'Current':d.name)+' preview';
+  f.width=w;f.height=h;f.style.width=w+'px';f.style.height=h+'px';f.loading='lazy';f.src=url(site,v,page);
+  box.appendChild(f);pane.appendChild(box);
+  return [pane,box,f,w,h];
+}
+function fit(){document.querySelectorAll('.viewport').forEach(box=>{const f=box.firstChild;const w=+f.width,h=+f.height;
+  const avail=box.parentElement.clientWidth;const sc=Math.min(1,avail/w);f.style.transform='scale('+sc+')';box.style.width=(w*sc)+'px';box.style.height=(h*sc)+'px';});}
+function render(){
+  document.querySelectorAll('.sites button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.site===site)));
+  const S=SITES[site];
+  if(!S.pages.some(p=>p[0]===page))page=S.pages[0][0];
+  seg($('seg-dir'),['a','b','c'].map(k=>[k,S.dirs[k].name,LETTER[k]]),dir,k=>{dir=k;render();});
+  seg($('seg-page'),S.pages.map(p=>[p[0],p[1]]),page,k=>{page=k;render();});
+  seg($('seg-view'),Object.keys(VIEWS).map(k=>[k,VIEWS[k][2]]),view,k=>{view=k;try{localStorage.setItem('cw001',JSON.stringify({view}))}catch(e){}render();});
+  const st=$('stage');st.innerHTML='';st.className='stage'+(view==='d'?'':' phone');
+  ['0',dir].forEach(v=>st.appendChild(frame(v)[0]));
+  requestAnimationFrame(fit);
+  const pg=S.pages.find(p=>p[0]===page)[1];
+  $('grid-title').textContent=pg+' · same content, four versions';
+  $('grid-meta').textContent=VIEWS[view][2]+' · click to enlarge';
+  const sh=$('shots');sh.innerHTML='';sh.className='shots'+(view==='d'?'':' phone');
+  ['0','a','b','c'].forEach(v=>{const fig=document.createElement('figure');const src=shot(site,page,v,view);
+    const name=v==='0'?'Current':LETTER[v]+' · '+S.dirs[v].name;
+    fig.innerHTML='<button type="button" aria-label="Enlarge '+name+'"><img loading="lazy" src="'+src+'" alt="'+name+', '+pg+', '+VIEWS[view][2]+'" width="'+VIEWS[view][0]+'" height="'+VIEWS[view][1]+'"></button><figcaption><span>'+name+'</span><span class="k ok">No scroll</span></figcaption>';
+    fig.querySelector('button').addEventListener('click',()=>{$('zoom-img').src=src;$('zoom-img').alt=name;$('zoom-cap').textContent=name+' · '+pg+' · '+VIEWS[view][2];$('zoom').showModal();});
+    sh.appendChild(fig);});
+  $('dirs-title').textContent=(site==='cole'?'Cole Calfee':'Freeman GC')+' · the directions';
+  const D=$('dirs');D.innerHTML='';
+  ['0','a','b','c'].forEach(v=>{const d=S.dirs[v];const el=document.createElement('article');el.className='dir'+(v==='0'?' current':'');
+    const links=S.pages.map(p=>'<a href="'+url(site,v,p[0])+'" target="_blank" rel="noopener">'+p[1]+' ↗</a>').join('');
+    el.innerHTML='<div class="id"><span class="k">'+(v==='0'?'Baseline':'Direction '+LETTER[v])+'</span><h5>'+d.name+'</h5><p>'+d.line+'</p><div class="open">'+links+'</div></div>'+
+      '<div class="col"><span class="k">'+(v==='0'?'Why it reads as paper':'Why it is optically stronger')+'</span><ol>'+d.strong.map(s=>'<li><span>'+s+'</span></li>').join('')+'</ol></div>'+
+      '<div class="col loss"><span class="k">'+(v==='0'?'What to fix or protect':'Critique · what could be lost')+'</span><ol>'+d.loss.map(s=>'<li><span>'+s+'</span></li>').join('')+'</ol></div>';
+    D.appendChild(el);});
+  if(location.hash!=='#'+site)history.replaceState(null,'','#'+site);
+}
+document.querySelectorAll('.sites button').forEach(b=>b.addEventListener('click',()=>{site=b.dataset.site;render();}));
+$('zoom-close').addEventListener('click',()=>$('zoom').close());
+$('zoom').addEventListener('click',e=>{if(e.target.id==='zoom'||e.target.classList.contains('img'))$('zoom').close();});
+function fromHash(){const h=location.hash.slice(1);if(h in SITES){site=h;}}
+window.addEventListener('hashchange',()=>{fromHash();render();});
+window.addEventListener('resize',fit);
+fromHash();render();
+})();
+</script>

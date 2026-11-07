@@ -1,0 +1,69 @@
+@import url("cw-base.css");
+/* C · ZERO INTERFACE
+   One face (Geist Mono, as production), one size per context, two values of ink.
+   Grouping by space instead of glyphs: no slashes, no rust name, no filled hover.
+   The only motion is the instant dimming of what you are not pointing at. */
+
+/* ---------- Entrance ---------- */
+html[data-cw="c"] body.landing{background:var(--paper)!important}
+html[data-cw="c"] body.landing .seven{
+  top:47.5%!important;            /* optical centre: a line at 50% reads low */
+  gap:0!important;font:400 13px/1 var(--cw-mono)!important;letter-spacing:-.005em!important;
+  font-feature-settings:"ss01" 1;
+}
+html[data-cw="c"] body.landing .seven .slash{display:none!important}
+html[data-cw="c"] body.landing .seven .name{color:var(--ink)!important;margin-right:3.6em!important}
+html[data-cw="c"] body.landing .seven a:not(.name){color:var(--muted)!important;margin-left:2.1em}
+html[data-cw="c"] body.landing .seven .name + a{margin-left:0}
+html[data-cw="c"] body.landing .seven a:is(:hover,:focus-visible){
+  background:none!important;box-shadow:none!important;color:var(--ink)!important;text-decoration:none!important;outline:0!important}
+/* Subtraction as hover: everything else steps back. */
+html[data-cw="c"] body.landing .seven:has(a:is(:hover,:focus-visible)) a:not(:hover):not(:focus-visible){color:#c7c7c7!important}
+html[data-cw="c"][data-tone="graphite"] body.landing .seven:has(a:is(:hover,:focus-visible)) a:not(:hover):not(:focus-visible){color:#4d4d4d!important}
+html[data-cw="c"] body.landing .seven a:focus-visible{outline:1px solid var(--ink)!important;outline-offset:6px!important}
+
+/* Tone control: two 8 px squares, 44 px targets, no rings. */
+html[data-cw="c"] body.landing .landing-paper{bottom:22px!important;gap:0!important}
+html[data-cw="c"] body.landing .landing-paper button[data-paper-tone]::after{width:8px!important;height:8px!important;border:1px solid #d4d4d4!important}
+html[data-cw="c"] body.landing .landing-paper button[data-paper-tone="off-white"]::after{background:#fff!important}
+html[data-cw="c"] body.landing .landing-paper button[data-paper-tone="graphite"]::after{background:#171717!important;border-color:#171717!important}
+html[data-cw="c"] body.landing .landing-paper button[aria-pressed="false"]::after{opacity:.55}
+html[data-cw="c"][data-tone="graphite"] body.landing .landing-paper button[data-paper-tone]::after{border-color:#555!important}
+
+@media(max-width:720px){
+  html[data-cw="c"] body.landing .seven{
+    top:46%!important;display:grid!important;justify-items:center!important;row-gap:0!important;
+    font-size:14px!important;line-height:1!important}
+  html[data-cw="c"] body.landing .seven .name{margin:0 0 30px!important}
+  html[data-cw="c"] body.landing .seven a:not(.name){margin:0!important;padding:13px 0!important}
+  html[data-cw="c"] body.landing .seven a::after{top:0!important;bottom:0!important}
+  html[data-cw="c"] body.landing .landing-paper{bottom:max(18px,env(safe-area-inset-bottom))!important}
+}
+
+/* ---------- Interior: the same restraint ---------- */
+html[data-cw="c"] body:not(.landing) .site-head{border-bottom:0!important;padding-bottom:10px!important}
+html[data-cw="c"] body:not(.landing) .site-head :is(.brand,.nav){font:400 13px/1.45 var(--cw-mono)!important;letter-spacing:-.005em!important}
+html[data-cw="c"] body:not(.landing) .site-head .nav a{color:var(--muted)!important;border:0!important;padding:0!important}
+html[data-cw="c"] body:not(.landing) .site-head .nav a[aria-current="page"]{color:var(--ink)!important}
+html[data-cw="c"] body:not(.landing) .site-head .nav:has(a:hover) a:not(:hover){color:#c7c7c7!important}
+html[data-cw="c"] body:not(.landing) .site-head .nav a:hover{text-decoration:none!important}
+html[data-cw="c"] body:not(.landing) .footer{border-top:0!important;color:var(--quiet)!important}
+
+/* Index: the register keeps its geometry; colour and glyph noise go. */
+html[data-cw="c"] .work-index .expand-button .indicator{color:var(--quiet)!important}
+html[data-cw="c"] .work-index .expand-button[aria-expanded=true]{color:var(--ink)!important}
+html[data-cw="c"] .work-index .expand-button[aria-expanded=true] .indicator{color:var(--accent)!important}
+html[data-cw="c"] .work-index .index-table tbody tr:first-child td{border-top-color:var(--ink)!important}
+html[data-cw="c"] .work-index .index-table :is(th,td:first-child,td:nth-child(3),td:last-child){color:var(--muted)!important}
+html[data-cw="c"] .work-index .index-table tbody:has(:is(.expand-button,a):hover) tr:not(:has(:hover)) td{color:#c7c7c7!important}
+html[data-cw="c"] .work-index .index-table tbody:has(:is(.expand-button,a):hover) tr:not(:has(:hover)) .indicator{color:#e0e0e0!important}
+html[data-cw="c"] .work-index .work-panel{border-left-color:transparent!important}
+html[data-cw="c"] .work-index :is(.kashus-gallery-controls,.ronnie-navigation,.teton-navigation,.joseph-navigation,.cowboyer-navigation,.drawings-controls) button:is(:hover,:focus-visible){color:var(--ink)!important;opacity:.45}
+html[data-cw="c"] .work-index .section-title{font:400 13px/1.4 var(--cw-mono)!important;text-transform:none!important}
+
+/* Available + Contact: lighter labels, captions on one quiet value. */
+html[data-cw="c"] body.paintings .intro h1{font:400 13px/1.4 var(--cw-mono)!important;letter-spacing:0!important}
+html[data-cw="c"] body.paintings :is(.count,.section-count,.section-head h2 span){color:var(--quiet)!important}
+html[data-cw="c"] body.paintings .caption h3{font-weight:400!important}
+html[data-cw="c"] body.paintings :is(.intro,.section-head){border-color:transparent!important}
+html[data-cw="c"] body.paintings .caption{border-top-color:var(--rule)!important}
