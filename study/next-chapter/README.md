@@ -24,8 +24,8 @@ Open http://127.0.0.1:4180. Every prototype fits one viewport on desktop and pho
 
 The `index.html` hub has no doctype because it is also published as a Claude artifact, which wraps it in one; the three prototypes are complete documents.
 
-Rebuild media (ten paintings come from Cole's Shopify CDN; download them first, see the URLs in `site/index/paintings-archive.js`):
+Rebuild media. Paintings are cropped to the canvas using `tools/canvases.json` (from `retired/studies/painting-crops`), and the full photograph is kept as `<id>-studio.webp`. Ten of the full-size photographs come from Cole's Shopify CDN (URLs in `site/index/paintings-archive.js`, without the crop parameters); the other four are `site/assets/paintings/originals`:
 
 ```sh
-python3 study/next-chapter/tools/build_media.py <folder-with-shopify-downloads>
+python3 study/next-chapter/tools/build_media.py <folder-of-full-size-painting-photographs-named-by-work-id>
 ```

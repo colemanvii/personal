@@ -73,7 +73,11 @@ figure.bottom img{object-position:50% 100%}
 /* type */
 .kicker{font:400 10.5px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--red)}
 h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
-.display{font-size:clamp(54px,9.4vw,152px);line-height:.86;font-weight:300;letter-spacing:-.045em}
+.display{font-size:clamp(48px,6.2vw,104px);line-height:.9;font-weight:300;letter-spacing:-.04em;margin-top:12px;max-width:9ch}
+h1.display{font-size:clamp(60px,9vw,150px);margin-top:0}
+.key{font:400 10.5px/1.6 var(--mono);color:var(--mid);text-transform:uppercase;letter-spacing:.02em;margin:0;border-top:1px solid var(--rule);padding-top:8px}
+.key b{font-weight:400;color:var(--red);margin-right:4px}
+.num{font:400 10px/1 var(--mono);color:var(--faint)}
 .display i{font-style:italic;font-weight:300}
 .h{font-size:clamp(30px,3.6vw,56px);line-height:.98;font-weight:300;letter-spacing:-.03em}
 .lede{font-size:clamp(17px,1.45vw,22px);line-height:1.38;max-width:30ch;font-weight:350;text-wrap:pretty}
@@ -85,6 +89,9 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
 .list li .r{font:400 10px/1 var(--mono);color:var(--mid);text-transform:uppercase;text-align:right}
 .list a{text-decoration:none}
 .list a:hover{color:var(--red)}
+.list li.more{display:none}
+@media (max-width:760px){.list li.more{display:grid;color:var(--mid)}}
+#records figcaption{display:none}
 .note{font:italic 300 clamp(15px,1.15vw,18px)/1.45 var(--serif);color:var(--mid);max-width:40ch}
 
 /* spread layouts */
@@ -98,7 +105,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
 .s-contents li .p{font:400 10.5px/1 var(--mono);color:var(--mid)}
 .s-opener{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
 .s-opener.flip{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
-.s-grid{grid-template-rows:auto minmax(0,1fr)}
+.s-grid{grid-template-rows:auto minmax(0,1fr) auto}
 .g{display:grid;gap:clamp(10px,1.4vw,20px);min-height:0}
 .s-motif{grid-template-rows:auto minmax(0,1fr) auto}
 .row4{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -123,11 +130,12 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
   .s-opener>.col,.s-text>.col:first-child,.s-two>.col{order:2}
   .s-opener>.col .lede,.s-text .body{font-size:15px}
   .s-text>.col:first-child .note{display:none}
-  #checklist li:nth-child(n+6),#discography li:nth-child(n+5){display:none}
+  #checklist li:nth-child(n+6):not(.more),#discography li:nth-child(n+5){display:none}
   .s-text#built-for-generations>.col:first-child .body{display:none}
   .s-text#elsewhere,.s-text#colophon{grid-template-rows:auto minmax(0,1fr)}
   .s-text#elsewhere>.col:first-child,.s-text#colophon>.col:first-child{order:0}
-  .display{font-size:clamp(46px,15vw,74px)}
+  .display{font-size:clamp(40px,12vw,60px)}
+  h1.display{font-size:clamp(52px,16vw,78px)}
   .row4{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ticks{display:none}
   .folio{grid-template-columns:auto 1fr auto}
@@ -135,7 +143,8 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
   .list li{padding:6px 0;font-size:14px}
 }
 @media (prefers-reduced-motion:reduce){.spread{transition:none!important;transform:none!important}}
-.study{position:fixed;right:max(var(--m),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 11px);z-index:9;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--red);padding:6px 7px;text-decoration:none}
+.study{position:fixed;right:max(var(--m),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 16px);z-index:9;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--faint);text-decoration:none}
+.study:hover{color:var(--ink)}
 .run{padding-right:118px}
 </style>
 </head>
@@ -153,7 +162,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <figure class="bleed"><div class="im"><img data-w="studio"></div><figcaption class="cap"><span>The studio</span><span>Photograph</span></figcaption></figure>
     <div class="title">
       <div class="kicker">Volume I · 2015 — 2026</div>
-      <h1 class="display">Cole<br><i>Calfee</i></h1>
+      <h1 class="display">Cole<br>Calfee</h1>
       <div>
         <p class="lede">Paintings, drawings, photographs, record sleeves, posters and identities, kept in one place and added to as they are made.</p>
         <p class="mono" style="color:var(--mid);margin:18px 0 0">Nashville, Tennessee / North Georgia</p>
@@ -164,7 +173,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
   <!-- 1 CONTENTS -->
   <section class="spread s-contents" id="contents" data-run="Contents">
     <div class="col">
-      <h2 class="display" style="font-size:clamp(46px,6vw,96px)"><i>Contents</i></h2>
+      <h2 class="display">Contents</h2>
       <figure class="cv" style="flex:1"><div class="im"><img data-w="western-sketchbook-1"></div><figcaption class="cap"><span>Western sketchbook I</span><span>012.06</span></figcaption></figure>
     </div>
     <ol id="toc"></ol>
@@ -174,7 +183,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
   <section class="spread s-opener" id="red-ink" data-run="I · Red Ink" data-chapter="I" data-name="Red Ink">
     <div class="col">
       <div class="kicker">Chapter I</div>
-      <h2 class="display"><i>Red</i><br>Ink</h2>
+      <h2 class="display">Red Ink</h2>
       <div>
         <p class="lede">Eleven drawings, all in the same red on ivory paper. Portraits, a bison, dogs, riders, a Lakeside Club, whole sketchbook pages with handwriting running through them.</p>
       </div>
@@ -195,9 +204,9 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
       <figure><div class="im"><img data-w="bison-study"></div><figcaption class="cap" data-c="bison-study"></figcaption></figure>
       <figure><div class="im"><img data-w="zen-buffalo"></div><figcaption class="cap" data-c="zen-buffalo"></figcaption></figure>
       <figure><div class="im"><img data-w="cowboyer-1"></div><figcaption class="cap" data-c="cowboyer-1"></figcaption></figure>
-      <figure class="bleed"><div class="im"><img data-w="studio" style="--pos:52% 50%"></div><figcaption class="cap"><span>Studio, bison at centre</span><span>000.01</span></figcaption></figure>
+      <figure class="bleed"><div class="im"><img data-w="studio" style="--pos:52% 50%"></div><figcaption class="cap" data-c="studio"></figcaption></figure>
     </div>
-    <p class="mono" style="color:var(--mid);margin:0">The archive cross-references itself. Each motif page is assembled from works already in the index.</p>
+    <p class="key" data-key></p>
   </section>
 
   <!-- 5 II. PAINT -->
@@ -206,7 +215,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <div class="col">
       <div>
         <div class="kicker">Chapter II</div>
-        <h2 class="display" style="margin-top:10px">Paint</h2>
+        <h2 class="display">Paint</h2>
       </div>
       <ul class="list" id="checklist"></ul>
     </div>
@@ -214,7 +223,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
 
   <!-- 6 PAINT PLATES -->
   <section class="spread s-grid" id="collection" data-run="II · Paint" data-name="In collections">
-    <div class="headline"><h2 class="h">In collections</h2><span class="mono" style="color:var(--mid)">Twelve paintings, photographed where they were made</span></div>
+    <div class="headline"><h2 class="h">In collections</h2><span class="mono" style="color:var(--mid)">Twelve paintings · sold</span></div>
     <div class="g" data-fill="harvest-1 peace-of-wild-things porter-study flowers-in-a-jug nine-ball little-window zen-buffalo fj40 scout-painting target purple-haze peach-circuit" data-c="6" data-r="2" data-cs="4" data-rs="3"></div>
   </section>
 
@@ -227,7 +236,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
       <figure><div class="im"><img data-w="ramsey-arrowhead"></div><figcaption class="cap" data-c="ramsey-arrowhead"></figcaption></figure>
       <figure><div class="im"><img data-w="jenni"></div><figcaption class="cap" data-c="jenni"></figcaption></figure>
     </div>
-    <p class="mono" style="color:var(--mid);margin:0">Assembled by colour from the index. The site can find these on its own.</p>
+    <p class="key" data-key></p>
   </section>
 
   <!-- 8 III. ARENA -->
@@ -236,7 +245,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <div class="col">
       <div>
         <div class="kicker">Chapter III</div>
-        <h2 class="display" style="font-size:clamp(46px,6.6vw,108px)">Ranch <i>&amp;</i><br>Arena</h2>
+        <h2 class="display">Ranch &amp; Arena</h2>
       </div>
       <div class="g hide-s" style="grid-template-columns:1fr 1fr;flex:1;min-height:0">
         <figure class="bleed"><div class="im"><img data-w="pbr-portrait"></div><figcaption class="cap" data-c="pbr-portrait"></figcaption></figure>
@@ -257,7 +266,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <div class="col">
       <div>
         <div class="kicker">Chapter IV</div>
-        <h2 class="display" style="margin-top:10px">Rec<i>ords</i></h2>
+        <h2 class="display">Records</h2>
       </div>
       <ul class="list" id="discography"></ul>
     </div>
@@ -284,9 +293,15 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
   </section>
 
   <!-- 12 V. COMMISSIONS -->
-  <section class="spread s-grid" id="commissions" data-run="V · Posters & Covers" data-chapter="V" data-name="Posters &amp; Covers">
-    <div class="headline"><h2 class="h"><span class="kicker" style="display:block;margin-bottom:8px">Chapter V</span>Posters &amp; Covers</h2><span class="mono hide-s" style="color:var(--mid)">Scout Motors · Joseph Martin · ERNEST · The Cowboyer</span></div>
-    <div class="g" data-fill="scout-1 scout-2 martin-survives dont-call-it-luck hatmaker ernest cowboyer-3 cowboyer-4" data-c="4" data-r="2" data-cs="4" data-rs="2"></div>
+  <section class="spread s-opener" id="commissions" data-run="V · Posters & Covers" data-chapter="V" data-name="Posters &amp; Covers">
+    <div class="col">
+      <div>
+        <div class="kicker">Chapter V</div>
+        <h2 class="display">Posters &amp; Covers</h2>
+      </div>
+      <ul class="list" id="commission-list"></ul>
+    </div>
+    <div class="g" data-fill="scout-1 scout-2 martin-survives dont-call-it-luck hatmaker ernest cowboyer-3 cowboyer-4" data-c="4" data-r="2" data-cs="4" data-rs="2" data-nokey="1"></div>
   </section>
 
   <!-- 13 VI. BUILT FOR GENERATIONS -->
@@ -294,7 +309,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <div class="col">
       <div>
         <div class="kicker">Chapter VI · A long project</div>
-        <h2 class="display" style="font-size:clamp(44px,6.4vw,104px);margin-top:10px">Built for <i>Generations</i></h2>
+        <h2 class="display">Built for Generations</h2>
       </div>
       <div>
         <p class="lede" style="max-width:34ch">Creative direction, identity and web for Freeman General Contracting.</p>
@@ -313,7 +328,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <div class="col">
       <div>
         <div class="kicker">Film, music, apprenticeships</div>
-        <h2 class="display" style="font-size:clamp(46px,7vw,112px);margin-top:10px"><i>Else</i>where</h2>
+        <h2 class="display">Elsewhere</h2>
       </div>
       <p class="note hide-s">Work that lives on other people's sites, records and screens. Listed so it can be found from here.</p>
     </div>
@@ -347,7 +362,7 @@ h1,h2{font-weight:300;margin:0;letter-spacing:-.025em;text-wrap:balance}
     <button type="button" class="next mono" id="next">Next →</button>
   </footer>
 </div>
-<a class="study" href="../">Study 02 / 03 ↩</a>
+<a class="study" href="../">↩ Study 02/03</a>
 
 <script src="../media/catalogue.js"></script>
 <script>
@@ -360,6 +375,12 @@ function img(el){const w=W[el.dataset.w];if(!w)return;el.alt=w.alt;el.dataset.sr
 function cap(id){const w=W[id];return `<span>${w.title}</span><span>${w.no}</span>`}
 document.querySelectorAll('img[data-w]').forEach(img);
 document.querySelectorAll('[data-c]').forEach(c=>{if(c.tagName==='FIGCAPTION')c.innerHTML=cap(c.dataset.c)});
+// motif rows: numbers under the plates, one key line beneath
+document.querySelectorAll('[data-key]').forEach(k=>{const figs=[...k.previousElementSibling.querySelectorAll('figcaption[data-c]')];
+  k.innerHTML=figs.map((f,i)=>`<b>${i+1}</b>${W[f.dataset.c].title} · ${W[f.dataset.c].discipline}`).join(' &nbsp; ');
+  figs.forEach((f,i)=>{f.className='num';f.textContent=i+1});});
+// commission list for chapter V
+document.getElementById('commission-list').innerHTML=['scout','joseph','ernest','cowboyer'].map(id=>P[id]).map(p=>`<li><span class="n">${p.n}</span><span>${p.title}</span><span class="r">${p.role} · ${p.year}</span></li>`).join('');
 
 // grids filled from the catalogue
 function fill(){
@@ -367,7 +388,9 @@ function fill(){
     const ids=g.dataset.fill.split(' '),c=narrow()?+g.dataset.cs:+g.dataset.c,r=narrow()?+g.dataset.rs:+g.dataset.r;
     g.style.gridTemplateColumns=`repeat(${c},minmax(0,1fr))`;g.style.gridTemplateRows=`repeat(${r},minmax(0,1fr))`;
     const show=ids.slice(0,c*r);
-    g.innerHTML=show.map(id=>`<figure class="${g.dataset.bleed?'bleed':''}"><div class="im"><img data-w="${id}"></div><figcaption class="cap">${cap(id)}</figcaption></figure>`).join('');
+    g.innerHTML=show.map((id,i)=>`<figure class="${g.dataset.bleed?'bleed':''}"><div class="im"><img data-w="${id}"></div><figcaption class="num">${i+1}</figcaption></figure>`).join('');
+    if(!g.dataset.nokey){let k=g.nextElementSibling;if(!k||!k.classList.contains('key')){k=document.createElement('p');k.className='key';g.after(k)}
+      k.innerHTML=show.map((id,i)=>`<b>${i+1}</b>${W[id].title}`).join(' &nbsp; ');}
     if(g.dataset.tail&&show.length<c*r)g.insertAdjacentHTML('beforeend',`<p class="note" style="align-self:end;margin:0">${g.dataset.tail}</p>`);
     g.querySelectorAll('img').forEach(img);
   });
@@ -376,7 +399,7 @@ fill();
 
 // painting checklist, exhibition style
 const paint=['red-sea','flowers-mccarty','harvest-1','peace-of-wild-things','porter-study','flowers-in-a-jug','nine-ball','little-window','zen-buffalo','fj40','scout-painting','target','purple-haze','peach-circuit'];
-document.getElementById('checklist').innerHTML=paint.map((id,i)=>{const w=W[id];return `<li><span class="n">${String(i+1).padStart(2,'0')}</span><span>${w.title} <span style="color:var(--mid);font-size:.82em">${w.detail.replace('Oil on canvas · ','').replace(' in.','″').replace(/ × /,'×')}</span></span><span class="r">${w.state==='available'?'<span style="color:var(--red)">Available</span>':'Sold'}</span></li>`}).join('');
+document.getElementById('checklist').innerHTML=paint.map((id,i)=>{const w=W[id];return `<li><span class="n">${String(i+1).padStart(2,'0')}</span><span>${w.title} <span style="color:var(--mid);font-size:.82em">${w.detail.replace('Oil on canvas · ','').replace(' in.','″').replace(/ × /,'×')}</span></span><span class="r">${w.state==='available'?'<span style="color:var(--red)">Available</span>':'Sold'}</span></li>`}).join('')+'<li class="more"><span class="n">+</span><span>Nine more on the next spread and in the Index</span><span class="r"></span></li>';
 
 // discography from the index
 const disc=[['Pour Me Out','Kashus Culpepper','https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM'],['Act I: Summer Nights','Kashus Culpepper','https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD'],['After Me?','Kashus Culpepper','https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP'],['Out of My Mind','Kashus Culpepper','https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8'],['Jenni','Kashus Culpepper','https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc'],['Who Hurt You','Kashus Culpepper','https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm'],['Talk With Me','Kashus Culpepper','https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855'],['Poster Child EP','Corey Kent','https://open.spotify.com/album/3GNybGSzZJEuDRYojyUiPz'],['Tree Birds','Dylan Gossett','https://open.spotify.com/track/0uNzLccqsb5crQ2dcBlakz']];

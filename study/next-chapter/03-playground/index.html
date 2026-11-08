@@ -39,7 +39,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .modes button{padding:7px 10px;text-transform:uppercase;color:var(--mid);font-size:10.5px;letter-spacing:.05em}
 .modes button:hover{color:var(--ink)}
 .modes button[aria-pressed=true]{color:var(--paper);background:var(--ink)}
-.top nav{justify-self:end;display:flex;gap:18px;font:400 13px/1 var(--sans);padding-right:112px}
+.top nav{justify-self:end;display:flex;gap:18px;font:400 13px/1 var(--sans);padding-right:104px}
 .top nav a:hover{color:var(--red)}
 .field{position:relative;min-height:0;overflow:hidden}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--rule);min-width:0}
@@ -59,7 +59,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pin img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.08))}
 .pin.dragging{cursor:grabbing;transition:none;z-index:50}
 .pin[aria-current=true]::after{content:"";position:absolute;inset:-5px;border:1px solid var(--red)}
-.pin .tape{position:absolute;left:50%;top:-6px;width:34px;height:12px;transform:translateX(-50%) rotate(var(--r,-3deg));background:rgba(240,238,230,.85)}
+.pin .tape{z-index:1;position:absolute;left:50%;top:-6px;width:34px;height:12px;transform:translateX(-50%) rotate(var(--r,-3deg));background:rgba(240,238,230,.85)}
 .scale{position:absolute;left:0;bottom:12px;display:flex;align-items:center;gap:8px;color:var(--mid);text-transform:uppercase;font-size:9.5px;letter-spacing:.05em}
 .scale i{display:block;height:5px;border:1px solid var(--ink);border-top:0}
 .floor{position:absolute;left:0;right:0;bottom:34px;border-top:1px solid var(--rule)}
@@ -72,7 +72,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pairs img.out{opacity:0;transform:scale(.97)}
 .pairs figcaption{display:flex;justify-content:space-between;gap:10px;color:var(--mid);text-transform:uppercase;font-size:10px;letter-spacing:.04em}
 .pairs figcaption span:first-child{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pairs .x{display:grid;place-items:center;font:200 40px/1 var(--sans);color:var(--red)}
+.pairs .x{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font:200 40px/1 var(--sans);color:var(--red)}
+.pairs .x small{font:400 9.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--mid);writing-mode:vertical-rl;transform:rotate(180deg)}
 
 /* SPECTRUM */
 .spectrum{display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:14px;padding-top:clamp(14px,3vh,30px)}
@@ -87,19 +88,27 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .spectrum .legend{display:flex;justify-content:space-between;color:var(--faint);text-transform:uppercase;font-size:9.5px;letter-spacing:.05em;padding-bottom:6px}
 
 /* DAYS */
-.days{display:grid;grid-template-columns:minmax(220px,.36fr) minmax(0,1fr);gap:var(--g);padding-top:clamp(14px,3vh,30px);padding-bottom:12px}
+.days{display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(220px,.36fr) minmax(0,1fr);gap:var(--g);padding-top:clamp(14px,3vh,30px);padding-bottom:12px}
 .days .copy{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
-.days .num{font:200 clamp(64px,9.5vw,150px)/.82 var(--sans);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.days .num{font:200 clamp(56px,7.4vw,118px)/.82 var(--sans);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
 .days .num small{display:block;font:400 11px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--mid);margin-top:14px}
 .days p{font:300 clamp(15px,1.25vw,19px)/1.4 var(--sans);letter-spacing:-.01em;max-width:30ch;margin:0;text-wrap:pretty}
 .days .key{display:grid;gap:7px;text-transform:uppercase;font-size:9.5px;color:var(--mid);letter-spacing:.05em}
 .days .key span{display:flex;align-items:center;gap:8px}
 .days .key i{width:9px;height:9px;display:inline-block;border:1px solid var(--rule)}
-.grid{position:relative;min-height:0;display:grid;gap:2px;align-content:start}
-.grid i{display:block;aspect-ratio:1;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule)}
-.grid i.f{box-shadow:none;cursor:pointer}
-.grid i.today{box-shadow:inset 0 0 0 1.5px var(--red);animation:blink 1.6s steps(2) infinite}
-.grid i.yr{box-shadow:inset 0 0 0 1px #cfcdc7}
+.cal{position:relative;min-height:0;height:100%;display:grid;align-content:start;gap:var(--yg,6px)}
+.prelude{display:flex;flex-wrap:wrap;gap:2px;padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:4px}
+.yr{display:grid;grid-template-columns:30px auto;gap:8px;align-items:start}
+.yr>span{font-size:9.5px;color:var(--mid);line-height:1;padding-top:1px;font-variant-numeric:tabular-nums}
+.wk{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,var(--c));grid-auto-columns:var(--c);gap:2px}
+.cal i{display:block;width:var(--c);height:var(--c);box-shadow:inset 0 0 0 1px var(--rule)}
+.cal i.pad{box-shadow:none}
+.cal i.f{box-shadow:none;cursor:pointer}
+.cal i.today{box-shadow:inset 0 0 0 1.5px var(--red);animation:blink 1.6s steps(2) infinite}
+.cal i.first{box-shadow:inset 0 0 0 1.5px var(--red)}
+.days .key .k-made{background:#a2624f;border-color:#a2624f}
+.days .key .k-start{border-color:var(--red)}
+.days .key b{font-weight:400;color:var(--ink)}
 @keyframes blink{50%{box-shadow:inset 0 0 0 1.5px transparent}}
 .peek{position:absolute;pointer-events:none;width:140px;background:var(--paper);border:1px solid var(--ink);padding:6px;z-index:5;font-size:9.5px;text-transform:uppercase}
 .peek img{width:100%;height:110px;object-fit:contain;display:block;margin-bottom:5px}
@@ -117,15 +126,19 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .modes button{padding:7px 8px;font-size:10px}
   .bar .act .hint{display:none}
   .pairs{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 30px minmax(0,1fr)}
-  .pairs .x{font-size:26px}
+  .pairs .x{font-size:24px;flex-direction:row}
+  .pairs .x small{writing-mode:horizontal-tb;transform:none}
   .days{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
-  .days .copy{flex-direction:row;align-items:end;gap:16px}
   .days .num{font-size:54px}
-  .days p,.days .key{display:none}
+  .days p{display:none}
+  .days .key{display:flex;flex-wrap:wrap;gap:4px 14px}
+  .days .key span:nth-child(2){display:none}
+  .days .copy{flex-direction:column;align-items:flex-start;gap:10px}
   .spectrum .big .sw i{width:36px;height:36px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.study{position:fixed;right:max(var(--g),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 12px);z-index:30;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--red);padding:6px 7px}
+.study{position:fixed;right:max(var(--g),env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 19px);z-index:30;font:400 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--faint)}
+.study:hover{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -145,26 +158,25 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     <section class="view wall" id="wall" aria-label="Wall: drag works to rearrange"></section>
     <section class="view pairs" id="pairs" hidden aria-label="Pairs" aria-live="polite">
       <figure><div class="im"><img id="pa" alt=""></div><figcaption id="pac"></figcaption></figure>
-      <div class="x" aria-hidden="true">+</div>
+      <div class="x"><span aria-hidden="true">+</span><small id="why"></small></div>
       <figure><div class="im"><img id="pb" alt=""></div><figcaption id="pbc"></figcaption></figure>
     </section>
     <section class="view spectrum" id="spectrum" hidden aria-label="Spectrum">
       <div class="big"><img id="sb" alt=""><div class="sw"><i id="sw"></i><span id="swh"></span></div></div>
       <div class="band" id="band" role="group" aria-label="Works sorted by colour"></div>
-      <div class="legend"><span>Red</span><span>Ochre</span><span>Green</span><span>Blue</span><span>Violet</span><span>Paper &amp; grey</span></div>
+      <div class="legend"><span id="spec-n">64 works, sorted by colour</span><span>Scrub the band</span></div>
     </section>
     <section class="view days" id="days" hidden aria-label="Seven years, one cell per day">
       <div class="copy">
-        <div class="num" id="dnum">0064<small>of 2,557 days · 2026 — 2033</small></div>
-        <p>Seven years is 2,557 days. One cell for each. Post a drawing, a photograph, a study, a failed idea, and a cell fills with its colour.</p>
+        <div class="num">2,557<small>days · 1 Jan 2027 — 31 Dec 2033</small></div>
+        <p>Seven calendar years, two leap days included. One cell for each day. Post a drawing, a photograph, a study or a failed idea, and that day fills with its colour.</p>
         <div class="key">
-          <span><i style="background:#c9a77f;border-color:#c9a77f"></i>Existing archive, standing in for days already made</span>
-          <span><i style="border-color:var(--red)"></i>Today</span>
-          <span><i></i>Days still open</span>
-          <span><i style="border-color:#cfcdc7"></i>First day of each year</span>
+          <span><i class="k-made"></i>Made before the chapter · <b id="made-n">64</b></span>
+          <span><i class="k-open"></i>Open day</span>
+          <span><i class="k-start"></i><b id="countdown">Starts 1 January 2027</b></span>
         </div>
       </div>
-      <div class="grid" id="grid"></div>
+      <div class="cal" id="cal"></div>
     </section>
   </main>
 
@@ -174,7 +186,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   </footer>
 </div>
 <div class="focus" id="focus" hidden role="dialog" aria-label="Enlarged work"><img id="fimg" alt=""><p><span id="fcap"></span><span>Click to close</span></p></div>
-<a class="study" href="../">Study 03 / 03 ↩</a>
+<a class="study" href="../">↩ Study 03/03</a>
 
 <script src="../media/catalogue.js"></script>
 <script>
@@ -213,23 +225,26 @@ function hang(){
     const sc=document.createElement('div');sc.className='scale';sc.innerHTML=`<i style="width:${12*ppi}px"></i>12 in. · paintings at true relative scale`;wall.appendChild(sc);
     return;
   }
-  // salon pin-up: a random selection placed on a loose grid with jitter, so nothing hides another
-  const n=Wd<760?9:Math.min(20,Math.round(Wd*Ht/52000));
-  const pick=shuffle(works).slice(0,n);
-  const cols=Math.max(3,Math.round(Math.sqrt(n*Wd/Ht)));const rows=Math.ceil(n/cols);
-  const cw=Wd/cols,ch=Ht/rows;
-  pick.forEach((w,i)=>{
-    const c=i%cols,r=Math.floor(i/cols);const s=(.5+Math.random()*.48);
-    let bw=cw*s,bh=bw/w.ratio;if(bh>ch*s){bh=ch*s;bw=bh*w.ratio}
-    const x=c*cw+(cw-bw)/2+(Math.random()-.5)*cw*.34,y=r*ch+(ch-bh)/2+(Math.random()-.5)*ch*.3;
-    pin(w,Math.max(0,Math.min(Wd-bw,x)),Math.max(6,Math.min(Ht-bh,y)),bw,bh,(Math.random()-.5)*3,false);
-  });
+  // pin-up on hang lines: a shuffled selection, centred on invisible horizontal lines with even gaps
+  const rows=Wd<760?3:2, per=Wd<760?3:Math.max(4,Math.min(7,Math.round(Wd/190)));
+  const pick=shuffle(works.filter(w=>!w.src)).slice(0,rows*per);
+  const rowH=Ht/rows, gap=Math.max(18,Wd*.03);
+  for(let r=0;r<rows;r++){
+    const row=pick.slice(r*per,(r+1)*per);
+    // heights vary a little by kind; widths follow each work's proportions
+    let hs=row.map(w=>rowH*(w.discipline==='Painting'?.74:w.discipline==='Drawing'?.62:.68));
+    let ws=row.map((w,i)=>hs[i]*w.ratio);
+    const sumW=ws.reduce((a,b)=>a+b,0);
+    const k=Math.min(1,(Wd-8-gap*(row.length-1))/sumW);hs=hs.map(h=>h*k);ws=ws.map(w=>w*k);
+    let x=(Wd-(ws.reduce((a,b)=>a+b,0)+gap*(row.length-1)))/2; const line=rowH*r+rowH*.5;
+    row.forEach((w,i)=>{pin(w,x,line-hs[i]/2,ws[i],hs[i],0,false);x+=ws[i]+gap});
+  }
 }
 function pin(w,x,y,bw,bh,rot,flat){
   const f=document.createElement('figure');f.className='pin';f.tabIndex=0;f.dataset.id=w.id;
   f.style.cssText=`left:${x}px;top:${y}px;width:${bw}px;height:${bh}px;transform:rotate(${rot}deg)`;
   f.setAttribute('aria-label',w.no+' '+w.title);
-  f.innerHTML=`<img src="${src(w,bw>360?'l':'s')}" alt="${w.alt}" draggable="false">${flat||w.discipline==='Photography'?'':`<span class="tape" style="--r:${(Math.random()-.5)*10}deg"></span>`}`;
+  f.innerHTML=`<img src="${src(w,bw>360?'l':'s')}" alt="${w.alt}" draggable="false">${flat||w.discipline!=='Drawing'?'':`<span class="tape" style="--r:${(Math.random()-.5)*10}deg"></span>`}`;
   wall.appendChild(f);
 }
 let drag=null,z=10;
@@ -243,12 +258,27 @@ function select(f){wall.querySelectorAll('.pin').forEach(p=>p.setAttribute('aria
 
 /* ---------- PAIRS ---------- */
 let pair=[];
+// Motifs read from the images themselves. Each pair is chosen for a reason, which becomes its label.
+const MOTIFS={
+  'the bison':['bison-study','zen-buffalo','purple-haze','cowboyer-1','studio'],
+  'riders':['jm-cowboy','cowboyer-3','cowboyer-2','martin-survives','dont-call-it-luck','hatmaker','teton-1','western-sketchbook-1','ronnie-1','ronnie-2','scout-2'],
+  'flowers':['flowers-in-a-jug','flowers-mccarty','peace-of-wild-things','harvest-1','mags'],
+  'trucks & cars':['fj40','scout-painting','scout-1','scout-2','teton-3'],
+  'faces':['lewis-grizzard','broadcast-portrait','portrait-study','kc-portrait-1','mags','ronnie-3','pbr-portrait','sketchbook-5'],
+  'guitars':['pour-me-out','who-hurt-you','kc-portrait-1','kc-portrait-2','kc-live']
+};
+const hueDist=(a,b)=>{const d=Math.abs(a.hue-b.hue);return Math.min(d,1-d)};
 function newPair(){
-  // two works from different disciplines and different projects
-  let a,b;do{a=works[rnd(works.length)];b=works[rnd(works.length)]}while(a.discipline===b.discipline||a.project===b.project);
+  let a,b,why,tries=0;
+  do{
+    tries++;
+    if(Math.random()<.6){const m=Object.keys(MOTIFS)[rnd(Object.keys(MOTIFS).length)];const ids=MOTIFS[m];a=W[ids[rnd(ids.length)]];b=W[ids[rnd(ids.length)]];why='Both: '+m;}
+    else{a=works[rnd(works.length)];const near=works.filter(w=>w!==a&&w.sat>.25&&a.sat>.25&&hueDist(w,a)<.025);b=near[rnd(near.length)];why='Same colour';}
+  }while((!a||!b||a===b||a.discipline===b.discipline&&tries<40||a.project===b.project&&tries<40)&&tries<80);
   pair=[a,b];
   [['#pa','#pac',a],['#pb','#pbc',b]].forEach(([i,c,w])=>{const im=$(i);im.classList.add('out');const pre=new Image();pre.onload=()=>{im.src=pre.src;im.alt=w.alt;im.classList.remove('out')};pre.src=src(w);$(c).innerHTML=`<span>${w.title}</span><span>${w.no} · ${w.discipline}</span>`});
-  label(null,`<span class="no">${a.no}</span><b>${a.title}</b><span class="d">×</span><b>${b.title}</b><span class="no">${b.no}</span>`);
+  $('#why').textContent=why;
+  label(null,`<span class="no">${why}</span><b>${a.title}</b><span class="d">+</span><b>${b.title}</b>`);
 }
 $('#pairs').addEventListener('click',e=>{const f=e.target.closest('figure');if(f)focus(pair[[...$('#pairs').querySelectorAll('figure')].indexOf(f)])});
 
@@ -266,24 +296,32 @@ band.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){spot(Math.min(spec.
 $('#sb').addEventListener('click',()=>focus(spec[si]));
 
 /* ---------- DAYS ---------- */
-const TOTAL=2557;
+// 1 Jan 2027 – 31 Dec 2033: seven calendar years, 2,557 days with the two leap days.
+const START=Date.UTC(2027,0,1),END=Date.UTC(2033,11,31),DAY=864e5;
 function days(){
-  const g=$('#grid');const R=g.getBoundingClientRect();
-  // largest square cell that lets all 2,557 days fit the field without scrolling
-  let best=2;for(let s=2;s<40;s+=.25){const cols=Math.floor((R.width+2)/(s+2));const rows=Math.ceil(TOTAL/cols);if(rows*(s+2)-2<=R.height)best=s;else break}
-  const cols=Math.floor((R.width+2)/(best+2));g.style.gridTemplateColumns=`repeat(${cols},${best}px)`;
+  const cal=$('#cal');const R=cal.getBoundingClientRect();
   const made=works.slice().sort((a,b)=>(a.year||'9').localeCompare(b.year||'9'));
-  let h='';for(let d=0;d<TOTAL;d++){
-    if(d<made.length)h+=`<i class="f" data-i="${d}" style="background:${made[d].color}"></i>`;
-    else h+=`<i class="${d===made.length?'today':''}${d%365===0&&d>0?' yr':''}"></i>`;
+  // cell size: 54 week columns wide, 7 years of 7 rows tall, plus the prelude strip
+  const c=Math.max(3,Math.min(14,Math.floor(Math.min((R.width-40)/54-2,(R.height-60)/(7*7+7*1.2+3)-2))));
+  cal.style.setProperty('--c',c+'px');cal.style.setProperty('--yg',Math.round(c*.9)+'px');
+  const now=new Date(),today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+  let h=`<div class="prelude" aria-label="${made.length} works made before the chapter">${made.map((w,i)=>`<i class="f" data-i="${i}" style="background:${w.color}"></i>`).join('')}</div>`;
+  for(let y=2027;y<=2033;y++){
+    const first=Date.UTC(y,0,1),last=Date.UTC(y,11,31),pad=new Date(first).getUTCDay();
+    let cells='';for(let p=0;p<pad;p++)cells+='<i class="pad"></i>';
+    for(let d=first;d<=last;d+=DAY){cells+=`<i class="${d===today?'today':d===START?'first':''}" title="${new Date(d).toISOString().slice(0,10)}"></i>`}
+    h+=`<div class="yr"><span>'${String(y).slice(2)}</span><div class="wk">${cells}</div></div>`;
   }
-  g.innerHTML=h;$('#dnum').firstChild.nodeValue=String(made.length).padStart(4,'0');
-  const peek=document.createElement('div');peek.className='peek';peek.hidden=true;g.appendChild(peek);
-  g.onmousemove=e=>{const c=e.target.closest('i.f');if(!c){peek.hidden=true;return}const w=made[+c.dataset.i];peek.innerHTML=`<img src="${src(w,'s')}" alt="">${w.no} · ${w.title}`;peek.hidden=false;
-    const gr=g.getBoundingClientRect();let x=e.clientX-gr.left+14,y=e.clientY-gr.top+14;if(x>gr.width-150)x-=170;peek.style.left=x+'px';peek.style.top=y+'px'};
-  g.onmouseleave=()=>peek.hidden=true;
-  g.onclick=e=>{const c=e.target.closest('i.f');if(c)focus(made[+c.dataset.i])};
-  label(null,`<span class="no">Day ${String(made.length+1).padStart(4,'0')}</span><b>Today is open.</b><span class="d">${TOTAL-made.length} days left in the chapter</span>`);
+  cal.innerHTML=h;
+  $('#made-n').textContent=made.length;
+  const until=Math.round((START-today)/DAY);
+  $('#countdown').textContent=until>0?`Starts in ${until} days`:today<=END?`Day ${Math.round((today-START)/DAY)+1} of 2,557`:'Chapter complete';
+  const peek=document.createElement('div');peek.className='peek';peek.hidden=true;cal.appendChild(peek);
+  cal.onmousemove=e=>{const t=e.target.closest('i.f');if(!t){peek.hidden=true;return}const w=made[+t.dataset.i];peek.innerHTML=`<img src="${src(w,'s')}" alt="">${w.no} · ${w.title}`;peek.hidden=false;
+    const gr=cal.getBoundingClientRect();let x=e.clientX-gr.left+14,y=e.clientY-gr.top+14;if(x>gr.width-150)x-=170;peek.style.left=x+'px';peek.style.top=y+'px'};
+  cal.onmouseleave=()=>peek.hidden=true;
+  cal.onclick=e=>{const t=e.target.closest('i.f');if(t)focus(made[+t.dataset.i])};
+  label(null,until>0?`<span class="no">${until} days</span><b>until the chapter opens.</b><span class="d">${made.length} works already made</span>`:`<span class="no">Day ${Math.round((today-START)/DAY)+1}</span><b>Today is open.</b>`);
 }
 
 /* ---------- modes ---------- */
@@ -297,7 +335,7 @@ function setMode(m){
   mode=m;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
   ['wall','pairs','spectrum','days'].forEach(v=>$('#'+v).hidden=v!==m);
   $('#act').innerHTML=ACT[m]();
-  if(m==='wall'){hang();label(null,'<span class="d">'+(trueScale?'Fourteen paintings, hung at their real sizes against each other.':'A wall of whatever is around. Drag things. Rehang.')+'</span>')}
+  if(m==='wall'){hang();label(null,'<span class="d">'+(trueScale?'Fourteen paintings, hung at their real sizes against each other.':'A shuffled wall. Drag things around, or rehang.')+'</span>')}
   if(m==='pairs')newPair();
   if(m==='spectrum'){si=-1;spot(spec.findIndex(w=>w.id==='red-sea'))}
   if(m==='days')requestAnimationFrame(days);

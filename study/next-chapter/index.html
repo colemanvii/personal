@@ -219,19 +219,19 @@ footer.end{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,120px);padd
         <a class="open" href="01-index/index.html">Open 01 →</a>
       </div>
       <div class="plates pdm">
-        <figure><img src="stills/01-years_d.webp" alt="Years view: colour chips stacked by year from 2015, open columns from 2027 to 2033" loading="lazy"><figcaption class="cap">Years · seven open columns, 2027—2033</figcaption></figure>
+        <figure><img src="stills/01-years_d.webp" alt="Years view: colour chips stacked by year from 2015, open columns from 2027 to 2033" loading="lazy"><figcaption class="cap">Years · 2027—2033 open</figcaption></figure>
         <figure><img src="stills/01-ledger_m.webp" alt="Phone ledger view" loading="lazy"><figcaption class="cap">Phone · ledger</figcaption></figure>
       </div>
       <div class="text">
         <div>
-          <p>The current Index, taken to its conclusion. The ledger lists works rather than clients. <b>011.06</b> means project 011 (Paintings), sixth work. Hover a row and the plate fills instantly with the work, its medium, sale state, project siblings and its own signature colour, sampled from the image.</p>
-          <p><b>Plates</b> turns the whole practice into one contact sheet. <b>Years</b> stacks each work as a colour chip on a timeline from 2015 to 2033. Everything after 2026 is open, ruled and waiting, and that is the part meant to make Cole want to make more.</p>
+          <p>The current Index, taken to its conclusion. The ledger lists works rather than clients. <b>011.06</b> means project 011 (Paintings), sixth work. Own work comes first: paintings, then drawings, then commissions. Hover a row and the plate shows the work with its medium, sale state and place in its project. Paintings show the canvas alone, with the studio photograph one click away.</p>
+          <p><b>Plates</b> turns the whole practice into one contact sheet. <b>Years</b> stacks each work as a colour chip on a timeline from 2015 to 2033. The seven years from 2027 to 2033 are open, ruled and waiting. That part is meant to make Cole want to make more.</p>
         </div>
         <dl>
           <dt>Look for</dt><dd>Hover the ledger. ↑ ↓ keys. Filter "Own work". Years view.</dd>
           <dt>Strength</dt><dd>Closest to the existing site. Scales to 1,000 works without redesign.</dd>
           <dt>Risk</dt><dd>Can feel like a database. It needs the Archive's warmth on top.</dd>
-          <dt>Built for Gen.</dt><dd>Row 001 is marked "w/ Freeman General Contracting". Its plate names Built for Generations as a long project. The "Own work" filter removes it entirely.</dd>
+          <dt>Built for Gen.</dt><dd>Freeman rows are named in the Project column. The plate reads "With Freeman General Contracting · Built for Generations". The "Own work" filter removes it entirely.</dd>
         </dl>
       </div>
     </article>
@@ -275,12 +275,12 @@ footer.end{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,120px);padd
       <div class="plates p3" style="grid-column:5/13">
         <figure><img src="stills/03-spectrum_d.webp" alt="Spectrum: works sorted into a colour band, Red Sea enlarged above" loading="lazy"><figcaption class="cap">Spectrum · scrub by colour</figcaption></figure>
         <figure><img src="stills/03-pairs_d.webp" alt="Pairs: two works from different disciplines side by side" loading="lazy"><figcaption class="cap">Pairs · chance juxtapositions</figcaption></figure>
-        <figure><img src="stills/03-days_d.webp" alt="Days: a grid of 2,557 cells, the first 64 filled with colour" loading="lazy"><figcaption class="cap">2,557 days · seven years</figcaption></figure>
+        <figure><img src="stills/03-days_d.webp" alt="Days: seven calendar years laid out week by week, with the 64 existing works as a strip of colour above" loading="lazy"><figcaption class="cap">2,557 days · seven years</figcaption></figure>
       </div>
       <div class="text">
         <div>
-          <p>Four modes on one white wall. <b>Wall</b> pins up a random selection you can drag around. <b>True scale</b> rehangs all fourteen paintings at their real sizes in inches, so an 8 × 10 in. Zen Buffalo sits beside a 36 × 48 in. Red Sea. <b>Pairs</b> puts two works from different disciplines next to each other. <b>Spectrum</b> sorts the whole archive into a colour band you scrub with a finger.</p>
-          <p><b>2,557 days</b> is seven years, one cell per day. For now the existing 64 works stand in for days already made, and today's cell blinks. It's the site as a promise.</p>
+          <p>Four modes on one white wall. <b>Wall</b> pins up a random selection you can drag around. <b>True scale</b> rehangs all fourteen paintings at their real sizes in inches, so an 8 × 10 in. Zen Buffalo sits beside a 36 × 48 in. Red Sea. <b>Pairs</b> puts two works side by side for a stated reason: both show the bison, both share a colour, both are faces. <b>Spectrum</b> sorts the whole archive into a colour band you scrub with a finger.</p>
+          <p><b>2,557 days</b> is seven years, one cell per day. It's a real calendar, 1 January 2027 to 31 December 2033, laid out week by week. The 64 works made so far sit above it, and a countdown runs until the first day. It's the site as a promise.</p>
         </div>
         <dl>
           <dt>Look for</dt><dd>Drag on Wall. "True scale". Space on Pairs. Scrub Spectrum.</dd>
@@ -290,6 +290,24 @@ footer.end{border-top:1px solid var(--ink);margin-top:clamp(56px,8vw,120px);padd
         </dl>
       </div>
     </article>
+  </section>
+
+  <!-- TIDY PASS -->
+  <section class="s" id="tidy">
+    <header><span class="lab">Revision · 8 Nov 2026</span><h2>The tidy pass</h2></header>
+    <div class="body">
+      <p>Same three directions, with less on screen in each one. What changed:</p>
+      <figure style="margin:18px 0 22px"><img src="stills/02-collection_d.webp" alt="Archive spread: twelve sold paintings shown as canvases only, numbered, with one key line beneath" loading="lazy"><figcaption class="cap">02 · In collections, now canvases only, with one key line</figcaption></figure>
+      <ul class="rules">
+        <li><b>All three · paintings are canvases.</b> The canvas positions already recorded in <code>retired/studies/painting-crops</code> now give each painting a clean canvas-only image. The studio photograph is kept as a second view. True scale is now really true, and colour sorting reads the paint instead of the wall.</li>
+        <li><b>All three · drawings take their ink colour,</b> not the colour of the paper, so they sit with the reds where they belong.</li>
+        <li><b>01 · Six filters instead of nine.</b> All, Own work, Painting, Drawing, Photography and Design. Short project names, no "w/". A calmer plate entry: number, title, details, state, a Canvas / Studio switch and a 06 / 14 stepper in place of fourteen thumbnails. Hover waits a beat before changing the plate.</li>
+        <li><b>01 · Years made honest.</b> The counts sit on top of their stacks. The open bracket is exactly seven years, 2027—2033. Works without a year are labelled n.d. Adding a year to each painting would make this view complete.</li>
+        <li><b>02 · One chapter style.</b> Every chapter title has the same size, place and weight, with no decorative italics. Grids show only plate numbers, with one key line beneath, as a printed book does. Posters &amp; Covers is now a proper chapter opener. On phones, shortened lists say what's missing.</li>
+        <li><b>03 · Hang lines, not scatter.</b> The wall hangs works centred on two even lines and only shuffles which works appear. Tape only on drawings, where it would really be. Pairs now state their reason. 2,557 days is a real week-by-week calendar with year labels.</li>
+        <li><b>All three · quieter scaffolding.</b> The red "Study" tag is now a small grey link.</li>
+      </ul>
+    </div>
   </section>
 
   <!-- COMPARE -->

@@ -1,0 +1,199 @@
+{
+ "_about": "Canvas-only crops for the study's catalogue. canvas = [left, top, right, bottom] as fractions of the full photograph, from retired/studies/painting-crops/canvases.json (Harvest 1 and Peace of Wild Things re-read by eye against the local, already reframed originals). trim = fraction removed inside each edge [l,t,r,b] to drop the canvas sides and wall slivers. Red Sea and Flowers in McCarty Vase lose a little more at the bottom, where paint buckets stand in front of the canvas.",
+ "harvest-1": {
+  "canvas": [
+   0.308,
+   0.342,
+   0.7,
+   0.653
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "peace-of-wild-things": {
+  "canvas": [
+   0.352,
+   0.383,
+   0.648,
+   0.615
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "porter-study": {
+  "canvas": [
+   0.34,
+   0.336,
+   0.664,
+   0.653
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "flowers-in-a-jug": {
+  "canvas": [
+   0.294,
+   0.323,
+   0.706,
+   0.648
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "nine-ball": {
+  "canvas": [
+   0.376,
+   0.357,
+   0.636,
+   0.619
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.055,
+   0.012
+  ]
+ },
+ "little-window": {
+  "canvas": [
+   0.34,
+   0.325,
+   0.674,
+   0.656
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "zen-buffalo": {
+  "canvas": [
+   0.354,
+   0.349,
+   0.652,
+   0.648
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.055,
+   0.012
+  ]
+ },
+ "fj40": {
+  "canvas": [
+   0.34,
+   0.346,
+   0.672,
+   0.653
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.055,
+   0.012
+  ]
+ },
+ "scout-painting": {
+  "canvas": [
+   0.292,
+   0.318,
+   0.72,
+   0.648
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.055,
+   0.012
+  ]
+ },
+ "target": {
+  "canvas": [
+   0.352,
+   0.373,
+   0.656,
+   0.611
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "purple-haze": {
+  "canvas": [
+   0.344,
+   0.358,
+   0.672,
+   0.605
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.055,
+   0.012
+  ]
+ },
+ "peach-circuit": {
+  "canvas": [
+   0.34,
+   0.256,
+   0.674,
+   0.608
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.012
+  ]
+ },
+ "red-sea": {
+  "canvas": [
+   0.27,
+   0.24,
+   0.75,
+   0.757
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.035
+  ]
+ },
+ "flowers-mccarty": {
+  "canvas": [
+   0.36,
+   0.3,
+   0.65,
+   0.58
+  ],
+  "trim": [
+   0.012,
+   0.012,
+   0.028,
+   0.035
+  ]
+ }
+}

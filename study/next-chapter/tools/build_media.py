@@ -18,7 +18,7 @@ Image.MAX_IMAGE_PIXELS = None
 ROOT = os.getcwd()
 SITE = os.path.join(ROOT, 'site/assets')
 RET = os.path.join(ROOT, 'retired/assets')
-SHOP = sys.argv[1] if len(sys.argv) > 1 else ''
+SHOP = sys.argv[1] if len(sys.argv) > 1 else ''  # full-size painting photographs, named by work id
 OUT = os.path.join(ROOT, 'study/next-chapter/media')
 
 # Projects: number, title, role, year, discipline(s), external link — all from the live Index.
@@ -54,16 +54,16 @@ WORKS = [
  # Paintings (titles + media from paintings-archive.js and paintings/index.html)
  ('red-sea', H, 'red-sea.jpg', 'paintings', 'Red Sea', 'Oil on canvas · 36 × 48 in.', 'Painting', '2026', 'Red Sea, a large red painting leaning in the studio', 'available'),
  ('flowers-mccarty', H, 'flowers-mccarty.jpg', 'paintings', 'Flowers in McCarty Vase', 'Oil on canvas · 24 × 30 in.', 'Painting', '2026', 'Flowers in McCarty Vase, red ground with a bouquet', 'available'),
- ('harvest-1', S, 'paintings/originals/harvest-1.jpg', 'paintings', 'Harvest 1', 'Oil on canvas · 36 × 36 in.', 'Painting', '', 'Harvest 1, Oil on canvas', 'sold'),
- ('peace-of-wild-things', S, 'paintings/originals/peace-of-wild-things.jpg', 'paintings', 'Peace of Wild Things', 'Oil on canvas · 30 × 30 in.', 'Painting', '', 'Peace of Wild Things, Oil on canvas', 'sold'),
+ ('harvest-1', H, 'harvest-1.jpg', 'paintings', 'Harvest 1', 'Oil on canvas · 36 × 36 in.', 'Painting', '', 'Harvest 1, Oil on canvas', 'sold'),
+ ('peace-of-wild-things', H, 'peace-of-wild-things.jpg', 'paintings', 'Peace of Wild Things', 'Oil on canvas · 30 × 30 in.', 'Painting', '', 'Peace of Wild Things, Oil on canvas', 'sold'),
  ('porter-study', H, 'porter-study.jpg', 'paintings', 'Porter Study', 'Oil on linen · 11 × 14 in.', 'Painting', '', 'Porter Study, Oil on linen', 'sold'),
- ('flowers-in-a-jug', S, 'paintings/originals/flowers-in-a-jug.jpg', 'paintings', 'Flowers in a jug', 'Oil on canvas · 30 × 30 in.', 'Painting', '', 'Flowers in a jug, Oil on canvas', 'sold'),
+ ('flowers-in-a-jug', H, 'flowers-in-a-jug.jpg', 'paintings', 'Flowers in a jug', 'Oil on canvas · 30 × 30 in.', 'Painting', '', 'Flowers in a jug, Oil on canvas', 'sold'),
  ('nine-ball', H, 'nine-ball.jpg', 'paintings', 'Nine Ball', 'Oil on linen · 11 × 14 in.', 'Painting', '', 'Nine Ball, Oil on linen', 'sold'),
  ('little-window', H, 'little-window.jpg', 'paintings', 'Little Window', 'Oil on linen · 11 × 14 in.', 'Painting', '', 'Little Window, Oil on linen', 'sold'),
  ('zen-buffalo', H, 'zen-buffalo.jpg', 'paintings', 'Zen Buffalo', 'Oil on canvas · 8 × 10 in.', 'Painting', '', 'Zen Buffalo, Oil on canvas', 'sold'),
  ('fj40', H, 'fj40.jpg', 'paintings', 'FJ40', 'Oil on canvas · 18 × 24 in.', 'Painting', '', 'FJ40, Oil on canvas', 'sold'),
  ('scout-painting', H, 'scout-painting.jpg', 'paintings', 'Scout', 'Oil on canvas · 30 × 30 in.', 'Painting', '', 'Scout, Oil on canvas', 'sold'),
- ('target', S, 'paintings/originals/target.jpg', 'paintings', 'Target', 'Oil on canvas · 20 × 20 in.', 'Painting', '', 'Target, Oil on canvas', 'sold'),
+ ('target', H, 'target.jpg', 'paintings', 'Target', 'Oil on canvas · 20 × 20 in.', 'Painting', '', 'Target, Oil on canvas', 'sold'),
  ('purple-haze', H, 'purple-haze.jpg', 'paintings', 'Purple Haze', 'Oil on canvas · 20 × 20 in.', 'Painting', '', 'Purple Haze, Oil on canvas', 'sold'),
  ('peach-circuit', H, 'peach-circuit.jpg', 'paintings', 'Peach Circuit', 'Oil and red wine on canvas · 30 × 40 in.', 'Painting', '', 'Peach Circuit, Oil and red wine on canvas', 'sold'),
  # Drawings (captions from the Index)
@@ -127,7 +127,7 @@ WORKS = [
  ('tops', R, 'D68D863A-E8DF-4D5C-978A-9D968EB72AD2.jpg', 'unfiled', 'Untitled (Tops Bar-B-Q)', 'Photograph · unfiled', 'Photography', '', 'Tops Bar-B-Q sign glowing at dusk', ''),
 ]
 
-def dominant(im):
+def dominant(im, floor=0.006):
     """Signature colour: the most saturated colour that still covers a real share of the image."""
     sm = im.convert('RGB').resize((64, 64))
     px = list(sm.get_flattened_data()) if hasattr(sm,"get_flattened_data") else list(sm.getdata())
@@ -138,7 +138,7 @@ def dominant(im):
     best, score = None, -1
     for v in buckets.values():
         share = len(v) / len(px)
-        if share < 0.006:
+        if share < floor:
             continue
         r, g, b = [sum(c[i] for c in v) / len(v) for i in range(3)]
         h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
@@ -148,6 +148,20 @@ def dominant(im):
             score, best = sc, (int(r), int(g), int(b), h, l, s)
     r, g, b, h, l, s = best
     return '#%02x%02x%02x' % (r, g, b), round(h, 3), round(l, 3), round(s, 3)
+
+def ink(im):
+    """Drawings: the mean colour of the inked pixels, ignoring the ivory paper."""
+    sm = im.convert('RGB').resize((256, 256))
+    px = list(sm.get_flattened_data()) if hasattr(sm, 'get_flattened_data') else list(sm.getdata())
+    inked = [p for p in px if colorsys.rgb_to_hls(*(c / 255 for c in p))[1] < 0.62]
+    r, g, b = [sum(p[i] for p in inked) / len(inked) for i in range(3)]
+    h, l, s_ = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+    return '#%02x%02x%02x' % (int(r), int(g), int(b)), round(h, 3), round(l, 3), round(s_, 3)
+
+CANVAS = {k: v for k, v in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'canvases.json'))).items() if not k.startswith('_')}
+SHORT = {'freeman': 'Freeman', 'kashus': 'Kashus Culpepper', 'scout': 'Scout Motors', 'ronnie': 'Ronnie Hodges',
+         'teton': 'Teton Valley Ranch', 'ramsey': 'Ramsey Hill', 'gossett': 'Dylan Gossett', 'callahan': 'Abbie Callahan',
+         'lastmovie': 'The Last Movie Star', 'weir': 'Jeff Weir'}
 
 def main():
     for d in ('l', 's'):
@@ -163,23 +177,35 @@ def main():
             bg.alpha_composite(im)
             im = bg
         im = im.convert('RGB')
+        studio = None
+        if wid in CANVAS:
+            # paintings: the catalogue image is the canvas alone; the studio photograph stays as a second view
+            studio = im
+            W0, H0 = im.size
+            l, t, r, b = CANVAS[wid]['canvas']; tl, tt, tr, tb = CANVAS[wid]['trim']
+            l, t, r, b = l * W0, t * H0, r * W0, b * H0; cw, ch = r - l, b - t
+            im = im.crop((round(l + cw * tl), round(t + ch * tt), round(r - cw * tr), round(b - ch * tb)))
+            for d, edge, q in (('l', 1800, 82), ('s', 720, 78)):
+                c = studio.copy(); c.thumbnail((edge, edge), Image.LANCZOS)
+                c.save(os.path.join(OUT, d, wid + '-studio.webp'), 'WEBP', quality=q, method=6)
         w, h = im.size
         for d, edge, q in (('l', 1800, 82), ('s', 720, 78)):
             c = im.copy()
             c.thumbnail((edge, edge), Image.LANCZOS)
             c.save(os.path.join(OUT, d, wid + '.webp'), 'WEBP', quality=q, method=6)
-        hexc, hue, light, sat = dominant(im)
+        # drawings: take the ink, not the paper
+        hexc, hue, light, sat = ink(im) if disc == 'Drawing' else dominant(im)
         p = next(x for x in PROJECTS if x[0] == proj) if proj not in ('studio', 'unfiled') else None
         works.append(dict(id=wid, title=title, detail=detail, discipline=disc,
                           year=year or (p[4] if p else ''), project=proj,
                           alt=alt, state=state, w=w, h=h, ratio=round(w / h, 4),
-                          color=hexc, hue=hue, light=light, sat=sat))
+                          color=hexc, hue=hue, light=light, sat=sat, **({'studio': True} if studio else {})))
     shutil.copy(os.path.join(SITE, 'freeman-eagle.svg'), os.path.join(OUT, 'freeman-eagle.svg'))
     works.insert(next(i for i, w in enumerate(works) if w['id'] == 'freeman-web'),
                  dict(id='freeman-eagle', title='Eagle mark', detail='Identity', discipline='Identity', year='2023',
                       project='freeman', alt='Original Freeman eagle identity mark', state='', w=1080, h=338, ratio=3.1953,
                       color='#2b2b2b', hue=0, light=0.17, sat=0, src='freeman-eagle.svg'))
-    projects = [dict(id=a, n=b, title=c, role=d, year=e, discipline=f, link=g,
+    projects = [dict(id=a, n=b, title=c, short=SHORT.get(a, c), role=d, year=e, discipline=f, link=g,
                      works=[w['id'] for w in works if w['project'] == a]) for a, b, c, d, e, f, g in PROJECTS]
     with open(os.path.join(OUT, 'catalogue.js'), 'w') as fh:
         fh.write('/* Generated by tools/build_media.py from the repository\'s own images. */\n')
