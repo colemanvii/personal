@@ -22,7 +22,7 @@ PERSONAL = os.path.abspath(os.path.join(HERE, '..', '..'))
 TEXT = ('.html', '.css', '.js', '.svg', '.txt', '.xml', '.json')
 IMG = ('.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg', '.pbm', '.woff2')
 # Private or operational pages that a design study has no business copying.
-FREEMAN_SKIP = {'photographs.html', 'client-access.html', 'team-os.html', '_headers',
+FREEMAN_SKIP = {'photographs.html', 'team-os.html', '_headers',
                 '_redirects', 'robots.txt', 'sitemap.xml', 'portal-identity.css'}
 
 
@@ -51,7 +51,7 @@ def referenced(src_root):
 def copy_site(src, dst, skip=set(), loader_dir='cyber-white'):
     refs = referenced(src)
     for d, dirs, files in os.walk(src):
-        dirs[:] = [x for x in dirs if not x.startswith('.') and x not in ('functions',)]
+        dirs[:] = [x for x in dirs if not x.startswith('.') and x not in ('functions', 'cyber-white')]
         for f in files:
             if f in skip:
                 continue
@@ -64,12 +64,18 @@ def copy_site(src, dst, skip=set(), loader_dir='cyber-white'):
             os.makedirs(os.path.dirname(dp), exist_ok=True)
             if low.endswith(TEXT):
                 t = open(sp, encoding='utf-8').read()
+                # A preview branch already carries the root-absolute loader line; the bundle adds its own.
+                t = t.replace('<script src="/cyber-white/cw.js"></script>', '')
                 pre = rel_prefix(rel) if low.endswith('.html') else None
                 if low.endswith(('.html', '.js', '.css')):
                     # JS/CSS resolve against the page (JS) or the sheet (CSS); every Cole/Freeman
                     # script is used by pages at one depth, which html_prefix_for() records.
                     p = pre if pre is not None else html_prefix_for(src, rel)
                     t = re.sub(r'''(["'`(]|url\()/(?=[A-Za-z_])''', lambda m: m.group(1) + (p or './'), t)
+                    # A bare root: href="/" and location.assign('/') mean the home page; '/' + key builds a path.
+                    t = re.sub(r'''href=(["'])/\1''', lambda m: 'href=' + m.group(1) + (p or '') + 'index.html' + m.group(1), t)
+                    t = re.sub(r'''(location\.(?:assign|replace)\()(["'])/\2\)''', lambda m: m.group(1) + m.group(2) + (p or '') + 'index.html' + m.group(2) + ')', t)
+                    t = re.sub(r'''(["'])/\1(\s*\+)''', lambda m: m.group(1) + (p or './') + m.group(1) + m.group(2), t)
                 if low.endswith('.html'):
                     inject = ('<script src="%s%s/cw.js"></script>'
                               '<script src="%s../preview-host.js" defer></script>') % (pre, loader_dir, pre)

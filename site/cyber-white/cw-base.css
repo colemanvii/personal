@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@300..600&display=swap");
+/* Cyber White 001 — shared optical foundation for colecalfee.com studies.
+   Imported by cw-a/b/c.css; every rule is scoped to html[data-cw] so production is untouched.
+
+   What this layer corrects, before any direction-specific composition:
+   1. Paper leaks. Warm surfaces (#faf9f6, #f4f4f1, #e5e0d8, #fff9f1) sit on a pure white page
+      and read as dirty grey-yellow patches. One quiet surface: #fafafa.
+   2. Two greys for rules (#d9d9d9 and warm #d7d7d1) → one hairline, #e9e9e9.
+   3. Ink. #111 on #fff is harsher than the type needs at 13 px; #171717 holds the same contrast
+      (17.9:1) with less vibration. Secondary #666 (5.7:1) passes AA at every size used.
+   4. Hover. The rust block with a 3 px halo is a print stamp; light needs an instant change of
+      value, not a filled shape. No transitions anywhere: state changes on the frame it happens. */
+html[data-cw]{
+  --paper:#fff;--surface:#fafafa;--ink:#171717;--muted:#666;--quiet:#a3a3a3;--rule:#e9e9e9;
+  --accent:#a43f33;
+  --cw-sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --cw-mono:"Geist Mono",ui-monospace,Menlo,Monaco,monospace;
+  background:#fff;
+}
+html[data-cw][data-tone="graphite"]{--paper:#171717;--surface:#1f1f1f;--ink:#ededed;--muted:#a1a1a1;--quiet:#6e6e6e;--rule:#2e2e2e;--accent:#e2a49b}
+html[data-cw] body{
+  background:var(--paper);color:var(--ink);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1;font-synthesis:none;
+  cursor:default;
+}
+html[data-cw] a,html[data-cw] button{cursor:pointer}
+html[data-cw] ::selection{background:#171717;color:#fff}
+
+/* One hairline, one surface. */
+html[data-cw] :is(.site-head,.footer,.index-table td,.release-list,.release-list li,.work-panel,
+  .freeman-identity,.archive-plate,.freeman-site-live,.collection,.section-head,.intro,.caption,
+  .info-links a){border-color:var(--rule)!important}
+html[data-cw] :is(.archive-notice,.archive-plate,.freeman-identity-art,.freeman-site-live,
+  .freeman-site-preview,.photo-plate,.ramsey-hill-plate){background-color:var(--surface)!important}
+
+/* Interior hover: an instant change of value; no block, no halo. */
+html[data-cw] body:not(.landing) a:not(:has(img)):is(:hover,:focus-visible),
+html[data-cw] body:not(.landing) button.expand-button:is(:hover,:focus-visible),
+html[data-cw] body:not(.landing) button.panel-close:is(:hover,:focus-visible),
+html[data-cw] body:not(.landing) .contact-submit button:is(:hover,:focus-visible),
+html[data-cw] .work-index .index-table a:hover,html[data-cw] .work-index .expand-button:hover,
+html[data-cw] .work-index .release-list a:is(:hover,:focus-visible),
+html[data-cw] .work-image-dialog .viewer-close:is(:hover,:focus-visible){
+  background:transparent!important;box-shadow:none!important;color:var(--ink)!important;
+  text-decoration:underline!important;text-decoration-thickness:1px!important;
+  text-underline-offset:.28em!important;
+}
+html[data-cw] :is(a,button):focus-visible{outline:1px solid var(--ink)!important;outline-offset:3px!important}
+html[data-cw] .work-image-dialog::backdrop{background:rgba(255,255,255,.96)}
+html[data-cw][data-tone="graphite"] .work-image-dialog::backdrop{background:rgba(23,23,23,.96)}
