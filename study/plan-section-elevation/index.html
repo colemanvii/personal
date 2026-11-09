@@ -1,0 +1,188 @@
+<meta charset="utf-8">
+<title>Plan · Section · Elevation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..500;1,8..60,200..500&family=Archivo:wdth,wght@62..125,300..500&family=Geist+Mono:wght@300..500&display=swap">
+<style>
+/* Layout: an entry sheet for three working studies. Three plates across, then one drawing of the
+   system and one legend. Each study keeps its own typeface; this page borrows one from each. */
+:root{
+  color-scheme:light;
+  --paper:#ffffff;
+  --ink:#131312;
+  --mid:#6f6d68;
+  --faint:#b3b1ab;
+  --rule:#e6e4df;
+  --tint:#f6f6f4;
+  --red:#a3352a;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--serif);-webkit-font-smoothing:antialiased;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:var(--faint)}
+a:hover{color:var(--red);text-decoration-color:var(--red)}
+:focus-visible{outline:1px solid var(--red);outline-offset:3px}
+.wrap{max-width:1360px;margin:0 auto}
+.mono{font:400 10.5px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.run{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:16px 12px;border-bottom:1px solid var(--ink);color:var(--mid)}
+.run b{font-weight:400;color:var(--ink)}
+.head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;align-items:end;padding-block:clamp(36px,6vw,84px) clamp(24px,4vw,48px)}
+h1{margin:0;font:250 clamp(52px,8vw,128px)/.86 var(--serif);letter-spacing:-.045em}
+h1 span{color:var(--faint)}
+.head p{margin:0;font-size:18px;max-width:44ch}
+
+.studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.st{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;padding:18px 22px 22px 0;min-width:0}
+.st+.st{border-left:1px solid var(--rule);padding-left:22px}
+.st .k{display:flex;justify-content:space-between;color:var(--mid)}
+.st .k b{font-weight:400;color:var(--red)}
+.st h2{margin:0;font-weight:300;font-size:clamp(34px,3.6vw,54px);line-height:.95;letter-spacing:-.035em}
+.st:nth-child(1) h2{font-family:var(--serif)}
+.st:nth-child(2) h2{font-family:var(--sans);font-variation-settings:"wdth" 72;letter-spacing:-.02em}
+.st:nth-child(3) h2{font-family:var(--sans);font-variation-settings:"wdth" 100;letter-spacing:-.03em}
+.st img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left;display:block;border:1px solid var(--rule);background:var(--tint)}
+.st p{margin:0;font-size:16px;color:#33312d}
+.st ul{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
+.st li{font:400 10.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--mid);padding:6px 0;border-bottom:1px solid var(--rule)}
+.open{display:inline-flex;justify-content:space-between;align-items:center;font:400 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:13px 15px;text-decoration:none}
+.open:hover{background:var(--red);color:var(--paper)}
+
+section.s{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:32px;padding-block:clamp(48px,6vw,88px) 0}
+section.s h2{margin:0;font:300 clamp(30px,3.4vw,48px)/1 var(--serif);letter-spacing:-.03em}
+section.s .lab{color:var(--red);display:block;margin-bottom:12px}
+section.s .intro{font-size:16px;color:#33312d;max-width:40ch;margin:16px 0 0}
+
+/* the system, drawn */
+.sys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--ink)}
+.node{padding:16px 16px 18px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.node+.node{border-left:1px solid var(--ink)}
+.node h3{margin:0;font:400 22px/1 var(--sans);font-variation-settings:"wdth" 80;letter-spacing:-.01em}
+.node .role{font:italic 300 16px/1.35 var(--serif);color:var(--ink)}
+.node p{margin:0;font-size:14px;line-height:1.45;color:#3a3833}
+.node .owns{margin-top:auto;font:400 10px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--mid);border-top:1px solid var(--rule);padding-top:8px}
+.node.site{background:var(--tint)}
+.flow{grid-column:1/-1;border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.flow div{padding:12px 16px;font:400 10.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--mid)}
+.flow div+div{border-left:1px solid var(--rule)}
+.flow b{font-weight:400;color:var(--ink)}
+.rules{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--ink)}
+.rules li{padding:10px 0;border-bottom:1px solid var(--rule);font-size:15.5px;line-height:1.45}
+.rules li b{font-weight:500}
+.assume{font:italic 300 15px/1.45 var(--serif);color:var(--mid);margin-top:12px}
+
+/* legend */
+.legend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--ink)}
+.legend div{padding:12px 14px 14px 0;border-bottom:1px solid var(--rule);min-width:0}
+.legend div+div{padding-left:14px;border-left:1px solid var(--rule)}
+.legend .n{font:300 34px/1 var(--sans);font-variation-settings:"wdth" 70;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.legend p{margin:6px 0 0;font-size:14px;color:#3a3833}
+.chip{width:12px;height:12px;display:inline-block;flex:none}
+.c-v{background:var(--ink)}
+.c-i{box-shadow:inset 0 0 0 1px var(--ink);background-image:linear-gradient(135deg,transparent 45%,var(--ink) 45% 55%,transparent 55%)}
+.c-p{background:var(--faint)}
+.c-x{box-shadow:inset 0 0 0 1px var(--red);border-radius:50%}
+.c-m{box-shadow:inset 0 0 0 1px var(--red)}
+.notes{columns:2;column-gap:32px;font-size:15px;color:#33312d}
+.notes p{margin:0 0 12px;break-inside:avoid}
+.notes b{font-weight:500;color:var(--ink)}
+footer{border-top:1px solid var(--ink);margin-top:clamp(56px,7vw,100px);padding-block:14px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--mid)}
+code{font:400 .86em/1 var(--mono)}
+
+@media (max-width:900px){
+  .head,section.s{grid-template-columns:1fr}
+  .studies,.sys,.flow,.legend{grid-template-columns:1fr}
+  .st+.st,.node+.node,.flow div+div,.legend div+div{border-left:0;padding-left:0;border-top:1px solid var(--rule)}
+  .node+.node{padding-left:16px;border-top:1px solid var(--ink)}
+  .flow div+div{padding-left:16px}
+  .notes{columns:1}
+}
+</style>
+
+<div class="wrap">
+  <header class="run mono"><span><b>Cole Calfee</b> · Plan · Section · Elevation</span><span>Working studies · 9 Nov 2026 · separate from the earlier studies and from production</span></header>
+
+  <div class="head">
+    <h1>Plan<span>,</span><br>Section<span>,</span><br>Elevation</h1>
+    <p>Three different ideas about an artist's website. Plan is how a stranger meets the work. Section is where the work accumulates and is kept honest. Elevation is a private wall where it gets made. Each one is built and works. All three use the same 72 records and Cole's existing images.</p>
+  </div>
+
+  <nav class="studies" aria-label="Studies">
+    <article class="st">
+      <div class="k mono"><b>Public experience</b><span>Plan</span></div>
+      <h2>A way in</h2>
+      <a href="plan/index.html"><img src="stills/plan-entrance_d.webp" alt="Plan: the entrance to the showing Red, a large title, a checklist and Red Sea"></a>
+      <p>A showing is a curated entrance: a title, a checklist, then one work at a time with a proper wall label. If you stay on a work for a few seconds, the label opens onto the rest of the work. <i>Sit</i> lets the showing turn by itself. All 72 records are one click away. There are no 3D rooms and no closing dates.</p>
+      <ul><li>Try: enter Red, stay on a work for five seconds</li><li>Try: Sit · All work · Paper</li></ul>
+      <a class="open" href="plan/index.html">Open Plan <span>→</span></a>
+    </article>
+    <article class="st">
+      <div class="k mono"><b>Archive</b><span>Section</span></div>
+      <h2>A factual record</h2>
+      <a href="section/index.html"><img src="stills/section-work_d.webp" alt="Section: disciplines as layers across 2015 to 2026, undated work set apart, Zen Buffalo's record open"></a>
+      <p>Time runs across and the disciplines are layers. Cut through any year to see everything made then. Every fact is marked verified, inferred, study label, reading or missing, with its source. Undated work sits apart instead of being guessed. <i>What we know</i> turns the archive into a map of its own gaps.</p>
+      <ul><li>Try: select a mark · click a year · As text</li><li>Try: What we know → Size, Original</li></ul>
+      <a class="open" href="section/index.html">Open Section <span>→</span></a>
+    </article>
+    <article class="st">
+      <div class="k mono"><b>Creative workspace</b><span>Elevation</span></div>
+      <h2>A finite wall</h2>
+      <a href="elevation/index.html"><img src="stills/elevation_d.webp" alt="Elevation: a 12 by 7 foot wall drawn with dimensions, paintings at recorded sizes, the library beside it"></a>
+      <p>A private wall, 12 ft × 7 ft, drawn as an elevation. Paintings hang at their recorded sizes, and everything else at a marked working size. The wall can't grow: to put something up, take something down. Everything else waits in the library. Snapshots record the wall with the date, and one can be proposed for the public site. Nothing is published from here.</p>
+      <ul><li>Try: drag from the library · Delete takes down</li><li>Try: Snapshot · Bring one back · Propose</li></ul>
+      <a class="open" href="elevation/index.html">Open Elevation <span>→</span></a>
+    </article>
+  </nav>
+
+  <section class="s" id="system">
+    <div><span class="mono lab">System</span><h2>One home for each thing</h2><p class="intro">The website presents the work. It doesn't become a second archive, a second task list or a second notebook. Each fact has one home, and the website points to it.</p></div>
+    <div>
+      <div class="sys">
+        <div class="node"><h3>Tangerine</h3><div class="role">Keeps originals and authorship</div><p>Master files and who made them. This is the source of truth for every original.</p><div class="owns">Owns: original files · authorship · capture facts</div></div>
+        <div class="node"><h3>TABLET</h3><div class="role">Thinking and working</div><p>Where ideas are worked through. Elevation is the narrow step where work is arranged for the site.</p><div class="owns">Owns: working thought · drafts</div></div>
+        <div class="node"><h3>Notion</h3><div class="role">Projects and commitments</div><p>What's planned, for whom, and by when. A showing links to its project and doesn't copy it.</p><div class="owns">Owns: projects · dates due · clients</div></div>
+        <div class="node site"><h3>Website</h3><div class="role">Presents the work</div><p>Plan shows the work, Section publishes the record, Elevation proposes. It holds only web-size copies, each pointing back to its original.</p><div class="owns">Owns: showings · public labels · sale state (Shopify)</div></div>
+        <div class="flow">
+          <div><b>Elevation → Plan</b><br>A snapshot is proposed, then reviewed. Nothing goes public on its own.</div>
+          <div><b>Tangerine → Section</b><br>Records read facts by reference. The website never edits them.</div>
+          <div><b>Notion ↔ Plan</b><br>A showing names its project. Deadlines stay in Notion.</div>
+        </div>
+      </div>
+      <ul class="rules">
+        <li><b>Originals are never touched.</b> Every image here is a resized copy. The painting crops are made from the photographs, which stay unchanged, and every crop is listed in <code>canvases.json</code>.</li>
+        <li><b>No competing archive.</b> Section is the published face of the record, not a parallel store. Each record has an <i>Original</i> field waiting for its Tangerine reference. In this study none are linked yet, and it says so on every record.</li>
+        <li><b>Readings stay readings.</b> Motifs such as "bison" are Claude's readings of the images. They are drawn dashed, labelled, and never mixed with stated facts until Cole confirms them.</li>
+      </ul>
+      <p class="assume">Assumed from your description, not from the tools themselves: how Tangerine identifies a file, and whether TABLET can export an arrangement. The links above are designed to be references, so either answer fits.</p>
+    </div>
+  </section>
+
+  <section class="s" id="facts">
+    <div><span class="mono lab">How facts are marked</span><h2>Known, inferred, missing</h2><p class="intro">Counts are from the 72 records. Sources are the live site's own files.</p></div>
+    <div class="legend">
+      <div><div class="n"><i class="chip c-v"></i>Verified</div><p>Stated for this work in a named source, such as a painting's size in <code>paintings-archive.js</code>.</p></div>
+      <div><div class="n"><i class="chip c-i"></i>Inferred</div><p>Taken from a source but not stated for this work. Most dates are the project's year from the Index.</p></div>
+      <div><div class="n"><i class="chip c-p"></i>Study label</div><p>A working name given here because none is recorded, such as "Ronnie Hodges 01". Plan shows these as <i>Untitled</i>.</p></div>
+      <div><div class="n"><i class="chip c-x"></i>Reading</div><p>An interpretation by Claude, such as shared motifs. Unconfirmed.</p></div>
+      <div><div class="n"><i class="chip c-m"></i>Missing</div><p>Not recorded anywhere available: 27 dates, 58 sizes, every collector, every original link.</p></div>
+    </div>
+  </section>
+
+  <section class="s" id="notes">
+    <div><span class="mono lab">Notes</span><h2>What's real and what isn't</h2></div>
+    <div class="notes">
+      <p><b>The showings</b> Red, Ranch &amp; Arena and Paper are selections made for this study. Their titles are working titles. Their wall text is built from facts alone (counts, kinds, years) and is marked as a placeholder for Cole's own.</p>
+      <p><b>No provenance is invented.</b> Sold paintings say Sold and nothing more. "Where now" is recorded as missing on every painting, and collector information is never inferred.</p>
+      <p><b>Authorship gaps are shown.</b> Seven images on the site have no stated photographer, including the Kashus portraits, PBR and the studio photograph. Their records say so.</p>
+      <p><b>Elevation is private by design.</b> It saves only to the browser it's used in. Snapshots and proposals never leave it. In the full system, a proposal becomes a draft showing for review.</p>
+      <p><b>Music, film and writing</b> have lanes in Section, although the repository holds only one music credit, one film credit and no writing. The lanes are ready, and they don't pretend to be full.</p>
+      <p><b>Built for Generations</b> appears as Freeman records in Section, with the client named on each one. It isn't on the Elevation wall, and it isn't a showing unless Cole makes it one.</p>
+    </div>
+  </section>
+
+  <footer class="mono"><span>study/plan-section-elevation · earlier studies and site/ untouched</span><span>72 records · 3 studies</span></footer>
+</div>

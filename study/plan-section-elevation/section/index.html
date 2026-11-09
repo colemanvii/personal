@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Section · Cole Calfee</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,200..600&family=Geist+Mono:wght@300..500&display=swap">
+<style>
+/* SECTION — the archive.
+   Time runs across, disciplines are layers, every record is a mark. A cut through any year shows
+   everything made then. Every fact carries its status: verified, inferred, study label,
+   interpretation or missing. The gaps are part of the record. */
+:root{
+  --paper:#ffffff;
+  --ink:#121212;
+  --mid:#6f6e6a;
+  --faint:#b3b2ad;
+  --rule:#e6e5e1;
+  --tint:#f6f6f4;
+  --red:#a3352a;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --m:clamp(16px,2vw,30px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);overflow:hidden}
+body{font:400 14px/1.4 var(--sans);font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:1px solid var(--red);outline-offset:2px}
+.mono{font:400 10px/1.45 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.app{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr);padding:env(safe-area-inset-top) max(var(--m),env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--m),env(safe-area-inset-left))}
+
+/* title block, as on a drawing sheet */
+.block{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(16px,3vw,48px);align-items:end;padding:16px 0 12px;border-bottom:1px solid var(--ink)}
+.block h1{margin:0;font-weight:300;font-size:clamp(30px,3.4vw,54px);line-height:.9;letter-spacing:-.03em;font-variation-settings:"wdth" 72}
+.block h1 span{display:block;font:400 10px/1.4 var(--mono);letter-spacing:.05em;color:var(--mid);text-transform:uppercase;margin-bottom:8px}
+.tally{display:grid;grid-template-columns:repeat(6,auto);justify-content:start;gap:clamp(12px,2vw,28px);color:var(--mid)}
+.tally b{font:300 22px/1 var(--sans);font-variation-settings:"wdth" 70;color:var(--ink);display:block;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.modes{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.seg{display:flex;border:1px solid var(--ink)}
+.seg button{font:400 10px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:7px 10px;color:var(--mid)}
+.seg button+button{border-left:1px solid var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.legend{display:flex;gap:12px;color:var(--mid)}
+.legend span{display:inline-flex;gap:5px;align-items:center}
+
+/* status chips */
+.st{display:inline-block;width:9px;height:9px;flex:none}
+.st.v{background:var(--ink)}
+.st.i{background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink);background-image:linear-gradient(135deg,transparent 45%,var(--ink) 45% 55%,transparent 55%)}
+.st.p{background:var(--faint)}
+.st.x{background:var(--paper);box-shadow:inset 0 0 0 1px var(--red);border-radius:50%}
+.st.m{background:var(--paper);box-shadow:inset 0 0 0 1px var(--red)}
+
+/* body: section + record */
+.body{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,30%);gap:var(--m);min-height:0;padding-top:14px}
+.chart{position:relative;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.axis{position:relative;height:22px}
+.axis button{position:absolute;bottom:4px;transform:translateX(-50%);font:400 10px/1 var(--mono);color:var(--mid);font-variant-numeric:tabular-nums;padding:4px 2px}
+.axis button:hover,.axis button.cut{color:var(--red)}
+.field{position:relative;min-height:0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.lane{position:absolute;left:0;right:0;border-top:1px solid var(--rule)}
+.lane:first-child{border-top:0}
+.lane .name{position:absolute;left:0;top:8px;font:400 12px/1 var(--sans);font-variation-settings:"wdth" 75;letter-spacing:.01em;text-transform:uppercase}
+.lane .name small{display:block;font:400 9.5px/1.4 var(--mono);color:var(--faint);margin-top:3px}
+.colrule{position:absolute;top:0;bottom:0;width:0;border-left:1px solid var(--rule)}
+.nd{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,transparent 0 6px,var(--tint) 6px 7px)}
+.ndlab{position:absolute;bottom:4px;font:400 10px/1 var(--mono);color:var(--red);letter-spacing:.04em;text-transform:uppercase}
+.mark{position:absolute;display:block;background:var(--tint);overflow:hidden;transition:opacity .2s,box-shadow .2s}
+.mark img{width:100%;height:100%;object-fit:cover;display:block}
+.mark.noimg{background:var(--paper);box-shadow:inset 0 0 0 1px var(--faint)}
+.mark[aria-current=true]{box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--red);z-index:3}
+.mark:hover{box-shadow:0 0 0 1px var(--ink);z-index:2}
+.chart.dim .mark:not(.lit){opacity:.18}
+/* status view: each mark becomes the status of one field */
+.chart.status .mark img{opacity:0}
+.chart.status .mark.s-v{background:var(--ink)}
+.chart.status .mark.s-i{background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink);background-image:linear-gradient(135deg,transparent 45%,var(--ink) 45% 55%,transparent 55%)}
+.chart.status .mark.s-p{background:var(--faint)}
+.chart.status .mark.s-m{background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--red)}
+.chart.status .mark.s-n{background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule)}
+.cutline{position:absolute;top:-4px;bottom:0;width:0;border-left:1px solid var(--red);pointer-events:none;z-index:4}
+.cutline span{position:absolute;bottom:6px;left:6px;font:400 10px/1 var(--mono);color:var(--red);white-space:nowrap}
+svg.threads{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:visible}
+svg.threads path{fill:none;stroke-width:1}
+.foot{display:flex;justify-content:space-between;gap:16px;padding-top:8px;color:var(--mid);flex-wrap:wrap}
+.fieldpick{display:flex;gap:10px;align-items:center}
+.fieldpick button{font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);padding:4px 0}
+.fieldpick button[aria-pressed=true]{color:var(--ink);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:4px}
+
+/* record */
+.side{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);border-left:1px solid var(--rule);padding-left:var(--m)}
+.tabs{display:flex;gap:16px;border-bottom:1px solid var(--rule)}
+.tabs button{font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);padding:8px 0 9px}
+.tabs button[aria-pressed=true]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
+.pane{min-height:0;overflow:hidden;padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.rec-img{position:relative;flex:0 1 34%;min-height:90px;background:var(--tint)}
+.rec-img img{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain}
+.rec-img .none{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint)}
+.rec-no{display:flex;justify-content:space-between;color:var(--mid)}
+.rec-no b{font-weight:400;color:var(--red)}
+.rec h2{margin:0;font-weight:350;font-size:clamp(22px,1.9vw,30px);line-height:1.02;letter-spacing:-.02em;font-variation-settings:"wdth" 80}
+.facts{display:grid;grid-template-columns:5.6em minmax(0,1fr) 12px;border-top:1px solid var(--ink);font-size:13px}
+.facts>*{padding:5px 0;border-bottom:1px solid var(--rule);min-width:0}
+.facts dt{font:400 9.5px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);padding-top:7px}
+.facts dd{margin:0;padding-right:8px}
+.facts dd .src{display:block;font:400 9.5px/1.4 var(--mono);color:var(--faint);margin-top:2px;overflow-wrap:anywhere}
+.facts dd.m{color:var(--red)}
+.facts dd.p{color:var(--mid)}
+.facts .st{margin-top:8px}
+.rel{font-size:13px}
+.rel h3{font:400 9.5px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);margin:0 0 4px;display:flex;gap:6px;align-items:center}
+.rel .chips{display:flex;flex-wrap:wrap;gap:4px}
+.rel .chips button{width:30px;height:30px;background:var(--tint);overflow:hidden}
+.rel .chips button img{width:100%;height:100%;object-fit:cover}
+.rel .chips button.x{box-shadow:inset 0 0 0 1px var(--red)}
+.rel .note{font:400 9.5px/1.5 var(--mono);color:var(--faint);text-transform:uppercase;margin-top:4px}
+.cutlist{display:grid;gap:10px;align-content:start}
+.cutlist h2{margin:0;font:300 46px/1 var(--sans);font-variation-settings:"wdth" 70;letter-spacing:-.03em}
+.cutlist .grp{display:grid;grid-template-columns:7em minmax(0,1fr);gap:8px;border-top:1px solid var(--rule);padding-top:6px}
+.cutlist .grp>span{font:400 10px/1.6 var(--mono);text-transform:uppercase;color:var(--mid)}
+.cutlist .grp div{display:flex;flex-wrap:wrap;gap:4px}
+.cutlist .grp button{width:38px;height:38px;background:var(--tint);overflow:hidden}
+.cutlist .grp button img{width:100%;height:100%;object-fit:cover}
+.cutlist .grp em{font:italic 300 13px/1.4 var(--sans);color:var(--faint)}
+pre.text{margin:0;font:400 11px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:var(--tint);padding:12px 14px;min-height:0;overflow:auto;flex:1}
+.copy{align-self:flex-start;font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--ink);padding:7px 10px}
+.copy:hover{background:var(--ink);color:var(--paper)}
+
+@media (max-width:860px){
+  .block{grid-template-columns:1fr;gap:10px}
+  .modes{align-items:flex-start}
+  .tally{grid-template-columns:repeat(3,auto);gap:10px 18px}
+  .tally b{font-size:18px}
+  .legend{flex-wrap:wrap;gap:8px}
+  .body{grid-template-columns:1fr}
+  .side{position:fixed;left:0;right:0;bottom:0;height:62dvh;background:var(--paper);border-left:0;border-top:1px solid var(--ink);padding:0 max(16px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 8px) max(16px,env(safe-area-inset-left));z-index:8;transform:translateY(100%);transition:transform .3s ease}
+  .side.open{transform:none}
+  .tabs .close{margin-left:auto}
+  .lane .name{font-size:10px}
+  .lane .name small{display:none}
+}
+.tabs .close{display:none}
+@media (max-width:860px){.tabs .close{display:block}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.study{position:fixed;right:max(var(--m),env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom) + 4px);font:400 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-decoration:none;z-index:9}
+.study:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="block">
+    <h1><span>Cole Calfee · Archive · Section</span>Section through<br>the work, 2015—2026</h1>
+    <div class="tally" id="tally"></div>
+    <div class="modes">
+      <div class="seg" role="group" aria-label="View"><button type="button" data-view="work" aria-pressed="true">Work</button><button type="button" data-view="status" aria-pressed="false">What we know</button></div>
+      <div class="legend mono"><span><i class="st v"></i>Verified</span><span><i class="st i"></i>Inferred</span><span><i class="st p"></i>Study label</span><span><i class="st x"></i>Reading</span><span><i class="st m"></i>Missing</span></div>
+    </div>
+  </header>
+
+  <main class="body">
+    <section class="chart" id="chart" aria-label="Section: disciplines by year">
+      <div class="axis" id="axis"></div>
+      <div class="field" id="field"><svg class="threads" id="threads"></svg></div>
+      <div class="foot mono">
+        <div class="fieldpick" id="fieldpick" hidden role="group" aria-label="Field"></div>
+        <span id="hint">Select a mark for its record · select a year to cut</span>
+        <span>Years from the live Index; undated work sits apart, not guessed</span>
+      </div>
+    </section>
+
+    <aside class="side" id="side" aria-label="Record">
+      <div class="tabs" role="group" aria-label="Panel"><button type="button" data-tab="record" aria-pressed="true">Record</button><button type="button" data-tab="cut" aria-pressed="false">Cut</button><button type="button" data-tab="text" aria-pressed="false">As text</button><button type="button" class="close mono" id="close">Close ×</button></div>
+      <div class="pane" id="pane"></div>
+    </aside>
+  </main>
+</div>
+<a class="study" href="../">↩ Study · Section</a>
+
+<script src="../data/records.js"></script>
+<script>
+(()=>{
+const R=window.RECORDS,M=window.MOTIFS,W=Object.fromEntries(R.map(r=>[r.id,r]));
+const $=s=>document.querySelector(s);
+const thumb=r=>r.image?'../media/'+(r.image.endsWith('.svg')?r.image:r.image.replace(/^l\//,'s/')):'';
+const large=r=>r.image?'../media/'+r.image:'';
+const LAYERS=['Painting','Drawing','Photography','Design','Music','Film','Writing'];
+const YEARS=[];for(let y=2015;y<=2026;y++)YEARS.push(y);
+const S={v:'Verified',i:'Inferred',p:'Study label',x:'Reading',m:'Missing'};
+let view='work',fieldKey='year',sel=W['zen-buffalo'],cut=2024,tab='record';
+
+/* tally: what the archive knows about itself */
+const cnt=(k,s)=>R.filter(r=>r[k]&&r[k].s===s).length;
+$('#tally').innerHTML=[['Records',R.length],['Dated by source',cnt('year','v')],['Dated by project',cnt('year','i')],['Undated',cnt('year','m')],['Sizes recorded',cnt('size','v')],['Originals linked',cnt('original','v')]]
+  .map(([l,n])=>`<div class="mono"><b>${n}</b>${l}</div>`).join('');
+
+/* layout */
+let geo=null;
+function layout(){
+  const F=$('#field');const w=F.clientWidth,h=F.clientHeight;
+  const labelW=Math.min(110,Math.max(64,w*.1)),ndW=Math.max(70,(w-labelW)*.17),yearsW=w-labelW-ndW-12;
+  const colW=yearsW/YEARS.length;
+  // lanes share the height by how much they hold; empty disciplines keep a slim lane of their own
+  const wts=LAYERS.map(L=>Math.max(1.2,Math.pow(R.filter(r=>r.layer===L).length,.55)));const tw=wts.reduce((a,b)=>a+b,0);
+  const laneHs=wts.map(x=>h*x/tw);const laneTops=laneHs.map((_,i)=>laneHs.slice(0,i).reduce((a,b)=>a+b,0));
+  const x0=labelW,ndX=labelW+yearsW+12;
+  // group records into cells
+  const cells={};R.forEach(r=>{const y=r.year.v?+r.year.v:'nd';const k=r.layer+'|'+y;(cells[k]=cells[k]||[]).push(r)});
+  // the largest square that lets the fullest cell fit
+  let s=40;const fits=s=>Object.entries(cells).every(([k,rs])=>{const cw=(k.endsWith('|nd')?ndW:colW)-4;const per=Math.max(1,Math.floor((cw+2)/(s+2)));return Math.ceil(rs.length/per)*(s+2)<=laneHs[LAYERS.indexOf(k.split('|')[0])]-10});
+  while(s>5&&!fits(s))s-=1;
+  geo={w,h,labelW,ndW,yearsW,colW,laneHs,laneTops,x0,ndX,s,cells};
+  draw();
+}
+function xOfYear(y){return geo.x0+(YEARS.indexOf(y)+.5)*geo.colW}
+function draw(){
+  const F=$('#field');const g=geo;
+  [...F.querySelectorAll('.lane,.mark,.colrule,.nd,.ndlab,.cutline')].forEach(e=>e.remove());
+  // lanes
+  LAYERS.forEach((L,i)=>{const d=document.createElement('div');d.className='lane';d.style.top=g.laneTops[i]+'px';d.style.height=g.laneHs[i]+'px';
+    const n=R.filter(r=>r.layer===L).length;d.innerHTML=`<span class="name">${L}<small>${n?n+' record'+(n>1?'s':''):'none yet'}</small></span>`;F.appendChild(d)});
+  YEARS.forEach((y,i)=>{const c=document.createElement('div');c.className='colrule';c.style.left=(g.x0+i*g.colW)+'px';F.appendChild(c)});
+  const nd=document.createElement('div');nd.className='nd';nd.style.left=g.ndX+'px';nd.style.width=g.ndW+'px';F.appendChild(nd);
+  // marks
+  Object.entries(g.cells).forEach(([k,rs])=>{
+    const [L,y]=k.split('|');const li=LAYERS.indexOf(L);const cx=y==='nd'?g.ndX+2:g.x0+YEARS.indexOf(+y)*g.colW+2;const cw=(y==='nd'?g.ndW:g.colW)-4;
+    const per=Math.max(1,Math.floor((cw+2)/(g.s+2)));
+    rs.forEach((r,j)=>{const b=document.createElement('button');b.type='button';b.className='mark'+(r.image?'':' noimg');b.dataset.id=r.id;
+      const col=j%per,row=Math.floor(j/per);
+      b.style.cssText=`left:${cx+col*(g.s+2)}px;top:${g.laneTops[li]+g.laneHs[li]-6-(row+1)*(g.s+2)}px;width:${g.s}px;height:${g.s}px`;
+      b.setAttribute('aria-label',`${r.no} ${r.title.v}, ${r.year.v||'undated'}`);
+      if(r.image)b.innerHTML=`<img loading="lazy" src="${thumb(r)}" alt="">`;
+      F.appendChild(b)});
+  });
+  // axis
+  $('#axis').innerHTML=YEARS.map(y=>`<button type="button" data-year="${y}" class="${y===cut?'cut':''}" style="left:${xOfYear(y)}px">'${String(y).slice(2)}</button>`).join('')+`<span class="ndlab" style="left:${g.ndX}px">Undated · ${R.filter(r=>!r.year.v).length}</span>`;
+  if(cut){const c=document.createElement('div');c.className='cutline';c.style.left=xOfYear(cut)+'px';c.innerHTML=`<span>Cut · ${cut}</span>`;F.appendChild(c)}
+  paint();
+}
+function paint(){
+  const chart=$('#chart');chart.classList.toggle('status',view==='status');
+  document.querySelectorAll('.mark').forEach(b=>{const r=W[b.dataset.id];b.className=b.className.replace(/\s?s-\w/g,'');
+    if(view==='status'){const f=r[fieldKey];b.classList.add('s-'+(f?f.s:'n'))}
+    b.setAttribute('aria-current',sel&&sel.id===b.dataset.id)});
+  threads();
+}
+/* threads: solid = same project (stated by the Index); dashed red = shared motif (a reading) */
+function threads(){
+  const svg=$('#threads');svg.innerHTML='';if(!sel||view==='status'){$('#chart').classList.remove('dim');return}
+  const pos=id=>{const b=document.querySelector(`.mark[data-id="${id}"]`);if(!b)return null;return [b.offsetLeft+b.offsetWidth/2,b.offsetTop+b.offsetHeight/2]};
+  const me=pos(sel.id);if(!me)return;const lit=new Set([sel.id]);let d='';
+  const same=R.filter(r=>r.project===sel.project&&r.id!==sel.id);
+  let html='';
+  same.forEach(r=>{const p=pos(r.id);if(!p)return;lit.add(r.id);html+=`<path d="M${me[0]},${me[1]} L${p[0]},${p[1]}" stroke="#121212" stroke-opacity=".35"/>`});
+  sel.motifs.forEach(m=>M[m].ids.forEach(id=>{if(id===sel.id)return;const p=pos(id);if(!p)return;lit.add(id);
+    const mx=(me[0]+p[0])/2,my=Math.min(me[1],p[1])-30;html+=`<path d="M${me[0]},${me[1]} Q${mx},${my} ${p[0]},${p[1]}" stroke="#a3352a" stroke-dasharray="3 3"/>`}));
+  svg.innerHTML=html;
+  $('#chart').classList.toggle('dim',lit.size>1);
+  document.querySelectorAll('.mark').forEach(b=>b.classList.toggle('lit',lit.has(b.dataset.id)));
+}
+
+/* panel */
+function fact(label,f){if(!f)return '';
+  const val=f.s==='m'?'Not recorded':f.v;
+  return `<dt>${label}</dt><dd class="${f.s}">${val}<span class="src">${f.s==='m'?f.src:S[f.s]+' · '+f.src}</span></dd><i class="st ${f.s}" title="${S[f.s]}"></i>`}
+function record(){
+  const r=sel;if(!r)return '';
+  const same=R.filter(x=>x.project===r.project&&x.id!==r.id);
+  const mot=r.motifs.map(m=>[m,M[m].ids.filter(id=>id!==r.id)]);
+  return `<div class="rec-img">${r.image?`<img src="${large(r)}" alt="${r.alt}">`:`<span class="none mono">No image in the repository</span>`}</div>
+   <div class="rec"><div class="rec-no mono"><span><b>${r.no}</b> · ${r.layer}${r.layer==='Design'?' / '+r.discipline:''}</span><span>Study no.</span></div><h2>${r.title.v}</h2></div>
+   <dl class="facts" style="margin:0">${fact('Title',r.title)}${fact('Date',r.year)}${fact('Medium',r.medium)}${fact('Size',r.size)}${fact('Author',r.author)}${fact('Status',r.status)}${fact('Where now',r.location)}${fact('Original',r.original)}</dl>
+   <div class="rel">${same.length?`<h3><i class="st v"></i>Same project · ${r.projectTitle} · stated</h3><div class="chips">${same.slice(0,16).map(x=>`<button type="button" data-id="${x.id}" aria-label="${x.title.v}">${x.image?`<img src="${thumb(x)}" alt="">`:''}</button>`).join('')}</div>`:''}
+   ${mot.map(([m,ids])=>`<h3 style="margin-top:8px"><i class="st x"></i>Reading · ${m}</h3><div class="chips">${ids.map(id=>`<button type="button" class="x" data-id="${id}" aria-label="${W[id].title.v}"><img src="${thumb(W[id])}" alt=""></button>`).join('')}</div>`).join('')}
+   ${mot.length?`<div class="note">Readings are Claude's, from the images. Unconfirmed by Cole.</div>`:''}</div>`;
+}
+function cutPane(){
+  const rs=R.filter(r=>+r.year.v===cut);
+  return `<div class="cutlist"><div class="mono" style="color:var(--mid)">Everything recorded in</div><h2>${cut}</h2>
+    ${LAYERS.map(L=>{const xs=rs.filter(r=>r.layer===L);return `<div class="grp"><span>${L}</span><div>${xs.length?xs.map(x=>`<button type="button" data-id="${x.id}" aria-label="${x.title.v}">${x.image?`<img src="${thumb(x)}" alt="">`:''}</button>`).join(''):'<em>Nothing recorded</em>'}</div></div>`}).join('')}
+    <div class="mono" style="color:var(--faint)">${rs.filter(r=>r.year.s==='i').length} of ${rs.length} dated by their project's year, not their own. ${R.filter(r=>!r.year.v).length} undated records can't be placed in any cut.</div></div>`;
+}
+function asText(){
+  const r=sel;const line=(k,f)=>f?`${k.padEnd(9)} ${f.s==='m'?'~':JSON.stringify(f.v)}   # ${S[f.s].toLowerCase()}${f.src?': '+f.src:''}`:'';
+  const t=[`# ${r.no} — one record, readable without the website`,`id        ${r.id}`,line('title',r.title),line('date',r.year),line('medium',r.medium),line('size',r.size),line('author',r.author),line('status',r.status),r.location?line('where',r.location):'',line('original',r.original),
+    `project   ${JSON.stringify(r.projectTitle)}   # stated: site/index/index.html`,`image     ${r.image?'media/'+r.image:'~'}   # web derivative only; the original is never altered`,
+    r.motifs.length?`readings  [${r.motifs.join(', ')}]   # interpretation by Claude, unconfirmed`:''].filter(Boolean).join('\n');
+  return `<pre class="text" id="txt">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</pre><button type="button" class="copy" id="copy">Copy record</button><div class="mono" style="color:var(--faint)">~ means not recorded. In the full system this file sits beside the derivative image and points to the original in Tangerine.</div>`;
+}
+function pane(){
+  document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab===tab));
+  $('#pane').innerHTML=tab==='record'?record():tab==='cut'?cutPane():asText();
+  const c=$('#copy');if(c)c.onclick=()=>{const t=$('#txt').textContent;navigator.clipboard?.writeText(t).then(()=>c.textContent='Copied',()=>{getSelection().selectAllChildren($('#txt'));c.textContent='Selected — press copy'})};
+}
+
+/* events */
+document.addEventListener('click',e=>{
+  const m=e.target.closest('[data-id]');if(m){sel=W[m.dataset.id];if(tab==='cut')tab='record';paint();pane();if(innerWidth<=860)$('#side').classList.add('open');try{history.replaceState(null,'','#'+sel.id)}catch(_){};return}
+  const y=e.target.closest('[data-year]');if(y){cut=+y.dataset.year;tab='cut';draw();pane();if(innerWidth<=860)$('#side').classList.add('open');return}
+  const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;if(tab==='text'&&!sel)sel=R[0];pane();return}
+  const v=e.target.closest('[data-view]');if(v){view=v.dataset.view;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b===v));$('#fieldpick').hidden=view!=='status';$('#hint').hidden=view==='status';paint();return}
+  const f=e.target.closest('[data-field]');if(f){fieldKey=f.dataset.field;document.querySelectorAll('[data-field]').forEach(b=>b.setAttribute('aria-pressed',b===f));paint();return}
+});
+$('#fieldpick').innerHTML='<span>Show</span>'+[['year','Date'],['medium','Medium'],['size','Size'],['author','Author'],['status','Status'],['original','Original']].map(([k,l])=>`<button type="button" data-field="${k}" aria-pressed="${k==='year'}">${l}</button>`).join('');
+$('#close').onclick=()=>$('#side').classList.remove('open');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#side').classList.remove('open')});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(layout,120)});
+const h=decodeURIComponent(location.hash.slice(1));if(W[h])sel=W[h];
+requestAnimationFrame(()=>{layout();pane();if(document.fonts)document.fonts.ready.then(layout)});
+})();
+</script>
+</body>
+</html>

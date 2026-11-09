@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Elevation · Cole Calfee</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Geist+Mono:wght@300..500&family=Source+Serif+4:ital,opsz,wght@1,8..60,300..400&display=swap">
+<style>
+/* ELEVATION — the private workspace.
+   One wall, drawn as an elevation with real dimensions: 12 ft × 7 ft. Paintings hang at their
+   recorded sizes; everything else at a marked working size. The wall is finite: to put something
+   up, you take something down. The library holds everything else. Snapshots record the wall as it
+   is, with the date; a snapshot can be proposed for the public site, but nothing leaves from here. */
+:root{
+  --paper:#ffffff;
+  --ink:#131313;
+  --mid:#6e6d69;
+  --faint:#b4b3ae;
+  --rule:#e7e6e2;
+  --tint:#f6f6f4;
+  --red:#a3352a;
+  --sans:"Geist","Helvetica Neue",Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --serif:"Source Serif 4",Georgia,serif;
+  --m:clamp(16px,1.8vw,28px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);overflow:hidden}
+body{font:400 13px/1.4 var(--sans);-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--red);outline-offset:2px}
+.mono{font:400 10px/1.45 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.app{position:fixed;inset:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,24vw,340px);grid-template-rows:52px minmax(0,1fr) 112px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0}
+.bar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(var(--m),env(safe-area-inset-right)) 0 max(var(--m),env(safe-area-inset-left));border-bottom:1px solid var(--ink)}
+.bar .id{display:flex;align-items:baseline;gap:14px}
+.bar .id b{font:500 14px/1 var(--sans);letter-spacing:-.01em}
+.private{display:inline-flex;gap:6px;align-items:center;color:var(--red)}
+.private::before{content:"";width:7px;height:7px;border:1px solid var(--red);border-radius:50%}
+.bar .acts{display:flex;gap:8px;align-items:center}
+.btn{font:400 10px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:9px 11px;border:1px solid var(--ink)}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--red);border-color:var(--red)}
+.meter{display:flex;align-items:center;gap:8px;color:var(--mid)}
+.meter i{display:block;width:90px;height:5px;background:var(--rule);position:relative}
+.meter i b{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+
+/* the elevation */
+.desk{position:relative;min-height:0;min-width:0}
+.sheet{position:absolute;inset:0}
+.wall{position:absolute;background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink)}
+.wall .grid{position:absolute;inset:0;background-image:radial-gradient(circle,var(--faint) .6px,transparent .8px);background-size:var(--ft) var(--ft);background-position:calc(var(--ft)/-2) calc(var(--ft)/-2);opacity:.7}
+.floor{position:absolute;height:0;border-top:2px solid var(--ink)}
+.floor::after{content:"";position:absolute;left:0;right:0;top:2px;height:10px;background:repeating-linear-gradient(135deg,transparent 0 5px,var(--rule) 5px 6px)}
+.dim{position:absolute;font:400 10px/1 var(--mono);color:var(--mid);letter-spacing:.03em}
+.dim.h{height:0;border-top:1px solid var(--mid)}
+.dim.h::before,.dim.h::after{content:"";position:absolute;top:-5px;width:1px;height:9px;background:var(--mid);transform:skewX(-45deg)}
+.dim.h::before{left:0}.dim.h::after{right:0}
+.dim.h span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);background:var(--paper);padding:0 6px}
+.dim.v{width:0;border-left:1px solid var(--mid)}
+.dim.v::before,.dim.v::after{content:"";position:absolute;left:-5px;width:9px;height:1px;background:var(--mid);transform:skewY(-45deg)}
+.dim.v::before{top:0}.dim.v::after{bottom:0}
+.dim.v span{position:absolute;top:50%;left:-10px;transform:translate(-100%,-50%);background:var(--paper);padding:4px 0;white-space:nowrap}
+.tag{position:absolute;font:400 10px/1 var(--mono);color:var(--mid);text-transform:uppercase;letter-spacing:.04em}
+.piece{position:absolute;margin:0;cursor:grab;touch-action:none;transition:box-shadow .15s}
+.piece img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;box-shadow:0 1px 1.5px rgba(0,0,0,.12)}
+.piece.work img{object-fit:contain;box-shadow:none}
+.piece.unsized::before{content:"";position:absolute;inset:-4px;border:1px dashed var(--faint);pointer-events:none}
+.piece.note{background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink);padding:.7em;font:italic 300 clamp(10px,1vw,15px)/1.3 var(--serif);overflow:hidden;color:var(--ink)}
+.piece[aria-current=true]{box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--red)}
+.piece.drag{cursor:grabbing;z-index:20;opacity:.92}
+.piece.bad{box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--red);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.ghost{position:fixed;pointer-events:none;z-index:30;opacity:.8;box-shadow:0 0 0 1px var(--red)}
+.ghost img{width:100%;height:100%;object-fit:contain}
+.toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 12px;font:400 10px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.04em;z-index:40;max-width:90%}
+.selbar{position:absolute;left:max(var(--m),env(safe-area-inset-left));right:var(--m);top:10px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;min-height:20px}
+.selbar .t{font:400 15px/1.2 var(--sans);letter-spacing:-.01em}
+.selbar .t small{font:400 10px/1 var(--mono);color:var(--mid);margin-left:8px;text-transform:uppercase}
+.selbar .take{font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--red);border-bottom:1px solid currentColor;padding-bottom:2px}
+
+/* library */
+.lib{grid-row:2/4;grid-column:2;border-left:1px solid var(--ink);display:grid;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0}
+.lib header{padding:14px 16px 8px;display:flex;justify-content:space-between;align-items:baseline}
+.lib h2{margin:0;font:400 20px/1 var(--sans);letter-spacing:-.02em}
+.back{margin:0 16px 10px;border:1px solid var(--red);padding:10px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center}
+.back img{width:52px;height:52px;object-fit:contain;background:var(--tint)}
+.back .mono{color:var(--red)}
+.back .t{font-size:13px;margin:3px 0}
+.back button{font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid currentColor;margin-right:10px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;padding:0 16px 8px;border-bottom:1px solid var(--rule)}
+.filters button{font:400 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);padding:5px 0}
+.filters button[aria-pressed=true]{color:var(--ink);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:4px}
+.shelf{overflow:auto;padding:12px 16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;gap:10px;align-content:start;scrollbar-width:thin;min-height:0}
+.item{position:relative;background:var(--tint);cursor:grab;touch-action:none;overflow:hidden}
+.item::before{content:"";display:block;padding-top:100%}
+.item>.c{position:absolute;inset:8px;overflow:hidden;outline:none}
+.item img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain;pointer-events:none}
+.item.on{opacity:.35}
+.item.on::after{content:"On wall";position:absolute;left:4px;bottom:3px;background:var(--paper);padding:1px 3px;font:400 8.5px/1 var(--mono);text-transform:uppercase;color:var(--ink)}
+.item.notec{background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink);font:italic 300 12px/1.25 var(--serif);color:var(--ink);cursor:text}
+.item.add{background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);font:400 10px/1.3 var(--mono);text-transform:uppercase;color:var(--mid);cursor:pointer;text-align:center}
+.item.add>.c{display:grid;place-items:center}
+.item.add:hover{box-shadow:inset 0 0 0 1px var(--ink);color:var(--ink)}
+
+/* snapshots */
+.snaps{grid-column:1;border-top:1px solid var(--ink);display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;padding:12px max(var(--m),env(safe-area-inset-right)) 12px max(var(--m),env(safe-area-inset-left));min-width:0}
+.snaps .lab{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:120px}
+.strip{display:flex;gap:12px;overflow-x:auto;align-items:stretch;scrollbar-width:thin}
+.snap{flex:none;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:5px;text-align:left}
+.snap canvas{display:block;height:58px;width:auto;box-shadow:inset 0 0 0 1px var(--rule)}
+.snap .d{font:400 9.5px/1.2 var(--mono);color:var(--mid);text-transform:uppercase;display:flex;gap:6px}
+.snap .d b{font-weight:400;color:var(--red)}
+.snap:hover canvas,.snap[aria-current=true] canvas{box-shadow:inset 0 0 0 1px var(--ink)}
+.empty{align-self:center;color:var(--faint);font:italic 300 14px/1.4 var(--serif);max-width:52ch}
+
+/* viewing a snapshot */
+.viewing{position:absolute;left:0;right:0;top:0;z-index:15;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px max(var(--m),env(safe-area-inset-left));background:var(--ink);color:var(--paper)}
+.viewing .btn{border-color:var(--paper);color:var(--paper)}
+.viewing .btn:hover{background:var(--paper);color:var(--ink)}
+.viewing .note{font:400 10px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.03em}
+.viewing .note b{font-weight:400;color:#f0b8ad}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) 92px}
+  .bar{flex-wrap:wrap;padding-block:8px;gap:8px}
+  .meter i{width:50px}
+  .bar .hide-s{display:none}
+  .lib{position:fixed;left:0;right:0;bottom:0;height:56dvh;background:var(--paper);z-index:25;border-left:0;border-top:1px solid var(--ink);transform:translateY(100%);transition:transform .3s ease;grid-row:auto;grid-column:auto;padding-bottom:env(safe-area-inset-bottom)}
+  .lib.open{transform:none}
+  .shelf{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .snaps{grid-column:1}
+  .snap canvas{height:44px}
+  .snaps .lab .mono:last-child{display:none}
+}
+.libtoggle{display:none}
+@media (max-width:860px){.libtoggle{display:inline-block}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.study{position:fixed;left:max(var(--m),env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom) + 3px);font:400 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-decoration:none;z-index:9}
+.study:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="id"><b>Elevation</b><span class="mono private">Private · this browser only</span></div>
+    <div class="acts">
+      <span class="meter mono hide-s" id="meter"><i><b></b></i><span></span></span>
+      <button type="button" class="btn libtoggle" id="libtoggle">Library</button>
+      <button type="button" class="btn" id="resurface">Bring one back</button>
+      <button type="button" class="btn solid" id="snapbtn">Snapshot</button>
+    </div>
+  </header>
+
+  <main class="desk" id="desk" aria-label="Wall A, elevation">
+    <div class="sheet" id="sheet"></div>
+    <div class="selbar" id="selbar"></div>
+  </main>
+
+  <aside class="lib" id="lib" aria-label="Library">
+    <header><h2>Library</h2><span class="mono" style="color:var(--mid)" id="libcount"></span></header>
+    <div class="back" id="back" hidden></div>
+    <div class="filters" id="filters" role="group" aria-label="Filter library"></div>
+    <div class="shelf" id="shelf"></div>
+  </aside>
+
+  <section class="snaps" aria-label="Snapshots">
+    <div class="lab"><span class="mono">Snapshots</span><span class="mono" style="color:var(--faint)">Dated · read-only</span></div>
+    <div class="strip" id="strip"></div>
+  </section>
+</div>
+<a class="study" href="../">↩ Study · Elevation</a>
+
+<script src="../data/records.js"></script>
+<script>
+(()=>{
+const R=window.RECORDS.filter(r=>r.image),W=Object.fromEntries(R.map(r=>[r.id,r]));
+const $=s=>document.querySelector(s);
+const pic=(r,s='s')=>'../media/'+(r.image.endsWith('.svg')?r.image:r.image.replace(/^l\//,s+'/'));
+const WALL={w:144,h:84,name:'Wall A'};       // inches: 12 ft × 7 ft
+const SNAP=2, WORKING=16, NOTE=10;            // grid in inches; working size for unsized works; note card size
+const KEY='elevation-study-v1';
+const fmt=i=>{const f=Math.floor(i/12),n=Math.round(i%12);return `${f}′ ${n}″`};
+
+/* state: the wall, the notes, the snapshots — kept in this browser only */
+const SEED={items:[{id:'red-sea',x:10,y:20},{id:'harvest-1',x:56,y:30},{id:'bison-study',x:100,y:46},{id:'lewis-grizzard',x:100,y:26},{id:'zen-buffalo',x:122,y:36},{id:'n1',x:120,y:56}],
+  notes:[{id:'n1',text:'A note card. Write anything here.'}],snaps:[],seen:{},example:true};
+let st;try{st=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!st||!st.items)st=JSON.parse(JSON.stringify(SEED));
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+let sel=null,viewing=null,filter='All';
+
+const thing=id=>W[id]?{kind:'work',r:W[id]}:{kind:'note',n:st.notes.find(n=>n.id===id)};
+function size(id){
+  const t=thing(id);
+  if(t.kind==='note')return {w:NOTE,h:NOTE,unsized:false};
+  const r=t.r;if(r.sizeIn)return {w:r.sizeIn[0],h:r.sizeIn[1],unsized:false};
+  const k=WORKING;return r.ratio>=1?{w:k,h:Math.round(k/r.ratio),unsized:true}:{w:Math.round(k*r.ratio),h:k,unsized:true};
+}
+const box=it=>{const s=size(it.id);return {x:it.x,y:it.y,w:s.w,h:s.h}};
+const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
+const inside=b=>b.x>=0&&b.y>=0&&b.x+b.w<=WALL.w&&b.y+b.h<=WALL.h;
+const free=(b,skip)=>inside(b)&&st.items.every(it=>it.id===skip||!hit(b,box(it)));
+function firstFree(id){const s=size(id);for(let y=WALL.h-s.h-6;y>=2;y-=SNAP)for(let x=2;x+s.w<=WALL.w-2;x+=SNAP){const b={x,y,w:s.w,h:s.h};if(free(b))return b}return null}
+
+/* drawing: the elevation, its dimension strings, the floor */
+let scale=1,ox=0,oy=0;
+function draw(){
+  const D=$('#desk'),sh=$('#sheet');const dw=D.clientWidth,dh=D.clientHeight;
+  const padL=Math.min(70,Math.max(52,dw*.09)),padR=Math.min(40,dw*.05),padT=54,padB=44;
+  scale=Math.min((dw-padL-padR)/WALL.w,(dh-padT-padB)/WALL.h);
+  const ww=WALL.w*scale,wh=WALL.h*scale;ox=padL+(dw-padL-padR-ww)/2;oy=padT+(dh-padT-padB-wh)/2;
+  const list=viewing?viewing.items:st.items;
+  let h=`<div class="wall" id="wall" style="left:${ox}px;top:${oy}px;width:${ww}px;height:${wh}px;--ft:${12*scale}px"><div class="grid"></div></div>
+  <div class="floor" style="left:${ox-14}px;top:${oy+wh}px;width:${ww+28}px"></div>
+  <div class="dim h" style="left:${ox}px;top:${oy-14}px;width:${ww}px"><span>${fmt(WALL.w)}</span></div>
+  <div class="dim v" style="left:${ox-16}px;top:${oy}px;height:${wh}px"><span>${fmt(WALL.h)}</span></div>
+  <span class="tag" style="left:${ox}px;top:${oy+wh+16}px">${WALL.name} · elevation · 1 dot = 1 ft</span>`;
+  list.forEach(it=>{const t=thing(it.id);if(!t.r&&!t.n)return;const s=size(it.id);
+    const st_=`left:${ox+it.x*scale}px;top:${oy+it.y*scale}px;width:${s.w*scale}px;height:${s.h*scale}px`;
+    h+=t.kind==='note'?`<figure class="piece note" data-id="${it.id}" style="${st_};font-size:${Math.max(6,scale*1.15)}px" tabindex="0" aria-current="${sel===it.id}">${esc(t.n.text)}</figure>`
+      :`<figure class="piece ${t.r.layer==='Photography'?'':'work'} ${s.unsized?'unsized':''}" data-id="${it.id}" style="${st_}" tabindex="0" aria-current="${sel===it.id}" aria-label="${t.r.title.v}"><img src="${pic(t.r,s.w*scale>220?'l':'s')}" alt=""></figure>`});
+  sh.innerHTML=h;
+  meter();selbar();
+}
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function meter(){const a=st.items.reduce((s,it)=>{const b=box(it);return s+b.w*b.h},0)/(WALL.w*WALL.h);
+  $('#meter b').style.width=Math.round(a*100)+'%';$('#meter span').textContent=`${st.items.length} up · ${Math.round(a*100)}% of wall`}
+function selbar(){
+  const S=$('#selbar');if(viewing){S.innerHTML='';return}
+  if(!sel){S.innerHTML=`<span class="mono" style="color:var(--mid)">${st.example?'Example arrangement. Rehang freely. ':''}Drag from the library · drag to move · ${SNAP} in. grid</span>`;return}
+  const t=thing(sel),s=size(sel);
+  const name=t.kind==='note'?'Note':t.r.title.v;
+  const sz=t.kind==='note'?'note card':s.unsized?`working size · no size recorded`:`${s.w} × ${s.h} in. · recorded`;
+  S.innerHTML=`<span class="t">${esc(name)}<small>${t.r?t.r.no+' · ':''}${sz}</small></span><button type="button" class="take" id="take">Take down</button>`;
+  $('#take').onclick=()=>takeDown(sel);
+}
+
+/* library: everything not on the wall is here, nothing is lost */
+const FILTERS=['All','Painting','Drawing','Photography','Design','Notes'];
+$('#filters').innerHTML=FILTERS.map(f=>`<button type="button" data-f="${f}" aria-pressed="${f==='All'}">${f}</button>`).join('');
+function shelf(){
+  const on=new Set(st.items.map(i=>i.id));
+  const works=filter==='Notes'?[]:R.filter(r=>filter==='All'||r.layer===filter);
+  const notes=(filter==='All'||filter==='Notes')?st.notes:[];
+  $('#shelf').innerHTML=`<button type="button" class="item add" id="addnote"><span class="c">+ Note</span></button>`+
+    notes.map(n=>`<div class="item notec ${on.has(n.id)?'on':''}" data-lib="${n.id}" title="Click the text to edit · drag the card's edge to the wall"><span class="c" contenteditable="${on.has(n.id)?'false':'true'}" spellcheck="false">${esc(n.text)}</span></div>`).join('')+
+    works.map(r=>`<div class="item ${on.has(r.id)?'on':''}" data-lib="${r.id}" title="${r.title.v}"><img loading="lazy" src="${pic(r)}" alt="${r.title.v}"></div>`).join('');
+  $('#libcount').textContent=`${R.length+st.notes.length} items · ${st.items.length} up`;
+  $('#addnote').onclick=()=>{const id='n'+Date.now();st.notes.unshift({id,text:'New note'});save();filter='All';shelf();const el=document.querySelector(`[data-lib="${id}"] .c`);if(el){el.focus();document.getSelection().selectAllChildren(el)}};
+  document.querySelectorAll('.notec .c').forEach(el=>el.addEventListener('input',()=>{const n=st.notes.find(n=>n.id===el.parentNode.dataset.lib);n.text=el.textContent.slice(0,140);save()}));
+}
+document.addEventListener('click',e=>{const f=e.target.closest('[data-f]');if(!f)return;filter=f.dataset.f;document.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed',b===f));shelf()});
+
+/* putting up, moving, taking down */
+function toast(t){const D=$('#desk');let el=D.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';D.appendChild(el)}el.textContent=t;clearTimeout(el._t);el._t=setTimeout(()=>el.remove(),2600)}
+function putUp(id,at){
+  if(st.items.some(i=>i.id===id)){sel=id;draw();return}
+  const s=size(id);let b=at?{x:at.x,y:at.y,w:s.w,h:s.h}:firstFree(id);
+  if(b&&!free(b))b=null;
+  if(!b){toast(at?'No room there. Take something down or move it.':'The wall is full. Take something down first.');return false}
+  st.items.push({id,x:b.x,y:b.y});st.seen[id]=Date.now();st.example=false;sel=id;save();draw();shelf();return true;
+}
+function takeDown(id){st.items=st.items.filter(i=>i.id!==id);st.seen[id]=Date.now();sel=null;st.example=false;save();draw();shelf();toast('Back in the library')}
+const toIn=(cx,cy)=>({x:(cx-$('#desk').getBoundingClientRect().left-ox)/scale,y:(cy-$('#desk').getBoundingClientRect().top-oy)/scale});
+const snapIn=v=>Math.round(v/SNAP)*SNAP;
+
+let drag=null;
+document.addEventListener('pointerdown',e=>{
+  if(viewing)return;
+  const p=e.target.closest('.piece');
+  if(p){const it=st.items.find(i=>i.id===p.dataset.id);sel=it.id;const pt=toIn(e.clientX,e.clientY);drag={mode:'move',it,el:p,dx:pt.x-it.x,dy:pt.y-it.y,ox:it.x,oy:it.y};p.setPointerCapture(e.pointerId);p.classList.add('drag');document.querySelectorAll('.piece').forEach(q=>q.setAttribute('aria-current',q===p));selbar();return}
+  const li=e.target.closest('[data-lib]');
+  if(li&&!li.classList.contains('on')&&!e.target.isContentEditable){drag={mode:'lib',id:li.dataset.lib,sx:e.clientX,sy:e.clientY,ghost:null}}
+});
+document.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  if(drag.mode==='move'){const pt=toIn(e.clientX,e.clientY);const s=size(drag.it.id);const x=snapIn(pt.x-drag.dx),y=snapIn(pt.y-drag.dy);
+    drag.el.style.left=(ox+x*scale)+'px';drag.el.style.top=(oy+y*scale)+'px';drag.nx=x;drag.ny=y;
+    drag.el.classList.toggle('bad',!free({x,y,w:s.w,h:s.h},drag.it.id));return}
+  if(drag.mode==='lib'){
+    if(!drag.ghost){if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;const s=size(drag.id);const g=document.createElement('div');g.className='ghost';g.style.width=s.w*scale+'px';g.style.height=s.h*scale+'px';
+      const t=thing(drag.id);g.innerHTML=t.r?`<img src="${pic(t.r)}" alt="">`:`<div class="piece note" style="position:static;width:100%;height:100%">${esc(t.n.text)}</div>`;document.body.appendChild(g);drag.ghost=g;if(innerWidth<=860)$('#lib').classList.remove('open')}
+    drag.ghost.style.left=e.clientX-drag.ghost.offsetWidth/2+'px';drag.ghost.style.top=e.clientY-drag.ghost.offsetHeight/2+'px'}
+});
+document.addEventListener('pointerup',e=>{
+  if(!drag)return;const d=drag;drag=null;
+  if(d.mode==='move'){d.el.classList.remove('drag');const s=size(d.it.id);
+    if(d.nx==null){draw();return}
+    // dragged off the wall entirely: take it down
+    const b={x:d.nx,y:d.ny,w:s.w,h:s.h};
+    if(b.x+b.w<-6||b.y+b.h<-6||b.x>WALL.w+6||b.y>WALL.h+6){takeDown(d.it.id);return}
+    if(free(b,d.it.id)){d.it.x=b.x;d.it.y=b.y;st.example=false;save()}else{toast('Overlaps or leaves the wall. Put back.')}
+    draw();return}
+  if(d.mode==='lib'){
+    if(!d.ghost){if(!W[d.id])return;putUp(d.id);return}           // a click puts a work in the first free place; notes are dragged
+    const s=size(d.id);const r=d.ghost.getBoundingClientRect();d.ghost.remove();
+    const pt=toIn(r.left,r.top);putUp(d.id,{x:snapIn(pt.x),y:snapIn(pt.y)});
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.target.isContentEditable)return;
+  if((e.key==='Delete'||e.key==='Backspace')&&sel&&!viewing){e.preventDefault();takeDown(sel)}
+  if(e.key==='Escape'){if(viewing)closeView();else{sel=null;draw()}}
+  if(sel&&!viewing&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const it=st.items.find(i=>i.id===sel);const s=size(sel);
+    const b={x:it.x+(e.key==='ArrowLeft'?-SNAP:e.key==='ArrowRight'?SNAP:0),y:it.y+(e.key==='ArrowUp'?-SNAP:e.key==='ArrowDown'?SNAP:0),w:s.w,h:s.h};
+    if(free(b,sel)){it.x=b.x;it.y=b.y;save();draw()}}
+});
+$('#desk').addEventListener('click',e=>{if(!e.target.closest('.piece,.selbar')&&!viewing){sel=null;draw()}});
+
+/* bring one back: the thing that has been away longest, offered (not hung) */
+$('#resurface').onclick=()=>{
+  const on=new Set(st.items.map(i=>i.id));const off=R.filter(r=>!on.has(r.id));
+  const never=off.filter(r=>!st.seen[r.id]);const pool=never.length?never:off.sort((a,b)=>st.seen[a.id]-st.seen[b.id]).slice(0,5);
+  const r=pool[Math.floor(Math.random()*pool.length)];if(!r)return;
+  const when=st.seen[r.id]?'last on the wall '+new Date(st.seen[r.id]).toLocaleDateString(undefined,{day:'numeric',month:'short'}):'never on this wall';
+  const B=$('#back');B.hidden=false;B.innerHTML=`<img src="${pic(r)}" alt=""><div><div class="mono">Back from the library · ${when}</div><div class="t">${r.title.v}</div><button type="button" id="b-up">Put up</button><button type="button" id="b-no">Not now</button></div>`;
+  $('#b-up').onclick=()=>{if(putUp(r.id)!==false)B.hidden=true};$('#b-no').onclick=()=>{st.seen[r.id]=Date.now();save();B.hidden=true};
+  if(innerWidth<=860)$('#lib').classList.add('open');
+};
+$('#libtoggle').onclick=()=>$('#lib').classList.toggle('open');
+
+/* snapshots: the wall exactly as it is, with the date. Read-only. One can be proposed for the public site. */
+$('#snapbtn').onclick=()=>{st.snaps.unshift({t:Date.now(),items:JSON.parse(JSON.stringify(st.items)),notes:st.notes.filter(n=>st.items.some(i=>i.id===n.id)).map(n=>({...n})),proposed:false});save();strip();toast('Snapshot taken')};
+function mini(sn,h){const c=document.createElement('canvas');const k=h/WALL.h;c.width=Math.round(WALL.w*k*2);c.height=h*2;const x=c.getContext('2d');x.scale(2,2);x.fillStyle='#fff';x.fillRect(0,0,WALL.w*k,h);
+  sn.items.forEach(it=>{const t=W[it.id];const s=t?size(it.id):{w:NOTE,h:NOTE};x.fillStyle=t?t.color:'#fff';x.fillRect(it.x*k,it.y*k,s.w*k,s.h*k);if(!t){x.strokeStyle='#131313';x.lineWidth=.5;x.strokeRect(it.x*k,it.y*k,s.w*k,s.h*k)}});return c}
+function strip(){
+  const S=$('#strip');S.innerHTML='';
+  if(!st.snaps.length){S.innerHTML='<p class="empty">No snapshots yet. A snapshot keeps the wall exactly as it is today, with the date, so you can look back at how the work came together.</p>';return}
+  st.snaps.forEach((sn,i)=>{const b=document.createElement('button');b.type='button';b.className='snap';b.setAttribute('aria-current',viewing===sn);
+    b.appendChild(mini(sn,innerWidth<=860?44:58));const d=document.createElement('div');d.className='d';
+    d.innerHTML=new Date(sn.t).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})+(sn.proposed?' <b>· Proposed</b>':'');b.appendChild(d);
+    b.onclick=()=>openView(sn);S.appendChild(b)});
+}
+function openView(sn){
+  viewing=sn;sel=null;
+  // show the snapshot's own notes, as they were
+  const keep=st.notes;st.notes=[...keep.filter(n=>!sn.notes.some(m=>m.id===n.id)),...sn.notes];draw();st.notes=keep;
+  const v=document.createElement('div');v.className='viewing';v.id='viewing';
+  v.innerHTML=`<span class="note">Snapshot · ${new Date(sn.t).toLocaleString(undefined,{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'})} · read-only${sn.proposed?' · <b>Proposed for the public site. Not published.</b>':''}</span>
+   <span style="display:flex;gap:8px"><button type="button" class="btn" id="v-restore">Rehang this</button><button type="button" class="btn" id="v-prop">${sn.proposed?'Withdraw proposal':'Propose for public'}</button><button type="button" class="btn" id="v-close">Back to wall</button></span>`;
+  $('#desk').appendChild(v);strip();
+  $('#v-close').onclick=closeView;
+  $('#v-restore').onclick=()=>{st.items=JSON.parse(JSON.stringify(sn.items));sn.notes.forEach(n=>{if(!st.notes.some(m=>m.id===n.id))st.notes.push({...n})});save();closeView();shelf();toast('Rehung from the snapshot')};
+  $('#v-prop').onclick=()=>{sn.proposed=!sn.proposed;save();closeView();openView(sn);toast(sn.proposed?'Proposed. Nothing is published from here.':'Proposal withdrawn')};
+}
+function closeView(){viewing=null;const v=$('#viewing');v&&v.remove();draw();strip()}
+
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{draw();strip()},120)});
+requestAnimationFrame(()=>{draw();shelf();strip()});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Plan · Cole Calfee</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..600;1,8..60,200..600&family=Geist+Mono:wght@300..500&display=swap">
+<style>
+/* PLAN — the public experience.
+   A showing is a curated way in: an entrance with a title, a checklist and a sequence of works,
+   one at a time, labelled like a wall label. The full body of work is always one step away.
+   No 3D room, no closing dates. Pace instead of navigation. */
+:root{
+  --paper:#ffffff;
+  --ink:#141312;
+  --mid:#74716b;
+  --faint:#b7b4ad;
+  --rule:#e8e6e1;
+  --red:#a3352a;
+  --serif:"Source Serif 4","Iowan Old Style",Palatino,Georgia,serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --m:clamp(18px,2.6vw,40px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);overflow:hidden}
+body{font:400 17px/1.45 var(--serif);-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--red);outline-offset:3px}
+.mono{font:400 10.5px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.mid{color:var(--mid)}
+.app{position:fixed;inset:0;padding:env(safe-area-inset-top) max(var(--m),env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--m),env(safe-area-inset-left))}
+.view{position:absolute;inset:env(safe-area-inset-top) max(var(--m),env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--m),env(safe-area-inset-left));display:grid;opacity:1;transition:opacity .6s ease}
+.view.fade{opacity:0}
+.top{display:flex;justify-content:space-between;align-items:center;height:56px;border-bottom:1px solid var(--rule);gap:16px}
+.top .name{font:500 15px/1 var(--serif);letter-spacing:-.01em;text-decoration:none}
+.top nav{display:flex;gap:22px}
+.top nav button,.top nav a{font:400 10.5px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--mid);text-decoration:none;padding:8px 0}
+.top nav :is(button,a):hover,.top nav [aria-current=true]{color:var(--ink)}
+
+/* ENTRANCE */
+.entrance{grid-template-rows:56px minmax(0,1fr) 54px}
+.ent{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,72px);min-height:0;padding-block:clamp(20px,4vh,48px)}
+.ent .text{display:flex;flex-direction:column;min-height:0;min-width:0}
+.ent .kicker{color:var(--red)}
+.ent h1{font-weight:250;font-size:clamp(64px,10vw,168px);line-height:.84;letter-spacing:-.045em;margin:14px 0 0;font-variation-settings:"opsz" 60}
+.ent .wall{font-size:clamp(17px,1.35vw,21px);line-height:1.45;max-width:34ch;margin:clamp(16px,3vh,32px) 0 0;font-weight:350}
+.ent .wall-tag{margin-top:8px;color:var(--faint)}
+.check{margin:auto 0 0;padding:0;list-style:none;border-top:1px solid var(--ink);min-height:0;overflow:hidden}
+.check li button{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:10px;width:100%;text-align:left;padding:clamp(4px,.85vh,8px) 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.check li button:hover .t{color:var(--red)}
+.check .n{font:400 10px/1 var(--mono);color:var(--faint);font-variant-numeric:tabular-nums}
+.check .t{font-style:italic;font-size:clamp(14px,1.05vw,16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.check .d{font:400 10px/1 var(--mono);color:var(--mid);text-transform:uppercase;white-space:nowrap}
+.ent .hero{position:relative;min-height:0;cursor:pointer}
+.ent .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 50%}
+.ent .enter{display:inline-flex;align-items:center;gap:14px;margin-top:clamp(14px,2.4vh,26px);font:400 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:14px 18px;background:var(--ink);color:var(--paper);align-self:flex-start}
+.ent .enter:hover{background:var(--red)}
+.programme{display:flex;align-items:center;gap:clamp(14px,2.4vw,36px);border-top:1px solid var(--rule);min-width:0;overflow-x:auto;scrollbar-width:none}
+.programme::-webkit-scrollbar{display:none}
+.programme button{white-space:nowrap;display:flex;gap:8px;align-items:baseline;color:var(--mid)}
+.programme button .r{font:400 10px/1 var(--mono);color:var(--faint)}
+.programme button em{font-size:15px}
+.programme button[aria-current=true]{color:var(--ink)}
+.programme button[aria-current=true] .r{color:var(--red)}
+.programme .all{margin-left:auto;font:400 10.5px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+
+/* VISIT */
+.visit{grid-template-rows:56px minmax(0,1fr) auto}
+.stage{position:relative;min-height:0;margin-block:clamp(18px,4vh,44px)}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .7s ease}
+.stage img.out{opacity:0}
+.stage .hit{position:absolute;top:0;bottom:0;width:30%;cursor:w-resize}
+.stage .hit.r{right:0;cursor:e-resize}
+.stage .hit.l{left:0}
+.label{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;border-top:1px solid var(--rule);padding:14px 0 18px}
+.tomb{min-width:0}
+.tomb .t{font-size:clamp(20px,1.7vw,26px);line-height:1.15;font-style:italic;font-weight:350}
+.tomb .t span{font-style:normal;color:var(--mid)}
+.tomb .l{font-size:15px;color:#3a3834;line-height:1.4}
+.tomb .l .q{color:var(--faint)}
+.linger{margin-top:10px;font:400 10.5px/1.6 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--mid);opacity:0;transform:translateY(4px);transition:opacity 1.4s ease,transform 1.4s ease;min-height:1.6em}
+.linger.on{opacity:1;transform:none}
+.linger button{text-transform:uppercase;letter-spacing:.03em;font:inherit;color:var(--ink);border-bottom:1px solid var(--rule)}
+.linger button:hover{color:var(--red);border-color:var(--red)}
+.linger i{font:italic 13px/1 var(--serif);text-transform:none;letter-spacing:0;color:var(--faint)}
+.seq{display:flex;align-items:center;gap:14px;font:400 11px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--mid)}
+.seq button{font-size:18px;padding:6px 4px;color:var(--ink)}
+.seq button:disabled{color:var(--rule);cursor:default}
+
+/* BENCH */
+body.bench .visit .top,body.bench .visit .label{opacity:0;transition:opacity .8s ease}
+body.bench .visit:hover .top{opacity:.9}
+body.bench .stage{margin-block:clamp(20px,5vh,60px)}
+.benchnote{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 16px);transform:translateX(-50%);color:var(--faint)}
+
+/* ALL WORK */
+.all{grid-template-rows:56px auto minmax(0,1fr)}
+.allhead{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 12px;gap:16px}
+.allhead h2{font-weight:250;font-size:clamp(34px,3.6vw,56px);letter-spacing:-.035em;margin:0;line-height:1}
+.layers{display:none;gap:16px;overflow-x:auto}
+.cols{columns:var(--cols,5);column-gap:clamp(18px,2vw,32px);column-fill:auto;min-height:0;height:100%;overflow:hidden;border-top:1px solid var(--ink);padding-top:12px;position:relative}
+.grp h3{break-after:avoid}
+.grp li{break-inside:avoid}
+.grp{min-width:0}
+.grp h3{font:400 10.5px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--red);margin:0 0 6px;display:flex;justify-content:space-between}
+.grp h3 span{color:var(--faint)}
+.grp ul{list-style:none;margin:0 0 18px;padding:0}
+.grp li button,.grp li a{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:3px 0;border-bottom:1px solid var(--rule);font-size:clamp(13px,.95vw,15px);line-height:1.3;text-decoration:none}
+.grp li .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grp li .y{font:400 10px/1.5 var(--mono);color:var(--faint);white-space:nowrap}
+.grp li :is(button,a):hover .t{color:var(--red)}
+.grp li.dim .t{color:var(--mid)}
+.peek{position:fixed;width:min(26vw,340px);aspect-ratio:1;pointer-events:none;z-index:6;background:var(--paper);display:grid;place-items:center;padding:10px;border:1px solid var(--rule)}
+.peek img{max-width:100%;max-height:100%;object-fit:contain}
+
+@media (max-width:820px){
+  body{font-size:16px}
+  .top nav{gap:14px}
+  .top nav .opt{display:none}
+  .ent{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:16px;padding-block:16px 10px}
+  .ent .hero{order:-1}
+  .ent .text{min-height:auto}
+  .ent h1{font-size:clamp(52px,16vw,80px);margin-top:8px}
+  .ent .wall{display:none}
+  .ent .wall-tag{display:none}
+  .check{display:none}
+  .label{grid-template-columns:1fr;gap:10px}
+  .seq{justify-content:space-between}
+  .cols{columns:1!important;overflow:hidden}
+  .grp{display:none}
+  .grp.on{display:block}
+  .layers{display:flex}
+  .layers button{font:400 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mid);padding:8px 0;white-space:nowrap}
+  .layers button[aria-pressed=true]{color:var(--ink);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:4px}
+  .allhead{flex-direction:column;gap:10px}
+  .peek{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.study{position:fixed;right:max(var(--m),env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom) + 4px);font:400 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-decoration:none;z-index:9}
+.study:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ENTRANCE -->
+  <section class="view entrance" id="entrance" aria-label="Showing entrance">
+    <header class="top"><a class="name" href="#">Cole Calfee</a><nav aria-label="Primary"><button type="button" data-go="all">All work</button><a class="opt" href="https://colecalfee.com/paintings/">Available</a><a href="https://colecalfee.com/info/">Contact</a></nav></header>
+    <div class="ent">
+      <div class="text">
+        <div class="mono kicker" id="e-kicker"></div>
+        <h1 id="e-title"></h1>
+        <p class="wall" id="e-wall"></p>
+        <div class="mono wall-tag">Wall text: factual placeholder, to be written by Cole</div>
+        <button type="button" class="enter" id="e-enter">Enter the showing <span aria-hidden="true">→</span></button>
+        <ol class="check" id="e-check" style="margin-top:clamp(16px,3vh,30px)"></ol>
+      </div>
+      <figure class="hero" id="e-hero" style="margin:0"><img id="e-img" alt=""></figure>
+    </div>
+    <nav class="programme" id="programme" aria-label="Showings"></nav>
+  </section>
+
+  <!-- VISIT -->
+  <section class="view visit" id="visit" hidden aria-label="Visit">
+    <header class="top"><button type="button" class="name" data-go="entrance" id="v-show"></button><nav aria-label="Visit"><button type="button" id="v-bench">Sit</button><button type="button" data-go="entrance">Checklist</button><button type="button" data-go="all">All work</button></nav></header>
+    <div class="stage" id="v-stage"><img id="v-img" alt=""><button type="button" class="hit l" aria-label="Previous work" data-step="-1"></button><button type="button" class="hit r" aria-label="Next work" data-step="1"></button></div>
+    <div class="label">
+      <div class="tomb" aria-live="polite"><div class="t" id="v-t"></div><div class="l" id="v-l"></div><div class="linger" id="v-linger"></div></div>
+      <div class="seq"><button type="button" data-step="-1" aria-label="Previous">‹</button><span id="v-n"></span><button type="button" data-step="1" aria-label="Next">›</button></div>
+    </div>
+  </section>
+
+  <!-- ALL WORK -->
+  <section class="view all" id="all" hidden aria-label="All work">
+    <header class="top"><a class="name" href="#">Cole Calfee</a><nav aria-label="Primary"><button type="button" data-go="entrance">Showings</button><a class="opt" href="https://colecalfee.com/paintings/">Available</a><a href="https://colecalfee.com/info/">Contact</a></nav></header>
+    <div class="allhead"><h2>All work</h2><span class="mono mid" id="a-count"></span><div class="layers" id="a-tabs" role="group" aria-label="Discipline"></div></div>
+    <div class="cols" id="a-cols"></div>
+  </section>
+</div>
+<div class="peek" id="peek" hidden><img alt=""></div>
+<div class="benchnote mono" id="benchnote" hidden>Sitting · the works change by themselves · Esc to stand</div>
+<a class="study" href="../">↩ Study · Plan</a>
+
+<script src="../data/records.js"></script>
+<script>
+(()=>{
+const R=window.RECORDS, W=Object.fromEntries(R.map(r=>[r.id,r]));
+const img=(r,s='l')=>r.image?'../media/'+(r.image.endsWith('.svg')?r.image:r.image.replace(/^l\//,s+'/')):'';
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,'0');
+
+// Showings: curated ways in. Selection and titles are proposals made for this study.
+const SHOWINGS=[
+  {roman:'I',title:'Red',ids:['red-sea','flowers-mccarty','pour-me-out','harvest-1','lewis-grizzard','jenni','peace-of-wild-things','ramsey-arrowhead','peach-circuit']},
+  {roman:'II',title:'Ranch & Arena',ids:['teton-1','ronnie-1','ronnie-3','ronnie-2','pbr-portrait','pbr-bull','teton-2','habitat','teton-3']},
+  {roman:'III',title:'Paper',ids:['bison-study','western-sketchbook-1','lakeside-club','broadcast-portrait','dog-studies','sketchbook-4','jm-cowboy','cowboyer-3','after-me']}
+];
+let cur=0, pos=0, seq=null, benchT=null, lingerT=null;
+
+/* facts read from the record; anything not recorded is simply left out of public labels */
+const yr=r=>r.year.v||'';
+const yrLabel=r=>r.year.v?r.year.v:'n.d.';
+// works without a recorded title are shown as Untitled; the study's working label stays in grey
+const tt=r=>r.title.s==='p'?`Untitled <span class="q" style="font-style:normal;color:var(--faint)">(${r.title.v})</span>`:r.title.v;
+function factLine(r){
+  const parts=[];
+  if(r.medium.v&&r.layer!=='Photography')parts.push(r.medium.v);
+  if(r.size.v)parts.push(r.size.v);
+  if(r.client)parts.push('For '+r.projectTitle);
+  if(r.status.v==='Sold')parts.push('Sold');
+  if(r.status.v&&r.status.v.startsWith('Available'))parts.push('<a href="https://colecalfee.com/paintings/" style="color:var(--red)">Available</a>');
+  return parts.join(' · ');
+}
+function wallText(sh){
+  const rs=sh.ids.map(id=>W[id]);const years=rs.map(yr).filter(Boolean).sort();
+  const kinds=[...new Set(rs.map(r=>r.layer==='Design'?r.discipline.toLowerCase():r.layer.toLowerCase()))];
+  const undated=rs.filter(r=>!r.year.v).length;
+  return `${rs.length} works: ${kinds.join(', ')}.`+(years.length?` Dated works from ${years[0]}${years[0]!==years[years.length-1]?' to '+years[years.length-1]:''}`:'')+(undated?`; ${undated} undated.`:'.');
+}
+
+/* ENTRANCE */
+function entrance(i){
+  cur=i;const sh=SHOWINGS[i];
+  $('#e-kicker').textContent=`Showing ${sh.roman} of ${SHOWINGS.length} · working title`;
+  $('#e-title').textContent=sh.title;
+  $('#e-wall').textContent=wallText(sh);
+  $('#e-check').innerHTML=sh.ids.map((id,k)=>{const r=W[id];return `<li><button type="button" data-open="${k}"><span class="n">${pad(k+1)}</span><span class="t">${tt(r)}</span><span class="d">${yrLabel(r)}</span></button></li>`}).join('');
+  const hero=W[sh.ids[0]];$('#e-img').src=img(hero);$('#e-img').alt=hero.alt;
+  $('#programme').innerHTML=SHOWINGS.map((s,k)=>`<button type="button" data-show="${k}" aria-current="${k===i}"><span class="r">${s.roman}</span><em>${s.title}</em></button>`).join('')+`<button type="button" class="all" data-go="all">All work · ${R.length} records →</button>`;
+  show('entrance');
+}
+$('#e-enter').onclick=()=>visit(SHOWINGS[cur].ids,0,SHOWINGS[cur]);
+$('#e-hero').onclick=()=>visit(SHOWINGS[cur].ids,0,SHOWINGS[cur]);
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');if(o)visit(SHOWINGS[cur].ids,+o.dataset.open,SHOWINGS[cur]);
+  const s=e.target.closest('[data-show]');if(s)entrance(+s.dataset.show);
+  const g=e.target.closest('[data-go]');if(g){if(g.dataset.go==='all')all();else{stand();entrance(cur)}}
+  const st=e.target.closest('[data-step]');if(st)step(+st.dataset.step);
+});
+
+/* VISIT: one work at a time, a wall label, and a doorway into everything else */
+function visit(ids,i,sh){
+  seq={ids,sh};pos=i;show('visit');
+  $('#v-show').textContent=sh?`${sh.roman} · ${sh.title}`:'All work';
+  render(true);
+}
+function render(first){
+  const r=W[seq.ids[pos]];const im=$('#v-img');
+  im.classList.add('out');const pre=new Image();
+  pre.onload=()=>{setTimeout(()=>{im.src=pre.src;im.alt=r.alt;im.classList.remove('out')},first?0:260)};pre.src=img(r);
+  [-1,1].forEach(d=>{const n=W[seq.ids[(pos+d+seq.ids.length)%seq.ids.length]];if(n&&n.image){const p=new Image();p.src=img(n)}});
+  $('#v-t').innerHTML=`${tt(r)}<span>, ${yrLabel(r)}</span>`;
+  $('#v-l').innerHTML=factLine(r)||'<span class="q">Medium and size not recorded</span>';
+  $('#v-n').textContent=`${pad(pos+1)} / ${pad(seq.ids.length)}`;
+  document.querySelectorAll('.seq [data-step]').forEach(b=>b.disabled=false);
+  // linger: after a while, the label opens onto the rest of the work
+  const L=$('#v-linger');L.classList.remove('on');L.innerHTML='';clearTimeout(lingerT);
+  lingerT=setTimeout(()=>{
+    const same=R.filter(x=>x.project===r.project&&x.id!==r.id&&x.image);
+    const mot=r.motifs.map(m=>[m,window.MOTIFS[m].ids.filter(id=>id!==r.id)]).filter(([,v])=>v.length);
+    const bits=[];
+    if(same.length)bits.push(`<button type="button" data-more="p:${r.project}">${same.length} more from ${r.projectTitle}</button>`);
+    mot.slice(0,1).forEach(([m,v])=>bits.push(`<button type="button" data-more="m:${m}">${v.length} others with ${m}</button> <i>a reading, not a fact</i>`));
+    if(!bits.length)return;
+    L.innerHTML='Also in the work: '+bits.join(' &nbsp;·&nbsp; ');L.classList.add('on');
+  },document.body.classList.contains('bench')?1e9:5200);
+  try{const hh=(seq.sh?'s'+(SHOWINGS.indexOf(seq.sh)+1)+'-':'w-')+r.id;last=hh;history.replaceState(null,'','#'+hh)}catch(e){}
+}
+document.addEventListener('click',e=>{const m=e.target.closest('[data-more]');if(!m)return;const [k,v]=m.dataset.more.split(':');
+  const ids=k==='p'?R.filter(x=>x.project===v&&x.image).map(x=>x.id):window.MOTIFS[v].ids;
+  const at=Math.max(0,ids.indexOf(seq.ids[pos]));visit(ids,at,null);$('#v-show').textContent=k==='p'?W[ids[0]].projectTitle:'With '+v+' (a reading)'});
+function step(d){if(!seq)return;pos=(pos+d+seq.ids.length)%seq.ids.length;render()}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(document.body.classList.contains('bench'))stand();else if(!$('#visit').hidden||!$('#all').hidden)entrance(cur);return}
+  if($('#visit').hidden)return;
+  if(e.key==='ArrowRight'){step(1)}if(e.key==='ArrowLeft'){step(-1)}
+});
+let tx=null;$('#v-stage').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+$('#v-stage').addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>45)step(dx<0?1:-1)},{passive:true});
+
+/* SIT: the bench. Chrome falls away and the showing turns slowly by itself. */
+$('#v-bench').onclick=()=>{document.body.classList.add('bench');$('#benchnote').hidden=false;clearInterval(benchT);benchT=setInterval(()=>step(1),11000)};
+function stand(){document.body.classList.remove('bench');$('#benchnote').hidden=true;clearInterval(benchT)}
+$('#benchnote').onclick=stand;
+
+/* ALL WORK: the full body of work, always one step away */
+const LAYERS=['Painting','Drawing','Photography','Design','Music','Film'];
+function all(){
+  stand();show('all');
+  $('#a-count').textContent=`${R.length} records · ${R.filter(r=>r.image).length} with images`;
+  $('#a-cols').innerHTML=LAYERS.map((L,k)=>{const rs=R.filter(r=>r.layer===L);if(!rs.length)return '';
+    return `<div class="grp ${k===0?'on':''}" data-layer="${L}"><h3>${L}<span>${rs.length}</span></h3><ul>${rs.map(r=>r.image?`<li><button type="button" data-rec="${r.id}"><span class="t">${tt(r)}</span><span class="y">${yrLabel(r)}</span></button></li>`:`<li class="dim"><a href="${r.link}" target="_blank" rel="noopener"><span class="t">${r.title.v} ↗︎</span><span class="y">${yrLabel(r)}</span></a></li>`).join('')}</ul></div>`}).join('');
+  $('#a-tabs').innerHTML=LAYERS.map((L,k)=>`<button type="button" data-tab="${L}" aria-pressed="${k===0}">${L}</button>`).join('');
+  fitCols();
+}
+function fitCols(){const c=$('#a-cols');if(innerWidth<=820)return;for(let n=3;n<=8;n++){c.style.setProperty('--cols',n);if(c.scrollWidth<=c.clientWidth+2)break}
+  // pack groups into columns in order so nothing scrolls
+}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-tab]');if(!t)return;document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b===t));document.querySelectorAll('.grp').forEach(g=>g.classList.toggle('on',g.dataset.layer===t.dataset.tab))});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(!b)return;const r=W[b.dataset.rec];const ids=R.filter(x=>x.layer===r.layer&&x.image).map(x=>x.id);$('#peek').hidden=true;visit(ids,ids.indexOf(r.id),null);$('#v-show').textContent='All work · '+r.layer});
+document.addEventListener('mousemove',e=>{const b=e.target.closest('[data-rec]');const p=$('#peek');if(!b||$('#all').hidden){p.hidden=true;return}
+  const r=W[b.dataset.rec];const im=p.querySelector('img');const s=img(r,'s');if(!im.src.endsWith(s.slice(2)))im.src=s;p.hidden=false;
+  const w=p.offsetWidth;let x=e.clientX+24;if(x+w>innerWidth-12)x=e.clientX-w-24;let y=Math.min(e.clientY-w/2,innerHeight-w-12);p.style.left=x+'px';p.style.top=Math.max(12,y)+'px'});
+
+function show(v){['entrance','visit','all'].forEach(k=>{$('#'+k).hidden=k!==v})}
+addEventListener('resize',()=>{if(!$('#all').hidden)fitCols()});
+
+let last=null;
+function route(){const h=location.hash.slice(1);if(h===last)return;last=h;const m=h.match(/^s(\d)-(.+)$/);
+if(m&&SHOWINGS[+m[1]-1]){cur=+m[1]-1;entrance(cur);const k=SHOWINGS[cur].ids.indexOf(m[2]);visit(SHOWINGS[cur].ids,Math.max(0,k),SHOWINGS[cur])}
+else if(h==='all')all();
+else if(/^s\d$/.test(h)&&SHOWINGS[+h[1]-1])entrance(+h[1]-1);
+else entrance(0);}
+addEventListener('hashchange',route);route();
+})();
+</script>
+</body>
+</html>
