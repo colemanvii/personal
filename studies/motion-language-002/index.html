@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Motion Language 002</title>
+<link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+<header class="masthead">
+  <div><span class="n">MATERIAL</span> · Motion Language Study 002</div>
+  <div class="muted">Freeman · Tangerine / TABLET · Cole Calfee · Material — 1080 × 1080 · 8.00 s · 60 fps · study, not production</div>
+</header>
+
+<div class="transport" role="toolbar" aria-label="Transport">
+  <button type="button" data-act="play" aria-label="Pause" title="Space">❚❚</button>
+  <button type="button" data-act="back" aria-label="Back one frame" title="←">←</button>
+  <button type="button" data-act="fwd" aria-label="Forward one frame" title="→">→</button>
+  <button type="button" data-act="seam" aria-label="Show the loop seam" title="L">Seam</button>
+  <div class="scrub">
+    <input type="range" min="0" max="479" step="1" value="0" aria-label="Frame" data-act="scrub">
+    <div class="beats" aria-hidden="true"></div>
+  </div>
+  <output class="clock">00.00 / 08.00 s · f 000</output>
+  <div class="opts">
+    <label>Tempo <select data-opt="tempo"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option></select></label>
+    <label>Ground <select data-opt="ground"><option value="white" selected>White</option><option value="ivory">Ivory</option></select></label>
+    <label><input type="checkbox" data-opt="signal" checked> Signal</label>
+    <label><input type="checkbox" data-opt="grid"> Grid</label>
+  </div>
+</div>
+
+<nav class="filters" aria-label="Filter">
+  <span class="muted">Project</span>
+  <button type="button" data-filter="project" data-v="" aria-pressed="true">All</button>
+  <button type="button" data-filter="project" data-v="Freeman" aria-pressed="false">Freeman</button>
+  <button type="button" data-filter="project" data-v="Tangerine / TABLET" aria-pressed="false">Tangerine / TABLET</button>
+  <button type="button" data-filter="project" data-v="Cole Calfee" aria-pressed="false">Cole Calfee</button>
+  <button type="button" data-filter="project" data-v="Material" aria-pressed="false">Material</button>
+  <span class="muted sep">Varies</span>
+  <button type="button" data-filter="axis" data-v="" aria-pressed="true">All</button>
+  <button type="button" data-filter="axis" data-v="timing" aria-pressed="false">Timing</button>
+  <button type="button" data-filter="axis" data-v="geometry" aria-pressed="false">Geometry</button>
+  <button type="button" data-filter="axis" data-v="scale" aria-pressed="false">Scale</button>
+  <button type="button" data-filter="axis" data-v="rhythm" aria-pressed="false">Rhythm</button>
+  <span class="muted sep">Compare</span>
+  <a class="compare" href="study.html" data-compare>Select two or more studies, then open them together →</a>
+</nav>
+
+<main id="gallery" aria-live="off"></main>
+
+<footer class="muted">
+  Every study is a pure function of time, draw(ctx, p), the same discipline as the approved Material pieces. Every canvas here reads one clock, so the seam arrives for all of them on the same frame.<br>
+  The Freeman signature and Stamp eagle are read from the approved files in <code>reference/</code>, byte for byte, and are never redrawn. Approved references run from their own unmodified <code>motion.js</code>.<br>
+  Keys: space play/pause · ← → one frame · L seam · G grid · S signal · W ground · click a study to open it alone.
+</footer>
+
+<script src="engine/grammar.js"></script>
+<script src="reference/freeman-v5/pixel-mark.js"></script>
+<script src="engine/marks.js"></script>
+<script src="reference/x-motion-001/motion.js"></script>
+<script src="engine/studies.js"></script>
+<script src="player.js"></script>
+<script src="gallery.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Motion Language 002 · Sheet</title>
+<style>
+  html, body { margin:0; background:#fff; font:9px Monaco, "DejaVu Sans Mono", monospace; color:#817d75; text-transform:uppercase; letter-spacing:.04em; }
+  h1 { font:inherit; color:#332e20; margin:0; padding:12px 12px 0; }
+  .grid { display:grid; gap:10px; padding:10px 12px 12px; }
+  figure { margin:0; } canvas { width:100%; display:block; outline:1px solid #dedbd4; } figcaption { padding-top:3px; }
+</style>
+</head>
+<body data-render="1">
+<h1></h1>
+<div class="grid"></div>
+<script>
+  // sheet.html?s=A1&n=16&cols=8 — n evenly spaced frames; &from=0.1&to=0.4 to zoom into a stretch; &ground=ivory&signal=0
+  const q = new URLSearchParams(location.search), s = q.get('s') || 'A1', n = +(q.get('n') || 16), cols = +(q.get('cols') || 8);
+  const from = +(q.get('from') || 0), to = +(q.get('to') || 1);
+  const grid = document.querySelector('.grid'); grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  for (let i = 0; i < n; i++) { const f = document.createElement('figure'), c = document.createElement('canvas'); c.width = c.height = 1080; const p = n === 1 ? from : from + (to - from) * i / (to === 1 && from === 0 ? n : n - 1); c.dataset.p = Math.round(p * 480) / 480; f.append(c); grid.append(f); }
+</script>
+<script src="engine/grammar.js"></script>
+<script src="reference/freeman-v5/pixel-mark.js"></script>
+<script src="engine/marks.js"></script>
+<script src="reference/x-motion-001/motion.js"></script>
+<script src="engine/studies.js"></script>
+<script src="player.js"></script>
+<script>
+  MotionPlayer.load().then((st) => {
+    const study = st[s]; document.querySelector('h1').textContent = `${s} ${study.title} · ${study.project} · varies ${study.axis}`;
+    for (const c of document.querySelectorAll('canvas')) {
+      window.stage.at(s, +c.dataset.p, c.getContext('2d'));
+      const l = document.createElement('figcaption'), t = +c.dataset.p * 8, ph = (study.phases || []).find(([a, b]) => t >= a && t < b);
+      l.textContent = t.toFixed(2) + ' s · f ' + String(Math.round(+c.dataset.p * 480)).padStart(3, '0') + (ph ? ' · ' + ph[2] : ''); c.after(l);
+    }
+    document.body.dataset.ready = '1';
+  });
+</script>
+</body>
+</html>

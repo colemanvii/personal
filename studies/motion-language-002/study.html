@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Motion Language 002 · Study</title>
+<link rel="stylesheet" href="gallery.css">
+<style>
+  html, body { height:100%; }
+  body { display:flex; flex-direction:column; }
+  .ids { display:flex; flex-wrap:wrap; gap:2px 12px; padding:14px 30px 0; font-size:10px; text-transform:uppercase; letter-spacing:.04em; }
+  .ids a { text-decoration:none; color:var(--muted); }
+  .ids a[aria-current] { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+  .stage { flex:1; display:flex; gap:30px; justify-content:center; align-items:flex-start; padding:20px 30px 30px; min-height:0; }
+  .stage figure { margin:0; flex:0 1 auto; }
+  .stage canvas { display:block; outline:1px solid var(--hair); aspect-ratio:1; }
+  .stage .title { margin-top:10px; }
+</style>
+</head>
+<body>
+<header class="masthead"><div><a href="index.html" style="text-decoration:none">← <span class="n">MATERIAL</span> · Motion Language Study 002</a></div><div class="muted">One clock · shift-click an id to add it to the comparison</div></header>
+<div class="transport" role="toolbar" aria-label="Transport">
+  <button type="button" data-act="play" aria-label="Pause" title="Space">❚❚</button>
+  <button type="button" data-act="back" aria-label="Back one frame" title="←">←</button>
+  <button type="button" data-act="fwd" aria-label="Forward one frame" title="→">→</button>
+  <button type="button" data-act="seam" aria-label="Show the loop seam" title="L">Seam</button>
+  <div class="scrub"><input type="range" min="0" max="479" step="1" value="0" aria-label="Frame" data-act="scrub"><div class="beats" aria-hidden="true"></div></div>
+  <output class="clock">00.00 / 08.00 s · f 000</output>
+  <div class="opts">
+    <label>Tempo <select data-opt="tempo"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option></select></label>
+    <label>Ground <select data-opt="ground"><option value="white" selected>White</option><option value="ivory">Ivory</option></select></label>
+    <label><input type="checkbox" data-opt="signal" checked> Signal</label>
+    <label><input type="checkbox" data-opt="grid"> Grid</label>
+  </div>
+</div>
+<nav class="ids" aria-label="Studies"></nav>
+<div class="stage"></div>
+<script>
+  if (new URLSearchParams(location.search).has('render')) document.body.dataset.render = '1';
+</script>
+<script src="engine/grammar.js"></script>
+<script src="reference/freeman-v5/pixel-mark.js"></script>
+<script src="engine/marks.js"></script>
+<script src="reference/x-motion-001/motion.js"></script>
+<script src="engine/studies.js"></script>
+<script src="player.js"></script>
+<script>
+(async () => {
+  const P = window.MotionPlayer, studies = await P.load();
+  const q = new URLSearchParams(location.search);
+  const ids = (q.get('s') || 'A1').split(',').filter((id) => studies[id]);
+  const stage = document.querySelector('.stage'), nav = document.querySelector('.ids');
+  const keep = (extra) => { const u = new URLSearchParams(location.search); u.set('s', extra); return '?' + u.toString(); };
+  for (const id of ['R1', 'R2', 'A1', 'A2', 'A3', 'O1', 'O2', 'O3', 'P1', 'P2', 'P3', 'S1', 'S2', 'S3']) {
+    const a = document.createElement('a'); a.href = keep(id); a.textContent = id + ' ' + studies[id].title;
+    if (ids.includes(id)) a.setAttribute('aria-current', 'true');
+    a.addEventListener('click', (e) => { if (!e.shiftKey) return; e.preventDefault(); const set = ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]; location.search = keep(set.join(',') || id); });
+    nav.append(a);
+  }
+  const figs = ids.map((id) => {
+    const st = studies[id], f = document.createElement('figure');
+    f.innerHTML = `<canvas width="1080" height="1080"></canvas><div class="title"><span><span class="n">${id}</span> ${st.title}</span><span class="muted">${st.project} · ${st.axis}</span></div><div class="now"><span class="phase"></span></div>`;
+    stage.append(f); P.add(f.querySelector('canvas'), st, { phase: f.querySelector('.phase') });
+    return f;
+  });
+  function size() {
+    if (document.body.dataset.render === '1') { for (const f of figs) f.querySelector('canvas').style.width = '1080px'; return; }
+    const r = stage.getBoundingClientRect(), n = figs.length;
+    const w = Math.max(160, Math.min((r.width - 60 - 30 * (n - 1)) / n, innerHeight - r.top - 80));
+    for (const f of figs) f.querySelector('canvas').style.width = Math.floor(w) + 'px';
+  }
+  addEventListener('resize', size); size();
+  P.start();
+})();
+</script>
+</body>
+</html>
