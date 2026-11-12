@@ -1,0 +1,96 @@
+{%- comment -%}
+Cole Calfee / Original Artwork product section, v1.
+Install on a duplicate Shopify theme. Intended for one-of-one originals.
+Hide/remove the old Main product section on the dedicated product template
+to avoid duplicate forms. Theme header/footer remain separately controlled.
+{%- endcomment -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<style>
+.cc-art-product{--cc-paper:#f3f1ea;--cc-ink:#171715;--cc-muted:#68645d;--cc-rule:#c9c5bb;--cc-accent:#8f251e;background:var(--cc-paper);color:var(--cc-ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.cc-art-product *{box-sizing:border-box}
+.cc-art-product__inner{width:min(1160px,calc(100% - 44px));margin:auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr);align-items:center;gap:clamp(30px,6vw,90px);padding:52px 0 70px}
+.cc-art-product__media{display:flex;align-items:center;justify-content:center;min-width:0}
+.cc-art-product__media img{display:block;width:auto;height:auto;max-width:100%;max-height:72dvh;object-fit:contain}
+.cc-art-product__details{max-width:360px}
+.cc-art-product__eyebrow,.cc-art-product__availability,.cc-art-product__description{font:11px/1.6 Monaco,Menlo,monospace;color:var(--cc-muted)}
+.cc-art-product h1{font:400 clamp(28px,3.2vw,43px)/1.1 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.035em;margin:14px 0 18px;color:var(--cc-ink)}
+.cc-art-product__price{font:400 17px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;margin:16px 0 24px}
+.cc-art-product__description{margin:0 0 26px}
+.cc-art-product__description p{margin:0 0 8px}
+.cc-art-product__availability{margin:0 0 10px;color:var(--cc-accent)}
+.cc-art-product__button{width:100%;min-height:54px;border:0;border-top:1px solid var(--cc-ink);border-bottom:1px solid var(--cc-rule);border-radius:0;background:transparent;color:var(--cc-ink);padding:16px 0;text-align:left;cursor:pointer;font:400 14px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif;display:flex;justify-content:space-between;align-items:center}
+.cc-art-product__button:disabled{opacity:.55;cursor:default}
+.cc-art-product__button:not(:disabled):hover{text-decoration:underline;text-underline-offset:4px}
+.cc-art-product__back{display:inline-block;margin-top:22px;color:var(--cc-muted);font:11px/1.6 Monaco,Menlo,monospace;text-decoration:none}
+.cc-art-product__back:hover{color:var(--cc-ink)}
+.cc-art-product__variant-label{display:block;margin:10px 0 6px;font:11px Monaco,Menlo,monospace}
+.cc-art-product__variant-select{width:100%;background:transparent;border:1px solid var(--cc-rule);border-radius:0;padding:12px;font:13px "Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--cc-ink);margin-bottom:18px}
+@media(max-width:700px){.cc-art-product__inner{width:calc(100% - 36px);display:flex;flex-direction:column;align-items:stretch;gap:28px;padding:20px 0 46px}.cc-art-product__media{min-height:36dvh}.cc-art-product__media img{max-height:48dvh}.cc-art-product__details{max-width:none}.cc-art-product h1{font-size:29px;margin:10px 0 12px}.cc-art-product__button{min-height:58px}}
+</style>
+<section class="cc-art-product" aria-label="Artwork purchase">
+  <div class="cc-art-product__inner">
+    <div class="cc-art-product__media">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 1600 | image_tag: loading: 'eager', widths: '360, 600, 900, 1200, 1600', alt: product.title }}
+      {%- endif -%}
+    </div>
+    <div class="cc-art-product__details">
+      <div class="cc-art-product__eyebrow">COLE CALFEE / ORIGINAL WORK</div>
+      <h1>{{ product.title | escape }}</h1>
+      {%- if product.description != blank -%}<div class="cc-art-product__description">{{ product.description }}</div>{%- endif -%}
+      {%- if product.has_only_default_variant -%}
+        <div class="cc-art-product__price">{{ current_variant.price | money }}</div>
+        <p class="cc-art-product__availability">{% if current_variant.available %}AVAILABLE{% else %}SOLD{% endif %}</p>
+      {%- else -%}
+        <div class="cc-art-product__price" id="cc-variant-price-{{ section.id }}">{{ current_variant.price | money }}</div>
+        <p class="cc-art-product__availability" id="cc-variant-availability-{{ section.id }}">{% if current_variant.available %}AVAILABLE{% else %}SOLD OUT{% endif %}</p>
+      {%- endif -%}
+      {%- form 'product', product, id: 'cc-artwork-form', class: 'cc-art-product__form' -%}
+        {%- unless product.has_only_default_variant -%}
+          <label class="cc-art-product__variant-label" for="cc-variant-{{ section.id }}">Edition / Option</label>
+          <select class="cc-art-product__variant-select" id="cc-variant-{{ section.id }}" name="id">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% if variant.id == current_variant.id %}selected{% endif %} data-price="{{ variant.price | money | escape }}" data-available="{{ variant.available }}">{{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} (Sold out){% endunless %}</option>
+            {% endfor %}
+          </select>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- endunless -%}
+        <input type="hidden" name="quantity" value="1">
+        <button id="cc-buy-{{ section.id }}" class="cc-art-product__button" type="submit" name="add" {% unless current_variant.available %}disabled{% endunless %}>
+          <span id="cc-buy-label-{{ section.id }}">{% if current_variant.available %}Add to cart{% else %}Sold{% endif %}</span><span aria-hidden="true">↗</span>
+        </button>
+        {%- if form.errors -%}<div role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+      {%- endform -%}
+      <a class="cc-art-product__back" href="https://colecalfee.com/paintings/">← Return to paintings</a>
+    </div>
+  </div>
+</section>
+{%- unless product.has_only_default_variant -%}
+<script>
+(function(){
+  const select=document.getElementById('cc-variant-{{ section.id }}');
+  const price=document.getElementById('cc-variant-price-{{ section.id }}');
+  const availability=document.getElementById('cc-variant-availability-{{ section.id }}');
+  const button=document.getElementById('cc-buy-{{ section.id }}');
+  const label=document.getElementById('cc-buy-label-{{ section.id }}');
+  if(!select)return;
+  select.addEventListener('change',function(){
+    const option=select.options[select.selectedIndex];
+    const available=option.dataset.available==='true';
+    price.textContent=option.dataset.price;
+    availability.textContent=available?'AVAILABLE':'SOLD OUT';
+    button.disabled=!available;
+    label.textContent=available?'Add to cart':'Sold out';
+    const url=new URL(location.href);url.searchParams.set('variant',option.value);history.replaceState({},'',url);
+  });
+})();
+</script>
+{%- endunless -%}
+{% schema %}
+{
+  "name": "Cole artwork product",
+  "settings": [],
+  "presets": [{"name": "Cole artwork product"}]
+}
+{% endschema %}
