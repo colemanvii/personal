@@ -81,13 +81,18 @@ async function waitForPage(page,path){
      }
      assert.equal(await page.getByText("Selected", {exact:true}).count(),0,"obsolete Selected toggle");
      const visible=rows.filter({visible:true});
-     const pageOneSize=12;
+     const pageOneSize=size.mobile?15:12;
      assert.equal(await visible.count(),pageOneSize,"page one must use the full intended screen capacity");
      const names=await visible.locator("td:nth-child(2)").allInnerTexts();
      for(const required of ["Ronnie Hodges","Teton Valley Ranch","Ramsey Hill"]){
        assert.ok(names.some(n=>n.includes(required)),required+" missing from page one");
      }
      assert.match(names[0],/Freeman General Contracting/);
+     if(size.mobile){
+       assert.match(names[10],/PBR/);
+       assert.match(names[11],/Hotel Perle/);
+       assert.match(names[12],/The Bygone/);
+     }
      assert.match(names.at(-2),/Paintings/,"Paintings must be the penultimate entry on the FIRST page");
      assert.match(names.at(-1),/Drawings/,"Drawings must be the final entry on the FIRST page");
      await assertNoHorizontalOverflow(page,"Index");
@@ -108,12 +113,15 @@ async function waitForPage(page,path){
        assert.ok(fit.gap<=12,"Desktop rows should fill the table area above pagination: "+JSON.stringify(fit));
        assert.ok(Math.min(...rhythm)>=39&&Math.max(...rhythm)-Math.min(...rhythm)<2,
          "Desktop rows should expand evenly: "+JSON.stringify(rhythm));
+     }else if(size.mobile){
+       assert.ok(rhythm.every(height=>height>=18&&height<=37),
+         "Mobile rows must compact to fit without clipping: "+JSON.stringify(rhythm));
      }else{
        assert.ok(rhythm.every(height=>height>=35&&height<=39),
-         "Mobile and short-viewport rows must stay a consistent 36px: "+JSON.stringify(rhythm));
+         "Short desktop rows should keep the 36px rhythm: "+JSON.stringify(rhythm));
      }
-     assert.match(await rows.nth(10).locator("td:nth-child(2)").textContent(),/Paintings/,"Paintings is always 011");
-     assert.match(await rows.nth(11).locator("td:nth-child(2)").textContent(),/Drawings/,"Drawings is always 012");
+     assert.match(await rows.nth(size.mobile?13:10).locator("td:nth-child(2)").textContent(),/Paintings/,"Paintings closes the first sheet");
+     assert.match(await rows.nth(size.mobile?14:11).locator("td:nth-child(2)").textContent(),/Drawings/,"Drawings closes the first sheet");
      if(size.mobile){
        const lastLink=visible.last().locator("a").first();
        if(await lastLink.count()){
