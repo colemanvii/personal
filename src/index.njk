@@ -1,0 +1,49 @@
+---
+layout: base.njk
+title: Cole Calfee
+nav: index
+permalink: /
+---
+{%- set works = collections.works -%}
+<main id="main" class="wrap">
+<div class="grid page-head">
+<h1>Index</h1>
+<div class="filter" role="group" aria-label="Filter by discipline">
+<button type="button" class="cap" aria-pressed="true" data-f="all">All</button>
+{%- for d in works | disciplines(site.disciplines) %}
+<button type="button" class="cap" aria-pressed="false" data-f="{{ d | lower }}">{{ d }}</button>
+{%- endfor %}
+</div>
+<p class="count cap" aria-live="polite"><span id="count">{{ works.length }}</span> Works</p>
+</div>
+<div class="works">
+<div class="colhead cap" aria-hidden="true"><span class="h-no">No.</span><span class="h-t">Title</span><span class="h-d">Discipline</span><span class="h-y">Year</span></div>
+<ol>
+{%- for w in works %}
+<li class="row" id="{{ w.page.fileSlug }}" data-d="{% for d in w.data.disciplines %}{{ d | lower }} {% endfor %}">
+{%- if w | hasPage %}
+<a href="{{ w.url }}">
+{%- else %}
+<a href="{{ w.data.link.href }}" rel="noopener">
+{%- endif %}
+<span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }}{% if not (w | hasPage) %} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span><span class="vh"> (opens {{ w.data.link.label | lower }})</span>{% endif %}</span><span class="d cap">{{ w.data.disciplines | join(" / ") }}</span><span class="yr">{{ w.data.year }}</span></a></li>
+{%- endfor %}
+</ol>
+</div>
+</main>
+<script>
+(function(){
+  /* Links from the old site (/index/#kashus) go to the work's page. Names that
+     did not change (#ernest) stay here: Close × on a work returns to /#its-name. */
+  var old={freeman:'freeman-general-contracting',kashus:'kashus-culpepper',scout:'scout-motors',ronnie:'ronnie-hodges-performance-horses',teton:'teton-valley-ranch','ramsey-hill':'ramsey-hill-contracting',habitat:'habitat-ranch',corey:'corey-kent',joseph:'joseph-martin',cowboyer:'the-cowboyer',mags:'mags-duval'};
+  var h=decodeURIComponent(location.hash.slice(1));
+  if(old[h]){location.replace('/work/'+old[h]+'/');return;}
+  var b=[].slice.call(document.querySelectorAll('.filter button')),r=[].slice.call(document.querySelectorAll('.row')),c=document.getElementById('count');
+  b.forEach(function(x){x.addEventListener('click',function(){
+    var f=x.dataset.f,n=0;
+    b.forEach(function(y){y.setAttribute('aria-pressed',String(y===x))});
+    r.forEach(function(w){var on=f==='all'||(' '+w.dataset.d).indexOf(' '+f+' ')>-1;w.hidden=!on;if(on)n++});
+    c.textContent=n;
+  })});
+})();
+</script>
