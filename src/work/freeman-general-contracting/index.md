@@ -15,8 +15,10 @@ media:
     desktop: "homepage.webp"
     alt: "Freeman General Contracting homepage: the script wordmark above Company, Projects and Contact on an off-white field"
     caption: "Website / Homepage / 2026"
+    size: "narrow"
   - type: "mark"
     src: "eagle.svg"
     alt: "The Freeman eagle mark"
     caption: "Identity / Eagle mark / 2023"
+    size: "narrow"
 ---

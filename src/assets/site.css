@@ -331,7 +331,8 @@ main { display: block; }
 .info .photo { grid-column: 1 / -1; }
 .info .photo img { width: 100%; height: auto; }
 .info .contact { grid-column: 1 / -1; display: grid; row-gap: var(--s4); border-top: var(--hair) solid var(--rule); padding-top: var(--s4); }
-.info .contact dd { margin: 0; display: flex; align-items: center; min-height: var(--row); }
+.info .contact dd { margin: 0; }
+.info .contact a { display: inline-flex; align-items: center; min-height: var(--row); }
 @media (min-width: 700px) { .info .contact { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); } }
 @media (min-width: 1024px) {
   .info { padding-top: var(--s8); }
