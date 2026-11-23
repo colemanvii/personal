@@ -1,0 +1,65 @@
+---
+layout: base.njk
+nav: index
+ogType: article
+---
+{%- set works = collections.works -%}
+{%- set paged = [] -%}
+{%- for w in works %}{% if w | hasPage %}{% set paged = (paged.push(w), paged) %}{% endif %}{% endfor -%}
+{%- set pos = 0 -%}
+{%- for w in paged %}{% if w.url == page.url %}{% set pos = loop.index0 %}{% endif %}{% endfor -%}
+{%- set prev = paged[pos - 1] if pos > 0 else paged[paged.length - 1] -%}
+{%- set next = paged[pos + 1] if pos < paged.length - 1 else paged[0] -%}
+<main id="main" class="wrap">
+<div class="grid work">
+<nav class="side cap" aria-label="Index">
+{%- for w in works %}
+{%- if w | hasPage %}
+<a href="{{ w.url }}"{% if w.url == page.url %} aria-current="page"{% endif %}><span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }}</span></a>
+{%- else %}
+<a href="{{ w.data.link.href }}" rel="noopener"><span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></span></a>
+{%- endif %}
+{%- endfor %}
+</nav>
+<article class="pane">
+<header>
+<div class="pane-head">
+<h1 class="title">{{ title }}</h1>
+<a class="close cap" href="/#{{ page.fileSlug }}" aria-label="Close, back to the index">Close ×</a>
+</div>
+<dl class="meta">
+{%- if role %}<div class="m-role"><dt class="cap">Role</dt><dd>{{ role }}</dd></div>{% endif %}
+{%- if client %}<div class="m-client"><dt class="cap">Client</dt><dd>{{ client }}</dd></div>{% endif %}
+<div class="m-year"><dt class="cap">Year</dt><dd>{{ year }}</dd></div>
+<div class="m-disc"><dt class="cap">Discipline</dt><dd>{{ disciplines | join(" / ") }}</dd></div>
+</dl>
+{%- if content | trim %}
+<div class="desc">{{ content | safe }}</div>
+{%- endif %}
+{%- if link or links %}
+<p class="links-out cap">
+{%- if link %}<a href="{{ link.href }}" rel="noopener">{{ link.label }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></a>{% endif %}
+{%- for l in links %}<a href="{{ l.href }}" rel="noopener">{{ l.label }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></a>{% endfor %}
+</p>
+{%- endif %}
+</header>
+<div class="media">
+{% media media %}
+{%- if releases %}
+<section class="releases" aria-label="Releases">
+<p class="cap">Releases</p>
+<nav class="list">
+{%- for r in releases %}
+<a href="{{ r.href }}" rel="noopener"><span>{{ r.title }}</span><span class="cap">Listen <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></span></a>
+{%- endfor %}
+</nav>
+</section>
+{%- endif %}
+</div>
+<nav class="step cap" aria-label="More work">
+<a class="prev" href="{{ prev.url }}" rel="prev">← {{ prev.data.title }}</a>
+<a class="next" href="{{ next.url }}" rel="next">{{ next.data.title }} →</a>
+</nav>
+</article>
+</div>
+</main>

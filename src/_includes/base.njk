@@ -1,0 +1,63 @@
+{%- set pageTitle = (title + " — " + site.name) if (title and title != site.name) else site.name -%}
+{%- set pageDesc = summary or site.description -%}
+{%- set canonical = site.url + page.url -%}
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ pageDesc }}">
+<link rel="canonical" href="{{ canonical }}">
+{%- if noindex %}
+<meta name="robots" content="noindex">
+{%- endif %}
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="{{ 'article' if ogType == 'article' else 'website' }}">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ pageTitle }}">
+<meta property="og:description" content="{{ pageDesc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ ogImage or (site.url + '/share.jpg') }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ ogAlt or pageTitle }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ pageTitle }}">
+<meta name="twitter:description" content="{{ pageDesc }}">
+<meta name="twitter:image" content="{{ ogImage or (site.url + '/share.jpg') }}">
+<link rel="preload" href="/fonts/geist-mono-v6.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script>document.documentElement.className='js'</script>
+<style>{{ "src/assets/site.css" | inlineCss | safe }}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head wrap">
+<div class="grid">
+<a class="brand" href="/">{{ site.name }}</a>
+<nav class="nav" aria-label="Primary">
+<a href="/"{% if nav == "index" %} aria-current="page"{% endif %}>Index</a>
+<a href="/available/"{% if nav == "available" %} aria-current="page"{% endif %}>Available</a>
+<a href="/info/"{% if nav == "info" %} aria-current="page"{% endif %}>Info</a>
+</nav>
+</div>
+</header>
+{{ content | safe }}
+<footer class="site-foot wrap cap">
+<div class="grid">
+<p class="copy">© {{ "" | year }} {{ site.name }}</p>
+<p class="links"><!--email_off--><a href="mailto:{{ site.email }}">{{ site.email }}</a><!--/email_off--><a href="{{ site.instagram.url }}" rel="noopener">Instagram <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></a></p>
+</div>
+</footer>
+<script>
+document.querySelectorAll('img.fade').forEach(function(i){function s(){i.classList.add('in')}if(i.complete)s();else{i.addEventListener('load',s);i.addEventListener('error',s)}});
+document.querySelectorAll('a[data-vimeo]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var f=document.createElement('iframe');f.src='https://player.vimeo.com/video/'+a.dataset.vimeo+'?autoplay=1&dnt=1';f.allow='autoplay; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=a.textContent.trim()||'Video';f.style.aspectRatio=a.style.aspectRatio;a.replaceWith(f)})});
+</script>
+{%- if site.analyticsToken %}
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"{{ site.analyticsToken }}"}'></script>
+{%- endif %}
+</body>
+</html>
