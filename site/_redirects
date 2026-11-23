@@ -1,24 +1,24 @@
 # Old URLs. Static rules first, then splats; within splats, specific before general.
 # Old /index/#name links are forwarded by a script on the index (a fragment never reaches the server).
 
-/index                        /                                  301
-/index/                       /                                  301
+# retired index redirect: index now lives at /index/
+# retired index redirect: index now lives at /index/
 /paintings                    /available/                        301
 /paintings/                   /available/                        301
 /shop                         /available/                        301
 /projects/the-cowboyer        /work/the-cowboyer/                301
 /projects/kashus-culpepper    /work/kashus-culpepper/            301
 /projects/scout-motors        /work/scout-motors/                301
-/projects                     /                                  301
-/art                          /                                  301
-/design                       /                                  301
-/photos                       /                                  301
-/work                         /                                  301
-/work/                        /                                  301
+/projects /index/ 301
+/art /index/ 301
+/design /index/ 301
+/photos /index/ 301
+/work /index/ 301
+/work/ /index/ 301
 /available                    /available/                        301
 /info                         /info/                             301
 
-/index/*                      /                                  301
+# retired index redirect: index now lives at /index/
 /paintings/*                  /available/                        301
 /shop/*                       /available/                        301
 /projects/the-cowboyer/*      /work/the-cowboyer/                301
