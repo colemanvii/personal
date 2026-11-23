@@ -1,0 +1,43 @@
+---
+layout: base.njk
+title: Available
+nav: available
+summary: Original paintings by Cole Calfee, available now.
+ogSource: red-sea.jpg
+permalink: /available/
+pieces:
+  - handle: red-sea
+    title: Red Sea
+    medium: Oil on canvas
+    size: 36 × 48 in.
+    src: red-sea.jpg
+    alt: Red Sea, a large red painting in oil on canvas, leaning on paint buckets in the studio
+  - handle: flowers-in-mccarty-vase
+    title: Flowers in McCarty Vase
+    medium: Oil on canvas
+    size: 24 × 30 in.
+    src: flowers-in-mccarty-vase.jpg
+    alt: Flowers in McCarty Vase, white and yellow flowers in a vase on a red ground, oil on canvas
+---
+<main id="main" class="wrap">
+<div class="grid page-head">
+<h1>Available</h1>
+<p class="count cap">{{ pieces.length | pad | replace("0", "", 1) }} Original works</p>
+</div>
+<div class="grid avail">
+<p class="note">Original paintings, one of each. Purchase opens a secure Shopify checkout. To ask about a work, use Inquire.</p>
+<div class="grid-2">
+{%- for p in pieces %}
+<figure class="fig piece" data-handle="{{ p.handle }}">
+{% picture p.src, p.alt, "(min-width: 1024px) 31vw, (min-width: 700px) 48vw, calc(100vw - 32px)", loop.first %}
+<figcaption>
+<span>{{ p.title }}</span>
+<span class="cap">{{ p.medium }} / {{ p.size }}</span>
+<span class="sale cap"><span class="price" hidden></span><button type="button" class="act cap" data-buy hidden>Purchase</button><!--email_off--><a class="act cap" data-inquire href="mailto:{{ site.email }}?subject={{ p.title | urlencode }}">Inquire</a><!--/email_off--></span>
+</figcaption>
+</figure>
+{%- endfor %}
+</div>
+</div>
+</main>
+<script type="module" src="/js/available.js"></script>

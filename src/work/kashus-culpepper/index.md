@@ -1,0 +1,68 @@
+---
+title: "Kashus Culpepper"
+year: "2026"
+disciplines: ["Music"]
+role: "Artwork, 7 releases"
+client: "Kashus Culpepper"
+featured: true
+order: 2
+draft: false
+releases:
+  - title: "Pour Me Out"
+    href: "https://open.spotify.com/track/4J6jZp2wdRIprg7Ya0QBLM"
+  - title: "Act I: Summer Nights"
+    href: "https://open.spotify.com/album/3RPDh3A283D7F4DuJO95kD"
+  - title: "After Me?"
+    href: "https://open.spotify.com/album/2uXVVL02SJGNLxy1tGdGKP"
+  - title: "Out of My Mind"
+    href: "https://open.spotify.com/album/7H2YIxloUqfVuRJCPIXtg8"
+  - title: "Jenni"
+    href: "https://open.spotify.com/album/7yAh8gTk7oykUml3DThvdc"
+  - title: "Who Hurt You"
+    href: "https://open.spotify.com/album/2EY46Rynp99lMD9mAZcjHm"
+  - title: "Talk With Me"
+    href: "https://open.spotify.com/album/7k6FBmrJzoUkCAw1gN2855"
+media:
+  - type: "grid"
+    items:
+      - src: "pour-me-out.jpg"
+        alt: "Pour Me Out single artwork"
+        caption: "Pour Me Out"
+      - src: "act-i-summer-nights.jpg"
+        alt: "Act I: Summer Nights artwork"
+        caption: "Act I: Summer Nights"
+  - type: "grid"
+    items:
+      - src: "after-me.png"
+        alt: "After Me? artwork"
+        caption: "After Me?"
+      - src: "out-of-my-mind.png"
+        alt: "Out of My Mind artwork"
+        caption: "Out of My Mind"
+  - type: "grid"
+    items:
+      - src: "who-hurt-you.png"
+        alt: "Who Hurt You artwork"
+        caption: "Who Hurt You"
+      - src: "jenni.jpg"
+        alt: "Jenni artwork"
+        caption: "Jenni"
+  - type: "image"
+    src: "portrait-01.jpg"
+    alt: "Portrait of Kashus Culpepper"
+    caption: "Portrait 01"
+    size: "narrow"
+  - type: "grid"
+    items:
+      - src: "portrait-02.jpg"
+        alt: "Portrait of Kashus Culpepper"
+        caption: "Portrait 02"
+      - src: "live.jpg"
+        alt: "Kashus Culpepper performing live"
+        caption: "Live performance"
+  - type: "image"
+    src: "harvest-moon-tour.jpg"
+    alt: "Harvest Moon tour poster"
+    caption: "Harvest Moon tour / Poster"
+    size: "narrow"
+---
