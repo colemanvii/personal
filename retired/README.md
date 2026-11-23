@@ -18,3 +18,10 @@ colecalfee.com.
 These pages still reference `/assets/…` as they did when they were public, so
 they will not render fully from here. `studies/painting-crops/apply.py` was
 written for the old layout; its target is now `site/paintings/index.html`.
+
+## Sources replaced in v2
+
+| Here | Was | Now |
+|---|---|---|
+| `assets/joseph-martin-cowboy-original.png` | `site/assets/cg.png` (19,872px) | `src/work/joseph-martin/cowboy.png`: the same drawing at 4,000px with the 4% plate edge the old page hid with CSS cropped off |
+| `assets/cowboyer-group-393.png`, `assets/cowboyer-group-394.png` | Insets the old page layered over covers 01 and 02 with CSS | Flattened into `src/work/the-cowboyer/cover-04.png` and `cover-03.png` |
