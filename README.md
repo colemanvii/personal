@@ -1,104 +1,127 @@
 # Cole Calfee
 
-Personal portfolio: art, design, and photography.
-
+Portfolio: creative direction, identity, web, film, editorial and music.
 [colecalfee.com](https://colecalfee.com)
 
-## The public site
+The site is static HTML built with [Eleventy](https://www.11ty.dev) from the
+files in `src/`. Images are resized and converted to AVIF and WebP at build
+time with [sharp](https://sharp.pixelplumbing.com). The built site is written
+to `site/`, which is what Cloudflare Pages publishes.
 
-The approved public site is four pages, and nothing else:
+## Pages
 
-| Page | URL | Source |
-|---|---|---|
-| Home | `/` | `site/index.html` |
-| Index | `/index/` | `site/index/` |
-| Available | `/paintings/` | `site/paintings/` |
-| Contact | `/info/` | `site/info/` |
+| URL | Source |
+| --- | --- |
+| `/` | `src/index.njk`: the index of every work |
+| `/work/<name>/` | `src/work/<name>/index.md`, one per work |
+| `/available/` | `src/available/index.njk`: paintings for sale (live price and checkout from Shopify) |
+| `/info/` | `src/info/index.njk` |
+| `/404.html`, `/sitemap.xml`, `/robots.txt` | `src/` |
 
-`site/` is the only directory that is deployed. It holds the four pages, their
-assets (`site/assets/`) and the platform files:
+Site-wide settings (email, Instagram, location, the discipline list,
+analytics) are in `src/_data/site.js`. The whole design is in
+`src/assets/site.css`; its first block holds every colour, size, space and rule.
 
-- `site/_redirects` — retired routes, each sent (301) to the page that now holds its work
-- `site/_routes.json` + `functions/[[path]].js` — every removed file answers 404, even at Cloudflare locations that still hold an old copy; nothing live ever runs this code
-- `site/_headers` — `noindex` on `*.pages.dev` preview deployments
-- `site/404.html` — served with status 404 for every unknown path
-- `site/robots.txt`, `site/sitemap.xml`
-- `site/assets/images/share.jpg` — the social sharing preview (a crop of the Contact photograph)
+## Add a work
 
-Everything else in the repository (tests, notes, retired pages, tooling) stays
-in Git and is never served. `retired/` preserves older pages and source
-material; see `retired/README.md`.
+1. Make a folder in `src/work/`. Its name becomes the URL: `src/work/new-project/` → `/work/new-project/`.
+2. Put the images in it.
+3. Add `index.md`:
 
-## Work here
-
-There is no build step or package installation.
-
-```sh
-python3 -m http.server 4173 --bind 127.0.0.1 --directory site
+```yaml
+---
+title: "New Project"
+year: "2026"                     # or "2024–25", "2026–", "Ongoing"
+disciplines: ["Identity", "Web"] # from the list in src/_data/site.js
+role: "Creative direction"
+client: "Client name"            # optional
+link:                            # optional, shown in red under the details
+  label: "Live website"
+  href: "https://example.com/"
+featured: false
+order: 24                        # position on the index
+draft: true                      # true keeps it off the site
+media:
+  - type: image                  # one image; size: narrow for 3/4 width
+    src: "cover.jpg"
+    alt: "What the image shows"
+    caption: "Identity / Cover / 2026"
+  - type: pair                   # desktop screenshot; the mobile one shows on phones
+    desktop: "home-desktop.png"
+    mobile: "home-mobile.png"
+    alt: "Homepage"
+    caption: "Website / Homepage / 2026"
+  - type: grid                   # two or three side by side (stacked on phones)
+    items:
+      - { src: "a.jpg", alt: "…", caption: "…" }
+      - { src: "b.jpg", alt: "…", caption: "…" }
+    caption: "Optional caption under the set"
+  - type: mark                   # a logo on the grey ground; use SVG
+    src: "logo.svg"
+    alt: "The logo"
+  - type: video                  # Vimeo (no sound until played) …
+    vimeo: "123456789"
+    poster: "still.jpg"
+    alt: "Film title"
+  - type: video                  # … or a file in the folder
+    src: "film.mp4"
+    poster: "still.jpg"
+    alt: "Film title"
+  - type: film                   # a still that links to the full film
+    src: "still.jpg"
+    href: "https://vimeo.com/…"
+    label: "Watch film"
+    alt: "Film title"
+  - type: placeholder            # a marked empty slot
+    label: "Placeholder / Signage"
+    ratio: "4/5"
+---
+Optional description, one or two sentences.
 ```
 
-Open `http://127.0.0.1:4173`. A plain file server does not apply `_redirects`
-or `404.html`; for those, run Cloudflare's own Pages server:
+A work without `media` but with a `link` is listed on the index and links straight out.
+
+4. Run `npm run build`. Set `draft: false` when it's ready.
+
+Use images at least 1,170px wide (2,400px is ideal) and SVG for logos.
+`MEDIA-REPORT.md` is rewritten on every build and lists any image that is too
+small or has no alt text.
+
+## Work locally
 
 ```sh
-npx wrangler@3.114.0 pages dev --port 8788    # reads wrangler.toml → site/
+npm install
+npm run dev          # http://localhost:8080, rebuilds on save
+DRAFTS=1 npm run dev # include drafts
+npm run build        # writes site/
 ```
 
-## Deployment
+The first build encodes every image and takes a few minutes. Later builds only
+encode new or changed images.
 
-Production is Cloudflare Pages (project `personal`), built from `main` with no
-build command. `wrangler.toml` sets `pages_build_output_dir = "site"`, so only
-`site/` is published. Every pull request gets a preview deployment at
-`<id>.personal-7jh.pages.dev`; previews answer `X-Robots-Tag: noindex`.
+## Deploy
 
-`vercel.json` points the separate Vercel project at `site/` as well, so it can
-never publish the repository root. Production does not use Vercel.
+Cloudflare Pages (project `personal`) publishes `site/` from `main`
+(`wrangler.toml`). Pages has no build command today, so **run `npm run build`
+and commit `site/` with your change**. CI fails a pull request whose `site/`
+does not match `src/`.
 
-`CNAME` names the custom domain; keep it.
+To let Cloudflare build instead, set the Pages build command to
+`npm ci && npm run build`. After that, `site/` no longer needs to be committed.
 
-## Purchasing
+Every branch and pull request gets a preview at `<branch>.personal-7jh.pages.dev`.
+Previews answer `X-Robots-Tag: noindex` (`src/_headers`).
 
-colecalfee.com is the whole storefront; Shopify (`241880-3.myshopify.com`) is only the commerce backend and secure checkout. Available reads live price, images and availability from Shopify's tokenless Storefront API. **Purchase** creates a fresh Shopify checkout for that one work and hands the visitor to it; there is no on-site cart. No credentials are used or needed — never add an Admin API token to the site.
-
-- `site/assets/js/storefront.js` — Storefront API client
-- `site/assets/css/commerce.css` — purchase styles
-- `site/paintings/purchase.js` — live wall labels, the viewer's sale line and the checkout handoff
-
-`site/paintings/index.html` alone decides where each work hangs, in what order, and its catalogue number (`data-number` on its caption); Shopify never moves a work. Shopify decides only each work's live state: Available or Sold, price, and whether it can be purchased. When a painting sells it shows SOLD in place, with no purchase action, until the page is deliberately republished. If Shopify cannot be reached, the composition is unchanged, each work keeps its INQUIRE email link, and nothing is offered for sale. Sold paintings are archived in the Index (Paintings).
-
-Each work names its Shopify product with `data-handle`. Tag a product `edition` (or give it a product type containing "print") to sell it in quantity with variant options; anything else is treated as a one-of-a-kind original.
+`src/_redirects` keeps old URLs working: `/index/` → `/`, `/paintings/` →
+`/available/`, and `/projects/*` → their works. Old `/index/#name` links are
+forwarded to the work's page by a script on the index.
 
 ## Tests
 
-All of these run in CI on every change to `site/`, `tests/` or the deployment configuration (`.github/workflows/release-qa.yml`).
-
 ```sh
-# Source and deployment contract (no network)
-node --test tests/site/deploy.test.mjs tests/site/arrows.test.mjs tests/commerce/unit.test.mjs
-
-# Browser QA at desktop, 390 × 844 and 375 × 667 (needs the file server above and Playwright)
-node tests/site/release.e2e.cjs
-node tests/site/no-scroll.e2e.cjs
-node tests/site/independent-audit.e2e.cjs
-node tests/site/about.e2e.cjs
-node tests/site/artwork.e2e.cjs     # opens every Index entry and gallery; every image loads, nothing hotlinked
-node tests/commerce/e2e.cjs         # live Shopify product reads; checkout is mocked, so nothing is created on Shopify
-
-# HTTP contract: public pages 200, retired routes 301, internal files and unknown URLs 404
-BASE_URL=http://127.0.0.1:8788 node tests/site/routes.e2e.cjs     # against wrangler pages dev
-BASE_URL=https://colecalfee.com node tests/site/routes.e2e.cjs     # against production
+npm run build
+python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
+npm test             # every page at 375, 390, 430, 768 and 1440px
 ```
 
-CI's last job waits for Cloudflare to deploy the commit, then runs the HTTP contract against the real pull-request preview, or against colecalfee.com after a merge.
-
-The real checkout is a separate, manual smoke test. Recurring CI never runs it. It clicks Purchase, lets Shopify create one real checkout, and stops the browser before the checkout page loads, so no payment or order is possible. Each run leaves one empty, abandoned checkout in Shopify. Run it on purpose from GitHub Actions → **Live checkout smoke test** → Run workflow, or locally:
-
-```sh
-CONFIRM_LIVE_CHECKOUT=yes BASE_URL=https://colecalfee.com node tests/commerce/live-checkout.smoke.cjs
-```
-
-Site rules the tests hold: arrows such as ↗ and ↔ carry U+FE0E so iOS draws them as type, never emoji; email links are wrapped in `<!--email_off-->` so Cloudflare does not obfuscate them; the four pages and the 404 page never scroll.
-
-Keep the presentation simple, personable, and static. Add real work before adding more interface. Check every page on desktop and iPhone before publishing.
-
-This is the current portfolio repository. Older site experiments belong in `colemanvii/colemanvii`.
+Old pages, source material and earlier experiments are kept in `retired/` and are never served.
