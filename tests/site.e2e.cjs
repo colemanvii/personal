@@ -13,7 +13,7 @@ const SHOTS = process.env.SCREENSHOTS;
 const WIDTHS = [[375, 667], [390, 844], [430, 932], [768, 1024], [1440, 900]];
 
 function pages() {
-  const list = ["/", "/available/", "/info/", "/404.html"];
+  const list = ["/", "/index/", "/available/", "/404.html"];
   for (const slug of fs.readdirSync("site/work")) list.push(`/work/${slug}/`);
   return list;
 }

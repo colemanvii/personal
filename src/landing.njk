@@ -1,35 +1,19 @@
 ---
+layout: base.njk
+home: true
 permalink: /
 eleventyExcludeFromCollections: true
 ---
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cole Calfee</title>
-<meta name="description" content="Cole Calfee — creative direction, identity, web, film, editorial and music.">
-<link rel="canonical" href="https://colecalfee.com/">
-<meta name="theme-color" content="#f8f8f6">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>
-@font-face{font-family:GeistMono;src:url('/fonts/geist-mono-v6.woff2') format('woff2');font-display:swap}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#f8f8f6;color:#171717}
-body{min-height:100vh;min-height:100dvh;display:grid;place-items:center;font:12px/1.4 GeistMono,Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
-header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center}
-h1{font:inherit;margin:0;font-weight:400;text-transform:uppercase;white-space:nowrap}
-nav{display:flex;justify-content:center;gap:28px}
-a{color:inherit;text-decoration:none;text-transform:uppercase}
-a:hover{text-decoration:underline;text-underline-offset:4px}
-a:focus-visible{outline:1px solid currentColor;outline-offset:5px}
-@media(max-width:600px){header{padding:20px 16px}nav{gap:28px}}
-</style>
-</head>
-<body>
-<header>
-<h1>Cole Calfee</h1>
-<nav aria-label="Primary"><a href="/index/">Index</a><a href="/info/">Contact</a></nav>
-</header>
-</body>
-</html>
+<h1>{{ site.name }}</h1>
+<dl>
+<dt>work</dt>
+<dd><a href="/index/">index</a><a href="/work/paintings/">paintings</a><a href="/work/drawings/">drawings</a></dd>
+<dt>available</dt>
+<dd><a href="/available/">original paintings</a></dd>
+<dt>email</dt>
+<dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd>
+<dt>location</dt>
+<dd>{% for place in site.places %}<span>{{ place }}</span>{% endfor %}</dd>
+<dt>elsewhere</dt>
+<dd><a href="{{ site.instagram.url }}">Instagram</a><a href="https://www.freemangc.com/">Freeman</a></dd>
+</dl>

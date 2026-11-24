@@ -12,15 +12,19 @@ to `site/`, which is what Cloudflare Pages publishes.
 
 | URL | Source |
 | --- | --- |
-| `/` | `src/index.njk`: the index of every work |
+| `/` | `src/landing.njk`: the address (name, and a labelled index of everything else) |
+| `/index/` | `src/index.njk`: every work, grouped by the year it began |
 | `/work/<name>/` | `src/work/<name>/index.md`, one per work |
 | `/available/` | `src/available/index.njk`: paintings for sale (live price and checkout from Shopify) |
-| `/info/` | `src/info/index.njk` |
 | `/404.html`, `/sitemap.xml`, `/robots.txt` | `src/` |
+
+`/info/` is retired: everything it held is on the home page, and it redirects
+there. Its photograph stays in `src/info/studio.jpg`.
 
 Site-wide settings (email, Instagram, location, the discipline list,
 analytics) are in `src/_data/site.js`. The whole design is in
 `src/assets/site.css`; its first block holds every colour, size, space and rule.
+The site uses no web fonts: type is the reader's own Helvetica (or Arial).
 
 ## Add a work
 

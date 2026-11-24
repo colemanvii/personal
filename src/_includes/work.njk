@@ -1,6 +1,5 @@
 ---
 layout: base.njk
-nav: index
 ogType: article
 ---
 {%- set works = collections.works -%}
@@ -10,56 +9,36 @@ ogType: article
 {%- for w in paged %}{% if w.url == page.url %}{% set pos = loop.index0 %}{% endif %}{% endfor -%}
 {%- set prev = paged[pos - 1] if pos > 0 else paged[paged.length - 1] -%}
 {%- set next = paged[pos + 1] if pos < paged.length - 1 else paged[0] -%}
-<main id="main" class="wrap">
-<div class="grid work">
-<nav class="side cap" aria-label="Index">
-{%- for w in works %}
-{%- if w | hasPage %}
-<a href="{{ w.url }}"{% if w.url == page.url %} aria-current="page"{% endif %}><span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }}</span></a>
-{%- else %}
-<a href="{{ w.data.link.href }}" rel="noopener"><span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></span></a>
+<dl class="rows">
+{%- if role %}<div class="r"><dt class="l">role</dt><dd>{{ role }}</dd></div>{% endif %}
+{%- if client and client != title and client != "Independent" %}<div class="r"><dt class="l">for</dt><dd>{{ client }}</dd></div>{% endif %}
+<div class="r"><dt class="l">year</dt><dd>{{ year }}</dd></div>
+{%- if (disciplines | join(", ") | lower) != (role | lower) %}<div class="r"><dt class="l">discipline</dt><dd>{{ disciplines | join(", ") }}</dd></div>{% endif %}
+{%- if link or links %}
+<div class="r"><dt class="l">elsewhere</dt><dd class="list">
+{%- if link %}<a class="ext" href="{{ link.href }}" rel="noopener">{{ link.label }}</a>{% endif %}
+{%- for l in links %}{% if not loop.first or link %}<br>{% endif %}<a class="ext" href="{{ l.href }}" rel="noopener">{{ l.label }}</a>{% endfor %}
+</dd></div>
 {%- endif %}
-{%- endfor %}
-</nav>
-<article class="pane">
-<header>
-<div class="pane-head">
-<h1 class="title">{{ title }}</h1>
-<a class="close cap" href="/#{{ page.fileSlug }}" aria-label="Close, back to the index">Close ×</a>
-</div>
-<dl class="meta">
-{%- if role %}<div class="m-role"><dt class="cap">Role</dt><dd>{{ role }}</dd></div>{% endif %}
-{%- if client %}<div class="m-client"><dt class="cap">Client</dt><dd>{{ client }}</dd></div>{% endif %}
-<div class="m-year"><dt class="cap">Year</dt><dd>{{ year }}</dd></div>
-<div class="m-disc"><dt class="cap">Discipline</dt><dd>{{ disciplines | join(" / ") }}</dd></div>
 </dl>
 {%- if content | trim %}
-<div class="desc">{{ content | safe }}</div>
+<div class="r"><span></span><div class="prose">{{ content | safe }}</div></div>
 {%- endif %}
-{%- if link or links %}
-<p class="links-out cap">
-{%- if link %}<a href="{{ link.href }}" rel="noopener">{{ link.label }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></a>{% endif %}
-{%- for l in links %}<a href="{{ l.href }}" rel="noopener">{{ l.label }} <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></a>{% endfor %}
-</p>
-{%- endif %}
-</header>
 <div class="media">
 {% media media %}
 {%- if releases %}
-<section class="releases" aria-label="Releases">
-<p class="cap">Releases</p>
-<nav class="list">
+<section class="r releases" aria-labelledby="releases">
+<h2 class="l" id="releases">releases</h2>
+<ul class="list">
 {%- for r in releases %}
-<a href="{{ r.href }}" rel="noopener"><span>{{ r.title }}</span><span class="cap">Listen <span class="arrow" aria-hidden="true">↗&#xFE0E;</span></span></a>
+<li><a class="ext" href="{{ r.href }}" rel="noopener">{{ r.title }}</a></li>
 {%- endfor %}
-</nav>
+</ul>
 </section>
 {%- endif %}
 </div>
-<nav class="step cap" aria-label="More work">
-<a class="prev" href="{{ prev.url }}" rel="prev">← {{ prev.data.title }}</a>
-<a class="next" href="{{ next.url }}" rel="next">{{ next.data.title }} →</a>
+<nav class="rows" aria-label="More work">
+<div class="r"><span class="l">previous</span><a href="{{ prev.url }}" rel="prev">{{ prev.data.title }}</a></div>
+<div class="r"><span class="l">next</span><a href="{{ next.url }}" rel="next">{{ next.data.title }}</a></div>
+<div class="r"><span class="l">all work</span><a href="/index/#{{ page.fileSlug }}">index</a></div>
 </nav>
-</article>
-</div>
-</main>

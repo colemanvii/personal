@@ -5,6 +5,7 @@
 export default {
   layout: "work.njk",
   eleventyComputed: {
+    heading: data => data.title,
     permalink: data => {
       if (data.draft && !data.showDrafts) return false;
       if (!data.media?.length) return false;

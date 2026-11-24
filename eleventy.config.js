@@ -16,7 +16,6 @@ export default function (eleventyConfig) {
 
   // Only the template formats are templates; image files beside them are inputs to the pipeline.
   eleventyConfig.setTemplateFormats(["njk", "md"]);
-  eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/js": "js" });
   eleventyConfig.addPassthroughCopy({ "src/assets/share.jpg": "share.jpg" });
   for (const f of ["favicon.svg", "_redirects", "_headers", "_routes.json", "robots.txt"]) {
@@ -52,6 +51,17 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("disciplines", (works, all) =>
     all.filter(d => works.some(w => (w.data.disciplines || []).includes(d))));
   eleventyConfig.addFilter("pad", n => String(n).padStart(3, "0"));
+  // Works grouped by the year they began, newest first; "Ongoing" work leads.
+  eleventyConfig.addFilter("byYear", works => {
+    const groups = new Map();
+    for (const w of works) {
+      const y = String(w.data.year).match(/\d{4}/)?.[0] || String(w.data.year).toLowerCase();
+      if (!groups.has(y)) groups.set(y, []);
+      groups.get(y).push(w);
+    }
+    const key = y => (/^\d{4}$/.test(y) ? Number(y) : Infinity);
+    return [...groups].sort((a, b) => key(b[0]) - key(a[0])).map(([year, items]) => ({ year, items }));
+  });
   eleventyConfig.addFilter("lower", s => String(s).toLowerCase());
   eleventyConfig.addFilter("hasPage", w => Boolean(w.data.media?.length));
 

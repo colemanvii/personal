@@ -6,12 +6,12 @@ const BASE = (process.env.BASE_URL || "http://127.0.0.1:8788").replace(/\/$/, ""
 const ATTEMPTS = Number(process.env.ROUTES_ATTEMPTS || 1);
 const RETRY_MS = Number(process.env.ROUTES_RETRY_MS || 0);
 
-const ok = ["/", "/available/", "/info/", "/sitemap.xml", "/robots.txt", "/favicon.svg"];
+const ok = ["/", "/index/", "/available/", "/sitemap.xml", "/robots.txt", "/favicon.svg"];
 for (const slug of fs.readdirSync("site/work")) ok.push(`/work/${slug}/`);
 const moved = {
-  "/index/": "/", "/paintings/": "/available/", "/shop/": "/available/",
+  "/info/": "/", "/paintings/": "/available/", "/shop/": "/available/",
   "/projects/kashus-culpepper/": "/work/kashus-culpepper/", "/projects/scout-motors/": "/work/scout-motors/",
-  "/projects/the-cowboyer/": "/work/the-cowboyer/", "/art/": "/", "/design/": "/", "/photos/": "/", "/work/": "/",
+  "/projects/the-cowboyer/": "/work/the-cowboyer/", "/art/": "/", "/design/": "/", "/photos/": "/", "/work/": "/index/",
 };
 const gone = ["/no-such-page/", "/work/no-such-work/", "/README.md", "/assets/s1.jpeg", "/gabe/"];
 

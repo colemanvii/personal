@@ -16,7 +16,8 @@
 /work /index/ 301
 /work/ /index/ 301
 /available                    /available/                        301
-/info                         /info/                             301
+/info                         /                                  301
+/info/                        /                                  301
 
 # retired index redirect: index now lives at /index/
 /paintings/*                  /available/                        301
