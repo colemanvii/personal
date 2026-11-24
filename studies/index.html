@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>ColeCalfee.com Studies</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a working sheet. Each study is one row: notes on the left, live desktop and phone frames on the right. */
+:root{--bg:#f4f4f2;--fg:#1b1b1a;--mute:#6a6a66;--rule:#d9d8d3;--frame:#c9c8c2;--sans:"Helvetica Neue",Helvetica,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1b1d;--fg:#e9e8e4;--mute:#9a9a95;--rule:#323336;--frame:#45464a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1b1d;--fg:#e9e8e4;--mute:#9a9a95;--rule:#323336;--frame:#45464a;color-scheme:dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 var(--sans);padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1360px;margin:0 auto}
+header{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);gap:24px 48px;padding-bottom:32px;border-bottom:1px solid var(--rule)}
+h1{font-size:14px;font-weight:400;margin:0}
+h1 span,.mute{color:var(--mute)}
+header p{margin:0;max-width:62ch}
+h2,h3,p{margin:0}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);gap:24px 48px;padding:40px 0;border-bottom:1px solid var(--rule)}
+.note{display:flex;flex-direction:column;gap:12px;min-width:0}
+.note h2{font-size:14px;font-weight:400}
+.note h2 b{font-weight:400;color:var(--mute);margin-right:.6em}
+.note p{max-width:44ch}
+.note .verdict{color:var(--mute)}
+.note a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+.note a:focus-visible,.shots a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.shots{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;min-width:0}
+.view{position:relative;overflow:hidden;outline:1px solid var(--frame);background:var(--bg)}
+.view.d{aspect-ratio:1440/900}
+.view.m{width:clamp(110px,17vw,200px);aspect-ratio:390/844}
+.view iframe,.view img{position:absolute;top:0;left:0;border:0;transform-origin:0 0;display:block}
+.view.d iframe{width:1440px;height:900px}
+.view.m iframe{width:390px;height:844px}
+.view img{width:100%;height:100%;object-fit:cover}
+.ghost{visibility:hidden}
+.cap{display:block;margin-top:6px;font-size:12px;color:var(--mute)}
+.rec{color:var(--fg)}
+@media (max-width:820px){
+  header,.row{grid-template-columns:minmax(0,1fr)}
+  .shots{grid-template-columns:minmax(0,1fr) 30%}
+  .view.m{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>ColeCalfee.com <span>/ six design studies / November 2026</span></h1>
+<p>A private working sheet for comparing directions. Each frame is the live study at 1440&times;900 and 390&times;844; open one to see it at your own window size. Links inside the studies go to the current production pages. Nothing here is published to colecalfee.com.</p>
+</header>
+
+<section class="row" aria-labelledby="ref">
+<div class="note">
+<h2 id="ref"><b>Ref</b>devin.com</h2>
+<p>A two-cell table filling the window, each cell centred. The name lands at 25% of the width, the details at 76%, both on the vertical midline. The background samples at #7d8999, within screenshot error of the X11 colour name <code>lightslategray</code> (#778899). Default blue links on it measure 2.6:1, which fails contrast; the studies keep the restraint and fix that.</p>
+</div>
+<div class="shots">
+<div><div class="view d"><img src="reference/devin-com.jpg" alt="Screenshot of devin.com: a name on the left and a small table of email, gpg and projects on the right, on a slate-grey field."></div></div>
+<div class="view m ghost" aria-hidden="true"></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="sa">
+<div class="note">
+<h2 id="sa"><b>A</b>Personal Address</h2>
+<p>Off-white field. The name and a small labelled index share one baseline, set above the optical centre. On the phone it becomes an envelope: name where the sender writes, index where the address goes.</p>
+<p class="verdict">Calm, correct, and closest to the reference. Easy to live with for decades. The risk is that it is only correct.</p>
+<p><a href="a/index.html">Open A</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="a/index.html" title="Study A at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="a/index.html" title="Study A at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="sb">
+<div class="note">
+<h2 id="sb"><b>B</b>Blue Hour</h2>
+<p>The colour is the page and the words are its wall label: one small block in the lower left, all one size. At night (system dark mode) the field deepens to the blue after dusk.</p>
+<p class="verdict">The most atmospheric and the most memorable at a glance. Typographically the thinnest; it depends entirely on the colour being right on every screen.</p>
+<p><a href="b/index.html">Open B</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="b/index.html" title="Study B at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="b/index.html" title="Study B at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="sc">
+<div class="note">
+<h2 id="sc"><b>C</b>Open Directory</h2>
+<p>No landing page: every one of the 23 existing works, grouped as Work, Photographs, Music and Paintings, with years, on one screen. External links are marked. Correspondence sits under the name.</p>
+<p class="verdict">The most useful and the most honest about the archive. Least like a gesture; most like a working index. It will need pruning or a second level as the list grows.</p>
+<p><a href="c/index.html">Open C</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="c/index.html" title="Study C at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="c/index.html" title="Study C at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="sd">
+<div class="note">
+<h2 id="sd"><b>D</b>The Printed Page</h2>
+<p>The desktop screen is an open book, with margins from the Van de Graaf canon. Title page on the right, colophon on the left, their last lines on one baseline. Red marks only what can be turned to. The phone is a single page.</p>
+<p class="verdict">The most composed and the most specific. Georgia ties it to the screen rather than to nostalgia. It leans literary, and the centred axis is formal.</p>
+<p><a href="d/index.html">Open D</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="d/index.html" title="Study D at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="d/index.html" title="Study D at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="se">
+<div class="note">
+<h2 id="se"><b>E</b>Native Internet</h2>
+<p>No font, size or colour is chosen. The browser supplies all of them, including dark mode and the purple of visited links. Contact sits in an <code>&lt;address&gt;</code>, so it is italic by default. Placed at the golden section.</p>
+<p class="verdict">The purest idea, and the one most likely to look the same in 2046. It also looks unfinished to most visitors. Better as a principle than as the homepage.</p>
+<p><a href="e/index.html">Open E</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="e/index.html" title="Study E at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="e/index.html" title="Study E at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+
+<section class="row" aria-labelledby="sf">
+<div class="note">
+<h2 id="sf"><b>F</b>One Photograph</h2>
+<p>A single photograph of yours, hung small: a truck crossing open ground at Teton Valley Ranch, 2015. The name hangs from its top edge and the index stands on its bottom edge. You would change the picture by hand, rarely.</p>
+<p class="verdict rec">Recommended for further development. The photograph says &ldquo;a person&rdquo; where the other studies say &ldquo;a page&rdquo;, and changing it is the one thing on the homepage that evolves.</p>
+<p><a href="f/index.html">Open F</a></p>
+</div>
+<div class="shots">
+<div><div class="view d"><iframe src="f/index.html" title="Study F at desktop size" loading="lazy" tabindex="-1"></iframe></div></div>
+<div><div class="view m"><iframe src="f/index.html" title="Study F at phone size" loading="lazy" tabindex="-1"></iframe></div></div>
+</div>
+</section>
+</div>
+<script>
+// Scale each frame's fixed-size page to the width it is given.
+(function(){
+  var views=document.querySelectorAll('.view');
+  function fit(v){var el=v.firstElementChild;if(el.tagName!=='IFRAME')return;el.style.transform='scale('+(v.clientWidth/el.offsetWidth)+')'}
+  if('ResizeObserver' in window){var ro=new ResizeObserver(function(es){es.forEach(function(e){fit(e.target)})});views.forEach(function(v){ro.observe(v)})}
+  else{views.forEach(fit);addEventListener('resize',function(){views.forEach(fit)})}
+})();
+</script>
+</body>
+</html>

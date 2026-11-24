@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f2eb">
+<title>Cole Calfee</title>
+<style>
+/* D — The Printed Page. The screen is an open book; margins follow the Van de Graaf canon
+   (inner 1/9, outer 2/9, head 1/9, foot 2/9 of the page). Black for text, red for what can be turned to. */
+html{background:#f5f2eb;color:#1e1c19;font:16px/1.5 Georgia,"Times New Roman",serif;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:50vw 50vw;overflow-x:hidden}
+.page{box-sizing:border-box;display:flex;flex-direction:column;padding:11.11svh 0 22.22svh}
+.verso{grid-area:1/1;padding-left:11.11vw;padding-right:5.56vw;justify-content:flex-end}
+.recto{grid-area:1/2;padding-left:5.56vw;padding-right:11.11vw;align-items:center;text-align:center}
+h1,p,ul{margin:0;padding:0;font:inherit;list-style:none}
+.caps{text-transform:uppercase;letter-spacing:.16em;font-size:.6875rem}
+h1{margin-top:20svh;font-size:1.0625rem;letter-spacing:.2em;text-transform:uppercase}
+.contents{margin-top:7svh;font-style:italic;line-height:1.75}
+.imprint{margin-top:auto;padding-top:2.5em}
+.colophon{font-size:.75rem;line-height:1.6;max-width:22em}
+.colophon p+p{margin-top:1.6em}
+a{color:#9e2a1f;text-decoration:none}
+a:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
+a:focus-visible{outline:1px solid currentColor;outline-offset:3px}
+@media (max-width:760px){
+  body{grid-template-columns:1fr}
+  .recto{grid-area:1/1}
+  .verso{display:none}
+  .recto{padding:11.11svh 9vw 9svh}
+  h1{margin-top:22svh}
+  .contents{margin-top:6svh}
+  .imprint span{display:none}
+}
+@media (min-width:761px){.m-only,.m-br{display:none}}
+</style>
+</head>
+<body>
+<main class="page recto">
+<h1>Cole Calfee</h1>
+<ul class="contents">
+<li><a href="https://colecalfee.com/index/">Index of works</a></li>
+<li><a href="https://colecalfee.com/work/paintings/">Paintings</a></li>
+<li><a href="https://colecalfee.com/work/drawings/">Drawings</a></li>
+<li><a href="https://colecalfee.com/available/">Available</a></li>
+<li class="m-only"><a href="mailto:colecalfee@gmail.com">Correspondence</a></li>
+<li class="m-only"><a href="https://www.instagram.com/colecalfee/">Instagram</a></li>
+</ul>
+<p class="imprint caps">Nashville, Tennessee<span aria-hidden="true"> &middot; </span><br class="m-br">North Georgia</p>
+</main>
+<aside class="page verso" aria-label="Colophon">
+<div class="colophon">
+<p>Correspondence: <a href="mailto:colecalfee@gmail.com">colecalfee@gmail.com</a><br>Instagram: <a href="https://www.instagram.com/colecalfee/">@colecalfee</a></p>
+<p>Freeman General Contracting: <a href="https://www.freemangc.com/">freemangc.com</a></p>
+</div>
+</aside>
+</body>
+</html>

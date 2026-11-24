@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#56677f">
+<meta name="theme-color" content="#2b3445" media="(prefers-color-scheme: dark)">
+<title>Cole Calfee</title>
+<style>
+/* B — Blue Hour. The colour is the page; the words are its label. */
+:root{--field:#56677f;--paper:#f1eee6}
+@media (prefers-color-scheme:dark){:root{--field:#2b3445}}
+html{background:var(--field);color:var(--paper);font:13px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding:0 6.25vw 6.25vw;box-sizing:border-box}
+main{display:grid;grid-template-columns:repeat(3,auto);column-gap:3.5em}
+h1,p,ul{margin:0;padding:0;font:inherit;list-style:none}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:rgba(241,238,230,.45)}
+a:hover{text-decoration-color:currentColor}
+a:focus-visible{outline:1px solid currentColor;outline-offset:3px}
+@media (max-width:640px){
+  html{font-size:14px}
+  body{padding:0 24px 30px}
+  main{grid-template-columns:auto auto;row-gap:1.5em;column-gap:2.75em}
+  .who{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<main>
+<div class="who">
+<h1>Cole Calfee</h1>
+<p>Nashville, Tennessee<br>North Georgia</p>
+</div>
+<ul aria-label="Work">
+<li><a href="https://colecalfee.com/index/">Index</a></li>
+<li><a href="https://colecalfee.com/work/paintings/">Paintings</a></li>
+<li><a href="https://colecalfee.com/work/drawings/">Drawings</a></li>
+<li><a href="https://colecalfee.com/available/">Available</a></li>
+</ul>
+<ul aria-label="Contact">
+<li><a href="mailto:colecalfee@gmail.com">colecalfee@gmail.com</a></li>
+<li><a href="https://www.instagram.com/colecalfee/">Instagram</a></li>
+<li><a href="https://www.freemangc.com/">Freeman</a></li>
+</ul>
+</main>
+</body>
+</html>
