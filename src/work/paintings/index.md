@@ -4,6 +4,7 @@ year: "Ongoing"
 disciplines: ["Painting"]
 role: "Original works"
 client: "Independent"
+available: true
 featured: false
 order: 11
 draft: false

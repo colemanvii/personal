@@ -13,7 +13,8 @@ ogType: article
 {%- if role %}<div class="r"><dt class="l">role</dt><dd>{{ role }}</dd></div>{% endif %}
 {%- if client and client != title and client != "Independent" %}<div class="r"><dt class="l">for</dt><dd>{{ client }}</dd></div>{% endif %}
 <div class="r"><dt class="l">year</dt><dd>{{ year }}</dd></div>
-{%- if (disciplines | join(", ") | lower) != (role | lower) %}<div class="r"><dt class="l">discipline</dt><dd>{{ disciplines | join(", ") }}</dd></div>{% endif %}
+{%- if (disciplines | join(", ") | lower) != (role | lower) %}<div class="r"><dt class="l">discipline</dt><dd>{{ disciplines | join(", ") | sentence }}</dd></div>{% endif %}
+{%- if available %}<div class="r"><dt class="l">available</dt><dd><a href="/available/">original paintings</a></dd></div>{% endif %}
 {%- if link or links %}
 <div class="r"><dt class="l">elsewhere</dt><dd class="list">
 {%- if link %}<a class="ext" href="{{ link.href }}" rel="noopener">{{ link.label }}</a>{% endif %}
@@ -25,7 +26,7 @@ ogType: article
 <div class="r"><span></span><div class="prose">{{ content | safe }}</div></div>
 {%- endif %}
 <div class="media">
-{% media media %}
+{% media media, { title: title, disciplines: disciplines, year: year } %}
 {%- if releases %}
 <section class="r releases" aria-labelledby="releases">
 <h2 class="l" id="releases">releases</h2>

@@ -122,15 +122,19 @@ a:has(.u) { text-decoration: none; }
 
 /* where fingers are used, every link in a row is at least 44px tall */
 @media (max-width: 1023px) {
-  .masthead .name, .r > a, .r dd > a { display: inline-flex; align-items: center; min-height: var(--tap); }
-  .masthead .name { justify-self: start; }
+  .masthead .name { display: inline-flex; align-items: center; min-height: var(--tap); justify-self: start; }
+  /* the home page's rhythm: 44px a row, 22px for each further line. A link's
+     tap area reaches into the row's padding instead of pushing rows apart. */
+  .rows:not(.works) { row-gap: 0; }
+  .rows:not(.works) > .r { padding-block: calc((var(--tap) - 1lh) / 2); }
+  .rows:not(.works) .r a { display: inline-block; padding-block: calc((var(--tap) - 1lh) / 2); margin-block: calc((var(--tap) - 1lh) / -2); }
 }
 /* lists of links, one per line */
 .list li + li { margin-top: 0; }
 .list a { display: inline-flex; align-items: baseline; min-height: var(--tap); }
 @media (max-width: 1023px) {
-  .list a, .masthead .name { align-items: center; }
-  .rows { row-gap: 1.1em; }
+  .list a { align-items: center; }
+  .works { row-gap: 1.1em; }
 }
 .prose { max-width: 34em; }
 .prose p + p { margin-top: 1em; }

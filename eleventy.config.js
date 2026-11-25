@@ -48,9 +48,6 @@ export default function (eleventyConfig) {
       .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title))
   );
 
-  eleventyConfig.addFilter("disciplines", (works, all) =>
-    all.filter(d => works.some(w => (w.data.disciplines || []).includes(d))));
-  eleventyConfig.addFilter("pad", n => String(n).padStart(3, "0"));
   // Works grouped by the year they began, newest first; "Ongoing" work leads.
   eleventyConfig.addFilter("byYear", works => {
     const groups = new Map();
@@ -63,11 +60,12 @@ export default function (eleventyConfig) {
     return [...groups].sort((a, b) => key(b[0]) - key(a[0])).map(([year, items]) => ({ year, items }));
   });
   eleventyConfig.addFilter("lower", s => String(s).toLowerCase());
+  eleventyConfig.addFilter("sentence", s => { s = String(s).toLowerCase(); return s.charAt(0).toUpperCase() + s.slice(1); });
   eleventyConfig.addFilter("hasPage", w => Boolean(w.data.media?.length));
 
   // {% media %} renders the current work's media list.
-  eleventyConfig.addAsyncShortcode("media", async function (media) {
-    const ctx = { dir: path.dirname(this.page.inputPath), slug: this.page.fileSlug, first: { done: false } };
+  eleventyConfig.addAsyncShortcode("media", async function (media, work) {
+    const ctx = { dir: path.dirname(this.page.inputPath), slug: this.page.fileSlug, work, first: { done: false } };
     const out = [];
     for (const m of media || []) out.push(await renderMedia(ctx, m));
     return out.join("\n");

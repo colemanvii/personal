@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cole Calfee</title>
-<meta name="description" content="Cole Calfee: creative direction, identity, web, film, editorial and music.">
+<meta name="description" content="Cole Calfee. Work, paintings and drawings.">
 <link rel="canonical" href="https://colecalfee.com/">
 <meta name="theme-color" content="#f3f2ee">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cole Calfee">
 <meta property="og:title" content="Cole Calfee">
-<meta property="og:description" content="Cole Calfee: creative direction, identity, web, film, editorial and music.">
+<meta property="og:description" content="Cole Calfee. Work, paintings and drawings.">
 <meta property="og:url" content="https://colecalfee.com/">
 <meta property="og:image" content="https://colecalfee.com/share.jpg">
 <meta property="og:image:width" content="1200">
@@ -18,7 +18,7 @@
 <meta property="og:image:alt" content="Cole Calfee">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cole Calfee">
-<meta name="twitter:description" content="Cole Calfee: creative direction, identity, web, film, editorial and music.">
+<meta name="twitter:description" content="Cole Calfee. Work, paintings and drawings.">
 <meta name="twitter:image" content="https://colecalfee.com/share.jpg">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -116,14 +116,16 @@ row-gap: 2.9em;
 .masthead .name:hover { text-decoration: underline; text-decoration-color: currentColor; }
 .masthead h1 { font-size: var(--fs-name); line-height: 1.2; letter-spacing: -.005em; text-wrap: balance; }
 @media (max-width: 1023px) {
-.masthead .name, .r > a, .r dd > a { display: inline-flex; align-items: center; min-height: var(--tap); }
-.masthead .name { justify-self: start; }
+.masthead .name { display: inline-flex; align-items: center; min-height: var(--tap); justify-self: start; }
+.rows:not(.works) { row-gap: 0; }
+.rows:not(.works) > .r { padding-block: calc((var(--tap) - 1lh) / 2); }
+.rows:not(.works) .r a { display: inline-block; padding-block: calc((var(--tap) - 1lh) / 2); margin-block: calc((var(--tap) - 1lh) / -2); }
 }
 .list li + li { margin-top: 0; }
 .list a { display: inline-flex; align-items: baseline; min-height: var(--tap); }
 @media (max-width: 1023px) {
-.list a, .masthead .name { align-items: center; }
-.rows { row-gap: 1.1em; }
+.list a { align-items: center; }
+.works { row-gap: 1.1em; }
 }
 .prose { max-width: 34em; }
 .prose p + p { margin-top: 1em; }
@@ -183,12 +185,10 @@ row-gap: 2.9em;
 <dl>
 <dt>work</dt>
 <dd><a href="/index/">index</a><a href="/work/paintings/">paintings</a><a href="/work/drawings/">drawings</a></dd>
-<dt>available</dt>
-<dd><a href="/available/">original paintings</a></dd>
 <dt>email</dt>
 <dd><a href="mailto:colecalfee@gmail.com">colecalfee@gmail.com</a></dd>
 <dt>location</dt>
-<dd><span>Nashville, Tennessee</span><span>North Georgia</span></dd>
+<dd><span>Georgia</span></dd>
 <dt>elsewhere</dt>
 <dd><a href="https://www.instagram.com/colecalfee/">Instagram</a><a href="https://www.freemangc.com/">Freeman</a></dd>
 </dl>

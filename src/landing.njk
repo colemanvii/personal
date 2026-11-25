@@ -8,12 +8,10 @@ eleventyExcludeFromCollections: true
 <dl>
 <dt>work</dt>
 <dd><a href="/index/">index</a><a href="/work/paintings/">paintings</a><a href="/work/drawings/">drawings</a></dd>
-<dt>available</dt>
-<dd><a href="/available/">original paintings</a></dd>
 <dt>email</dt>
 <dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd>
 <dt>location</dt>
-<dd>{% for place in site.places %}<span>{{ place }}</span>{% endfor %}</dd>
+<dd><span>{{ site.location }}</span></dd>
 <dt>elsewhere</dt>
 <dd><a href="{{ site.instagram.url }}">Instagram</a><a href="https://www.freemangc.com/">Freeman</a></dd>
 </dl>
