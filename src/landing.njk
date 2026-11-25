@@ -11,6 +11,19 @@ eleventyExcludeFromCollections: true
 <meta name="description" content="Cole Calfee — creative direction, identity, web, film, editorial and music.">
 <link rel="canonical" href="https://colecalfee.com/">
 <meta name="theme-color" content="#f8f8f6">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ site.name }}">
+<meta property="og:description" content="Cole Calfee — creative direction, identity, web, film, editorial and music.">
+<meta property="og:url" content="{{ site.url }}/">
+<meta property="og:image" content="{{ site.url }}/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ site.name }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ site.name }}">
+<meta name="twitter:description" content="Cole Calfee — creative direction, identity, web, film, editorial and music.">
+<meta name="twitter:image" content="{{ site.url }}/share.jpg">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
 @font-face{font-family:GeistMono;src:url('/fonts/geist-mono-v6.woff2') format('woff2');font-display:swap}
@@ -27,15 +40,21 @@ header{margin:auto;display:flex;flex-direction:column;align-items:center;justify
 h1{font:inherit;margin:0;font-weight:400;text-transform:uppercase;white-space:nowrap}
 nav{display:flex;justify-content:center;gap:28px}
 a{color:inherit;text-decoration:none;text-transform:uppercase}
+/* Each link is at least a 44px tap target without moving anything: padding grows its
+   box past 44px and an equal negative margin keeps its place in the layout. The span
+   keeps the link's original box, so the focus ring is drawn exactly where it was. */
+nav a{padding-block:14px;margin-block:-14px}
+nav a span{display:block}
 a:hover{text-decoration:underline;text-underline-offset:4px}
-a:focus-visible{outline:1px solid currentColor;outline-offset:5px}
+a:focus-visible{outline:none}
+a:focus-visible span{outline:1px solid currentColor;outline-offset:5px}
 @media(max-width:600px){header{padding:20px 16px}nav{gap:28px}}
 </style>
 </head>
 <body>
 <header>
 <h1>Cole Calfee</h1>
-<nav aria-label="Primary"><a href="/index/">Index</a><a href="/info/">Contact</a></nav>
+<nav aria-label="Primary"><a href="/index/"><span>Index</span></a><a href="/info/"><span>Contact</span></a></nav>
 </header>
 </body>
 </html>
