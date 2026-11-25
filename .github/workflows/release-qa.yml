@@ -2,7 +2,8 @@ name: Site QA
 
 # site/ is the published site, built from src/ by `npm run build`.
 # Every change checks that site/ matches src/, tests every page in a real
-# browser at phone, tablet and desktop widths, checks routing under
+# browser at phone, tablet and desktop widths, holds the home page to one
+# stationary viewport (a permanent requirement), checks routing under
 # Cloudflare's own Pages server, and finally checks the real deployment.
 
 on:
@@ -63,6 +64,10 @@ jobs:
           BASE_URL: http://127.0.0.1:4173
           SCREENSHOTS: release-screenshots
         run: node tests/site.e2e.cjs
+      - name: Home page is one stationary viewport (permanent requirement)
+        env:
+          BASE_URL: http://127.0.0.1:4173
+        run: node tests/landing.e2e.cjs
       - name: Save screenshots
         if: always()
         uses: actions/upload-artifact@v4

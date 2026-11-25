@@ -12,7 +12,8 @@ to `site/`, which is what Cloudflare Pages publishes.
 
 | URL | Source |
 | --- | --- |
-| `/` | `src/index.njk`: the index of every work |
+| `/` | `src/landing.njk`: the landing page, one stationary viewport (see Permanent requirements) |
+| `/index/` | `src/index.njk`: the index of every work |
 | `/work/<name>/` | `src/work/<name>/index.md`, one per work |
 | `/available/` | `src/available/index.njk`: paintings for sale (live price and checkout from Shopify) |
 | `/info/` | `src/info/index.njk` |
@@ -21,6 +22,33 @@ to `site/`, which is what Cloudflare Pages publishes.
 Site-wide settings (email, Instagram, location, the discipline list,
 analytics) are in `src/_data/site.js`. The whole design is in
 `src/assets/site.css`; its first block holds every colour, size, space and rule.
+
+## Permanent requirements
+
+**The home page is a fixed, single-viewport composition.** This is foundational, not
+a style preference, and holds for every future design of `/`. At normal zoom, in
+Safari, Chrome and mobile browsers, the home page must:
+
+- occupy exactly one visible viewport, with no vertical or horizontal document scrolling;
+- stay stationary: it must not move, bounce or re-centre when it is swiped, scrolled,
+  or when mobile browser toolbars show or hide;
+- have no entrance animation and no layout shift, including when the web font loads late;
+- stay accessible when zoomed: if enlarged text no longer fits, the page scrolls and
+  nothing is cut off.
+
+How the current page meets it (`src/landing.njk`):
+
+- Size the page with `min-height: 100svh` (the small viewport: the visible area with
+  toolbars shown, which toolbars do not change), with `100%` as the fallback. Never size
+  it with `dvh`, which changes as toolbars move and so moves anything centred in it, or
+  with `vh`/`lvh`, which are taller than the visible area on phones.
+- Centre with `margin: auto`, not `place-items: center`: auto margins give way when the
+  content is taller than the screen, so nothing is pushed out of reach.
+- Set `overscroll-behavior: none` on `html` so the page cannot bounce.
+- Use no animations or transitions on the home page.
+
+`tests/landing.e2e.cjs` enforces this on every pull request and every push to `main`,
+at 16 desktop, tablet, phone, landscape and zoomed sizes. A change that breaks it fails CI.
 
 ## Add a work
 
@@ -112,16 +140,31 @@ To let Cloudflare build instead, set the Pages build command to
 Every branch and pull request gets a preview at `<branch>.personal-7jh.pages.dev`.
 Previews answer `X-Robots-Tag: noindex` (`src/_headers`).
 
-`src/_redirects` keeps old URLs working: `/index/` → `/`, `/paintings/` →
-`/available/`, and `/projects/*` → their works. Old `/index/#name` links are
-forwarded to the work's page by a script on the index.
+`src/_redirects` keeps old URLs working. Legacy portfolio paths (`/index`,
+`/projects`, `/art`, `/design`, `/photos`, `/work`, with or without a trailing slash
+and anything beneath them) lead to the index at `/index/`; `/paintings/` and `/shop/`
+lead to `/available/`; the three old project pages lead to their works. Old
+`/index/#name` links are forwarded to the work's page by a script on the index.
+`tests/routes.e2e.cjs` holds the whole contract.
 
 ## Tests
 
 ```sh
 npm run build
 python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
-npm test             # every page at 375, 390, 430, 768 and 1440px
+npm test             # every page at 375, 390, 430, 768 and 1440px, then the home page
+                     # held to one stationary viewport at 16 sizes
 ```
+
+Routing runs under Cloudflare's own Pages server, which reads `_redirects`:
+
+```sh
+npx wrangler pages dev --port 8788 &
+npm run test:routes
+```
+
+The headless Chromium these tests use cannot show or hide real mobile browser
+toolbars or reproduce Safari's elastic scrolling, so the landing test also checks the
+CSS that prevents both. Check the home page on a real iPhone after changing it.
 
 Old pages, source material and earlier experiments are kept in `retired/` and are never served.
