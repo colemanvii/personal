@@ -32,6 +32,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <script>document.documentElement.className='js'</script>
 <style>{{ "src/assets/site.css" | inlineCss | safe }}</style>
+<link rel="stylesheet" href="/js/viewport.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -39,7 +40,7 @@
 <div class="grid">
 <a class="brand" href="/">{{ site.name }}</a>
 <nav class="nav" aria-label="Primary">
-<a href="/"{% if nav == "index" %} aria-current="page"{% endif %}>Index</a>
+<a href="/index/"{% if nav == "index" %} aria-current="page"{% endif %}>Index</a>
 <a href="/available/"{% if nav == "available" %} aria-current="page"{% endif %}>Available</a>
 <a href="/info/"{% if nav == "info" %} aria-current="page"{% endif %}>Info</a>
 </nav>
@@ -59,5 +60,6 @@ document.querySelectorAll('a[data-vimeo]').forEach(function(a){a.addEventListene
 {%- if site.analyticsToken %}
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"{{ site.analyticsToken }}"}'></script>
 {%- endif %}
+<script src="/js/viewport.js"></script>
 </body>
 </html>

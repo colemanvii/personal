@@ -1,0 +1,72 @@
+/* Interior folios. The landing page does not load this stylesheet. */
+html.folio {height:100%;overscroll-behavior:none}
+html.folio body {height:100vh;height:100svh;min-height:0;overscroll-behavior:none}
+html.folio [hidden]{display:none!important}
+html.folio .site-head,html.folio .site-foot{flex:none}
+html.folio .site-foot{margin-top:0;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+html.folio .site-foot .copy{padding-top:0}
+html.folio main{flex:1;min-height:0;display:flex;flex-direction:column}
+html.folio .page-head{flex:none;padding-top:12px;padding-bottom:8px}
+html.folio .filter{overflow:visible;mask:none;-webkit-mask:none;flex-wrap:wrap;margin:0;padding:0;gap:0 12px}
+html.folio .filter-select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:0;min-height:44px;max-width:100%}
+html.folio .works{flex:1;min-height:0;padding-bottom:0}
+html.folio .row a{padding:4px 0}
+html.folio .folio-controls{flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;border-top:1px solid var(--rule);min-height:44px}
+html.folio .folio-controls button{min-height:44px;text-align:left}
+html.folio .folio-controls button:last-child{text-align:right}
+html.folio .folio-controls button:disabled{opacity:.35;cursor:default}
+html.folio .work{flex:1;min-height:0;display:flex;padding:8px 0 0}
+html.folio .side{display:none}
+html.folio .pane{flex:1;min-height:0;display:flex;flex-direction:column;view-transition-name:none}
+html.folio .pane-head{flex:none}
+html.folio .step{flex:none;margin-top:0}
+html.folio .step a{min-height:44px;padding-top:0}
+html.folio .folio-stage{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);padding:8px 0}
+html.folio .plate{min-height:0;min-width:0}
+html.folio .plate-visual,html.folio .plate-visual .fig,html.folio .info .photo,html.folio .piece{display:flex;flex-direction:column;min-height:0;min-width:0;width:100%}
+html.folio .plate-visual .fig{height:100%}
+html.folio .plate-visual :is(picture,.frame,.film,.video,.on-desktop,.on-mobile,.ph),html.folio .info .photo picture,html.folio .piece picture{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+html.folio .plate-visual :is(img,video,iframe),html.folio .info .photo img,html.folio .piece img{width:100%;height:100%;min-height:0;max-height:100%;object-fit:contain}
+html.folio .plate-visual > :is(img,video,iframe){flex:1}
+html.folio .plate-visual .frame{padding:8px;aspect-ratio:auto!important}
+html.folio .plate-visual .frame > picture,html.folio .plate-visual .film > picture,html.folio .plate-visual .video > picture,html.folio .plate-visual .on-desktop > picture,html.folio .plate-visual .on-mobile > picture{height:100%}
+html.folio .plate-visual figcaption,html.folio .plate-visual > .cap,html.folio .piece figcaption{flex:none;margin-top:8px}
+html.folio .plate-visual :is(.grid-2,.grid-3){flex:1;min-height:0;display:grid;align-items:stretch;gap:8px;grid-auto-rows:minmax(0,1fr)}
+html.folio .plate-visual .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+html.folio .plate-visual .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+html.folio .plate-visual .on-mobile{display:none}
+html.folio .info{flex:1;min-height:0;padding:12px 0;row-gap:8px;grid-template-rows:auto minmax(0,1fr) auto}
+html.folio .info .contact{padding-top:8px;row-gap:0}
+html.folio .avail{flex:1;min-height:0;display:flex;flex-direction:column;padding:8px 0 0;gap:8px}
+html.folio .avail .note{flex:none;padding:0}
+html.folio .piece{height:100%}
+html.folio .lost{padding:24px 0}
+html.folio .fade{opacity:1;transition:none}
+@view-transition{navigation:none}
+@media(min-width:1024px){html.folio .info .lede{grid-row:1 / 3}html.folio .info .photo{grid-row:1 / 3}html.folio .info .contact{grid-row:3}}
+@media(max-width:1023px){
+html.folio .filter{grid-column:1/-1}
+html.folio .site-foot .links{column-gap:12px}
+html.folio .site-foot .links a{min-height:44px}
+html.folio .meta{margin-top:8px;padding-top:8px;gap:8px}
+html.folio .desc{margin-top:8px}
+}
+@media(max-width:699px){
+html.folio .plate-visual .on-desktop{display:none}
+html.folio .plate-visual .on-mobile{display:flex;width:100%}
+html.folio .plate-visual .grid-2,html.folio .plate-visual .grid-3{grid-template-columns:1fr}
+html.folio .info .contact{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html.folio .info .contact a{overflow-wrap:anywhere}
+html.folio .site-foot{display:none}
+}
+@media(max-height:520px){
+html.folio .site-foot{display:none}
+html.folio .site-head{padding-top:max(4px,env(safe-area-inset-top))}
+html.folio .page-head{padding-top:4px}
+html.folio .plate-visual .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+html.folio .plate-visual .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* Never clip text at extreme zoom or if a screen is unusually short. */
+html.folio.folio-overflow body{height:auto;min-height:100vh;min-height:100svh}
+html.folio.folio-overflow .folio-stage{display:block}
+html.folio.folio-overflow .plate-visual{min-height:180px}
