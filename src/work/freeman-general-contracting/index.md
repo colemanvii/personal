@@ -15,6 +15,7 @@ media:
     desktop: "homepage.webp"
     alt: "Freeman General Contracting homepage: the script wordmark above Company, Projects and Contact on an off-white field"
     caption: "Website / Homepage / 2026"
+    href: "https://www.freemangc.com/"
     size: "narrow"
   - type: "mark"
     src: "eagle.svg"

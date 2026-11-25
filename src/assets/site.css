@@ -103,6 +103,7 @@ img, svg, video, iframe { display: block; }
   max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 }
 .fig picture { display: block; }
+.fig a.to { display: block; width: fit-content; max-width: 100%; }
 .fig figcaption, .set > p { margin-top: 12px; text-transform: uppercase; }
 .set { min-width: 0; max-width: 100%; }
 .row2, .row3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px var(--pad); align-items: end; }
