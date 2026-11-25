@@ -6,7 +6,8 @@
   "scripts": {
     "build": "eleventy",
     "dev": "eleventy --serve --port 8080",
-    "test": "node tests/site.e2e.cjs"
+    "test": "node tests/site.e2e.cjs && node tests/landing.e2e.cjs",
+    "test:routes": "node tests/routes.e2e.cjs"
   },
   "engines": {
     "node": ">=20"
