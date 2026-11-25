@@ -11,9 +11,15 @@
 <style>
 @font-face{font-family:GeistMono;src:url('/fonts/geist-mono-v6.woff2') format('woff2');font-display:swap}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#f8f8f6;color:#171717}
-body{min-height:100vh;min-height:100dvh;display:grid;place-items:center;font:12px/1.4 GeistMono,Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
-header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center}
+/* One stationary viewport. The page is the height of the small viewport (browser
+   toolbars shown), which does not change as toolbars move, so it never exceeds what
+   is visible and nothing on it moves. Older browsers fall back to 100% of the html
+   element. Auto margins centre the composition but give way when zoomed text is
+   taller than the screen, so the page then scrolls normally and nothing is cut off. */
+html{height:100%;overscroll-behavior:none}
+html,body{margin:0;background:#f8f8f6;color:#171717}
+body{min-height:100%;min-height:100svh;display:flex;overscroll-behavior:none;font:12px/1.4 GeistMono,Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+header{margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center}
 h1{font:inherit;margin:0;font-weight:400;text-transform:uppercase;white-space:nowrap}
 nav{display:flex;justify-content:center;gap:28px}
 a{color:inherit;text-decoration:none;text-transform:uppercase}
