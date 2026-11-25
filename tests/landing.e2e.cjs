@@ -7,6 +7,8 @@
 //   - be exactly one viewport: no vertical or horizontal document scrolling
 //   - stay still: wheel and touch gestures do not move it
 //   - have no entrance animation and no layout shift, even when the web font is slow
+//     (the composition's centre and vertical position are compared before and after
+//     the font arrives; its width may differ by a fraction of a pixel between renderers)
 // And it must be sized so browser toolbars cannot move it (checked in the CSS, because
 // headless Chromium cannot show or hide real mobile toolbars), must not bounce, and
 // must stay fully reachable when zoomed text no longer fits.
@@ -63,7 +65,7 @@ function checkCss() {
       new PerformanceObserver(l => { for (const e of l.getEntries()) window.__cls += e.value; }).observe({ type: "layout-shift", buffered: true });
       document.addEventListener("DOMContentLoaded", () => {
         const r = document.querySelector("header").getBoundingClientRect();
-        window.__first = [r.x, r.y, r.width, r.height];
+        window.__first = [r.x + r.width / 2, r.y, r.height];
       });
     });
     await page.goto(BASE + "/", { waitUntil: "networkidle" });
@@ -75,7 +77,7 @@ function checkCss() {
       return {
         iw: innerWidth, ih: innerHeight, sw: d.scrollWidth, sh: d.scrollHeight,
         bodyH: document.body.getBoundingClientRect().height,
-        first: window.__first, now: [r.x, r.y, r.width, r.height], cls: window.__cls,
+        first: window.__first, now: [r.x + r.width / 2, r.y, r.height], cls: window.__cls,
         animations: document.getAnimations().length,
         overscroll: getComputedStyle(d).overscrollBehaviorY,
       };
@@ -96,9 +98,9 @@ function checkCss() {
       await cdp.send("Input.synthesizeScrollGesture", { x: Math.round(m.iw / 2), y: Math.round(m.ih * 0.7), yDistance: -Math.round(m.ih / 2), speed: 1200 });
     }
     await page.waitForTimeout(300);
-    const after = await page.evaluate(() => { const r = document.querySelector("header").getBoundingClientRect(); return [scrollX, scrollY, r.x, r.y]; });
+    const after = await page.evaluate(() => { const r = document.querySelector("header").getBoundingClientRect(); return [scrollX, scrollY, r.x + r.width / 2, r.y]; });
     if (after[0] || after[1] || Math.abs(after[2] - m.now[0]) > 0.5 || Math.abs(after[3] - m.now[1]) > 0.5)
-      fail(name, `moved under a scroll gesture: scroll ${after[0]},${after[1]}, header at ${after[2].toFixed(1)},${after[3].toFixed(1)}`);
+      fail(name, `moved under a scroll gesture: scroll ${after[0]},${after[1]}, centre at ${after[2].toFixed(1)},${after[3].toFixed(1)}`);
     await ctx.close();
   }
 
