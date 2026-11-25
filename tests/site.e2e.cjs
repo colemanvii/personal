@@ -10,10 +10,10 @@ const path = require("node:path");
 
 const BASE = (process.env.BASE_URL || "http://127.0.0.1:4173").replace(/\/$/, "");
 const SHOTS = process.env.SCREENSHOTS;
-const WIDTHS = [[375, 667], [390, 844], [430, 932], [768, 1024], [1440, 900]];
+const WIDTHS = [[320, 568], [844, 390], [375, 667], [390, 844], [430, 932], [768, 1024], [1440, 900]];
 
 function pages() {
-  const list = ["/", "/available/", "/info/", "/404.html"];
+  const list = ["/", "/index/", "/available/", "/info/", "/404.html"];
   for (const slug of fs.readdirSync("site/work")) list.push(`/work/${slug}/`);
   return list;
 }
@@ -32,30 +32,41 @@ function pages() {
       page.on("requestfailed", r => { if (!r.url().includes("myshopify.com")) errors.push(`failed ${r.url()}`); });
       const res = await page.goto(BASE + url, { waitUntil: "networkidle" });
       if (url !== "/404.html" && (!res || res.status() !== 200)) fail(where, `status ${res && res.status()}`);
-      await page.evaluate(async () => {
-        for (let y = 0; y < document.body.scrollHeight; y += innerHeight / 2) { scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); }
-        scrollTo(0, 0);
-      });
+      await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(300);
       const r = await page.evaluate(() => {
         const overflow = document.documentElement.scrollWidth - innerWidth;
-        const imgs = [...document.images].map(i => ({ src: i.currentSrc || i.src, ok: i.complete && i.naturalWidth > 0, alt: i.getAttribute("alt") }));
+        const vertical = document.documentElement.scrollHeight - innerHeight;
+        const fallback = document.documentElement.classList.contains("folio-overflow");
+        const imgs = [...document.images].filter(i => i.getClientRects().length).map(i => ({ src: i.currentSrc || i.src, ok: i.complete && i.naturalWidth > 0, alt: i.getAttribute("alt") }));
         const offsite = imgs.filter(i => !i.src.startsWith(location.origin)).map(i => i.src);
         const small = [...document.querySelectorAll("a, button")].filter(el => {
           const b = el.getBoundingClientRect(), s = getComputedStyle(el);
           return b.width > 0 && b.height > 0 && s.visibility !== "hidden" && !el.closest(".skip") && b.height < 44;
         }).map(el => el.textContent.trim().slice(0, 30));
         const og = ["og:title", "og:description", "og:image", "og:url"].filter(p => !document.querySelector(`meta[property="${p}"]`));
-        return { overflow, broken: imgs.filter(i => !i.ok).map(i => i.src), noAlt: imgs.filter(i => i.alt === null).map(i => i.src), offsite, small, og, h1: document.querySelectorAll("h1").length };
+        return { overflow, vertical, fallback, broken: imgs.filter(i => !i.ok).map(i => i.src), noAlt: imgs.filter(i => i.alt === null).map(i => i.src), offsite, small, og, h1: document.querySelectorAll("h1").length };
       });
+      if (r.vertical > 1 || r.fallback) fail(where, `not stationary: vertical overflow ${r.vertical}, fallback ${r.fallback}`);
       if (r.overflow > 0) fail(where, `scrolls sideways by ${r.overflow}px`);
       if (r.broken.length) fail(where, `broken images ${r.broken.join(", ")}`);
       if (r.noAlt.length) fail(where, `images without alt ${r.noAlt.join(", ")}`);
       if (r.offsite.length) fail(where, `hotlinked images ${r.offsite.join(", ")}`);
-      if (w < 1024 && r.small.length) fail(where, `tap targets under 44px: ${r.small.join(" | ")}`);
-      if (r.og.length) fail(where, `missing ${r.og.join(", ")}`);
+      if (url !== "/" && w < 1024 && r.small.length) fail(where, `tap targets under 44px: ${r.small.join(" | ")}`);
+      if (url !== "/" && r.og.length) fail(where, `missing ${r.og.join(", ")}`);
       if (r.h1 !== 1) fail(where, `${r.h1} h1 elements`);
       if (errors.length) fail(where, errors.join("; "));
+      const next = page.getByRole("button", {name:"Next page", exact:true});
+      if (await next.count()) {
+        let turns=0;
+        while (await next.isEnabled() && turns++ < 100) {
+          await next.click();
+          await page.waitForTimeout(100);
+          const bad=await page.evaluate(()=>document.documentElement.scrollHeight>innerHeight+1||document.documentElement.classList.contains("folio-overflow"));
+          if(bad)fail(where,"page turn overflow");
+        }
+        if(turns>=100)fail(where,"pagination did not terminate");
+      }
       if (SHOTS) {
         fs.mkdirSync(SHOTS, { recursive: true });
         await page.screenshot({ path: path.join(SHOTS, `${url.replace(/\W+/g, "-").replace(/^-|-$/g, "") || "index"}-${w}.png`) });

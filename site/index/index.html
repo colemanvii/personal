@@ -318,6 +318,7 @@ border-bottom: var(--hair) solid var(--rule);
 @view-transition { navigation: none; }
 }
 </style>
+<link rel="stylesheet" href="/js/viewport.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -325,7 +326,7 @@ border-bottom: var(--hair) solid var(--rule);
 <div class="grid">
 <a class="brand" href="/">Cole Calfee</a>
 <nav class="nav" aria-label="Primary">
-<a href="/" aria-current="page">Index</a>
+<a href="/index/" aria-current="page">Index</a>
 <a href="/available/">Available</a>
 <a href="/info/">Info</a>
 </nav>
@@ -450,5 +451,6 @@ border-bottom: var(--hair) solid var(--rule);
 document.querySelectorAll('img.fade').forEach(function(i){function s(){i.classList.add('in')}if(i.complete)s();else{i.addEventListener('load',s);i.addEventListener('error',s)}});
 document.querySelectorAll('a[data-vimeo]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var f=document.createElement('iframe');f.src='https://player.vimeo.com/video/'+a.dataset.vimeo+'?autoplay=1&dnt=1';f.allow='autoplay; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=a.textContent.trim()||'Video';f.style.aspectRatio=a.style.aspectRatio;a.replaceWith(f)})});
 </script>
+<script src="/js/viewport.js"></script>
 </body>
 </html>
