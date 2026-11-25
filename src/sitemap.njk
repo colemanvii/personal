@@ -5,6 +5,7 @@ eleventyExcludeFromCollections: true
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>{{ site.url }}/</loc></url>
+<url><loc>{{ site.url }}/index/</loc></url>
 {%- for w in collections.works %}{% if w | hasPage %}
 <url><loc>{{ site.url }}{{ w.url }}</loc></url>
 {%- endif %}{% endfor %}
