@@ -13,8 +13,7 @@
 @font-face { font-family: GeistMonoFallbackLinux; src: local("DejaVu Sans Mono"), local("DejaVuSansMono"); size-adjust: 99.66%; }
 
 :root {
-  --paper: #f8f8f6;
-  --ink: #171717;
+  /* --paper and --ink come from the colourway (src/_includes/colorway-head.njk) */
   --font: GeistMono, GeistMonoFallback, GeistMonoFallbackWin, GeistMonoFallbackLinux, Menlo, Consolas, monospace;
   --pad: 24px;          /* page edge, as on / and /info/ */
   --gap: 24px;          /* between blocks of text */

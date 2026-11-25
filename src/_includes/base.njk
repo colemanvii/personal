@@ -29,9 +29,11 @@
 <link rel="preload" href="/fonts/geist-mono-v6.woff2" as="font" type="font/woff2" crossorigin>
 {% include "icons.njk" %}
 <style>{{ "src/assets/site.css" | inlineCss | safe }}</style>
+{% include "colorway-head.njk" %}
 </head>
 <body>
 {{ content | safe }}
+{% include "colorway-toggle.njk" %}
 <script>
 document.querySelectorAll('a[data-vimeo]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var f=document.createElement('iframe');f.src='https://player.vimeo.com/video/'+a.dataset.vimeo+'?autoplay=1&dnt=1';f.allow='autoplay; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=a.textContent.trim()||'Video';f.style.aspectRatio=a.style.aspectRatio;a.replaceWith(f)})});
 </script>

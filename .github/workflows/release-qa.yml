@@ -72,6 +72,10 @@ jobs:
         env:
           BASE_URL: http://127.0.0.1:4173
         run: node tests/screens.e2e.cjs
+      - name: Both colourways, identical layout, remembered choice
+        env:
+          BASE_URL: http://127.0.0.1:4173
+        run: node tests/colorway.e2e.cjs
       - name: Save screenshots
         if: always()
         uses: actions/upload-artifact@v4

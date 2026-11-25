@@ -32,8 +32,6 @@
 @font-face { font-family: GeistMonoFallbackWin; src: local("Consolas"); size-adjust: 109.13%; }
 @font-face { font-family: GeistMonoFallbackLinux; src: local("DejaVu Sans Mono"), local("DejaVuSansMono"); size-adjust: 99.66%; }
 :root {
---paper: #f8f8f6;
---ink: #171717;
 --font: GeistMono, GeistMonoFallback, GeistMonoFallbackWin, GeistMonoFallbackLinux, Menlo, Consolas, monospace;
 --pad: 24px;
 --gap: 24px;
@@ -142,6 +140,24 @@ max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 .go.end { padding-bottom: max(var(--pad), env(safe-area-inset-bottom)); }
 }
 </style>
+<style>
+/* Colourways. The default is set here; the other applies when the visitor chooses it. */
+:root{--paper:#f8f8f6;--ink:#171717}
+:root[data-colorway="earth"]{--paper:#3a281f;--ink:#efe8da;color-scheme:dark}
+/* Two swatches in the top right corner, out of the composition: absolutely placed, so
+   they never move anything and scroll away with the page. 44px targets on touch screens. */
+.cw{position:absolute;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);display:flex;padding:4px}
+.cw[hidden]{display:none}
+.cw button{width:24px;height:24px;display:grid;place-items:center;margin:0;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cw button::before{content:"";width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 1px var(--ink)}
+.cw [data-cw="paper"]::before{background:#f8f8f6}
+.cw [data-cw="earth"]::before{background:#3a281f}
+.cw [aria-pressed="true"]::before{outline:1px solid var(--ink);outline-offset:2px}
+.cw button:focus-visible{outline:1px solid var(--ink);outline-offset:-4px}
+@media (max-width:1023px),(pointer:coarse){.cw{padding:0}.cw button{width:36px;height:44px}}
+</style>
+<script>try{if(localStorage.getItem("colorway")==="earth")document.documentElement.dataset.colorway="earth"}catch(e){}</script>
+
 </head>
 <body>
 <main id="main" class="col">
@@ -149,6 +165,27 @@ max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 <p>This page isn’t here.</p>
 <nav class="go" aria-label="Site"><a href="/index/">Index</a><a href="/info/">Contact</a><a href="/">Home</a></nav>
 </main>
+
+<div class="cw" role="group" aria-label="Colourway" hidden><button type="button" data-cw="paper" aria-label="Ink on paper" aria-pressed="true"></button><button type="button" data-cw="earth" aria-label="Chalk on brown" aria-pressed="false"></button></div>
+<script>
+(function(){
+  var r=document.documentElement,g=document.querySelector(".cw"),m=document.querySelector('meta[name="theme-color"]');
+  var bg={paper:"#f8f8f6",earth:"#3a281f"},b=[].slice.call(g.querySelectorAll("button"));
+  function set(c,save){
+    c=c==="earth"?"earth":"paper";
+    if(c==="earth")r.dataset.colorway=c;else delete r.dataset.colorway;
+    if(m)m.setAttribute("content",bg[c]);
+    b.forEach(function(x){x.setAttribute("aria-pressed",String(x.dataset.cw===c))});
+    if(save)try{localStorage.setItem("colorway",c)}catch(e){}
+  }
+  function stored(){try{return localStorage.getItem("colorway")}catch(e){}}
+  b.forEach(function(x){x.addEventListener("click",function(){set(x.dataset.cw,true)})});
+  addEventListener("storage",function(e){if(e.key==="colorway")set(e.newValue)});
+  addEventListener("pageshow",function(){set(stored())});
+  set(stored());
+  g.hidden=false;
+})();
+</script>
 
 <script>
 document.querySelectorAll('a[data-vimeo]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var f=document.createElement('iframe');f.src='https://player.vimeo.com/video/'+a.dataset.vimeo+'?autoplay=1&dnt=1';f.allow='autoplay; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=a.textContent.trim()||'Video';f.style.aspectRatio=a.style.aspectRatio;a.replaceWith(f)})});

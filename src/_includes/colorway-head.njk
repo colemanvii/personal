@@ -1,0 +1,18 @@
+{%- set cw = site.colorways -%}
+<style>
+/* Colourways. The default is set here; the other applies when the visitor chooses it. */
+:root{--paper:{{ cw.paper.bg }};--ink:{{ cw.paper.fg }}}
+:root[data-colorway="earth"]{--paper:{{ cw.earth.bg }};--ink:{{ cw.earth.fg }};color-scheme:dark}
+/* Two swatches in the top right corner, out of the composition: absolutely placed, so
+   they never move anything and scroll away with the page. 44px targets on touch screens. */
+.cw{position:absolute;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);display:flex;padding:4px}
+.cw[hidden]{display:none}
+.cw button{width:24px;height:24px;display:grid;place-items:center;margin:0;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cw button::before{content:"";width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 1px var(--ink)}
+.cw [data-cw="paper"]::before{background:{{ cw.paper.bg }}}
+.cw [data-cw="earth"]::before{background:{{ cw.earth.bg }}}
+.cw [aria-pressed="true"]::before{outline:1px solid var(--ink);outline-offset:2px}
+.cw button:focus-visible{outline:1px solid var(--ink);outline-offset:-4px}
+@media (max-width:1023px),(pointer:coarse){.cw{padding:0}.cw button{width:36px;height:44px}}
+</style>
+<script>try{if(localStorage.getItem("colorway")==="earth")document.documentElement.dataset.colorway="earth"}catch(e){}</script>
