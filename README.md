@@ -16,12 +16,14 @@ to `site/`, which is what Cloudflare Pages publishes.
 | `/index/` | `src/index.njk`: the index of every work |
 | `/work/<name>/` | `src/work/<name>/index.md`, one per work |
 | `/available/` | `src/available/index.njk`: paintings for sale (live price and checkout from Shopify) |
-| `/info/` | `src/info/index.njk` |
+| `/info/` | `src/info/index.njk`: Contact, one stationary viewport, styled inline like `/` |
 | `/404.html`, `/sitemap.xml`, `/robots.txt` | `src/` |
 
 Site-wide settings (email, Instagram, location, the discipline list,
-analytics) are in `src/_data/site.js`. The whole design is in
-`src/assets/site.css`; its first block holds every colour, size, space and rule.
+analytics) are in `src/_data/site.js`. `/` and `/info/` carry their own CSS inline;
+every other page uses `src/assets/site.css`, whose first block holds every colour,
+size and space. The whole site is Geist Mono at one size (12px), in two colours
+(`#171717` on `#f8f8f6`), with no rules, accents or animation.
 
 ## Permanent requirements
 
@@ -50,6 +52,22 @@ How the current page meets it (`src/landing.njk`):
 `tests/landing.e2e.cjs` enforces this on every pull request and every push to `main`,
 at 16 desktop, tablet, phone, landscape and zoomed sizes. A change that breaks it fails CI.
 
+## Screens
+
+Every page after the home page extends it: it is composed as screens, not as a
+scrolling portfolio.
+
+- **A centred column** (`/info/`, `/index/`, `/404.html`): a heading, the content, and a
+  closing row of links, centred in the viewport. On a laptop or desktop the Index is one screen.
+- **Text beside media** (`/work/<name>/`, `/available/`): on a large screen the text sits
+  still in the left third while the media passes on the right, each item centred in a
+  viewport of its own. On a phone the text comes first and the media follows.
+- **Every image is seen whole**: none is ever taller or wider than the viewport.
+- Nothing is hidden to avoid scrolling. When content is longer than a screen (the Index on
+  a phone, a work with many images) or text is zoomed, the page scrolls.
+
+`tests/screens.e2e.cjs` enforces this at 11 desktop, tablet, phone and zoomed sizes.
+
 ## Add a work
 
 1. Make a folder in `src/work/`. Its name becomes the URL: `src/work/new-project/` → `/work/new-project/`.
@@ -63,7 +81,7 @@ year: "2026"                     # or "2024–25", "2026–", "Ongoing"
 disciplines: ["Identity", "Web"] # from the list in src/_data/site.js
 role: "Creative direction"
 client: "Client name"            # optional
-link:                            # optional, shown in red under the details
+link:                            # optional, an outside link under the details
   label: "Live website"
   href: "https://example.com/"
 featured: false
@@ -84,7 +102,7 @@ media:
       - { src: "a.jpg", alt: "…", caption: "…" }
       - { src: "b.jpg", alt: "…", caption: "…" }
     caption: "Optional caption under the set"
-  - type: mark                   # a logo on the grey ground; use SVG
+  - type: mark                   # a logo, shown small; use SVG
     src: "logo.svg"
     alt: "The logo"
   - type: video                  # Vimeo (no sound until played) …
@@ -153,7 +171,8 @@ lead to `/available/`; the three old project pages lead to their works. Old
 npm run build
 python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
 npm test             # every page at 375, 390, 430, 768 and 1440px, then the home page
-                     # held to one stationary viewport at 16 sizes
+                     # held to one stationary viewport at 16 sizes, then every other
+                     # page held to its screens at 11 sizes
 ```
 
 Routing runs under Cloudflare's own Pages server, which reads `_redirects`:

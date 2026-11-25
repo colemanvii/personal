@@ -28,7 +28,7 @@ eleventyExcludeFromCollections: true
 <meta name="twitter:description" content="Cole Calfee — brand, marketing and business development at Freeman General Contracting, and independent creative direction at Tangerine.">
 <meta name="twitter:image" content="{{ ogImage or (site.url + '/share.jpg') }}">
 <link rel="preload" href="/fonts/geist-mono-v6.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{% include "icons.njk" %}
 <style>
 @font-face{font-family:GeistMono;src:url('/fonts/geist-mono-v6.woff2') format('woff2');font-display:swap}
 /* Until Geist Mono arrives, text is set in a system monospace scaled to Geist Mono's
