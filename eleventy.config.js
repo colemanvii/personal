@@ -39,6 +39,10 @@ export default function (eleventyConfig) {
     for (const [name, size] of [["apple-touch-icon.png", 180], ["icon-192.png", 192], ["icon-512.png", 512]]) {
       await sharp("src/favicon.svg", { density: 600 }).resize(size, size).png().toFile(`${OUTPUT}/${name}`);
     }
+    // favicon.ico for Safari, Windows and anything that asks for it at the root.
+    const pngs = [];
+    for (const size of [16, 32, 48]) pngs.push([size, await sharp("src/favicon.svg", { density: 600 }).resize(size, size).png().toBuffer()]);
+    fs.writeFileSync(`${OUTPUT}/favicon.ico`, ico(pngs));
     writeReport();
   });
 
@@ -59,7 +63,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addAsyncShortcode("media", async function (media) {
     const ctx = { dir: path.dirname(this.page.inputPath), slug: this.page.fileSlug, first: { done: false } };
     const out = [];
-    for (const m of media || []) out.push(await renderMedia(ctx, m));
+    // Each item is one screen: on a large screen it is centred in a viewport of its own.
+    for (const m of media || []) out.push(`<div class="screen">${await renderMedia(ctx, m)}</div>`);
     return out.join("\n");
   });
 
@@ -78,6 +83,21 @@ export default function (eleventyConfig) {
     markdownTemplateEngine: false,
     htmlTemplateEngine: "njk",
   };
+}
+
+// An .ico holding PNG images: a 6-byte header, a 16-byte entry per image, then the images.
+function ico(pngs) {
+  const head = Buffer.alloc(6 + 16 * pngs.length);
+  head.writeUInt16LE(0, 0); head.writeUInt16LE(1, 2); head.writeUInt16LE(pngs.length, 4);
+  let offset = head.length;
+  pngs.forEach(([size, png], i) => {
+    const e = 6 + 16 * i;
+    head.writeUInt8(size % 256, e); head.writeUInt8(size % 256, e + 1);
+    head.writeUInt16LE(1, e + 4); head.writeUInt16LE(32, e + 6);
+    head.writeUInt32LE(png.length, e + 8); head.writeUInt32LE(offset, e + 12);
+    offset += png.length;
+  });
+  return Buffer.concat([head, ...pngs.map(([, png]) => png)]);
 }
 
 function writeReport() {

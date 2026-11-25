@@ -7,6 +7,9 @@ client: "Independent"
 featured: false
 order: 11
 draft: false
+see:
+  label: "Available now"
+  href: "/available/"
 media:
   - type: "grid"
     items:
