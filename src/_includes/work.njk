@@ -12,7 +12,7 @@ ogType: article
 {%- set prev = paged[pos - 1] if pos > 0 else paged[paged.length - 1] -%}
 {%- set next = paged[pos + 1] if pos < paged.length - 1 else paged[0] -%}
 {%- set go -%}
-<a href="{{ prev.url }}" rel="prev" aria-label="Previous: {{ prev.data.title }}">← Previous</a><a href="{{ next.url }}" rel="next" aria-label="Next: {{ next.data.title }}">Next →</a><a href="/index/#{{ page.fileSlug }}">Index</a><a href="/">Home</a>
+<a href="{{ prev.url }}" rel="prev" aria-label="Previous: {{ prev.data.title }}">← Previous</a><a href="{{ next.url }}" rel="next" aria-label="Next: {{ next.data.title }}">Next →</a><a href="/index/#{{ page.fileSlug }}">Index</a><a href="/">Home</a>{% include "colorway-button.njk" %}
 {%- endset -%}
 <main id="main" class="split">
 <header class="about">

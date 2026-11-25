@@ -3,7 +3,8 @@
 //   BASE_URL=http://127.0.0.1:4173 node tests/colorway.e2e.cjs
 //
 // On every page, at desktop and phone sizes:
-//   - the default colourway is unchanged and the toggle is two swatches in the corner;
+//   - the default colourway is unchanged, and the switch is one word in the page's row of
+//     links: DARK, or LIGHT once the page is brown;
 //   - choosing the other colourway recolours the page and changes nothing else: every
 //     element keeps its exact position and size, and the page its exact scroll size;
 //   - the choice is remembered (localStorage) on the next page and after a reload,
@@ -50,7 +51,8 @@ const rgb = h => `rgb(${[1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)).join
 const layout = () => ({
   sw: document.documentElement.scrollWidth,
   sh: document.documentElement.scrollHeight,
-  boxes: [...document.body.querySelectorAll("*")].map(e => { const b = e.getBoundingClientRect(); return [e.tagName, b.x, b.y, b.width, b.height].join(); }),
+  // The switch's two words trade places inside it; everything else, the switch included, must not move.
+  boxes: [...document.body.querySelectorAll("*")].filter(e => !e.matches(".cwt span") && e.getClientRects().length).map(e => { const b = e.getBoundingClientRect(); return [e.tagName, b.x + scrollX, b.y + scrollY, b.width, b.height].join(); }),
 });
 
 (async () => {
@@ -71,24 +73,26 @@ const layout = () => ({
         fg: getComputedStyle(document.body).color,
         theme: document.querySelector('meta[name="theme-color"]')?.content,
         attr: document.documentElement.dataset.colorway || "paper",
-        pressed: [...document.querySelectorAll(".cw button")].map(b => b.getAttribute("aria-pressed")).join(),
+        word: [...document.querySelectorAll(".cwt")].filter(b => b.offsetParent).map(b => b.innerText.trim()).join(),
       }));
+      const toggle = page.locator(".cwt").filter({ visible: true }).first();
       // default
       let s = await read();
       if (s.bg !== rgb(cw.paper.bg) || s.fg !== rgb(cw.paper.fg)) fail(where, `default colourway is ${s.fg} on ${s.bg}`);
-      if (s.pressed !== "true,false") fail(where, `toggle state ${s.pressed}`);
-      const sw = await page.locator(".cw button").evaluateAll(bs => bs.map(b => { const r = b.getBoundingClientRect(); return { x: r.right, y: r.top, w: r.width, h: r.height, vis: getComputedStyle(b.parentElement).display !== "none" }; }));
-      if (sw.length !== 2 || !sw.every(b => b.vis)) fail(where, "two visible swatches expected");
-      const vw = await page.evaluate(() => innerWidth);
-      if (sw.some(b => b.y > 8 || b.x < vw - 120)) fail(where, "swatches should sit in the top right corner");
-      if (opts.isMobile && sw.some(b => b.h < 44)) fail(where, "swatch tap targets under 44px");
+      if (!/^DARK(,DARK)*$/.test(s.word)) fail(where, `the switch reads "${s.word}", not DARK`);
+      const sw = await page.locator(".cwt").evaluateAll(bs => bs.filter(b => b.offsetParent).map(b => {
+        const r = b.getBoundingClientRect(), row = b.parentElement;
+        return { h: r.height, inRow: row.tagName === "NAV" && row === b.closest("nav"), last: row.lastElementChild === b };
+      }));
+      if (!sw.length || !sw.every(b => b.inRow && b.last)) fail(where, "the switch should be the last word of the page's link row");
+      if (opts.isMobile && sw.some(b => b.h < 44)) fail(where, "switch tap target under 44px");
       const before = await page.evaluate(layout);
       // switch
-      await page.locator('.cw [data-cw="earth"]').click();
+      await toggle.click();
       s = await read();
       if (s.bg !== rgb(cw.earth.bg) || s.fg !== rgb(cw.earth.fg)) fail(where, `alternate colourway is ${s.fg} on ${s.bg}`);
       if (s.theme !== cw.earth.bg) fail(where, `theme-color ${s.theme} after switching`);
-      if (s.pressed !== "false,true") fail(where, `toggle state ${s.pressed} after switching`);
+      if (!/^LIGHT(,LIGHT)*$/.test(s.word)) fail(where, `the switch reads "${s.word}" on brown, not LIGHT`);
       const after = await page.evaluate(layout);
       if (before.sw !== after.sw || before.sh !== after.sh) fail(where, "switching colourway changed the page size");
       const moved = before.boxes.filter((b, i) => b !== after.boxes[i]);
@@ -98,9 +102,11 @@ const layout = () => ({
       s = await read();
       if (s.attr !== "earth" || s.bg !== rgb(cw.earth.bg)) fail(where, "choice not remembered after reload");
       // back to the default
-      await page.locator('.cw [data-cw="paper"]').click();
+      await toggle.click();
       s = await read();
       if (s.attr !== "paper" || s.bg !== rgb(cw.paper.bg) || s.theme !== cw.paper.bg) fail(where, "could not return to the default");
+      const back = await page.evaluate(layout);
+      if (back.boxes.some((b, i) => b !== before.boxes[i])) fail(where, "switching back moved an element");
       await ctx.close();
     }
   }
@@ -108,7 +114,7 @@ const layout = () => ({
   const ctx = await browser.newContext(SIZES[0][1]);
   const page = await ctx.newPage();
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
-  await page.locator('.cw [data-cw="earth"]').click();
+  await page.locator(".cwt").first().click();
   await page.route("**/fonts/**", r => setTimeout(() => r.continue(), 1500));
   await page.goto(BASE + "/index/", { waitUntil: "commit" });
   await page.waitForSelector("body");

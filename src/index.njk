@@ -18,7 +18,7 @@ permalink: /index/
 <span class="no">{{ loop.index | pad }}</span><span class="t">{{ w.data.title }}{% if not (w | hasPage) %} <span aria-hidden="true">↗&#xFE0E;</span><span class="vh"> (opens {{ w.data.link.label }})</span>{% endif %}</span><span class="d">{{ w.data.disciplines | join(", ") }}</span><span class="y">{{ w.data.year }}</span></a></li>
 {%- endfor %}
 </ol>
-<nav class="go" aria-label="Site"><a href="/available/">Available</a><a href="/info/">Contact</a><a href="/">Home</a></nav>
+<nav class="go" aria-label="Site"><a href="/available/">Available</a><a href="/info/">Contact</a><a href="/">Home</a>{% include "colorway-button.njk" %}</nav>
 </main>
 <script>
 /* Links from the old site (/index/#kashus) go to the work's page. */

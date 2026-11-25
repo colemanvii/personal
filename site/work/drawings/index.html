@@ -143,19 +143,19 @@ max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 /* Colourways. The default is set here; the other applies when the visitor chooses it. */
 :root{--paper:#f8f8f6;--ink:#171717}
 :root[data-colorway="earth"]{--paper:#473931;--ink:#e9e0d6;color-scheme:dark}
-/* Two swatches in the top right corner, out of the composition: absolutely placed, so
-   they never move anything and scroll away with the page. 44px targets on touch screens. */
-.cw{position:absolute;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);display:flex;padding:4px}
-.cw[hidden]{display:none}
-.cw button{width:24px;height:24px;display:grid;place-items:center;margin:0;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cw button::before{content:"";width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 1px var(--ink)}
-.cw [data-cw="paper"]::before{background:#f8f8f6}
-.cw [data-cw="earth"]::before{background:#473931}
-.cw [aria-pressed="true"]::before{outline:1px solid var(--ink);outline-offset:2px}
-.cw button:focus-visible{outline:1px solid var(--ink);outline-offset:-4px}
-@media (max-width:1023px),(pointer:coarse){.cw{padding:0}.cw button{width:36px;height:44px}}
+/* The switch is one more word in each page's row of links: DARK, or LIGHT when brown.
+   It always takes five letters of room, so switching never moves the other links, and
+   like the links on / it is a 44px target without taking 44px of the layout. */
+.cwt{display:none;margin:-14px 0;padding:14px 0;border:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;text-transform:uppercase;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cw-on .cwt{display:inline-block}
+.cwt span{display:block;width:5ch}
+.cwt .l,[data-colorway="earth"] .cwt .d{display:none}
+[data-colorway="earth"] .cwt .l{display:block}
+.cwt:hover span{text-decoration:underline;text-underline-offset:4px}
+.cwt:focus-visible{outline:none}
+.cwt:focus-visible span{outline:1px solid currentColor;outline-offset:5px}
 </style>
-<script>try{if(localStorage.getItem("colorway")==="earth")document.documentElement.dataset.colorway="earth"}catch(e){}</script>
+<script>(function(r){r.classList.add("cw-on");try{if(localStorage.getItem("colorway")==="earth")r.dataset.colorway="earth"}catch(e){}})(document.documentElement)</script>
 
 </head>
 <body>
@@ -169,7 +169,7 @@ max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 <dt>Discipline</dt><dd>Illustration</dd>
 </dl>
 <nav class="go" aria-label="More work">
-<a href="/work/paintings/" rel="prev" aria-label="Previous: Paintings">← Previous</a><a href="/work/pbr/" rel="next" aria-label="Next: PBR">Next →</a><a href="/index/#drawings">Index</a><a href="/">Home</a></nav>
+<a href="/work/paintings/" rel="prev" aria-label="Previous: Paintings">← Previous</a><a href="/work/pbr/" rel="next" aria-label="Next: PBR">Next →</a><a href="/index/#drawings">Index</a><a href="/">Home</a><button type="button" class="cwt"><span class="d">Dark</span><span class="l">Light</span></button></nav>
 </div>
 </header>
 <div class="media">
@@ -181,27 +181,23 @@ max-height: calc(100svh - 2 * var(--pad) - var(--cap));
 <div class="screen"><figure class="fig narrow"><picture><source type="image/avif" srcset="/img/e97fba7a82-480.avif 480w, /img/e97fba7a82-671.avif 671w" sizes="(min-width: 1024px) 48vw, (min-width: 700px) 75vw, calc(100vw - 32px)"><img src="/img/e97fba7a82-671.webp" srcset="/img/e97fba7a82-480.webp 480w, /img/e97fba7a82-671.webp 671w" sizes="(min-width: 1024px) 48vw, (min-width: 700px) 75vw, calc(100vw - 32px)" width="671" height="671" alt="Sketchbook V" loading="lazy" decoding="async" style="--w:671px"></picture><figcaption>Sketchbook V</figcaption></figure></div>
 </div>
 <nav class="go end" aria-label="More work, end of page">
-<a href="/work/paintings/" rel="prev" aria-label="Previous: Paintings">← Previous</a><a href="/work/pbr/" rel="next" aria-label="Next: PBR">Next →</a><a href="/index/#drawings">Index</a><a href="/">Home</a></nav>
+<a href="/work/paintings/" rel="prev" aria-label="Previous: Paintings">← Previous</a><a href="/work/pbr/" rel="next" aria-label="Next: PBR">Next →</a><a href="/index/#drawings">Index</a><a href="/">Home</a><button type="button" class="cwt"><span class="d">Dark</span><span class="l">Light</span></button></nav>
 </main>
 
-<div class="cw" role="group" aria-label="Colourway" hidden><button type="button" data-cw="paper" aria-label="Ink on paper" aria-pressed="true"></button><button type="button" data-cw="earth" aria-label="Chalk on brown" aria-pressed="false"></button></div>
 <script>
 (function(){
-  var r=document.documentElement,g=document.querySelector(".cw"),m=document.querySelector('meta[name="theme-color"]');
-  var bg={paper:"#f8f8f6",earth:"#473931"},b=[].slice.call(g.querySelectorAll("button"));
+  var r=document.documentElement,m=document.querySelector('meta[name="theme-color"]'),bg={paper:"#f8f8f6",earth:"#473931"};
   function set(c,save){
     c=c==="earth"?"earth":"paper";
     if(c==="earth")r.dataset.colorway=c;else delete r.dataset.colorway;
     if(m)m.setAttribute("content",bg[c]);
-    b.forEach(function(x){x.setAttribute("aria-pressed",String(x.dataset.cw===c))});
     if(save)try{localStorage.setItem("colorway",c)}catch(e){}
   }
   function stored(){try{return localStorage.getItem("colorway")}catch(e){}}
-  b.forEach(function(x){x.addEventListener("click",function(){set(x.dataset.cw,true)})});
+  [].forEach.call(document.querySelectorAll(".cwt"),function(b){b.addEventListener("click",function(){set(r.dataset.colorway==="earth"?"paper":"earth",true)})});
   addEventListener("storage",function(e){if(e.key==="colorway")set(e.newValue)});
   addEventListener("pageshow",function(){set(stored())});
   set(stored());
-  g.hidden=false;
 })();
 </script>
 
