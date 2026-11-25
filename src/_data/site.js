@@ -12,8 +12,7 @@ export default {
   // localStorage under "colorway". Every colour on the site is one of these four.
   colorways: {
     paper: { label: "Ink on paper", bg: "#f8f8f6", fg: "#171717" },
-    // PROVISIONAL: to be sampled from the reference painting.
-    earth: { label: "Chalk on brown", bg: "#3a281f", fg: "#efe8da" },
+    earth: { label: "Chalk on brown", bg: "#473931", fg: "#e9e0d6" },
   },
   // Cloudflare Web Analytics site token. Leave empty for no analytics.
   analyticsToken: "",

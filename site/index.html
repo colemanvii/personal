@@ -58,7 +58,7 @@ a:focus-visible span{outline:1px solid currentColor;outline-offset:5px}
 <style>
 /* Colourways. The default is set here; the other applies when the visitor chooses it. */
 :root{--paper:#f8f8f6;--ink:#171717}
-:root[data-colorway="earth"]{--paper:#3a281f;--ink:#efe8da;color-scheme:dark}
+:root[data-colorway="earth"]{--paper:#473931;--ink:#e9e0d6;color-scheme:dark}
 /* Two swatches in the top right corner, out of the composition: absolutely placed, so
    they never move anything and scroll away with the page. 44px targets on touch screens. */
 .cw{position:absolute;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);display:flex;padding:4px}
@@ -66,7 +66,7 @@ a:focus-visible span{outline:1px solid currentColor;outline-offset:5px}
 .cw button{width:24px;height:24px;display:grid;place-items:center;margin:0;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cw button::before{content:"";width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 1px var(--ink)}
 .cw [data-cw="paper"]::before{background:#f8f8f6}
-.cw [data-cw="earth"]::before{background:#3a281f}
+.cw [data-cw="earth"]::before{background:#473931}
 .cw [aria-pressed="true"]::before{outline:1px solid var(--ink);outline-offset:2px}
 .cw button:focus-visible{outline:1px solid var(--ink);outline-offset:-4px}
 @media (max-width:1023px),(pointer:coarse){.cw{padding:0}.cw button{width:36px;height:44px}}
@@ -83,7 +83,7 @@ a:focus-visible span{outline:1px solid currentColor;outline-offset:5px}
 <script>
 (function(){
   var r=document.documentElement,g=document.querySelector(".cw"),m=document.querySelector('meta[name="theme-color"]');
-  var bg={paper:"#f8f8f6",earth:"#3a281f"},b=[].slice.call(g.querySelectorAll("button"));
+  var bg={paper:"#f8f8f6",earth:"#473931"},b=[].slice.call(g.querySelectorAll("button"));
   function set(c,save){
     c=c==="earth"?"earth":"paper";
     if(c==="earth")r.dataset.colorway=c;else delete r.dataset.colorway;
