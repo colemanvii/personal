@@ -19,6 +19,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/js": "js" });
   eleventyConfig.addPassthroughCopy({ "src/assets/share.jpg": "share.jpg" });
+  // Temporary same-origin copy of Tangerine while its external delivery is investigated.
+  eleventyConfig.addPassthroughCopy({ "src/tangerine/index.html": "tangerine/index.html" });
   for (const f of ["favicon.svg", "_redirects", "_headers", "_routes.json", "robots.txt"]) {
     eleventyConfig.addPassthroughCopy(`src/${f}`);
   }
